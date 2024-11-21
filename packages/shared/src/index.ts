@@ -4,6 +4,8 @@ export * from './compiler';
 export * from './json';
 export * from './num';
 export * from './options';
+export * from './promise';
 export * from './str';
 export * from './val';
+export * from './try';
 export * from './type';

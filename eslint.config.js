@@ -8,7 +8,7 @@ import tencentBase from 'eslint-config-tencent/base'
 import tencentImport from 'eslint-config-tencent/import'
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'build', 'types'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
