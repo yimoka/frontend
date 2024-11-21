@@ -1,7 +1,149 @@
-import { IAny, IAnyObject, IAPIRequestConfig, IOptions } from '@yimoka/shared';
+import { reaction } from '@formily/reactive';
+import { dataToOptions, IAny, IAnyObject, IKeys, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
 
-import { IStoreAPI, IStoreResponse } from './api';
-import { IField } from './field';
+import { pick } from 'lodash-es';
+
+import { IStoreAPI, IStoreResponse, runStoreAPI } from './api';
+import { BaseStore } from './base';
+import { getFieldIsMultiple, getFieldSplitter, IField } from './field';
+
+// 初始化字典数据
+export const initStoreDict = (store: BaseStore) => {
+  const { dictConfig, apiExecutor } = store;
+  dictConfig?.forEach((conf) => {
+    const { type, field, data, api } = conf;
+    if (data) {
+      store.setDictByField(field, data);
+    }
+    if (type !== 'by') {
+      if (api) {
+        store.setDictLoading(field, true);
+        const lastFetchID = store.setDictFetchIDMap(field);
+        runStoreAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
+          if (lastFetchID === store.getDictFetchIDMap(field)) {
+            store.setDictLoading(field, false);
+            if (isSuccess(res)) {
+              const apiData = getDictAPIData(res.data, conf);
+              console.log('apiData', conf, apiData);
+
+              store.setDictByField(field, apiData);
+            }
+          }
+        });
+      }
+    }
+  });
+};
+
+// 字典数据处理
+export const runStoreDict = (store: BaseStore) => {
+  const disposerArr: (() => void)[] = [];
+  const { values, dictConfig, apiExecutor } = store;
+  dictConfig?.forEach((conf) => {
+    const { type } = conf;
+    if (type === 'by') {
+      const { field, getData, api, byField, isEmptyGetData = false, toMap, toOptions, keys } = conf;
+      const updateDict = (newValues: IAny) => {
+        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) && byField.every(item => isBlank(newValues[item]))))) {
+          store.setDictFetchIDMap(field);
+          store.setDictByField(field, []);
+          updateValueByDict(conf, [], store);
+        } else {
+          if (getData) {
+            const dictData = getData(newValues, store);
+            if (dictData instanceof Promise) {
+              store.setDictLoading(field, true);
+              const lastFetchID = store.setDictFetchIDMap(field);
+              dictData.then((data: IOptions | IAny) => {
+                if (lastFetchID === store.getDictFetchIDMap(field)) {
+                  store.setDictLoading(field, false);
+                  store.setDictByField(field, data);
+                  updateValueByDict(conf, data, store);
+                }
+              });
+            } else {
+              store.setDictByField(field, dictData);
+              updateValueByDict(conf, dictData, store);
+            }
+          } else if (api) {
+            const lastFetchID = store.setDictFetchIDMap(field);
+            store.setDictLoading(field, true);
+            runStoreAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
+              if (lastFetchID === store.getDictFetchIDMap(field)) {
+                store.setDictLoading(field, false);
+                if (isSuccess(res)) {
+                  const apiData = res.data;
+                  if (toMap && Array.isArray(apiData)) {
+                    store.setDictByField(field, optionsToObj(res.data, keys));
+                  } else if (toOptions) {
+                    store.setDictByField(field, dataToOptions(res.data, keys));
+                  } else {
+                    store.setDictByField(field, apiData);
+                  }
+                  updateValueByDict(conf, apiData, store);
+                }
+              }
+            });
+          }
+        }
+      };
+      const obj = pick(values, byField);
+      updateDict(obj);
+      disposerArr.push(reaction(() => pick(values, byField), (newVal) => {
+        updateDict(newVal);
+      }));
+    }
+  });
+  return () => {
+    disposerArr.forEach(disposer => disposer());
+  };
+};
+
+const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
+  const { field, isUpdateValue = true, keys, childrenKey } = config;
+  if (isUpdateValue) {
+    const { values } = store;
+    const oldValue = values[field];
+    const type = typeof oldValue;
+    const isMultiple = getFieldIsMultiple(field, store);
+    const splitter = getFieldSplitter(field, store);
+    const options = dataToOptions(dict, { keys, splitter, childrenKey });
+    const haveMap: Record<string, boolean> = {};
+
+    options.forEach(item => haveMap[item.value] = true);
+
+    const getOldArr = () => {
+      if (Array.isArray(oldValue)) {
+        return oldValue;
+      }
+      return isMultiple && type === 'string' ? strToArr(oldValue, splitter) : [oldValue];
+    };
+
+    const oldArr = getOldArr();
+    const newArr = oldArr.filter(item => haveMap[item]);
+
+    if (newArr.length !== oldArr.length) {
+      const getNewValue = () => {
+        if (Array.isArray(oldValue)) {
+          return newArr;
+        }
+        return isMultiple && type === 'string' ? newArr.join(splitter) : newArr[0];
+      };
+      store.setValuesByField(field, getNewValue());
+    }
+  }
+};
+
+// 获取字典的接口数据
+const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
+  const { toMap, toOptions = true, keys } = dictConf;
+  if (toMap && Array.isArray(data)) {
+    return optionsToObj(data, keys);
+  } if (toOptions) {
+    return dataToOptions(data, { keys });
+  }
+  return data;
+};
 
 export type IStoreDict<V extends object = IAnyObject> = { [key in IField<V>]?: IAny };
 
@@ -9,23 +151,30 @@ export type IStoreDictLoading<V extends object = IAnyObject> = { [key in IField<
 
 export type IStoreDictConfig<V extends object = IAnyObject> = Array<IDictConfigItem<V>>;
 
-export type IDictConfigItem<V extends object = IAnyObject> = {
+type IDictConfigItemBase<V extends object = IAnyObject> = {
   field: IField<V>,
-  isApiOptionsToMap?: boolean
-  toMapKeys?: { value?: string, label?: string }
-} & ({
-  type?: 'self'
   data?: IOptions | IAny,
-  api?: IAPIRequestConfig | (() => Promise<IStoreResponse>)
-} | IDictConfigItemBy<V>);
-
-export interface IDictConfigItemBy<V extends object = IAnyObject> {
-  field: IField<V>,
-  type: 'by'
-  byField: IField<V> | IField<V>[], // 添加支持多字段联动
-  getData?: (value: IAny) => IOptions | IAny
   api?: IStoreAPI
-  paramKey?: string
+  // 只处理 api 返回值 默认为 true
+  toOptions?: boolean
+  // 只处理 api 返回值
+  toMap?: boolean
+  // 只处理 api 返回值
+  keys?: IKeys
+  // 只处理 api 返回值
+  childrenKey?: string
+}
+
+export type IDictConfigItem<V extends object = IAnyObject> = ({ type?: 'self' } & IDictConfigItemBase<V>) | IDictConfigItemBy<V>;
+
+export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBase<V> & {
+  type: 'by'
+  byField: IField<V> | IField<V>[],
+  // 当存在 getData 不会调用 api
+  getData?: (values: V, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>,
+  paramKeys?: string | Record<IField<V>, IAny>
+  // 字典变化时是否更新值
   isUpdateValue?: boolean
+  // 字典为空时是否获取数据
   isEmptyGetData?: boolean
 }

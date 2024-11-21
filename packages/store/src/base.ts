@@ -1,6 +1,6 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, isBlank } from '@yimoka/shared';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, set } from 'lodash-es';
 
 import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api';
@@ -78,6 +78,16 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
   dictConfig: IStoreDictConfig<V> = [];
   dictLoading: IStoreDictLoading<V> = {};
+  // 字典请求时序 ID
+  private dictFetchIDMap: Record<IObjKey, number> = {};
+  setDictFetchIDMap = (field: IField<V>) => {
+    const fetchID = addWithLimit(this.dictFetchIDMap[field] ?? 0);
+    this.dictFetchIDMap[field] = fetchID;
+    return fetchID;
+  };
+
+  getDictFetchIDMap = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
+
   dict: IStoreDict<V> = {};
 
   // 请求执行器
