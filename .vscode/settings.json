@@ -1,0 +1,20 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.alwaysShowStatus": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "html",
+    "typescript",
+    "typescriptreact"
+  ],
+  "cSpell.words": [
+    "dbaeumer",
+    "kohler",
+    "moxios",
+    "tseslint"
+  ]
+}
