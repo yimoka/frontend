@@ -110,6 +110,67 @@ importers:
         specifier: ~5.6.2
         version: 5.6.3
 
+  packages/store:
+    dependencies:
+      '@formily/core':
+        specifier: ^2.3.2
+        version: 2.3.2
+      '@formily/reactive':
+        specifier: ^2.3.2
+        version: 2.3.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.13.0
+        version: 9.15.0
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.9.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.15.0
+        version: 8.15.0(@typescript-eslint/parser@8.15.0)(eslint@9.15.0)(typescript@5.6.3)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.3
+        version: 4.3.3(vite@5.4.11)
+      '@vitest/coverage-v8':
+        specifier: 2.1.5
+        version: 2.1.5(vitest@2.1.5)
+      eslint:
+        specifier: ^9.13.0
+        version: 9.15.0
+      eslint-config-tencent:
+        specifier: ^1.1.1
+        version: 1.1.1(@babel/core@7.26.0)(@typescript-eslint/parser@8.15.0)(eslint@9.15.0)(prettier@3.3.3)(typescript@5.6.3)
+      eslint-plugin-import:
+        specifier: ^2.31.0
+        version: 2.31.0(@typescript-eslint/parser@8.15.0)(eslint@9.15.0)
+      eslint-plugin-react-hooks:
+        specifier: ^5.0.0
+        version: 5.0.0(eslint@9.15.0)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.14
+        version: 0.4.14(eslint@9.15.0)
+      typescript:
+        specifier: ~5.6.2
+        version: 5.6.3
+      typescript-eslint:
+        specifier: ^8.11.0
+        version: 8.15.0(eslint@9.15.0)(typescript@5.6.3)
+      vite:
+        specifier: ^5.4.10
+        version: 5.4.11(@types/node@22.9.1)
+      vite-plugin-dts:
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@22.9.1)(typescript@5.6.3)(vite@5.4.11)
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.9.1)
+
 packages:
 
   /@algolia/autocomplete-core@1.17.7(@algolia/client-search@5.15.0)(algoliasearch@5.15.0)(search-insights@2.17.3):
@@ -3290,6 +3351,45 @@ packages:
     dependencies:
       levn: 0.4.1
     dev: true
+
+  /@formily/core@2.3.2:
+    resolution: {integrity: sha512-qS02mKWDRdm5IYnx3b6L4i/i7oFEBbVotF6B3xdqgbkeSjdzSz81/aJnEr0Sbi3yCgh1FhA0x+QKkpWnE8/GDQ==}
+    engines: {npm: '>=3.0.0'}
+    dependencies:
+      '@formily/reactive': 2.3.2
+      '@formily/shared': 2.3.2
+      '@formily/validator': 2.3.2
+    dev: false
+
+  /@formily/path@2.3.2:
+    resolution: {integrity: sha512-KK8h/CupHOs4HIgu9JucqwWvIr8Nbmof++Kby0NdNFHdTN5nAyVzStS8VEPFPGRkQaXV3AH+FVGAxgucmEy4ZA==}
+    engines: {npm: '>=3.0.0'}
+    dev: false
+
+  /@formily/reactive@2.3.2:
+    resolution: {integrity: sha512-fw9EBWyBNSo3d1diX+HW3v6fBYqmn5zRM+L8le03XGft847LaajCYkjXiZXSzj7v8U4qzjhURIcqVYgmi4OW8g==}
+    engines: {npm: '>=3.0.0'}
+    dev: false
+
+  /@formily/shared@2.3.2:
+    resolution: {integrity: sha512-hb8eL28Dqe4WQzGtxC3h7OwG9VPPBXtfKUfmnRkaBMJ8zn2KmdYOP8YnAkwdO2ZMgxtkOl0hku0Ufm2PwP3ziA==}
+    engines: {npm: '>=3.0.0'}
+    dependencies:
+      '@formily/path': 2.3.2
+      camel-case: 4.1.2
+      lower-case: 2.0.2
+      no-case: 3.0.4
+      param-case: 3.0.4
+      pascal-case: 3.1.2
+      upper-case: 2.0.2
+    dev: false
+
+  /@formily/validator@2.3.2:
+    resolution: {integrity: sha512-XoY31kUypHB8MIw9jhp/Pb0fDFan5wPhR9Hgz/HiTPUdpg8l7kxzHRMZieqtL4YbtFzJD4wpk1+XrylILpPGYg==}
+    engines: {npm: '>=3.0.0'}
+    dependencies:
+      '@formily/shared': 2.3.2
+    dev: false
 
   /@hapi/hoek@9.3.0:
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -12393,6 +12493,12 @@ packages:
       semver: 7.6.3
       semver-diff: 4.0.0
       xdg-basedir: 5.1.0
+    dev: false
+
+  /upper-case@2.0.2:
+    resolution: {integrity: sha512-KgdgDGJt2TpuwBUIjgG6lzw2GWFRCW9Qkfkiv0DxqHHLYJHmtmdUIKcZd8rHgFSjopVTlw6ggzCm1b8MFQwikg==}
+    dependencies:
+      tslib: 2.8.1
     dev: false
 
   /uri-js@4.4.1:
