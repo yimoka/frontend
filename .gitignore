@@ -21,3 +21,4 @@ types
 *.njsproj
 *.sln
 *.sw?
+packages/docs/docs/apis
