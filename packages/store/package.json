@@ -47,7 +47,9 @@
   },
   "dependencies": {
     "@formily/core": "^2.3.2",
+    "@formily/json-schema": "^2.3.2",
     "@formily/reactive": "^2.3.2",
+    "@yimoka/shared": "workspace:*",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {

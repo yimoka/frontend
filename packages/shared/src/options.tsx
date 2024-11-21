@@ -3,7 +3,7 @@
 import { omit } from 'lodash-es';
 
 import { strToArr } from './str';
-import { IAnyObject, ObjKey } from './type';
+import { IAnyObject, IObjKey } from './type';
 import { isBlank } from './val';
 
 export const DF_KEYS: IKeys = { label: 'label', value: 'value' };
@@ -257,7 +257,7 @@ export const isValueInOptions = (value: any, options: IOptions<'value'>, conf?: 
  *
  * @param {IOptions} options - 选项数组。
  * @param {IKeys} [keys] - 可选的键名配置对象。
- * @returns {Record<ObjKey, any>} 键值对映射。
+ * @returns {Record<IObjKey, any>} 键值对映射。
  *
  * @example
  * // 示例 1: 使用默认键名
@@ -292,7 +292,7 @@ export const isValueInOptions = (value: any, options: IOptions<'value'>, conf?: 
  */
 
 export const optionsToObj = (options: IOptions, keys?: IKeys) => {
-  const map: Record<ObjKey, any> = Object({});
+  const map: Record<IObjKey, any> = Object({});
   const valueKey = keys?.value ?? DF_KEYS.value;
   const labelKey = keys?.label ?? DF_KEYS.label;
   if (!Array.isArray(options)) {
@@ -309,10 +309,10 @@ export const optionsToObj = (options: IOptions, keys?: IKeys) => {
 };
 
 
-export type IOptions<T extends ObjKey = 'label' | 'value'> = Array<IOption<T>>;
+export type IOptions<T extends IObjKey = 'label' | 'value'> = Array<IOption<T>>;
 
 
-export type IOption<T extends ObjKey = 'label' | 'value'> = { [key in T]?: any } & { [key: string]: any };
+export type IOption<T extends IObjKey = 'label' | 'value'> = { [key in T]?: any } & { [key: string]: any };
 
 
-export type IKeys<T extends ObjKey = 'label' | 'value'> = { [key in T | string]: string };
+export type IKeys<T extends IObjKey = 'label' | 'value'> = { [key in T | string]: string };

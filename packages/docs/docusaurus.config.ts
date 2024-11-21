@@ -26,12 +26,20 @@ const config: Config = {
   plugins: [
     [
       'docusaurus-plugin-typedoc',
-
-      // Options
       {
+        id: 'shared',
         out: './docs/apis/shared',
         entryPoints: ['../shared/src/index.ts'],
         tsconfig: '../shared/tsconfig.json',
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'store',
+        out: './docs/apis/store',
+        entryPoints: ['../store/src/index.ts'],
+        tsconfig: '../store/tsconfig.json',
       },
     ],
   ],

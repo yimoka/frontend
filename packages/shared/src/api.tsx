@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjKey } from './type';
+import { IObjKey } from './type';
 
 /**
  * 判断响应是否成功。
@@ -71,7 +71,7 @@ export interface IHTTPResponse<R = any, P = any> {
   config?: IAPIRequestConfig<P>
   status?: number;
   statusText?: string;
-  headers?: Record<ObjKey, any>;
+  headers?: Record<IObjKey, any>;
   [key: string]: any
 }
 
@@ -107,7 +107,7 @@ export type IAPIRequestConfig<V = any> = {
  * @property {T[]} data - 当前页的数据项数组。
  * @property {any} [key: string] - 可以动态添加的其他属性。
  */
-export interface IPageData<T extends object = Record<ObjKey, any>> {
+export interface IPageData<T extends object = Record<IObjKey, any>> {
   page: number,
   pageSize: number,
   total: number,

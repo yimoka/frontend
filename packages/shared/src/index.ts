@@ -6,3 +6,4 @@ export * from './num';
 export * from './options';
 export * from './str';
 export * from './val';
+export * from './type';
