@@ -1,21 +1,23 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
 import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank } from '@yimoka/shared';
-import { cloneDeep, get, pick, pickBy, set } from 'lodash-es';
+import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
+import { IAfterAtRun } from './aop';
 import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api';
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
 import { getSearchParamByValue, getValueBySearchParam, IField, IFieldsConfig } from './field';
+import { INotifier } from './notifier';
 
 /**
  * 应用配置的默认选项。
  *
- * @property {boolean} filterBlankAtRun - 指示在运行时是否过滤空值。
- * @property {boolean} bindRoute - 指定是否绑定路由。
- * @property {'push' | 'replace'} updateRouteType - 确定更新路由的方法，是 'push' 还是 'replace'。
- * @property {'unequal' | 'any'} routeTrigger - 指定路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
- * @property {'run' | 'required' | 'no'} entryRunMode - 定义进入时的执行模式：'run' 表示立即执行，'required' 表示满足必填项时执行，'no' 表示不执行。
- * @property {string[]} urlWithDefaultFields - 生成 URL 时要包含的默认字段列表。默认为空数组。
+ * @property {boolean} filterBlankAtRun - 执行 API 时是否过滤参数空值。
+ * @property {boolean} bindRoute - 是否绑定路由。
+ * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
+ * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
+ * @property {'run' | 'required' | 'no'} entryRunMode - 进入时的执行模式：'run' 表示立即执行，'required' 表示满足必填项时执行，'no' 表示不执行。
+ * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
  * @property {Record<string, string>} fieldKeys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
  */
 const DF_OPTIONS = {
@@ -78,37 +80,32 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
   dictConfig: IStoreDictConfig<V> = [];
   dictLoading: IStoreDictLoading<V> = {};
+
   // 字典请求时序 ID
   private dictFetchIDMap: Record<IObjKey, number> = {};
-  setDictFetchIDMap = (field: IField<V>) => {
-    const fetchID = addWithLimit(this.dictFetchIDMap[field] ?? 0);
-    this.dictFetchIDMap[field] = fetchID;
-    return fetchID;
-  };
-
-  getDictFetchIDMap = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
 
   dict: IStoreDict<V> = {};
-
-  // 请求执行器
-  apiExecutor?: IStoreHTTPRequest<R, V>;
-  api?: IStoreAPI<V, R>;
-  loading = false;
-  response: IStoreResponse<R, V> = {};
-  moreLoading = false;
-  moreResponse: IStoreResponse<R, V> = {};
-
-  private lastFetchID = 0;
-  private apiController: AbortController | undefined;
-
-  // 选中的行的 keys 用于表格批量操作
-  selectedRowKeys: Array<string | number> = [];
 
   // 扩展数据
   extInfo: IAnyObject = {};
 
+  // 请求执行器
+  apiExecutor?: IStoreHTTPRequest<R, V>;
+  api?: IStoreAPI<V, R>;
+
+  loading = false;
+  response: IStoreResponse<R, V> = {};
+
+  private lastFetchID = 0;
+  private apiController: AbortController | undefined;
+
+  // 通知器
+  notifier?: INotifier;
+  // 执行后的操作
+  afterAtRun: IAfterAtRun = {};
+
   constructor(config: IBaseStoreConfig<V, R> = {}) {
-    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, defineConfig } = config;
+    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, defineConfig, notifier, afterAtRun } = config;
     this.defaultValues = defaultValues as V & IAnyObject;
     this.dictConfig = dictConfig || [];
     this.apiExecutor = apiExecutor;
@@ -116,6 +113,10 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     this.extInfo = extInfo || {};
     this.options = { ...this.options, ...options };
     this.form = createForm({ ...formConfig, initialValues: defaultValues });
+    this.notifier = notifier;
+    if (afterAtRun) {
+      this.afterAtRun = afterAtRun;
+    }
 
     define(this, {
       dict: observable,
@@ -124,10 +125,6 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       response: observable.shallow,
       loading: observable,
       extInfo: observable,
-
-      selectedRowKeys: observable,
-      moreLoading: observable,
-      moreResponse: observable.shallow,
 
       setDict: action,
       setDictLoading: action,
@@ -179,7 +176,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   setValuesByRouter = (search: string | IAnyObject, params?: IAnyObject, type: 'all' | 'part' = 'all') => {
     let newValues: IAnyObject = {};
     const keys = Object.keys(this.values);
-    if (typeof search === 'string') {
+    if (typeof search === 'string' && search) {
       try {
         // 小程序会报错
         const searchParams = new URLSearchParams(search);
@@ -222,6 +219,14 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
   };
 
+  setDictFetchIDMap = (field: IField<V>) => {
+    const fetchID = addWithLimit(this.dictFetchIDMap[field] ?? 0);
+    this.dictFetchIDMap[field] = fetchID;
+    return fetchID;
+  };
+
+  getDictFetchIDMap = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
+
   setDict = (dict: IStoreDict<V>) => this.dict = dict;
 
   setDictByField = (field: IField<V>, value: IAny) => this.dict[field] = value;
@@ -243,9 +248,9 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   };
 
   // 设置扩展数据
-  setExtInfo = (key: string, value: IAny) => set(this.extInfo, key, value);
+  setExtInfo = (key: PropertyPath, value: IAny) => set(this.extInfo, key, value);
   // 获取扩展数据
-  getExtInfo = (key: string) => get(this.extInfo, key);
+  getExtInfo = (key: PropertyPath) => get(this.extInfo, key);
 
   runAPI = async () => {
     this.setLoading(true);
@@ -300,4 +305,6 @@ export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
   // 表单的配置
   formConfig?: Omit<IFormProps, 'initialValues'>;
   defineConfig?: IAnyObject
+  notifier?: INotifier;
+  afterAtRun?: IAfterAtRun
 }

@@ -1,6 +1,5 @@
 import { reaction } from '@formily/reactive';
 import { dataToOptions, IAny, IAnyObject, IKeys, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
-
 import { pick } from 'lodash-es';
 
 import { IStoreAPI, IStoreResponse, runStoreAPI } from './api';
@@ -24,8 +23,6 @@ export const initStoreDict = (store: BaseStore) => {
             store.setDictLoading(field, false);
             if (isSuccess(res)) {
               const apiData = getDictAPIData(res.data, conf);
-              console.log('apiData', conf, apiData);
-
               store.setDictByField(field, apiData);
             }
           }
