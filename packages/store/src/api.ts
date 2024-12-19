@@ -29,17 +29,20 @@ import { IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shar
  */
 export function runStoreAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController) {
   if (!api) {
-    return undefined;
+    return { code: 400, data: '', msg: 'api is required' } as IHTTPResponse;
   }
   if (typeof api === 'function') {
     return api(params);
   };
+  if (!apiExecutor) {
+    return { code: 400, data: '', msg: 'apiExecutor is required' } as IHTTPResponse;
+  }
   const { method } = api;
   const config: IAPIRequestConfig = isMethodPost(method) ? { ...api, data: { ...api.data, ...params } } : { ...api, params: { ...api.params, ...params } };
   if (abortController) {
     config.signal = abortController.signal;
   }
-  return apiExecutor?.(config);
+  return apiExecutor(config);
 }
 
 const isMethodPost = (method = '') => ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase());

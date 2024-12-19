@@ -12,18 +12,18 @@ export const initStoreDict = (store: BaseStore) => {
   dictConfig?.forEach((conf) => {
     const { type, field, data, api } = conf;
     if (data) {
-      store.setDictByField(field, data);
+      store.setFieldDict(field, data);
     }
     if (type !== 'by') {
       if (api) {
-        store.setDictLoading(field, true);
-        const lastFetchID = store.setDictFetchIDMap(field);
+        store.setFieldDictLoading(field, true);
+        const lastFetchID = store.incrDictFetchID(field);
         runStoreAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
-          if (lastFetchID === store.getDictFetchIDMap(field)) {
-            store.setDictLoading(field, false);
+          if (lastFetchID === store.getDictFetchID(field)) {
+            store.setFieldDictLoading(field, false);
             if (isSuccess(res)) {
               const apiData = getDictAPIData(res.data, conf);
-              store.setDictByField(field, apiData);
+              store.setFieldDict(field, apiData);
             }
           }
         });
@@ -42,40 +42,40 @@ export const runStoreDict = (store: BaseStore) => {
       const { field, getData, api, byField, isEmptyGetData = false, toMap, toOptions, keys } = conf;
       const updateDict = (newValues: IAny) => {
         if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) && byField.every(item => isBlank(newValues[item]))))) {
-          store.setDictFetchIDMap(field);
-          store.setDictByField(field, []);
+          store.incrDictFetchID(field);
+          store.setFieldDict(field, []);
           updateValueByDict(conf, [], store);
         } else {
           if (getData) {
             const dictData = getData(newValues, store);
             if (dictData instanceof Promise) {
-              store.setDictLoading(field, true);
-              const lastFetchID = store.setDictFetchIDMap(field);
+              store.setFieldDictLoading(field, true);
+              const lastFetchID = store.incrDictFetchID(field);
               dictData.then((data: IOptions | IAny) => {
-                if (lastFetchID === store.getDictFetchIDMap(field)) {
-                  store.setDictLoading(field, false);
-                  store.setDictByField(field, data);
+                if (lastFetchID === store.getDictFetchID(field)) {
+                  store.setFieldDictLoading(field, false);
+                  store.setFieldDict(field, data);
                   updateValueByDict(conf, data, store);
                 }
               });
             } else {
-              store.setDictByField(field, dictData);
+              store.setFieldDict(field, dictData);
               updateValueByDict(conf, dictData, store);
             }
           } else if (api) {
-            const lastFetchID = store.setDictFetchIDMap(field);
-            store.setDictLoading(field, true);
+            const lastFetchID = store.incrDictFetchID(field);
+            store.setFieldDictLoading(field, true);
             runStoreAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
-              if (lastFetchID === store.getDictFetchIDMap(field)) {
-                store.setDictLoading(field, false);
+              if (lastFetchID === store.getDictFetchID(field)) {
+                store.setFieldDictLoading(field, false);
                 if (isSuccess(res)) {
                   const apiData = res.data;
                   if (toMap && Array.isArray(apiData)) {
-                    store.setDictByField(field, optionsToObj(res.data, keys));
+                    store.setFieldDict(field, optionsToObj(res.data, keys));
                   } else if (toOptions) {
-                    store.setDictByField(field, dataToOptions(res.data, keys));
+                    store.setFieldDict(field, dataToOptions(res.data, keys));
                   } else {
-                    store.setDictByField(field, apiData);
+                    store.setFieldDict(field, apiData);
                   }
                   updateValueByDict(conf, apiData, store);
                 }
@@ -126,7 +126,7 @@ const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseSto
         }
         return isMultiple && type === 'string' ? newArr.join(splitter) : newArr[0];
       };
-      store.setValuesByField(field, getNewValue());
+      store.setFieldValue(field, getNewValue());
     }
   }
 };

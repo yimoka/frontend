@@ -3,31 +3,20 @@ import { action, define, observable } from '@formily/reactive';
 import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
-import { IAfterAtRun } from './aop';
+import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
 import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api';
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
 import { getSearchParamByValue, getValueBySearchParam, IField, IFieldsConfig } from './field';
 import { INotifier } from './notifier';
 
-/**
- * 应用配置的默认选项。
- *
- * @property {boolean} filterBlankAtRun - 执行 API 时是否过滤参数空值。
- * @property {boolean} bindRoute - 是否绑定路由。
- * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
- * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
- * @property {'run' | 'required' | 'no'} entryRunMode - 进入时的执行模式：'run' 表示立即执行，'required' 表示满足必填项时执行，'no' 表示不执行。
- * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
- * @property {Record<string, string>} fieldKeys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
- */
-const DF_OPTIONS = {
+const DF_OPTIONS: IBaseStoreOptions = {
   filterBlankAtRun: false,
   bindRoute: false,
-  updateRouteType: 'push' as 'push' | 'replace',
-  routeTrigger: 'unequal' as 'unequal' | 'any',
-  entryRunMode: 'no' as 'run' | 'required' | 'no',
+  updateRouteType: 'push',
+  routeTrigger: 'unequal',
+  entryRunMode: 'no',
   urlWithDefaultFields: [] as string[],
-  fieldKeys: {} as Record<string, string>,
+  keys: {} as Record<string, string>,
 };
 
 /**
@@ -42,25 +31,23 @@ const DF_OPTIONS = {
  * const store = new BaseStore({
  *  defaultValues: {
  *   name: '张三',
- *  age: 18,
+ *   age: 18,
  * }
  * });
  * ```
  */
 export class BaseStore<V extends object = IAnyObject, R = IAny> {
   /**
-   * 深拷贝 `DF_OPTIONS` 并将其赋值给 `options`。
-   *
-   * `cloneDeep` 函数用于创建一个对象的深拷贝，确保 `options` 与 `DF_OPTIONS` 之间没有引用关系。
-   *
-   * @see https://lodash.com/docs/4.17.15#cloneDeep
+   * 选项对象，包含默认选项。
+   * @type {IBaseStoreOptions}
    */
-  options = cloneDeep(DF_OPTIONS);
+  options: IBaseStoreOptions = cloneDeep(DF_OPTIONS);
 
   /**
+   * 字段配置对象，用于配置字段的 schema。
    * @type {IFieldsConfig<V>}
    * @default {}
-   * @description fieldsConfig 是一个 IFieldsConfig 类型的对象，用于配置字段。默认值是一个空对象。
+   * fieldsConfig 是一个 IFieldsConfig 类型的对象，用于配置字段。默认值是一个空对象。
    */
   fieldsConfig: IFieldsConfig<V> = Object({});
 
@@ -73,39 +60,101 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
   /**
    * 表单对象，包含表单的所有字段和方法。来源于 `@formily/core` 的 createForm 方法。
-   *
    * @type {Form<V & IAnyObject>}
    */
   form: Form<V & IAnyObject>;
 
+  /**
+   * dictConfig 数据字典的配置,按字段配置，支持直接写数据或者配置 API 请求。
+   * @type {IStoreDictConfig<V>}
+   */
   dictConfig: IStoreDictConfig<V> = [];
+  /**
+   * 字典请求的加载状态。
+   * @type {IStoreDictLoading<V>}
+   */
   dictLoading: IStoreDictLoading<V> = {};
 
-  // 字典请求时序 ID
+  /**
+   * 字典请求时序 ID
+   */
   private dictFetchIDMap: Record<IObjKey, number> = {};
 
+  /**
+   * 字典数据 用于存储 dictConfig 中配置生成的数据。主要用于下拉框 tag 等数据源。
+   * @type {IStoreDict<V>}
+   */
   dict: IStoreDict<V> = {};
 
-  // 扩展数据
+  /**
+   * 扩展数据 用于存储一些额外的数据 可以通过 setExtInfo 方法设置
+   * @type {IAnyObject}
+   */
   extInfo: IAnyObject = {};
 
-  // 请求执行器
+  /**
+   * 请求执行器 用于执行请求
+   * @type {IStoreHTTPRequest<R, V>}
+  */
   apiExecutor?: IStoreHTTPRequest<R, V>;
-  api?: IStoreAPI<V, R>;
 
-  loading = false;
+  /**
+   * 请求 API 的配置 支持 函数或者配置对象（参考 axios 请求配置）
+   * @type {IStoreAPI<V, R>}
+   * @example
+   * ```ts
+   * import { BaseStore } from '@yimoka/store';
+   * const store = new BaseStore({
+   * api: {url: '/api/user', method: 'GET'}
+   * });
+   * ```
+   * @example
+   * ```ts
+   * import { BaseStore } from '@yimoka/store';
+   * const store = new BaseStore({
+   * api: (params) => fetch('/api/user', {method: 'GET', body: JSON.stringify(params)})
+   * });
+   * ```
+   *
+  */
+  api?: IStoreAPI<V, R>;
+  /**
+   * 请求加载状态
+   * @type {boolean}
+   */
+  loading: boolean = false;
+  /**
+   * 请求响应数据
+   * @type {IStoreResponse<R, V>}
+   */
   response: IStoreResponse<R, V> = {};
 
+  /**
+   * 最后一次请求的 ID，请求时序保护。
+   * @private
+   */
   private lastFetchID = 0;
+  /**
+   * 请求控制器 用于取消请求
+   * @type {AbortController}
+   * @private
+  */
   private apiController: AbortController | undefined;
 
-  // 通知器
+  /**
+  * 通知器 用于通知消息的方法
+  * @type {INotifier}
+  */
   notifier?: INotifier;
-  // 执行后的操作
-  afterAtRun: IAfterAtRun = {};
+
+  /**
+   * 请求后的操作配置
+   * @type {IAfterAtFetch}
+   */
+  afterAtFetch: IAfterAtFetch = {};
 
   constructor(config: IBaseStoreConfig<V, R> = {}) {
-    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, defineConfig, notifier, afterAtRun } = config;
+    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, defineConfig, notifier, afterAtFetch } = config;
     this.defaultValues = defaultValues as V & IAnyObject;
     this.dictConfig = dictConfig || [];
     this.apiExecutor = apiExecutor;
@@ -114,8 +163,8 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     this.options = { ...this.options, ...options };
     this.form = createForm({ ...formConfig, initialValues: defaultValues });
     this.notifier = notifier;
-    if (afterAtRun) {
-      this.afterAtRun = afterAtRun;
+    if (afterAtFetch) {
+      this.afterAtFetch = afterAtFetch;
     }
 
     define(this, {
@@ -127,25 +176,21 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       extInfo: observable,
 
       setDict: action,
-      setDictLoading: action,
-      setDictByField: action,
-      resetDictConfig: action,
-      resetDictConfigByField: action,
-
+      setFieldDictLoading: action,
+      setFieldDict: action,
       setLoading: action,
       setResponse: action,
-
       setExtInfo: action,
-
-      runAPI: action,
-      runAPIByField: action,
-      runAPIByValues: action,
-      runAPIDataBySearch: action,
-
+      fetch: action,
       ...defineConfig,
     });
   }
 
+  /**
+   * 当前表单的值
+   *
+   * @type {V & IAnyObject}
+   */
   get values() {
     return this.form.values;
   }
@@ -157,23 +202,109 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    */
   getDefaultValues = () => cloneDeep(this.defaultValues);
 
+  /**
+   * 设置表单的值。
+   *
+   * @param values - 部分或全部的表单值。
+   * @param strategy - （可选）合并策略，指定如何将新值与现有值合并。 'overwrite' | 'merge' | 'shallowMerge'; 默认为 'merge'。
+   *
+   * @example
+   * // 示例1：设置表单的值 默认策略 merge
+   * ```ts
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+   * store.setValues({ name: '张三' });
+   * console.log(store.values); // { name: '张三', age: 18 }
+   * ```
+   * @example
+   * // 示例2：设置表单值 overwrite
+   * ```ts
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+   * store.setValues({ name: '张三' }, 'overwrite');
+   * console.log(store.values); // { name: '张三' }
+   * ```
+   * @example
+   * // 示例3：设置表单值 shallowMerge
+   * ```ts
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18, info: { address: '北京' } } });
+   * store.setValues({ name: '李四', info: { phone: '123' } }, 'shallowMerge');
+   * console.log(store.values); // { name: '李四', age: 18, info: { phone: '123' } }
+   * ```
+   */
   setValues = (values: Partial<V>, strategy?: IFormMergeStrategy) => {
     this.form.setValues(values, strategy);
   };
 
-  resetValues = () => {
-    this.form.setValues(this.getDefaultValues(), 'overwrite');
-  };
-
-  resetValuesByFields = (fields: Array<IField<V>> | IField<V>) => {
-    this.setValues(pick(this.getDefaultValues(), fields));
-  };
-
-  setValuesByField = (field: IField<V>, value: IAny) => {
+  /**
+   * 设置指定字段的值。
+   *
+   * @param field 要设置值的字段。
+   * @param value 要设置的值。
+   *
+   * @example
+   * 示例1：设置指定字段的值。
+  * ```ts
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+   * store.setFieldValue("name", '李四');
+   * console.log(store.values); // { name: '李四', age: 18 }
+   * ```
+   * @example
+   * ```ts
+   * 示例2：设置指定字段的值多级字段。
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18, info: { address: '北京' } } });
+   * store.setFieldValue("info.address", '上海');
+   * console.log(store.values); // { name: '张三', age: 18, info: { address: '上海' } }
+   * ```
+   * @example
+   * 示例3：设置指定字段的值多级数组字段。
+   * ```ts
+   * const store = new BaseStore({ defaultValues: { name: '张三', age: 18, tags: ['a', 'b'] } });
+   * store.setFieldValue("tags[0]", 'c');
+   * console.log(store.values); // { name: '张三', age: 18, tags: ['c', 'b'] }
+   * ```
+   */
+  setFieldValue = (field: IField<V>, value: IAny) => {
     this.form.setValuesIn(field as IAny, value);
   };
 
-  setValuesByRouter = (search: string | IAnyObject, params?: IAnyObject, type: 'all' | 'part' = 'all') => {
+  /**
+   * 根据路由中的查询参数和路径参数设置值。
+   *
+   * @param search - 查询参数，可以是查询字符串或对象。
+   * @param params - 路径参数对象，可选。
+   * @param resetMissingValues - 是否重置缺失的值，默认为 true。
+  * @example
+  * // 示例1：从路由查询参数设置值
+  * ```ts
+  * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+  * store.setValuesFromRoute('?name=李四&age=20');
+  * console.log(store.values); // { name: '李四', age: 20 }
+  * ```
+  * @example
+  * // 示例2：从路由查询参数和路径参数设置值
+  * ```ts
+  * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+  * store.setValuesFromRoute('?name=李四', { age: 20 });
+  * console.log(store.values); // { name: '李四', age: 20 }
+  * ```
+  * @example
+  * // 示例3：从对象查询参数设置值 不重置缺失的值
+  * ```ts
+  * const store = new BaseStore({ defaultValues: { name: '张三', age: 18 } });
+  * store.setValuesFromRoute({ name: '李四', age: 20 });
+  * console.log(store.values); // { name: '李四', age: 20 }
+  * // 不重置缺失的值
+  * store.setValuesFromRoute({ name: '李四' }, {}, false);
+  * console.log(store.values); // { name: '李四', age: 20 }
+  * // 重置缺失的值
+  * store.setValuesFromRoute({ name: '李四' }, {}, true);
+  * console.log(store.values); // { name: '李四', age: 18 }
+  * ```
+   */
+  setValuesFromRoute = (
+    search: string | IAnyObject,
+    params?: IAnyObject,
+    resetMissingValues: boolean = true,
+  ) => {
     let newValues: IAnyObject = {};
     const keys = Object.keys(this.values);
     if (typeof search === 'string' && search) {
@@ -183,26 +314,62 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
         keys.forEach((key) => {
           const strValue = searchParams.get(key);
           if (strValue !== null) {
-            newValues[key] = getValueBySearchParam(strValue, this.fieldsConfig[key], this.defaultValues[key]);
+            newValues[key] = getValueBySearchParam(
+              strValue,
+              this.fieldsConfig[key],
+              this.defaultValues[key],
+            );
           }
         });
       } catch (error) {
-        console.error('setValuesByRouter error:', error);
+        console.error('setValuesFromRoute error:', error);
       }
     }
     if (typeof search === 'object') {
-      Object.entries(pick(search, keys)).forEach(([key, value]) => newValues[key] = getValueBySearchParam(value, this.fieldsConfig[key], this.defaultValues[key]));
+      Object.entries(pick(search, keys)).forEach(([key, value]) => {
+        newValues[key] = getValueBySearchParam(
+          value,
+          this.fieldsConfig[key],
+          this.defaultValues[key],
+        );
+      });
     }
     if (typeof params === 'object') {
-      Object.entries(pick(params, keys)).forEach(([key, value]) => newValues[key] = getValueBySearchParam(value, this.fieldsConfig[key], this.defaultValues[key]));
+      Object.entries(pick(params, keys)).forEach(([key, value]) => {
+        newValues[key] = getValueBySearchParam(
+          value,
+          this.fieldsConfig[key],
+          this.defaultValues[key],
+        );
+      });
     }
-    if (type === 'all') {
+    if (resetMissingValues) {
       newValues = { ...this.getDefaultValues(), ...newValues };
-    };
+    }
     this.setValues(newValues);
   };
 
-  getURLSearch = () => {
+  /**
+   * 重置表单的值为默认值。
+  */
+  resetValues = () => {
+    this.form.setValues(this.getDefaultValues(), 'overwrite');
+  };
+
+  /**
+   * 重置指定字段的值为默认值。
+   * @param fields - 要重置的字段。支持单个字段或多字段数组。
+   * 如果重置的字段在默认值中不存在，则不会重置。
+   *
+   */
+  resetFieldsValue = (fields: Array<IField<V>> | IField<V>) => {
+    this.setValues(pick(this.getDefaultValues(), fields));
+  };
+
+  /**
+   * 根据表单的值生成 URL search 字符串。
+   */
+  genURLSearch = () => {
     try {
       const searchParams = new URLSearchParams();
       Object.entries(this.values).forEach(([key, value]) => {
@@ -219,30 +386,48 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
   };
 
-  setDictFetchIDMap = (field: IField<V>) => {
+  /**
+   * 增加字典请求时序 ID。
+   */
+  incrDictFetchID = (field: IField<V>) => {
     const fetchID = addWithLimit(this.dictFetchIDMap[field] ?? 0);
     this.dictFetchIDMap[field] = fetchID;
     return fetchID;
   };
 
-  getDictFetchIDMap = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
+  /**
+   * 获取字典请求时序 ID。
+   */
+  getDictFetchID = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
 
+  /**
+   * 设置字典数据。
+   * @param dict - 字典数据。
+   */
   setDict = (dict: IStoreDict<V>) => this.dict = dict;
 
-  setDictByField = (field: IField<V>, value: IAny) => this.dict[field] = value;
+  /**
+   * 设置字段字典数据。
+   * @param field - 字段。
+   * @param value - 字典数据。
+   */
+  setFieldDict = (field: IField<V>, value: IAny) => set(this.dict, field, value);
 
-  setDictLoading = (field: IField<V>, value: boolean) => this.dictLoading[field] = value;
+  /**
+   * 设置字段字典加载状态。
+   * @param field - 字段。
+   * @param bool - 加载状态 true | false。
+   */
+  setFieldDictLoading = (field: IField<V>, bool: boolean) => this.dictLoading[field] = bool;
 
-  resetDictConfig = () => {
-    this.dictConfig = [...this.dictConfig];
-  };
-
-  resetDictConfigByField = (field: IField<V>) => {
-    this.dictConfig = this.dictConfig.map(item => (item.field === field ? { ...item } : item));
-  };
-
+  /**
+   * 设置 fetch 的加载状态。
+   */
   setLoading = (loading: boolean) => this.loading = loading;
 
+  /**
+   * 设置 fetch 的响应数据
+   */
   setResponse = (data: IStoreResponse<R, V>) => {
     this.response = data;
   };
@@ -252,7 +437,10 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   // 获取扩展数据
   getExtInfo = (key: PropertyPath) => get(this.extInfo, key);
 
-  runAPI = async () => {
+  /**
+   * 执行 API 请求。
+   */
+  fetch = async () => {
     this.setLoading(true);
     this.lastFetchID = addWithLimit(this.lastFetchID);
     if (typeof this.api !== 'function') {
@@ -271,28 +459,34 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     const { api } = this;
     const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : this.values) as V;
     const response = await runStoreAPI<V, R>(api, this.apiExecutor, params, this.apiController);
-
     if (response && fetchID === this.lastFetchID) {
       this.setResponse(response);
       this.setLoading(false);
+      handleAfterAtFetch(response, this);
     }
     return response;
   };
+}
 
-  runAPIByField = (field: IField<V>, value: IAny) => {
-    this.setValuesByField(field, value);
-    return this.runAPI();
-  };
-
-  runAPIByValues = (values: Partial<V>, strategy?: IFormMergeStrategy) => {
-    this.setValues(values, strategy);
-    return this.runAPI();
-  };
-
-  runAPIDataBySearch = async (search: string | IAnyObject, params?: IAnyObject, type: 'all' | 'part' = 'all') => {
-    this.setValuesByRouter(search, params, type);
-    return this.runAPI();
-  };
+/**
+ * Store 的默认选项。
+ *
+ * @property {boolean} filterBlankAtRun - 执行 API 时是否过滤参数空值。
+ * @property {boolean} bindRoute - 是否绑定路由。
+ * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
+ * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
+ * @property {'run' | 'required' | 'no'} entryRunMode - 进入时的执行模式：'run' 表示立即执行，'required' 表示满足必填项时执行，'no' 表示不执行。
+ * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
+ * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
+ */
+export type IBaseStoreOptions = {
+  filterBlankAtRun: boolean;
+  bindRoute: boolean;
+  updateRouteType: 'push' | 'replace';
+  routeTrigger: 'unequal' | 'any';
+  entryRunMode: 'run' | 'required' | 'no';
+  urlWithDefaultFields: string[];
+  keys: Record<string, string>;
 }
 
 export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
@@ -300,11 +494,11 @@ export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
   dictConfig?: IStoreDictConfig<V>;
   apiExecutor?: IStoreHTTPRequest<R, V>;
   api?: IStoreAPI<V, R>;
-  options?: Partial<typeof DF_OPTIONS>;
+  options?: Partial<IBaseStoreOptions>;
   extInfo?: IAnyObject;
   // 表单的配置
   formConfig?: Omit<IFormProps, 'initialValues'>;
   defineConfig?: IAnyObject
   notifier?: INotifier;
-  afterAtRun?: IAfterAtRun
+  afterAtFetch?: IAfterAtFetch
 }

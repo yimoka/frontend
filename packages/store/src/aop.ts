@@ -2,14 +2,14 @@ import { IHTTPResponse, isBlank, isSuccess } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 
-export const handleAfterAtRun = (res: Partial<IHTTPResponse>, store: BaseStore) => {
+export const handleAfterAtFetch = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   handleResetValues(res, store);
-  handleAfterAtRunRun(res, store);
-  handleAfterAtRunNotify(res, store);
+  handleAfterAtFetchRun(res, store);
+  handleAfterAtFetchNotify(res, store);
 };
 
 const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
-  const { resetValues } = store.afterAtRun;
+  const { resetValues } = store.afterAtFetch;
   const reset = () => {
     store.resetValues();
     // 清除表单错误
@@ -29,19 +29,19 @@ const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   }
 };
 
-const handleAfterAtRunRun = (res: Partial<IHTTPResponse>, store: BaseStore) => {
-  const { run, failRun: runOnFail, successRun: runOnSuccess } = store.afterAtRun;
-  const runFn = (fn: IAfterAtRun['run']) => typeof fn === 'function' && fn(res, store);
+const handleAfterAtFetchRun = (res: Partial<IHTTPResponse>, store: BaseStore) => {
+  const { run, failRun, successRun } = store.afterAtFetch;
+  const runFn = (fn: IAfterAtFetch['run']) => typeof fn === 'function' && fn(res, store);
   runFn(run);
   if (isSuccess(res)) {
-    runFn(runOnSuccess);
+    runFn(successRun);
   } else {
-    runFn(runOnFail);
+    runFn(failRun);
   };
 };
 
-const handleAfterAtRunNotify = (res: Partial<IHTTPResponse>, store: BaseStore) => {
-  const { notify, failNotify: notifyOnFail = notify, successNotify: notifyOnSuccess = notify } = store.afterAtRun;
+const handleAfterAtFetchNotify = (res: Partial<IHTTPResponse>, store: BaseStore) => {
+  const { notify, failNotify: notifyOnFail = notify, successNotify: notifyOnSuccess = notify } = store.afterAtFetch;
   const getMsg = (notify: true | string, df?: string) => {
     const msg = notify === true ? res.msg : notify;
     return isBlank(msg) ? df : msg;
@@ -57,14 +57,14 @@ const handleAfterAtRunNotify = (res: Partial<IHTTPResponse>, store: BaseStore) =
   }
 };
 
-export type IAfterAtRunFn = (res: Partial<IHTTPResponse>, store: BaseStore) => void;
+export type IAfterAtFetchFn = (res: Partial<IHTTPResponse>, store: BaseStore) => void;
 
-export interface IAfterAtRun {
+export interface IAfterAtFetch {
   resetValues?: boolean | 'success' | 'fail';
   notify?: boolean | string
   failNotify?: boolean | string
   successNotify?: boolean | string
-  run?: IAfterAtRunFn
-  failRun?: IAfterAtRunFn
-  successRun?: IAfterAtRunFn
+  run?: IAfterAtFetchFn
+  failRun?: IAfterAtFetchFn
+  successRun?: IAfterAtFetchFn
 }

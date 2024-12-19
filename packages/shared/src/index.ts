@@ -3,6 +3,7 @@ export * from './arr';
 export * from './compiler';
 export * from './json';
 export * from './num';
+export * from './obj';
 export * from './options';
 export * from './promise';
 export * from './str';

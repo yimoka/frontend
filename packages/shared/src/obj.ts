@@ -1,6 +1,6 @@
 import { mergeWith } from 'lodash-es';
 
-import { IAny } from './type';
+import { IAny, IAnyObject } from './type';
 /**
  * 合并两个对象，当遇到数组时用源数组覆盖目标数组。
  *
@@ -36,7 +36,7 @@ import { IAny } from './type';
  * const result4 = mergeWithArrayOverride(obj7, obj8);
  * console.log(result4); // 输出: { a: { x: [3, 4], y: 2 }, b: 2, c: 4 }
  */
-export const mergeWithArrayOverride = (object: IAny, ...otherArgs: IAny[]) => mergeWith(object, ...otherArgs, (objValue: IAny, srcValue: IAny) => {
+export const mergeWithArrayOverride = <T extends object = IAnyObject>(object: IAny, ...otherArgs: IAny[]) => mergeWith(object, ...otherArgs, (objValue: IAny, srcValue: IAny): T => {
   if (Array.isArray(objValue)) {
     return srcValue;
   }
