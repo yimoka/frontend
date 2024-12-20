@@ -6,7 +6,7 @@ import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
 import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api';
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
-import { getSearchParamByValue, getValueBySearchParam, IField, IFieldsConfig } from './field';
+import { valueToSearchParam, parseSearchParam, IField, IFieldsConfig } from './field';
 import { INotifier } from './notifier';
 
 const DF_OPTIONS: IBaseStoreOptions = {
@@ -154,8 +154,11 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   afterAtFetch: IAfterAtFetch = {};
 
   constructor(config: IBaseStoreConfig<V, R> = {}) {
-    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, defineConfig, notifier, afterAtFetch } = config;
+    const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, fieldsConfig, defineConfig, notifier, afterAtFetch } = config;
     this.defaultValues = defaultValues as V & IAnyObject;
+    if (fieldsConfig) {
+      this.fieldsConfig = fieldsConfig;
+    }
     this.dictConfig = dictConfig || [];
     this.apiExecutor = apiExecutor;
     this.api = api;
@@ -314,7 +317,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
         keys.forEach((key) => {
           const strValue = searchParams.get(key);
           if (strValue !== null) {
-            newValues[key] = getValueBySearchParam(
+            newValues[key] = parseSearchParam(
               strValue,
               this.fieldsConfig[key],
               this.defaultValues[key],
@@ -327,7 +330,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     if (typeof search === 'object') {
       Object.entries(pick(search, keys)).forEach(([key, value]) => {
-        newValues[key] = getValueBySearchParam(
+        newValues[key] = parseSearchParam(
           value,
           this.fieldsConfig[key],
           this.defaultValues[key],
@@ -336,7 +339,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     if (typeof params === 'object') {
       Object.entries(pick(params, keys)).forEach(([key, value]) => {
-        newValues[key] = getValueBySearchParam(
+        newValues[key] = parseSearchParam(
           value,
           this.fieldsConfig[key],
           this.defaultValues[key],
@@ -375,7 +378,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       Object.entries(this.values).forEach(([key, value]) => {
         const defaultValue = this.defaultValues[key];
         if ((value !== defaultValue || this.options.urlWithDefaultFields?.includes(key)) && (!isBlank(value) || !isBlank(defaultValue))) {
-          const str = getSearchParamByValue(value);
+          const str = valueToSearchParam(value);
           searchParams.append(key, str);
         }
       });
@@ -491,6 +494,7 @@ export type IBaseStoreOptions = {
 
 export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
   defaultValues?: V & IAnyObject;
+  fieldsConfig?: IFieldsConfig<V>;
   dictConfig?: IStoreDictConfig<V>;
   apiExecutor?: IStoreHTTPRequest<R, V>;
   api?: IStoreAPI<V, R>;

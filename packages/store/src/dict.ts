@@ -4,7 +4,7 @@ import { pick } from 'lodash-es';
 
 import { IStoreAPI, IStoreResponse, runStoreAPI } from './api';
 import { BaseStore } from './base';
-import { getFieldIsMultiple, getFieldSplitter, IField } from './field';
+import { getFieldSplitter, IField } from './field';
 
 // 初始化字典数据
 export const initStoreDict = (store: BaseStore) => {
@@ -102,18 +102,20 @@ const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseSto
     const { values } = store;
     const oldValue = values[field];
     const type = typeof oldValue;
-    const isMultiple = getFieldIsMultiple(field, store);
     const splitter = getFieldSplitter(field, store);
+    // 当存在分割符时 认为是多选支持按分割符分割的字符串
+    const isMultiple = !!splitter;
+    const isToArr = isMultiple && type === 'string';
+
     const options = dataToOptions(dict, { keys, splitter, childrenKey });
     const haveMap: Record<string, boolean> = {};
-
     options.forEach(item => haveMap[item.value] = true);
 
     const getOldArr = () => {
       if (Array.isArray(oldValue)) {
         return oldValue;
       }
-      return isMultiple && type === 'string' ? strToArr(oldValue, splitter) : [oldValue];
+      return isToArr ? strToArr(oldValue, splitter) : [oldValue];
     };
 
     const oldArr = getOldArr();
@@ -124,7 +126,7 @@ const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseSto
         if (Array.isArray(oldValue)) {
           return newArr;
         }
-        return isMultiple && type === 'string' ? newArr.join(splitter) : newArr[0];
+        return isToArr ? newArr.join(splitter) : newArr[0];
       };
       store.setFieldValue(field, getNewValue());
     }
