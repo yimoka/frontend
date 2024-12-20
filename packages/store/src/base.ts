@@ -62,7 +62,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * 表单对象，包含表单的所有字段和方法。来源于 `@formily/core` 的 createForm 方法。
    * @type {Form<V & IAnyObject>}
    */
-  form: Form<V & IAnyObject>;
+  form: Form<V | IAnyObject>;
 
   /**
    * dictConfig 数据字典的配置,按字段配置，支持直接写数据或者配置 API 请求。
@@ -94,9 +94,9 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
   /**
    * 请求执行器 用于执行请求
-   * @type {IStoreHTTPRequest<R, V>}
+   * @type {IStoreHTTPRequest<R, V | IAnyObject>}
   */
-  apiExecutor?: IStoreHTTPRequest<R, V>;
+  apiExecutor?: IStoreHTTPRequest<R, V | IAnyObject>;
 
   /**
    * 请求 API 的配置 支持 函数或者配置对象（参考 axios 请求配置）
@@ -262,7 +262,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * console.log(store.values); // { name: '张三', age: 18, tags: ['c', 'b'] }
    * ```
    */
-  setFieldValue = (field: IField<V>, value: IAny) => {
+  setFieldValue = (field: IField<V> | IObjKey, value: IAny) => {
     this.form.setValuesIn(field as IAny, value);
   };
 
@@ -362,7 +362,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * 如果重置的字段在默认值中不存在，则不会重置。
    *
    */
-  resetFieldsValue = (fields: Array<IField<V>> | IField<V>) => {
+  resetFieldsValue = (fields: Array<IField<V> | IObjKey> | IField<V> | IObjKey) => {
     this.setValues(pick(this.getDefaultValues(), fields));
   };
 
@@ -389,7 +389,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   /**
    * 增加字典请求时序 ID。
    */
-  incrDictFetchID = (field: IField<V>) => {
+  incrDictFetchID = (field: IField<V> | IObjKey) => {
     const fetchID = addWithLimit(this.dictFetchIDMap[field] ?? 0);
     this.dictFetchIDMap[field] = fetchID;
     return fetchID;
@@ -398,7 +398,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   /**
    * 获取字典请求时序 ID。
    */
-  getDictFetchID = (field: IField<V>) => this.dictFetchIDMap[field] ?? 0;
+  getDictFetchID = (field: IField<V> | IObjKey) => this.dictFetchIDMap[field] ?? 0;
 
   /**
    * 设置字典数据。
@@ -411,14 +411,14 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * @param field - 字段。
    * @param value - 字典数据。
    */
-  setFieldDict = (field: IField<V>, value: IAny) => set(this.dict, field, value);
+  setFieldDict = (field: IField<V> | IObjKey, value: IAny) => set(this.dict, field, value);
 
   /**
    * 设置字段字典加载状态。
    * @param field - 字段。
    * @param bool - 加载状态 true | false。
    */
-  setFieldDictLoading = (field: IField<V>, bool: boolean) => this.dictLoading[field] = bool;
+  setFieldDictLoading = (field: IField<V> | IObjKey, bool: boolean) => this.dictLoading[field] = bool;
 
   /**
    * 设置 fetch 的加载状态。

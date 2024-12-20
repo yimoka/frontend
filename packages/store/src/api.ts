@@ -27,15 +27,15 @@ import { IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shar
  * const result = runStoreAPI(apiConfig, apiExecutor, { extraParam: 'value' });
  * console.log(result); // 输出: { success: true, config: { method: 'GET', url: '/api/data', params: { id: 1, extraParam: 'value' } } }
  */
-export function runStoreAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController) {
+export function runStoreAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController): IStoreResponse<R, V> {
   if (!api) {
-    return { code: 400, data: '', msg: 'api is required' } as IHTTPResponse;
+    return { code: 400, data: '', msg: 'api is required' } as IStoreResponse;
   }
   if (typeof api === 'function') {
     return api(params);
   };
   if (!apiExecutor) {
-    return { code: 400, data: '', msg: 'apiExecutor is required' } as IHTTPResponse;
+    return { code: 400, data: '', msg: 'apiExecutor is required' } as IStoreResponse;
   }
   const { method } = api;
   const config: IAPIRequestConfig = isMethodPost(method) ? { ...api, data: { ...api.data, ...params } } : { ...api, params: { ...api.params, ...params } };
@@ -47,7 +47,7 @@ export function runStoreAPI<V extends object = IAnyObject, R = IAny>(api?: IStor
 
 const isMethodPost = (method = '') => ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase());
 
-export type IStoreResponse<R = any, V = any> = Partial<IHTTPResponse<R, V & IAnyObject>>;
+export type IStoreResponse<R = any, V = any> = Partial<IHTTPResponse<R, V | IAnyObject>>;
 
 export type IStoreAPI<V = any, R = any> = IAPIRequestConfig<V> | ((params: V) => Promise<IStoreResponse<R, V>>);
 

@@ -1,5 +1,5 @@
 import { reaction } from '@formily/reactive';
-import { dataToOptions, IAny, IAnyObject, IKeys, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
+import { dataToOptions, IAny, IAnyObject, IKeys, IObjKey, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
 import { pick } from 'lodash-es';
 
 import { IStoreAPI, IStoreResponse, runStoreAPI } from './api';
@@ -144,7 +144,7 @@ const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
 
 export type IStoreDict<V extends object = IAnyObject> = { [key in IField<V>]?: IAny };
 
-export type IStoreDictLoading<V extends object = IAnyObject> = { [key in IField<V>]?: boolean };
+export type IStoreDictLoading<V extends object = IAnyObject> = { [key in IField<V> | IObjKey]?: boolean };
 
 export type IStoreDictConfig<V extends object = IAnyObject> = Array<IDictConfigItem<V>>;
 
@@ -168,7 +168,7 @@ export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBa
   type: 'by'
   byField: IField<V> | IField<V>[],
   // 当存在 getData 不会调用 api
-  getData?: (values: V, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>,
+  getData?: (values: V | IAnyObject, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>,
   paramKeys?: string | Record<IField<V>, IAny>
   // 字典变化时是否更新值
   isUpdateValue?: boolean
