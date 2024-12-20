@@ -62,7 +62,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * 表单对象，包含表单的所有字段和方法。来源于 `@formily/core` 的 createForm 方法。
    * @type {Form<V & IAnyObject>}
    */
-  form: Form<V | IAnyObject>;
+  form: Form<(V & IAnyObject) | IAnyObject>;
 
   /**
    * dictConfig 数据字典的配置,按字段配置，支持直接写数据或者配置 API 请求。

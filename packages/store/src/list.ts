@@ -164,7 +164,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
       this.setNextLoading(false);
       if (isSuccess(nextResponse)) {
         // 加载下一页数据 这里要求 data 为 object 包含 data 字段及其他分页信息
-        this.loadNextData(nextResponse?.data.data);
+        this.loadNextData((nextResponse?.data as IAny)?.data ?? []);
         this.setFieldValue(page, get(nextResponse.data, page, nextPage));
       }
     }
