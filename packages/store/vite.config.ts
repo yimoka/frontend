@@ -28,10 +28,18 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'lodash-es',
+        '@formily/core',
+        '@formily/json-schema',
+        '@formily/reactive',
+        '@yimoka/shared',
       ],
       output: {
         globals: {
           'lodash-es': '_',
+          '@formily/core': 'Formily.Core',
+          '@formily/json-schema': 'Formily.JSONSchema',
+          '@formily/reactive': 'Formily.Reactive',
+          '@yimoka/shared': 'YimokaShared',
         },
       },
     },
