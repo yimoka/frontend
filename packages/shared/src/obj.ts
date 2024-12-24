@@ -37,7 +37,7 @@ import { IAny, IAnyObject } from './type';
  * console.log(result4); // 输出: { a: { x: [3, 4], y: 2 }, b: 2, c: 4 }
  */
 export const mergeWithArrayOverride = <T extends object = IAnyObject>(object: IAny, ...otherArgs: IAny[]) => mergeWith(object, ...otherArgs, (objValue: IAny, srcValue: IAny): T => {
-  if (Array.isArray(objValue)) {
+  if (Array.isArray(objValue) || Array.isArray(srcValue)) {
     return srcValue;
   }
   if (typeof objValue === 'object' && typeof srcValue === 'object') {

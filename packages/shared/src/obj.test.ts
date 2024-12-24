@@ -38,4 +38,18 @@ describe('mergeWithArrayOverride', () => {
     const result = mergeWithArrayOverride(obj1, obj2, obj3);
     expect(result).toEqual({ a: 1, b: [3], c: [5], d: 6 });
   });
+  // 第一个值为数组 第二个值为对象的合并
+  it('数组合并对象', () => {
+    const obj1 = { a: [1, 2], b: 2 };
+    const obj2 = { a: { x: 1 }, c: 4 };
+    const result = mergeWithArrayOverride(obj1, obj2);
+    expect(result).toEqual({ a: { x: 1 }, b: 2, c: 4 });
+  });
+  // 第一个值为对象 第二个值为数组的合并
+  it('对象合并数组', () => {
+    const obj1 = { a: { x: 1 }, b: 2 };
+    const obj2 = { a: [1, 2], c: 4 };
+    const result = mergeWithArrayOverride(obj1, obj2);
+    expect(result).toEqual({ a: [1, 2], b: 2, c: 4 });
+  });
 });
