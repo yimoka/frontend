@@ -33,7 +33,7 @@ export const initStoreDict = (store: BaseStore) => {
 };
 
 // 字典数据处理
-export const runStoreDict = (store: BaseStore) => {
+export const watchStoreDict = (store: BaseStore) => {
   const disposerArr: (() => void)[] = [];
   const { values, dictConfig, apiExecutor } = store;
   dictConfig?.forEach((conf) => {

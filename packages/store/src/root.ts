@@ -82,6 +82,8 @@ export class RootStore<
   };
 }
 
+export const rootStore = new RootStore();
+
 export interface IRootInitVal<
   U extends object = IAnyObject,
   M extends Array<IAnyObject> = Array<IAnyObject>,
