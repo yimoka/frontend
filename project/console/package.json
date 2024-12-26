@@ -14,9 +14,9 @@
     "@formily/core": "^2.3.2",
     "@formily/react": "^2.3.2",
     "@formily/reactive": "^2.3.2",
+    "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
-    "@yimoka/react": "workspace:*",
     "antd": "^5.22.6",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
@@ -26,7 +26,8 @@
     "react-is": "18.3.1",
     "react-router-dom": "^7.1.1",
     "vite-plugin-pwa": "^0.21.1",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "workbox-window": "^7.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
