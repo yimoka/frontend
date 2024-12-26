@@ -5,6 +5,7 @@ import 'dayjs/locale/zh-cn';
 import { BrowserRouter } from 'react-router-dom';
 
 import { InitConfig } from '@/config';
+import { Pwa } from '@/pwa';
 import { RootRouter } from '@/router';
 
 dayjs.locale('zh-cn');
@@ -14,6 +15,7 @@ export default function app() {
     <BrowserRouter>
       <ConfigProvider locale={zhCN}>
         <App component={false}>
+          <Pwa />
           <InitConfig>
             <RootRouter />
           </InitConfig>
