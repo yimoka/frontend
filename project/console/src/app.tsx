@@ -8,6 +8,8 @@ import { InitConfig } from '@/config';
 import { Pwa } from '@/pwa';
 import { RootRouter } from '@/router';
 
+import { BaseLayout } from './layout/base';
+
 dayjs.locale('zh-cn');
 
 export default function app() {
@@ -17,7 +19,9 @@ export default function app() {
         <App component={false}>
           <Pwa />
           <InitConfig>
-            <RootRouter />
+            <BaseLayout>
+              <RootRouter />
+            </BaseLayout>
           </InitConfig>
         </App>
       </ConfigProvider>
