@@ -4,19 +4,22 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { BrowserRouter } from 'react-router-dom';
 
-import { RootRouter } from './router';
+import { InitConfig } from '@/config';
+import { RootRouter } from '@/router';
 
 dayjs.locale('zh-cn');
 
 export default function app() {
   return (
-    <BrowserRouter >
-      <ConfigProvider locale={zhCN}  >
+    <BrowserRouter>
+      <ConfigProvider locale={zhCN}>
         <App component={false}>
-          <RootRouter />
+          <InitConfig>
+            <RootRouter />
+          </InitConfig>
         </App>
       </ConfigProvider>
-    </BrowserRouter >
+    </BrowserRouter>
   );
 }
 
