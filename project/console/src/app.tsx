@@ -1,4 +1,4 @@
-import { ConfigProvider, App } from 'antd';
+import { ConfigProvider, App, theme } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
@@ -15,7 +15,10 @@ dayjs.locale('zh-cn');
 export default function app() {
   return (
     <BrowserRouter>
-      <ConfigProvider locale={zhCN}>
+      <ConfigProvider
+        locale={zhCN}
+        theme={{ algorithm: [theme.compactAlgorithm] }}
+      >
         <App component={false}>
           <Pwa />
           <InitConfig>

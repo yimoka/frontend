@@ -1,4 +1,20 @@
 import { observer } from '@formily/react';
-import { Layout } from 'antd';
+import { ConfigProvider, Layout, theme } from 'antd';
+const { useToken } = theme;
 
-export const Header = observer(() => <Layout.Header title='标题' ></Layout.Header>);
+export const Header = observer(() => {
+  const { token } = useToken();
+
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: { itemBg: token.colorBgContainer },
+          Layout: { headerBg: token.colorBgContainer },
+        },
+      }}
+    >
+      <Layout.Header title='标题' style={{ zIndex: 9, boxShadow: `0 1px 6px ${token.colorBorder}` }} ></Layout.Header>
+    </ConfigProvider>
+  );
+});

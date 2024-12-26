@@ -30,10 +30,7 @@ export const Sider = observer(({ menus, ...args }: SiderProps) => {
   }, [pathname]);
 
   return (
-    <Layout.Sider
-      collapsible
-      {...args}
-    >
+    <Layout.Sider collapsible theme='light'  {...args}  >
       <Menu
         mode="inline"
         selectedKeys={selectedKeys}
