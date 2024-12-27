@@ -1,21 +1,13 @@
 import { observer } from '@formily/react';
+import { ErrorComponent } from '@yimoka/react';
 import { isSuccess } from '@yimoka/shared';
-import { IStoreResponse } from '@yimoka/store';
 import { Result, ResultProps, Button, Spin } from 'antd';
-import React, { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
-export interface ErrorContentProps extends Omit<ResultProps, 'icon'> {
-  isReturnIndex?: boolean
-  loading?: boolean;
-  response: IStoreResponse;
-  onAgain?: () => unknown | Promise<unknown>;
-  icon?: string
-  children?: React.ReactNode
-}
 
-export const ErrorContent: FC<ErrorContentProps> = observer((props) => {
-  const { isReturnIndex = true, loading, response, onAgain, icon, status, children, ...args } = props;
+export const ErrorContent: ErrorComponent = observer((props) => {
+  const { returnIndex = true, loading, response, onAgain, icon, status, children, size, ...args } = props;
   const success = isSuccess(response);
   const { msg, code } = response;
 
@@ -25,6 +17,8 @@ export const ErrorContent: FC<ErrorContentProps> = observer((props) => {
     return null;
   }
 
+  // TODO: 根据不同的 size 显示不同的界面
+
   const resultProps: ResultProps = {
     ...args,
     icon,
@@ -32,7 +26,7 @@ export const ErrorContent: FC<ErrorContentProps> = observer((props) => {
     title: `出错了 ${code ?? ''}`,
     subTitle: msg,
     extra: <>
-      {isReturnIndex && <Link to='/'><Button >返回首页</Button></Link>}
+      {returnIndex && <Link to='/'><Button >返回首页</Button></Link>}
       {onAgain && <Button type='primary' onClick={onAgain}>再试一次</Button>}
     </>,
     children,

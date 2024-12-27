@@ -7,6 +7,7 @@ export * from './aop';
 export * from './api';
 export * from './base';
 export * from './dict';
+export * from './entity';
 export * from './field';
 export * from './list';
 export * from './notifier';

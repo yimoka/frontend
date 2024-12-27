@@ -1,7 +1,9 @@
-export type IObjKey = string | number | symbol;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type IAnyObject = Record<IObjKey, any>;
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type IAny = any;
+
+export type IObjKey = string | number | symbol;
+
+export type IAnyObject = Record<IObjKey, IAny>
+
+export type IStrKeyObject = Record<string, IAny>
+

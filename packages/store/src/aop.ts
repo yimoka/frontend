@@ -68,3 +68,9 @@ export interface IAfterAtFetch {
   failRun?: IAfterAtFetchFn
   successRun?: IAfterAtFetchFn
 }
+
+// 操作类型 store 的 afterAtFetch 配置
+export const opStoreAfterAtFetch: IAfterAtFetch = {
+  resetValues: 'success',
+  notify: true,
+};

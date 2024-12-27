@@ -41,7 +41,7 @@ export const useRouteParams = () => {
   return config?.useRouteParams?.();
 };
 
-export const useComponents = () => {
+export const useConfigComponents = () => {
   const config = useConfig();
   return config?.components;
 };
@@ -95,13 +95,15 @@ export interface Path {
 
 type ILevel = 'info' | 'warn' | 'error';
 
+export type ISize = 'small' | 'default' | 'large' | string;
+
 type IReport = (info: IAnyObject | Error | unknown, level: ILevel) => void;
 
-export type LoadingComponent = ComponentType<{ loading?: boolean, children?: ReactNode } & IAnyObject>;
+export type LoadingComponent = ComponentType<{ size?: ISize, loading?: boolean, children?: ReactNode } & IAnyObject>;
 
 export type ErrorComponent = ComponentType<ErrorProps>;
 
-export type SkeletonComponent = ComponentType<{ loading?: boolean, children?: ReactNode } & IAnyObject>;
+export type SkeletonComponent = ComponentType<{ size?: ISize, loading?: boolean, children?: ReactNode } & IAnyObject>;
 
 export type IConfigComponents = {
   Loading: LoadingComponent,
@@ -111,11 +113,12 @@ export type IConfigComponents = {
 };
 
 export interface ErrorProps {
-  isReturnIndex?: boolean
+  returnIndex?: boolean
   loading?: boolean;
   response: IStoreResponse;
   onAgain?: () => IAny | Promise<IAny>;
   icon?: string
   children?: ReactNode
+  size?: ISize,
   [key: string]: IAny
 }

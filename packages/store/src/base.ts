@@ -49,7 +49,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * @default {}
    * fieldsConfig 是一个 IFieldsConfig 类型的对象，用于配置字段。默认值是一个空对象。
    */
-  fieldsConfig: IFieldsConfig<V> = Object({});
+  fieldsConfig: IFieldsConfig = Object({});
 
   /**
    * 默认值对象，包含类型 V 和 IAnyObject 的属性。
@@ -494,7 +494,7 @@ export type IBaseStoreOptions = {
 
 export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
   defaultValues?: V & IAnyObject;
-  fieldsConfig?: IFieldsConfig<V>;
+  fieldsConfig?: IFieldsConfig;
   dictConfig?: IStoreDictConfig<V>;
   apiExecutor?: IStoreHTTPRequest<R, V>;
   api?: IStoreAPI<V, R>;

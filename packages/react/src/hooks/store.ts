@@ -1,11 +1,14 @@
+import { useExpressionScope } from '@formily/react';
 import { IAnyObject } from '@yimoka/shared';
 import { BaseStore, IStore, IStoreConfig, StoreMap } from '@yimoka/store';
+
+import { useMemo } from 'react';
 
 import { useAPIExecutor, useNotifier } from '../context/config';
 
 import { useDeepMemo } from './deep-memo';
 
-export function useStore<V extends object = IAnyObject, R extends object = IAnyObject>(store: IStore<V, R> | IStoreConfig<V, R>) {
+export function useInitStore<V extends object = IAnyObject, R extends object = IAnyObject>(store: IStore<V, R> | IStoreConfig<V, R>) {
   const apiExecutor = useAPIExecutor();
   const notifier = useNotifier();
   const curStore = useDeepMemo(() => {
@@ -26,3 +29,8 @@ export function useStore<V extends object = IAnyObject, R extends object = IAnyO
 
   return curStore;
 }
+
+export const useStore = <V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R>) => {
+  const scope = useExpressionScope();
+  return useMemo(() => store ?? (scope?.curStore as IStore<V, R> ?? {}), [store, scope]);
+};

@@ -22,13 +22,36 @@ export default defineConfig({
     target: 'es2015',
     rollupOptions: {
       output: {
+        // manualChunks: (id) => {
+        //   const nodeModules = '/node_modules/';
+        //   if (id.includes(`${nodeModules}react`)) {
+        //     return 'react';
+        //   }
+        //   if (id.includes(`${nodeModules}antd`) || id.includes(`${nodeModules}rc-`)) {
+        //     return 'antd';
+        //   }
+        //   if (id.includes(`${nodeModules}@ant-design/icons`)) {
+        //     return 'icon';
+        //   }
+        //   if (id.includes(`${nodeModules}@formily`)) {
+        //     return 'formily';
+        //   }
+        //   if (id.includes(`${nodeModules}@yimoka`)) {
+        //     return 'yimoka';
+        //   }
+        //   if (id.includes(`${nodeModules}`)) {
+        //     console.log('id', id);
+        //     // console.log('getModuleIds', meta.getModuleIds());
+        //     return 'vendor';
+        //   }
+        // },
         manualChunks: {
-          vendor: ['dayjs', 'axios', 'lodash-es'],
-          react: ['react', 'react-dom', 'react-is', 'react-router-dom'],
+          vendor: ['dayjs', 'dayjs/locale/zh-cn', 'axios', 'lodash-es'],
+          react: ['react', 'react-dom', 'react-is', 'react-router-dom', 'react/jsx-runtime'],
           antd: ['antd', 'antd/lib/locale/zh_CN'],
           icon: ['@ant-design/icons'],
           formily: ['@formily/core', '@formily/react', '@formily/reactive'],
-          // yimoka: ['@yimoka/shared', '@yimoka/store', '@yimoka/react'],
+          yimoka: ['@yimoka/shared', '@yimoka/store', '@yimoka/react'],
         },
       },
     },

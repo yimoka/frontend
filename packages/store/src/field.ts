@@ -1,5 +1,5 @@
 import { ISchema } from '@formily/json-schema';
-import { IAny, IAnyObject, JSONParse, JSONStringify } from '@yimoka/shared';
+import { IAny, IAnyObject, IObjKey, IStrKeyObject, JSONParse, JSONStringify } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 
@@ -197,17 +197,19 @@ export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
   return levelConf;
 };
 
-export type IField<P extends object = IAnyObject> = keyof P | string;
+export type IField<P extends object = IStrKeyObject> = keyof P | string;
 
-export type IFieldsConfig<V extends object = IAnyObject> = Record<IField<V>, IFieldConfig>;
+export type IFieldsConfig = Record<string, IFieldConfig>;
 
 export type IFieldConfig = ISchema<IAny> & {
+  // 分割符 当使用字符串表示数组时使用
+  'x-splitter'?: string;
   // 字段的提示
-  tooltip?: string | IAnyObject;
-  // 用于配置表格列的属性 列表页
-  column?: IAnyObject,
-  // 用于配置描述列表的属性 详情页
-  desc?: IAnyObject
-  // 显示的属性
-  read?: IAnyObject
+  'x-tooltip'?: string | IAnyObject;
+  // 当在列表页表格渲染时使用
+  'x-column'?: IAnyObject & { key?: IObjKey, width?: number | string }
+  // 唯一标识字段 用于在多级系统时用于编辑时的数据匹配
+  'x-id': string
+  //
+  'x-edit-config'?: IAnyObject
 };
