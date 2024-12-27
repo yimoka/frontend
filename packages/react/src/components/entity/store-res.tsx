@@ -17,7 +17,7 @@ export type IEntityResProps = PropsWithChildren<{
   size?: ISize
 }>
 
-export const StorePageContent = observer((props: IEntityResProps) => {
+export const EntityStoreRes = observer((props: IEntityResProps) => {
   const { store, children, skeleton, returnIndex, again = true, load = false, size } = props;
   const curStore = useStore(store);
   const { loading, response, fetch } = curStore;

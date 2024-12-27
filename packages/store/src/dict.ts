@@ -150,8 +150,8 @@ export type IStoreDictLoading<V extends object = IAnyObject> = { [key in IField<
 
 export type IStoreDictConfig<V extends object = IAnyObject> = Array<IDictConfigItem<V>>;
 
-type IDictConfigItemBase<V extends object = IAnyObject> = {
-  field: IField<V>,
+type IDictConfigItemBase = {
+  field: string,
   data?: IOptions | IAny,
   api?: IStoreAPI
   // 只处理 api 返回值 默认为 true
@@ -164,14 +164,14 @@ type IDictConfigItemBase<V extends object = IAnyObject> = {
   childrenKey?: string
 }
 
-export type IDictConfigItem<V extends object = IAnyObject> = ({ type?: 'self' } & IDictConfigItemBase<V>) | IDictConfigItemBy<V>;
+export type IDictConfigItem<V extends object = IAnyObject> = ({ type?: 'self' } & IDictConfigItemBase) | IDictConfigItemBy<V>;
 
-export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBase<V> & {
+export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBase & {
   type: 'by'
-  byField: IField<V> | IField<V>[],
+  byField: string | string[],
   // 当存在 getData 不会调用 api
   getData?: (values: V | IAnyObject, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>,
-  paramKeys?: string | Record<IField<V>, IAny>
+  paramKeys?: string | Record<string, IAny>
   // 字典变化时是否更新值
   isUpdateValue?: boolean
   // 字典为空时是否获取数据

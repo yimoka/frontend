@@ -3,7 +3,7 @@ import { IAnyObject, isBlank } from '@yimoka/shared';
 import { IStore } from '@yimoka/store';
 import { ComponentType, PropsWithChildren, useMemo } from 'react';
 
-import { useComponents } from '../../context/config';
+import { useComponents } from '../../hooks/components';
 import { useRoot } from '../../hooks/root';
 
 export const EntitySchema = observer((props: EntitySchemaProps) => {

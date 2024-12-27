@@ -209,7 +209,7 @@ export type IFieldConfig = ISchema<IAny> & {
   // 当在列表页表格渲染时使用
   'x-column'?: IAnyObject & { key?: IObjKey, width?: number | string }
   // 唯一标识字段 用于在多级系统时用于编辑时的数据匹配
-  'x-id': string
+  'x-id'?: string
   //
   'x-edit-config'?: IAnyObject
 };
