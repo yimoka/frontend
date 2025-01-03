@@ -40,5 +40,5 @@ export type EntitySchemaProps<V extends object = IAnyObject, R extends object = 
   store: IStore<V, R>;
   components?: Record<string, ComponentType<IAnyObject>>;
   scope?: IAnyObject;
-  schema: ISchema;
+  schema?: ISchema;
 }>
