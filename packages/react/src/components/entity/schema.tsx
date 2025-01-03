@@ -1,13 +1,13 @@
 import { createSchemaField, FormProvider, ISchema, observer, RecordScope } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
-import { IStore } from '@yimoka/store';
-import { ComponentType, PropsWithChildren, useMemo } from 'react';
+import { IFetchListener, IStore } from '@yimoka/store';
+import { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
 import { useComponents } from '../../hooks/components';
 import { useRoot } from '../../hooks/root';
 
 export const EntitySchema = observer((props: EntitySchemaProps) => {
-  const { store, components, scope, schema, children } = props;
+  const { store, components, scope, schema, children, onError, onSuccess } = props;
   const ctxComponents = useComponents();
   const root = useRoot();
   const { fieldsConfig, form } = store;
@@ -25,6 +25,23 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
     scope: { $store: store, $root: root, ...scope },
   }), [ctxComponents, components, store, root, scope]);
 
+  useEffect(() => {
+    if (onError) {
+      store.onFetchError(onError);
+    }
+    if (onSuccess) {
+      store.onFetchSuccess(onSuccess);
+    }
+    return () => {
+      if (onError) {
+        store.offFetchError(onError);
+      }
+      if (onSuccess) {
+        store.offFetchSuccess(onSuccess);
+      }
+    };
+  }, [onError, onSuccess, store]);
+
   return (
     <FormProvider form={form}>
       <RecordScope getRecord={() => store.values}>
@@ -41,4 +58,6 @@ export type EntitySchemaProps<V extends object = IAnyObject, R extends object = 
   components?: Record<string, ComponentType<IAnyObject>>;
   scope?: IAnyObject;
   schema?: ISchema;
+  onError?: IFetchListener;
+  onSuccess?: IFetchListener;
 }>

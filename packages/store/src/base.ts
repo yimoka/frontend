@@ -1,6 +1,6 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank } from '@yimoka/shared';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
@@ -8,6 +8,8 @@ import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
 import { valueToSearchParam, parseSearchParam, IField, IFieldsConfig } from './field';
 import { INotifier } from './notifier';
+
+import { IStore } from '.';
 
 const DF_OPTIONS: IBaseStoreOptions = {
   filterBlankAtRun: false,
@@ -17,6 +19,12 @@ const DF_OPTIONS: IBaseStoreOptions = {
   entryRun: false,
   urlWithDefaultFields: [] as string[],
   keys: {} as Record<string, string>,
+};
+
+// 事件名称
+export const EVENT_NAMES = {
+  fetchSuccess: 'fetchSuccess',
+  fetchError: 'fetchError',
 };
 
 /**
@@ -37,6 +45,12 @@ const DF_OPTIONS: IBaseStoreOptions = {
  * ```
  */
 export class BaseStore<V extends object = IAnyObject, R = IAny> {
+  /**
+   * 事件监听器。
+   * @private
+   */
+  private eventListeners: Record<string, Array<(...args: IAny[]) => void>> = {};
+
   /**
    * 选项对象，包含默认选项。
    * @type {IBaseStoreOptions}
@@ -466,9 +480,73 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       this.setResponse(response);
       this.setLoading(false);
       handleAfterAtFetch(response, this);
+      if (isSuccess(response)) {
+        this.emitFetchSuccess(response, this);
+      } else {
+        this.emitFetchError(response, this);
+      }
     }
     return response;
   };
+
+
+  /**
+   * 订阅事件。
+   * @param event - 事件名称。
+   * @param listener - 事件监听器。
+   */
+  on(event: string, listener: (...args: IAny[]) => void) {
+    if (!this.eventListeners[event]) {
+      this.eventListeners[event] = [];
+    }
+    this.eventListeners[event].push(listener);
+  }
+
+  /**
+   * 取消订阅事件。
+   * @param event - 事件名称。
+   * @param listener - 事件监听器。
+   */
+  off(event: string, listener: (...args: IAny[]) => void) {
+    if (!this.eventListeners[event]) return;
+    this.eventListeners[event] = this.eventListeners[event].filter(l => l !== listener);
+  }
+
+  /**
+   * 触发事件。
+   * @param event - 事件名称。
+   * @param args - 传递给事件监听器的参数。
+   */
+  emit(event: string, ...args: IAny[]) {
+    if (!this.eventListeners[event]) return;
+    this.eventListeners[event].forEach(listener => listener(...args));
+  }
+
+  // 监听请求成功事件
+  onFetchSuccess(listener: IFetchListener<V, R>) {
+    this.on(EVENT_NAMES.fetchSuccess, listener);
+  }
+  // 取消监听请求成功事件
+  offFetchSuccess(listener: IFetchListener<V, R>) {
+    this.off(EVENT_NAMES.fetchSuccess, listener);
+  }
+  // 触发请求成功事件
+  emitFetchSuccess(response: IStoreResponse<R, V>, store: IStore<V, R>) {
+    this.emit(EVENT_NAMES.fetchSuccess, response, store);
+  }
+
+  // 监听请求失败事件
+  onFetchError(listener: IFetchListener<V, R>) {
+    this.on(EVENT_NAMES.fetchError, listener);
+  }
+  // 取消监听请求失败事件
+  offFetchError(listener: IFetchListener<V, R>) {
+    this.off(EVENT_NAMES.fetchError, listener);
+  }
+  // 触发请求失败事件
+  emitFetchError(response: IStoreResponse<R, V>, store: IStore<V, R>) {
+    this.emit(EVENT_NAMES.fetchError, response, store);
+  }
 }
 
 /**
@@ -506,3 +584,5 @@ export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
   notifier?: INotifier;
   afterAtFetch?: IAfterAtFetch
 }
+
+export type IFetchListener<V extends object = IAnyObject, R = IAny> = (response: IStoreResponse<R, V>, store: IStore<V, R>) => void

@@ -1,4 +1,4 @@
-import { IAnyObject } from '@yimoka/shared';
+import { IAny, IAnyObject } from '@yimoka/shared';
 
 import { BaseStore, IBaseStoreConfig } from './base';
 import { ListStore } from './list';
@@ -15,9 +15,9 @@ export * from './root';
 
 export type IStoreType = 'base' | 'list';
 
-export type IStore<V extends object = IAnyObject, R extends object = IAnyObject> = BaseStore<V, R> | ListStore<V, R>
+export type IStore<V extends object = IAnyObject, R = IAny> = BaseStore<V, R> | ListStore<V, R>
 
-export type IStoreConfig<V extends object = IAnyObject, R extends object = IAnyObject> = { type?: IStoreType } & (IBaseStoreConfig<V, R>);
+export type IStoreConfig<V extends object = IAnyObject, R = IAny> = { type?: IStoreType } & (IBaseStoreConfig<V, R>);
 
 export const StoreMap = {
   base: BaseStore,
