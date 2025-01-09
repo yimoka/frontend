@@ -1,6 +1,7 @@
 import { observer } from '@formily/react';
 import { IAnyObject } from '@yimoka/shared';
 import { IStore, IStoreConfig } from '@yimoka/store';
+import React from 'react';
 
 import { useInitStore } from '../../hooks/store';
 import { StoreDict } from '../store/dict';

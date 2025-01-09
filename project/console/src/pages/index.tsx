@@ -1,6 +1,8 @@
 import { Flex, theme } from 'antd';
+import React from 'react';
 
 import { WithFooterLayout } from '@/layout/with-footer';
+
 const { useToken } = theme;
 
 export const IndexPage = () => {

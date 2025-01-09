@@ -1,5 +1,5 @@
 import { Modal } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
 // 进入页面的时间

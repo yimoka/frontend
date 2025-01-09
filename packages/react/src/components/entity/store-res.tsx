@@ -2,7 +2,7 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isBlank, isSuccess } from '@yimoka/shared';
 import { IStore } from '@yimoka/store';
-import { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
 import { ISize } from '../../context/config';
 import { useComponents } from '../../hooks/components';

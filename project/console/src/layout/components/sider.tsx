@@ -1,7 +1,7 @@
 import { observer } from '@formily/react';
 import { useRoot } from '@yimoka/react';
 import { SiderProps as TSiderProps, MenuProps, Menu, Layout } from 'antd';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export interface SiderProps extends TSiderProps {

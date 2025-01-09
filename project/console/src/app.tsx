@@ -2,6 +2,7 @@ import { ConfigProvider, App, theme } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { InitConfig } from '@/config';

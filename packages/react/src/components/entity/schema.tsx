@@ -1,7 +1,7 @@
 import { createSchemaField, FormProvider, ISchema, observer, RecordScope } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
 import { IFetchListener, IStore } from '@yimoka/store';
-import { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
+import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
 import { useComponents } from '../../hooks/components';
 import { useRoot } from '../../hooks/root';

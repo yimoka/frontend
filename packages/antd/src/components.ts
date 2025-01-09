@@ -1,10 +1,17 @@
 import { IConfigComponents } from '@yimoka/react';
 import { Skeleton } from 'antd';
 
+import { Table } from './display/table';
+
 import { ErrorContent } from './feedback/error-content';
 import { Loading } from './feedback/loading';
+
 export const components: IConfigComponents = {
+  // 用于系统配置的基础组件
   Loading,
   ErrorContent,
   Skeleton,
+
+  // display
+  Table,
 };

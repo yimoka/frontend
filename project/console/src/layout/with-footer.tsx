@@ -1,5 +1,6 @@
 import { observer } from '@formily/react';
 import { Flex, Layout, LayoutProps } from 'antd';
+import React from 'react';
 
 import { Footer } from './components/footer';
 

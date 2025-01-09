@@ -2,7 +2,7 @@ import { ISchema, observer } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
 import { getEntryStore, IEntityConfig, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
 import { useInitStore } from '../../hooks/store';
