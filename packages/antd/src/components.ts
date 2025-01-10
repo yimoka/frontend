@@ -1,6 +1,7 @@
 import { IConfigComponents } from '@yimoka/react';
 import { Skeleton, Tag } from 'antd';
 
+import { Descriptions } from './display/descriptions';
 import { Table } from './display/table';
 
 import { ErrorContent } from './feedback/error-content';
@@ -15,5 +16,6 @@ export const components: IConfigComponents = {
   Tag,
 
   // display
+  Descriptions,
   Table,
 };

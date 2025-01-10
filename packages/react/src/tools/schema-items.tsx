@@ -1,4 +1,4 @@
-import { Schema } from '@formily/react';
+import { Schema, SchemaKey } from '@formily/react';
 import { IAny, IAnyObject, isBlank } from '@yimoka/shared';
 import { get } from 'lodash-es';
 
@@ -32,7 +32,7 @@ export const isItemSchemaRecursion = (schema: Schema, componentName?: string) =>
 // 判断是否需要渲染
 export const isItemSchemaVisible = (schema: Schema) => !(schema['x-hidden'] || schema['x-visible'] === false || (schema['x-display'] && schema['x-display'] !== 'visible'));
 
-export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema) => IAnyObject) => {
+export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema, key: SchemaKey, index: number) => IAnyObject) => {
   if (!schema) {
     return undefined;
   }
@@ -44,11 +44,14 @@ export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema) 
   const item = Array.isArray(items) ? items[0] : items;
   const propsArr: IAny[] = [];
 
-  item?.reduceProperties((arr, item) => {
+  item?.reduceProperties((arr, item, key, index) => {
+    console.log(' reduceProperties key:', key);
+    console.log(' reduceProperties index:', index);
+
     if (!isItemSchemaVisible(item)) {
       return arr;
     }
-    arr.push(toProps(item));
+    arr.push(toProps(item, key, index));
     return arr;
   }, propsArr);
 

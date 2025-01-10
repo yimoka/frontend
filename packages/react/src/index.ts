@@ -5,6 +5,7 @@ export * from './components/entity/schema';
 
 export * from './components/store/dict';
 export * from './components/store/route';
+export * from './components/render-any';
 
 export * from './context/config';
 
