@@ -42,6 +42,7 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
+    "build-watch": "tsc -b && vite build --watch",
     "lint": "eslint . --fix",
     "test": "vitest --coverage"
   },

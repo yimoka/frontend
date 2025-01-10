@@ -1,5 +1,5 @@
 import { IConfigComponents } from '@yimoka/react';
-import { Skeleton } from 'antd';
+import { Skeleton, Tag } from 'antd';
 
 import { Table } from './display/table';
 
@@ -11,6 +11,8 @@ export const components: IConfigComponents = {
   Loading,
   ErrorContent,
   Skeleton,
+
+  Tag,
 
   // display
   Table,
