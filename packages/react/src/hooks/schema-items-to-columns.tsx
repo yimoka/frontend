@@ -33,4 +33,3 @@ const schemaToItemProps = (schema: Schema, getRecordIndex?: IRecordIndexFn, prop
   }
   return itemProps;
 };
-

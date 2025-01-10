@@ -33,6 +33,9 @@ export const isItemSchemaRecursion = (schema: Schema, componentName?: string) =>
 export const isItemSchemaVisible = (schema: Schema) => !(schema['x-hidden'] || schema['x-visible'] === false || (schema['x-display'] && schema['x-display'] !== 'visible'));
 
 export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema) => IAnyObject) => {
+  if (!schema) {
+    return undefined;
+  }
   const { items } = schema;
   if (isBlank(items)) {
     return undefined;
