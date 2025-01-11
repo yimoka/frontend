@@ -9,6 +9,7 @@ export * from './components/render-any';
 
 export * from './context/config';
 
+export * from './hooks/component-data';
 export * from './hooks/components';
 export * from './hooks/deep-memo';
 export * from './hooks/record-index-fn';
