@@ -74,7 +74,7 @@ export type IUseLocation<T = IAny> = () => {
 }
 
 export interface IUseNavigate {
-  (to: string | Partial<Path>, options?: NavigateOptions): void;
+  (to: string | Partial<IRoutePath>, options?: NavigateOptions): void;
   (delta: number): void;
 }
 
@@ -87,7 +87,7 @@ export interface NavigateOptions {
   unstable_viewTransition?: boolean;
 }
 
-export interface Path {
+export interface IRoutePath {
   pathname: string;
   search: string;
   hash: string;

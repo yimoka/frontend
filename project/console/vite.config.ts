@@ -12,10 +12,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8080,
+    port: 8001,
   },
   preview: {
-    port: 8180,
+    port: 8101,
   },
   build: {
     sourcemap: true,

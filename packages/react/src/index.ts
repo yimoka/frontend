@@ -1,3 +1,5 @@
+export * from '@formily/react';
+
 export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';
 export * from './components/entity/base';
@@ -14,6 +16,7 @@ export * from './hooks/components';
 export * from './hooks/deep-memo';
 export * from './hooks/record-index-fn';
 export * from './hooks/root';
+export * from './hooks/schema-items-to-items';
 export * from './hooks/schema-items-to-columns';
 export * from './hooks/store';
 

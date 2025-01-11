@@ -26,7 +26,7 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
 export const isItemSchemaRecursion = (schema: Schema, componentName?: string) => {
   const decorator = schema['x-decorator'];
   const component = schema['x-component'];
-  return schema.properties || (decorator && decorator !== componentName) || (component && component !== componentName);
+  return !isBlank(schema.properties) || (decorator && decorator !== componentName) || (component && component !== componentName);
 };
 
 // 判断是否需要渲染
@@ -45,9 +45,6 @@ export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema, 
   const propsArr: IAny[] = [];
 
   item?.reduceProperties((arr, item, key, index) => {
-    console.log(' reduceProperties key:', key);
-    console.log(' reduceProperties index:', index);
-
     if (!isItemSchemaVisible(item)) {
       return arr;
     }

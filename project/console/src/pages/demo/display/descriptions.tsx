@@ -22,26 +22,24 @@ export const DescriptionsSchema = () => (
           type: 'void',
           'x-component': 'Descriptions',
           'x-component-props': {
+            data: [{ k1: 'v1', k2: 'v2' }],
           },
-          // 理论上来讲 void 不存在 items,
-          // 这里为了 'x-component': 'Descriptions' 里的 items 能够支持 lowCode 使用 items
-          // 所以这里显示声明 items 为 void
           items: {
-            type: 'void',
+            type: 'object',
             properties: {
-              id: {
+              k1: {
                 title: 'ID',
                 // 'x-hidden': true,
               },
-              nameTag: {
+              k2: {
                 type: 'void',
                 title: 'Name',
                 'x-component': 'Tag',
                 'x-component-props': {
-                  children: '123',
+                  color: 'blue',
+                  children: '{{$value}}',
                 },
               },
-
             },
           },
         },
