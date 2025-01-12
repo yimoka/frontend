@@ -1,4 +1,3 @@
-import { components } from '@yimoka/antd';
 import { ConfigProvider, IConfig } from '@yimoka/react';
 import { INotifier } from '@yimoka/store';
 import { App } from 'antd';
@@ -7,6 +6,8 @@ import React, { PropsWithChildren, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { httpRequest } from '@/http';
+
+import { components } from './components';
 
 const { useApp } = App;
 
