@@ -91,11 +91,24 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
   private nextLastFetchID = 0;
   private nextAPIController: AbortController | undefined;
 
-  constructor(config: IBaseStoreConfig<V, R> = {}) {
-    const { options, defineConfig, defaultValues, ...args } = config;
+  constructor(config: IBaseStoreConfig<V, R> & { isPaginate?: boolean } = {}) {
+    const { options, defineConfig, defaultValues, isPaginate, ...args } = config;
     const curOptions = mergeWithArrayOverride<IBaseStoreOptions>(cloneDeep(listOptionsDefault), options);
-    const { page, pageSize, sortOrder } = curOptions.keys ?? listKeysDefault;
-    const curDefaultValues = { [sortOrder]: [], [page]: 1, [pageSize]: 10, ...defaultValues } as V & IAnyObject;
+    const { page, pageSize, sortOrder } = mergeWithArrayOverride(cloneDeep(listKeysDefault), curOptions.keys);
+    const curDefaultValues = { ...defaultValues } as IAnyObject;
+
+    if (sortOrder && typeof curDefaultValues[sortOrder] === 'undefined') {
+      curDefaultValues[sortOrder] = [];
+    }
+    if (isPaginate) {
+      if (typeof curDefaultValues[page] === 'undefined') {
+        curDefaultValues[page] = 1;
+      }
+      if (typeof curDefaultValues[pageSize] === 'undefined') {
+        curDefaultValues[pageSize] = 10;
+      }
+    }
+
     super({
       ...args,
       options: curOptions,
