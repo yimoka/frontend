@@ -21,7 +21,7 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
   }, [schema, fieldsConfig]);
 
   const SchemaField = useMemo(() => createSchemaField({
-    components: { ...ctxComponents, ...components },
+    components: components ? { ...ctxComponents, ...components } : ctxComponents,
     scope: { $store: store, $root: root, ...scope },
   }), [ctxComponents, components, store, root, scope]);
 

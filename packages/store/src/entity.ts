@@ -6,7 +6,7 @@ import { IFieldsConfig } from './field';
 import { IStore, IStoreConfig, opStoreAfterAtFetch } from '.';
 
 // eslint-disable-next-line complexity
-export function getEntryStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>): IStore<V, R> | IStoreConfig<V, R> {
+export function getEntryStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>, isOperation?: boolean): IStore<V, R> | IStoreConfig<V, R> {
   if (store instanceof BaseStore) {
     return store;
   }
@@ -26,6 +26,8 @@ export function getEntryStore<V extends object = IAnyObject, R extends object = 
     if (config?.idKey) {
       conf.defaultValues[config.idKey] = undefined;
     }
+  } else if (isOperation) {
+    conf.afterAtFetch = { ...opStoreAfterAtFetch };
   }
 
   const curStore = store ?? {} as IStoreConfig<V, R>;
@@ -82,7 +84,7 @@ export interface IBreadcrumbItem {
   [key: IObjKey]: IAny;
 }
 
-type IAPIKey =
+export type IAPIKey =
   'add' | 'edit' | 'detail' | 'del' | 'delOne'
   | 'list' | 'queryOne' | 'query' | 'count'
   | 'getCache' | 'setCache' | 'delCache'

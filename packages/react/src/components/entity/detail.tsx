@@ -8,7 +8,7 @@ import { useDeepMemo } from '../../hooks/deep-memo';
 import { useInitStore } from '../../hooks/store';
 
 import { Entity, IEntityProps } from './base';
-import { EntityStoreRes } from './store-res';
+import { EntityResponse } from './response';
 
 export const EntityDetail = observer((props: IEntityDetailProps) => {
   const { values, ...args } = props;
@@ -27,9 +27,9 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
 
   return (
     <Entity store={curDetailStore} >
-      <EntityStoreRes store={curDetailStore}>
+      <EntityResponse store={curDetailStore}>
         <EntityValues  {...args} scope={{ ...scope, $detailStore: detailStore }} config={config} values={curDetailStore?.response?.data ?? {}} />
-      </EntityStoreRes>
+      </EntityResponse>
     </Entity>
   );
 });

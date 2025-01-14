@@ -8,7 +8,7 @@ import { ISize } from '../../context/config';
 import { useComponents } from '../../hooks/components';
 import { useStore } from '../../hooks/store';
 
-export type IEntityResProps = PropsWithChildren<{
+export type IEntityResponseProps = PropsWithChildren<{
   store?: IStore,
   skeleton?: IAnyObject | false
   returnIndex?: boolean
@@ -17,7 +17,7 @@ export type IEntityResProps = PropsWithChildren<{
   size?: ISize
 }>
 
-export const EntityStoreRes = observer((props: IEntityResProps) => {
+export const EntityResponse = observer((props: IEntityResponseProps) => {
   const { store, children, skeleton, returnIndex, again = true, load = false, size } = props;
   const curStore = useStore(store);
   const { loading, response, fetch } = curStore;
