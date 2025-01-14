@@ -81,13 +81,17 @@ export const schemaItemsReduce = (schema: Schema, scope: IAnyObject, toProps: (i
   return propsArr;
 };
 
-export const getSchemaNameByFieldSchema = (schema: Schema, fieldSchema: Schema): SchemaKey | undefined => {
+// 获取当前 schema 的 name 通过字段的 Schema
+export const getSchemaNameByFieldSchema = (schema: Schema, fieldSchema: Schema, name?: SchemaKey): SchemaKey | undefined => {
   if (!schema?.parent || schema.parent === fieldSchema) {
-    return schema.name;
+    return name ?? schema.name;
   }
-  const sName = schema.type === 'void' ? undefined : schema.name;
-  if (!sName) {
-    return getSchemaNameByFieldSchema(schema.parent, fieldSchema);
+  const schemaName = schema.type === 'void' ? undefined : schema.name;
+  if (!schemaName) {
+    return getSchemaNameByFieldSchema(schema.parent, fieldSchema, name);
   }
-  return `${getSchemaNameByFieldSchema(schema.parent, fieldSchema)}.${sName}`;
+  if (!name) {
+    return getSchemaNameByFieldSchema(schema.parent, fieldSchema, schemaName);
+  }
+  return getSchemaNameByFieldSchema(schema.parent, fieldSchema, `${schemaName}.${name}`);
 };
