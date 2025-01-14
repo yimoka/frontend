@@ -1,7 +1,7 @@
-import { ISchema } from '@formily/json-schema';
-import { IAny, IAnyObject, IObjKey, IStrKeyObject, JSONParse, JSONStringify } from '@yimoka/shared';
+import { IAny, IStrKeyObject, JSONParse, JSONStringify } from '@yimoka/shared';
 
 import { BaseStore } from './base';
+import { ISchema } from './schema';
 
 /**
  * 将给定的值转换为搜索参数字符串。
@@ -201,15 +201,4 @@ export type IField<P extends object = IStrKeyObject> = keyof P | string;
 
 export type IFieldsConfig = Record<string, IFieldConfig>;
 
-export type IFieldConfig = ISchema<IAny> & {
-  // 分割符 当使用字符串表示数组时使用
-  'x-splitter'?: string;
-  // 字段的提示
-  'x-tooltip'?: string | IAnyObject;
-  // 当在列表页表格渲染时使用
-  'x-column'?: IAnyObject & { key?: IObjKey, width?: number | string }
-  // 唯一标识字段 用于在多级系统时用于编辑时的数据匹配
-  'x-id'?: string
-  //
-  'x-edit-config'?: IAnyObject
-};
+export type IFieldConfig = ISchema

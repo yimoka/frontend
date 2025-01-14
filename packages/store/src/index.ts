@@ -12,6 +12,7 @@ export * from './field';
 export * from './list';
 export * from './notifier';
 export * from './root';
+export * from './schema';
 
 export type IStoreType = 'base' | 'list';
 

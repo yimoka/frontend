@@ -44,6 +44,9 @@ importers:
 
   packages/antd:
     dependencies:
+      '@ant-design/icons':
+        specifier: 5.5.1
+        version: 5.5.1(react-dom@18.3.1)(react@18.3.1)
       '@formily/core':
         specifier: ^2.3.2
         version: 2.3.2
@@ -416,8 +419,8 @@ importers:
   project/console:
     dependencies:
       '@ant-design/icons':
-        specifier: ^5.5.2
-        version: 5.5.2(react-dom@18.3.1)(react@18.3.1)
+        specifier: ^5.5.1
+        version: 5.5.1(react-dom@18.3.1)(react@18.3.1)
       '@formily/core':
         specifier: ^2.3.2
         version: 2.3.2
@@ -840,6 +843,22 @@ packages:
 
   /@ant-design/icons-svg@4.4.2:
     resolution: {integrity: sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==}
+    dev: false
+
+  /@ant-design/icons@5.5.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-0UrM02MA2iDIgvLatWrj6YTCYe0F/cwXvVE0E2SqGrL7PZireQwgEKTKBisWpZyal5eXZLvuM98kju6YtYne8w==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      '@ant-design/colors': 7.1.0
+      '@ant-design/icons-svg': 4.4.2
+      '@babel/runtime': 7.26.0
+      classnames: 2.5.1
+      rc-util: 5.44.3(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /@ant-design/icons@5.5.2(react-dom@18.3.1)(react@18.3.1):
@@ -9851,7 +9870,7 @@ packages:
     dev: true
 
   /is-module@1.0.0:
-    resolution: {integrity: sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g==}
+    resolution: {integrity: sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=}
     dev: false
 
   /is-negative-zero@2.0.3:
@@ -14432,6 +14451,12 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /tr46@1.0.1:
+    resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==}
+    dependencies:
+      punycode: 2.3.1
+    dev: false
+
   /trim-lines@3.0.1:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
 
@@ -15343,7 +15368,7 @@ packages:
     resolution: {integrity: sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==}
     dependencies:
       lodash.sortby: 4.7.0
-      tr46: mirrors.cloud.tencent.com/tr46@1.0.1
+      tr46: 1.0.1
       webidl-conversions: 4.0.2
     dev: false
 
@@ -15677,11 +15702,3 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
-
-  mirrors.cloud.tencent.com/tr46@1.0.1:
-    resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==, registry: https://mirrors.tencent.com/npm/, tarball: https://mirrors.cloud.tencent.com/npm/tr46/-/tr46-1.0.1.tgz}
-    name: tr46
-    version: 1.0.1
-    dependencies:
-      punycode: 2.3.1
-    dev: false

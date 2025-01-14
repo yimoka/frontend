@@ -43,6 +43,7 @@ export default defineConfig({
         'react-dom',
         'react-router-dom',
         'antd',
+        '@ant-design/icons',
       ],
       output: {
         globals: {
@@ -59,6 +60,7 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
           'react-router-dom': 'ReactRouterDOM',
           antd: 'Antd',
+          '@ant-design/icons': 'AntDesignIcons',
         },
       },
     },

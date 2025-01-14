@@ -1,12 +1,16 @@
 import { isVoidField } from '@formily/core';
 import { Schema, SchemaKey } from '@formily/json-schema';
-import { useField, RecursionField } from '@formily/react';
+import { useField, RecursionField, useFieldSchema } from '@formily/react';
 import React, { useMemo } from 'react';
+
+import { getSchemaNameByFieldSchema } from '../../tools/schema-items';
 
 export const SchemaItemRecursion = (props: { schema: Schema, componentName?: string, name?: SchemaKey }) => {
   const { schema, componentName, name } = props;
   const field = useField();
   const voidField = isVoidField(field);
+  const fieldSchema = useFieldSchema();
+  const curName = useMemo(() => (name ? name : getSchemaNameByFieldSchema(schema, fieldSchema)), [name, schema, fieldSchema]);
 
   const curSchema = useMemo(() => {
     // 渲染有两种情况
@@ -21,5 +25,5 @@ export const SchemaItemRecursion = (props: { schema: Schema, componentName?: str
   if (componentName && componentName === schema['x-component']) {
     return <RecursionField schema={curSchema} onlyRenderProperties name={name} />;
   }
-  return <RecursionField schema={curSchema} name={name} />;
+  return <RecursionField schema={curSchema} name={curName} />;
 };

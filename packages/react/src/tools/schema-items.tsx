@@ -33,7 +33,7 @@ const propCompile = (prop: IAny, scope?: IAnyObject) => {
   if (typeof prop === 'string') {
     const value = prop.trim();
     if (value.startsWith('{{') && value.endsWith('}}')) {
-      return Schema.compile(value, scope);
+      return Schema.shallowCompile(value, scope);
     }
   }
   return prop;
@@ -79,4 +79,15 @@ export const schemaItemsReduce = (schema: Schema, scope: IAnyObject, toProps: (i
   }, propsArr);
 
   return propsArr;
+};
+
+export const getSchemaNameByFieldSchema = (schema: Schema, fieldSchema: Schema): SchemaKey | undefined => {
+  if (!schema?.parent || schema.parent === fieldSchema) {
+    return schema.name;
+  }
+  const sName = schema.type === 'void' ? undefined : schema.name;
+  if (!sName) {
+    return getSchemaNameByFieldSchema(schema.parent, fieldSchema);
+  }
+  return `${getSchemaNameByFieldSchema(schema.parent, fieldSchema)}.${sName}`;
 };

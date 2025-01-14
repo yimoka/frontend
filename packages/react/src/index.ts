@@ -19,6 +19,7 @@ export * from './components/render-any';
 
 export * from './context/config';
 
+export * from './hooks/additional-node';
 export * from './hooks/component-data';
 export * from './hooks/components';
 export * from './hooks/deep-memo';

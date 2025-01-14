@@ -1,9 +1,11 @@
-import { ConfigProvider, IConfig } from '@yimoka/react';
+import * as AllIcon from '@ant-design/icons/lib/icons';
+import { ConfigProvider, IConfig, IGetIcon } from '@yimoka/react';
 import { INotifier } from '@yimoka/store';
 import { App } from 'antd';
 import { get } from 'lodash-es';
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
 
 import { httpRequest } from '@/http';
 
@@ -34,6 +36,7 @@ export const InitConfig = (props: PropsWithChildren) => {
       notifier,
       apiExecutor: httpRequest,
       components,
+      getIcon,
       useNavigate,
       useLocation,
       useRouteParams: useParams,
@@ -51,4 +54,13 @@ const titleMap: Record<string, string> = {
   warn: '警告',
   confirm: '确认',
   loading: '加载',
+};
+
+const getIcon: IGetIcon = async (icon: string) => {
+  if (!icon) return null;
+  if (icon in AllIcon) {
+    return AllIcon[icon as keyof typeof AllIcon];
+  }
+  // TODO: 从远程加载
+  return null;
 };

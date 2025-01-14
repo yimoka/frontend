@@ -47,13 +47,14 @@
     "test": "vitest --coverage"
   },
   "dependencies": {
+    "@ant-design/icons": "5.5.1",
     "@formily/core": "^2.3.2",
     "@formily/json-schema": "^2.3.2",
-    "@formily/reactive": "^2.3.2",
     "@formily/react": "^2.3.2",
+    "@formily/reactive": "^2.3.2",
+    "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
-    "@yimoka/react": "workspace:*",
     "antd": "^5.22.6",
     "lodash-es": "^4.17.21",
     "react": "^18.3.1",

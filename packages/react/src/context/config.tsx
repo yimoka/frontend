@@ -57,7 +57,12 @@ export interface IConfig {
   useNavigate?: IUseNavigate;
   useRouteParams?: IUseRouteParams;
   components?: IConfigComponents;
+  getIcon?: IGetIcon;
 }
+
+type Icon = ReactNode | ComponentType
+
+export type IGetIcon = (icon: string) => Icon | Promise<Icon>
 
 export type IUseRouteParams<T extends string | Record<string, string | undefined> = string> = () => Readonly<[T] extends [string] ? Params<T> : Partial<T>>;
 
