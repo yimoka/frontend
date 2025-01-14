@@ -1,4 +1,4 @@
-import { useFieldSchema } from '@formily/react';
+import { useExpressionScope, useFieldSchema } from '@formily/react';
 import { IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
 import { get } from 'lodash-es';
 import React, { useMemo } from 'react';
@@ -10,6 +10,7 @@ import { getPropsByItemSchema, isItemSchemaRecursion, isItemSchemaVisible } from
 // https://docs.qq.com/doc/DSG9ZbFBEQ0xLeUtk
 export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?: IAnyObject, valueNodeKey = 'children') => {
   const fieldSchema = useFieldSchema();
+  const scope = useExpressionScope();
 
   return useMemo(() => {
     const itemComponentName = 'Item';
@@ -20,7 +21,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     }
     normalizeToArray(data).forEach((record, index) => {
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
-      if (isBlank(itemSchema) || !isItemSchemaVisible(itemSchema)) {
+      if (isBlank(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
       }
       const getRecordIndex = () => index;
@@ -37,10 +38,10 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       }
       // 当顶层没有 UI 属性且 properties 不为空时使用 properties 的每一个 prop 转为 item
       Object.entries(properties).forEach(([propKey, propSchema]) => {
-        if (!isItemSchemaVisible(propSchema)) {
+        const value = get(record, propSchema.name ?? propKey);
+        if (!isItemSchemaVisible(propSchema, { ...scope, $index: index, $record: record, $value: value })) {
           return;
         }
-        const value = get(record, propSchema.name ?? propKey);
         const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
         if (isItemSchemaRecursion(propSchema, itemComponentName)) {
           itemProps[valueNodeKey] = <SchemaItemRender value={value} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
@@ -52,5 +53,5 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     });
 
     return componentItems;
-  }, [fieldSchema, data, propsMap, valueNodeKey]);
+  }, [fieldSchema, data, scope, propsMap, valueNodeKey]);
 };

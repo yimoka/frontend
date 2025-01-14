@@ -22,19 +22,17 @@ export const DescriptionsSchema = () => (
           type: 'void',
           'x-component': 'Descriptions',
           'x-component-props': {
-            data: [{ k1: 'v1', k2: 'v2' }],
+            data: [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }],
           },
           items: {
             type: 'object',
             properties: {
-              k1: {
-                title: 'ID',
-                // 'x-hidden': true,
-              },
-              k2: {
+              id: { title: 'ID' },
+              name: {
                 type: 'void',
                 title: 'Name',
                 'x-component': 'Tag',
+                'x-hidden': '{{$value === "name1"}}',
                 'x-component-props': {
                   color: 'blue',
                   children: '{{$value}}',

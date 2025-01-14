@@ -29,8 +29,34 @@ export const isItemSchemaRecursion = (schema: Schema, componentName?: string) =>
   return !isBlank(schema.properties) || (decorator && decorator !== componentName) || (component && component !== componentName);
 };
 
+const propCompile = (prop: IAny, scope?: IAnyObject) => {
+  if (typeof prop === 'string') {
+    const value = prop.trim();
+    if (value.startsWith('{{') && value.endsWith('}}')) {
+      return Schema.compile(value, scope);
+    }
+  }
+  return prop;
+};
+
 // 判断是否需要渲染
-export const isItemSchemaVisible = (schema: Schema) => !(schema['x-hidden'] || schema['x-visible'] === false || (schema['x-display'] && schema['x-display'] !== 'visible'));
+export const isItemSchemaVisible = (schema: Schema, scope?: IAnyObject) => {
+  const hidden = schema['x-hidden'];
+  if (hidden === true || propCompile(hidden, scope) === true) {
+    return false;
+  }
+
+  const visible = schema['x-visible'];
+  if (visible === false || propCompile(visible, scope) === false) {
+    return false;
+  }
+  const display = schema['x-display'];
+  if (display && propCompile(display, scope) !== 'visible') {
+    return false;
+  }
+  return true;
+};
+
 
 export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema, key: SchemaKey, index: number) => IAnyObject) => {
   if (!schema) {
