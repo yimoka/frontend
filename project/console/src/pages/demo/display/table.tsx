@@ -14,7 +14,9 @@ export const TableDemo = () => (
 
 export const TableSchema = () => (
   <Entity
-    store={{}}
+    store={{
+      defaultValues: { name: 'name1' },
+    }}
     schema={{
       type: 'object',
       properties: {
@@ -42,6 +44,7 @@ export const TableSchema = () => (
               },
               name: {
                 title: 'Name',
+                'x-hidden': '{{$store.values.name === "name1"}}',
                 'x-component': 'Column',
                 'x-component-props': {
                   width: 200,

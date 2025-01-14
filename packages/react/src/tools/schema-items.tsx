@@ -58,7 +58,7 @@ export const isItemSchemaVisible = (schema: Schema, scope?: IAnyObject) => {
 };
 
 
-export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema, key: SchemaKey, index: number) => IAnyObject) => {
+export const schemaItemsReduce = (schema: Schema, scope: IAnyObject, toProps: (itemSchema: Schema, key: SchemaKey, index: number) => IAnyObject) => {
   if (!schema) {
     return undefined;
   }
@@ -71,7 +71,7 @@ export const schemaItemsReduce = (schema: Schema, toProps: (itemSchema: Schema, 
   const propsArr: IAny[] = [];
 
   item?.reduceProperties((arr, item, key, index) => {
-    if (!isItemSchemaVisible(item)) {
+    if (!isItemSchemaVisible(item, scope)) {
       return arr;
     }
     arr.push(toProps(item, key, index));
