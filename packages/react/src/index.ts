@@ -2,11 +2,19 @@ export * from '@formily/react';
 
 export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';
+
+export * from './components/entity/add';
 export * from './components/entity/base';
+export * from './components/entity/detail';
+export * from './components/entity/edit';
+export * from './components/entity/list';
+export * from './components/entity/operation';
+export * from './components/entity/response';
 export * from './components/entity/schema';
 
 export * from './components/store/dict';
 export * from './components/store/route';
+export * from './components/index.ts';
 export * from './components/render-any';
 
 export * from './context/config';
