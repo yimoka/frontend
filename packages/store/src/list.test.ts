@@ -7,7 +7,7 @@ describe('ListStore', () => {
   let listStore: ListStore;
 
   beforeEach(() => {
-    listStore = new ListStore({ isPaginate: true });
+    listStore = new ListStore();
   });
 
   it('should initialize with default values', () => {
