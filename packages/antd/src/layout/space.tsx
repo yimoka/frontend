@@ -1,15 +1,15 @@
 import { useAdditionalNode } from '@yimoka/react';
 import { Space as AntSpace, SpaceProps } from 'antd';
-import React, { forwardRef } from 'react';
+import React from 'react';
 
-const SpaceFC = forwardRef<HTMLDivElement, SpaceProps>((props, ref) => {
+const SpaceFC = (props: SpaceProps) => {
   const { split, ...rest } = props;
   const curSplit = useAdditionalNode('split', split);
 
   return (
-    <AntSpace {...rest} split={curSplit} ref={ref} />
+    <AntSpace {...rest} split={curSplit} />
   );
-});
+};
 
 export const Space = Object.assign(SpaceFC, AntSpace);
 

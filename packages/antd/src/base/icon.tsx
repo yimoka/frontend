@@ -2,14 +2,14 @@ import TIcon from '@ant-design/icons';
 import { IconComponentProps } from '@ant-design/icons/lib/components/Icon';
 import { RenderAny, useGetIcon } from '@yimoka/react';
 import { Spin } from 'antd';
-import React, { ComponentType, ReactNode, forwardRef, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
 
 export type IconProps = Partial<Omit<IconComponentProps, 'component'>> & {
   name?: string
   value?: string
 };
 
-export const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+export const Icon = (props: IconProps) => {
   const { name, value, ...args } = props;
   const [loading, setLoading] = useState(false);
   const getIcon = useGetIcon();
@@ -34,21 +34,7 @@ export const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
   }, [file, getIcon]);
 
   if (component) {
-    return <RenderAny value={TIcon} props={{ component, ...args, ref }} />;
+    return <RenderAny value={TIcon} props={{ component, ...args }} />;
   }
   return <Spin size='small' spinning={loading} />;
-});
-
-// export const getAutoIcon: <T = ReactNode>(name: T) => (T | ReactNode) = (name) => {
-//   if (typeof name === 'string' && name) {
-//     return <Icon name={name} />;
-//   }
-//   return name;
-// };
-
-// export const getAllowClear = (v?: boolean | { clearIcon?: ReactNode | string }) => {
-//   if (typeof v === 'object' && v?.clearIcon) {
-//     return { clearIcon: getAutoIcon(v.clearIcon) };
-//   }
-//   return v;
-// };
+};

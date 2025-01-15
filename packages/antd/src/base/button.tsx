@@ -1,10 +1,10 @@
 import { Button as AntButton, ButtonProps } from 'antd';
-import React, { forwardRef } from 'react';
+import React from 'react';
 
 import { strToIcon } from '../tools/icon';
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+export const Button = (props: ButtonProps) => {
   const { icon, ...args } = props;
-  return <AntButton {...args} ref={ref} icon={strToIcon(icon)} />;
-});
+  return <AntButton {...args} icon={strToIcon(icon)} />;
+};
 

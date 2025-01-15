@@ -1,17 +1,14 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { Input as AntInput, InputProps, InputRef } from 'antd';
+import { Input as AntInput, InputProps } from 'antd';
 import { PasswordProps, SearchProps, TextAreaProps } from 'antd/lib/input';
-import React, { forwardRef } from 'react';
+import React from 'react';
 
 import { handleAllowClear } from '../tools/icon';
 
 type IOnChange<T = HTMLInputElement> = (value: string, e: React.ChangeEvent<T>) => void;
 
-const InputFC = forwardRef<InputRef, Omit<InputProps, 'onChange'> & { onChange?: IOnChange }>((props, ref) => {
-  const {
-    onChange,
-    prefix, suffix, addonBefore, addonAfter, allowClear,
-    ...rest } = props;
+const InputFC = (props: Omit<InputProps, 'onChange'> & { onChange?: IOnChange }) => {
+  const { onChange, prefix, suffix, addonBefore, addonAfter, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
   const curSuffix = useAdditionalNode('suffix', suffix);
@@ -21,7 +18,6 @@ const InputFC = forwardRef<InputRef, Omit<InputProps, 'onChange'> & { onChange?:
   return (
     <AntInput
       {...rest}
-      ref={ref}
       allowClear={handleAllowClear(allowClear)}
       prefix={curPrefix}
       suffix={curSuffix}
@@ -29,24 +25,21 @@ const InputFC = forwardRef<InputRef, Omit<InputProps, 'onChange'> & { onChange?:
       addonAfter={curAddonAfter}
       onChange={e => onChange?.(e.target.value, e)}
     />);
-});
+};
 
-const TextArea = forwardRef<InputRef, Omit<TextAreaProps, 'onChange'> & { onChange?: IOnChange<HTMLTextAreaElement> }>((props, ref) => {
+const TextArea = (props: Omit<TextAreaProps, 'onChange'> & { onChange?: IOnChange<HTMLTextAreaElement> }) => {
   const { onChange, allowClear, ...rest } = props;
+
   return (
     <AntInput.TextArea
       {...rest}
-      ref={ref}
       allowClear={handleAllowClear(allowClear)}
       onChange={e => onChange?.(e.target.value, e)}
     />);
-});
+};
 
-const Password = forwardRef<InputRef, Omit<PasswordProps, 'onChange'> & { onChange?: IOnChange }>((props, ref) => {
-  const {
-    onChange,
-    prefix, suffix, addonBefore, addonAfter, allowClear,
-    ...rest } = props;
+const Password = (props: Omit<PasswordProps, 'onChange'> & { onChange?: IOnChange }) => {
+  const { onChange, prefix, suffix, addonBefore, addonAfter, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
   const curSuffix = useAdditionalNode('suffix', suffix);
@@ -56,7 +49,6 @@ const Password = forwardRef<InputRef, Omit<PasswordProps, 'onChange'> & { onChan
   return (
     <AntInput.Password
       {...rest}
-      ref={ref}
       prefix={curPrefix}
       suffix={curSuffix}
       addonBefore={curAddonBefore}
@@ -64,13 +56,10 @@ const Password = forwardRef<InputRef, Omit<PasswordProps, 'onChange'> & { onChan
       allowClear={handleAllowClear(allowClear)}
       onChange={e => onChange?.(e.target.value, e)}
     />);
-});
+};
 
-const Search = forwardRef<InputRef, Omit<SearchProps, 'onChange'> & { onChange?: IOnChange }>((props, ref) => {
-  const {
-    onChange,
-    prefix, suffix, addonBefore, addonAfter, enterButton, allowClear,
-    ...rest } = props;
+const Search = (props: Omit<SearchProps, 'onChange'> & { onChange?: IOnChange }) => {
+  const { onChange, prefix, suffix, addonBefore, addonAfter, enterButton, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
   const curSuffix = useAdditionalNode('suffix', suffix);
@@ -81,7 +70,6 @@ const Search = forwardRef<InputRef, Omit<SearchProps, 'onChange'> & { onChange?:
   return (
     <AntInput.Search
       {...rest}
-      ref={ref}
       prefix={curPrefix}
       suffix={curSuffix}
       addonBefore={curAddonBefore}
@@ -90,11 +78,13 @@ const Search = forwardRef<InputRef, Omit<SearchProps, 'onChange'> & { onChange?:
       allowClear={handleAllowClear(allowClear)}
       onChange={e => onChange?.(e.target.value, e)}
     />);
-});
+};
+
 
 export const Input = Object.assign(InputFC, {
   TextArea,
   Password,
   Search,
   Group: AntInput.Group,
+  OTP: AntInput.OTP,
 });
