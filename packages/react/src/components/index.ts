@@ -14,6 +14,7 @@ import { EntitySchema } from './entity/schema';
 import { RenderAny } from './render-any';
 import { StoreDict } from './store/dict';
 import { StoreRoute } from './store/route';
+import { Trigger } from './trigger';
 
 export const components: Record<string, ComponentType<IAny>> = {
   SchemaItemRecursion,
@@ -30,5 +31,7 @@ export const components: Record<string, ComponentType<IAny>> = {
 
   StoreDict,
   StoreRoute,
+
   RenderAny,
+  Trigger,
 };
