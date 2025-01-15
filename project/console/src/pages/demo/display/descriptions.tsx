@@ -16,6 +16,7 @@ export const DescriptionsSchema = () => (
   <Entity
     store={{
       defaultValues: {
+        in: 'in',
         arr: [{ id: 1, name: 'name1' }],
         obj: { id: 1, name: 'name1' },
       },
@@ -23,6 +24,19 @@ export const DescriptionsSchema = () => (
     schema={{
       type: 'object',
       properties: {
+        in: {
+          type: 'string', title: 'In', 'x-component': 'Input',
+          'x-additional-schema': {
+            addonAfter: {
+              type: 'void',
+              'x-component': 'Tag',
+              'x-component-props': {
+                color: 'blue',
+                children: '{{$values.in}}',
+              },
+            },
+          },
+        },
         arr: {
           type: 'array',
           'x-component': 'Descriptions',
@@ -30,7 +44,20 @@ export const DescriptionsSchema = () => (
             type: 'object',
             properties: {
               id: { title: 'ID' },
-              name: { title: 'Name', 'x-component': 'Input' },
+              name: {
+                title: 'Name',
+                'x-component': 'Input',
+                'x-additional-schema': {
+                  addonAfter: {
+                    type: 'void',
+                    'x-component': 'Tag',
+                    'x-component-props': {
+                      color: 'blue',
+                      children: '{{$record.name}}',
+                    },
+                  },
+                },
+              },
             },
           },
         },

@@ -1,6 +1,6 @@
-import { ISchema, observer } from '@formily/react';
+import { observer } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
-import { getEntryStore, IEntityConfig, IStore, IStoreConfig } from '@yimoka/store';
+import { getEntryStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
 import React, { useEffect } from 'react';
 

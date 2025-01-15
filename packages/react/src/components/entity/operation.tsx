@@ -1,6 +1,6 @@
-import { ISchema, observer } from '@formily/react';
+import { observer } from '@formily/react';
 import { IAnyObject } from '@yimoka/shared';
-import { getEntryStore, IAPIKey, IEntityConfig } from '@yimoka/store';
+import { getEntryStore, IAPIKey, IEntityConfig, ISchema } from '@yimoka/store';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
