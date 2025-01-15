@@ -1,6 +1,6 @@
 import TIcon from '@ant-design/icons';
 import { IconComponentProps } from '@ant-design/icons/lib/components/Icon';
-import { RenderAny, useConfig } from '@yimoka/react';
+import { RenderAny, useGetIcon } from '@yimoka/react';
 import { Spin } from 'antd';
 import React, { ComponentType, ReactNode, forwardRef, useEffect, useState } from 'react';
 
@@ -12,7 +12,7 @@ export type IconProps = Partial<Omit<IconComponentProps, 'component'>> & {
 export const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
   const { name, value, ...args } = props;
   const [loading, setLoading] = useState(false);
-  const { getIcon } = useConfig() ?? {};
+  const getIcon = useGetIcon();
   const [component, setComponent] = useState<ReactNode | ComponentType | null>(null);
   const file = name ?? value ?? '';
 

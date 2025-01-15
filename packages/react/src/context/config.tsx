@@ -46,6 +46,11 @@ export const useConfigComponents = () => {
   return config?.components;
 };
 
+export const useGetIcon = () => {
+  const config = useConfig();
+  return config?.getIcon;
+};
+
 // 通过 Context 传递配置信息
 // 为了可用于 web 小程序 native 等多端，不直接依赖 react-router
 // 将报告、通知、API 执行器和路由等配置信息通过 Context 传递
