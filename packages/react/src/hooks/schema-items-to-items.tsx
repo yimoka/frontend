@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 
 import { SchemaItemRender } from '../components/array/schema-item-render';
 import { RenderAny } from '../components/render-any';
-import { getPropsByItemSchema, isItemSchemaRecursion, isItemSchemaVisible } from '../tools/schema-items';
+import { getPropsByItemSchema, getSchemaNameByFieldSchema, isItemSchemaRecursion, isItemSchemaVisible } from '../tools/schema-items';
 
 // https://docs.qq.com/doc/DSG9ZbFBEQ0xLeUtk
 export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?: IAnyObject, valueNodeKey = 'children') => {
@@ -19,18 +19,21 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     if (isBlank(data) || isBlank(fieldItems)) {
       return componentItems;
     }
+    // eslint-disable-next-line complexity
     normalizeToArray(data).forEach((record, index) => {
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
       if (isBlank(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
       }
+      const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(itemSchema, fieldSchema);
+
       const getRecordIndex = () => index;
       // 当顶层不包含 UI 属性或者 UI属性为 itemComponentName 或者 properties 为空时 则转为 component item
       const { 'x-component': component, 'x-decorator': decorator, properties } = itemSchema;
       if (isBlank(properties) || (!(!component || component === itemComponentName) && (!decorator || decorator === itemComponentName))) {
         const itemProps = getPropsByItemSchema(itemSchema, itemComponentName, propsMap);
         if (isItemSchemaRecursion(itemSchema, itemComponentName)) {
-          itemProps[valueNodeKey] = <SchemaItemRender value={record} record={record} schema={itemSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
+          itemProps[valueNodeKey] = <SchemaItemRender value={record} name={schemaKey} record={record} schema={itemSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
         } else {
           itemProps[valueNodeKey] = <RenderAny value={record} />;
         }
@@ -42,9 +45,10 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
         if (!isItemSchemaVisible(propSchema, { ...scope, $index: index, $record: record, $value: value })) {
           return;
         }
+        const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(propSchema, fieldSchema);
         const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
         if (isItemSchemaRecursion(propSchema, itemComponentName)) {
-          itemProps[valueNodeKey] = <SchemaItemRender value={value} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
+          itemProps[valueNodeKey] = <SchemaItemRender value={value} name={schemaKey} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
         } else if (typeof itemProps[valueNodeKey] === 'undefined') {
           itemProps[valueNodeKey] = <RenderAny value={value} />;
         }

@@ -13,12 +13,12 @@ export const SchemaItemRender = (props: { value: IAny, record: IAny, schema: Sch
   const { value, record, schema, getRecordIndex, componentName, name } = props;
   const index = getRecordIndex?.(record);
   const fieldSchema = useFieldSchema();
-  const curName = useMemo(() => (name ? name : getSchemaNameByFieldSchema(schema, fieldSchema)), [name, schema, fieldSchema]);
+  const curName = useMemo(() => (name ? name : `${index}.${getSchemaNameByFieldSchema(schema, fieldSchema)}`), [name, index, schema, fieldSchema]);
 
   return (
     <RecordScope getRecord={() => record} getIndex={() => index ?? 0} >
       <ExpressionScope value={{ $value: value }}>
-        <SchemaItemRecursion schema={schema} componentName={componentName} name={`${index}.${curName}`} />
+        <SchemaItemRecursion schema={schema} componentName={componentName} name={curName} />
       </ExpressionScope>
     </RecordScope>
   );

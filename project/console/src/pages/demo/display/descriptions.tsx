@@ -14,10 +14,36 @@ export const DescriptionsDemo = () => (
 
 export const DescriptionsSchema = () => (
   <Entity
-    store={{}}
+    store={{
+      defaultValues: {
+        arr: [{ id: 1, name: 'name1' }],
+        obj: { id: 1, name: 'name1' },
+      },
+    }}
     schema={{
       type: 'object',
       properties: {
+        arr: {
+          type: 'array',
+          'x-component': 'Descriptions',
+          items: {
+            type: 'object',
+            properties: {
+              id: { title: 'ID' },
+              name: { title: 'Name', 'x-component': 'Input' },
+            },
+          },
+        },
+        obj: {
+          type: 'object',
+          'x-component': 'Descriptions',
+          items: {
+            properties: {
+              id: { type: 'string', title: 'ID' },
+              name: { type: 'string', title: 'Name', 'x-component': 'Input' },
+            },
+          },
+        },
         descriptions: {
           type: 'void',
           'x-component': 'Descriptions',
