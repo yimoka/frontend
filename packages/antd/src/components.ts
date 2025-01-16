@@ -4,6 +4,7 @@ import { Tag } from 'antd';
 import { Button } from './base/button';
 import { Icon } from './base/icon';
 import { Descriptions } from './display/descriptions';
+import { Link } from './display/link';
 import { Table } from './display/table';
 
 import { Input } from './enter/input';
@@ -27,6 +28,9 @@ import { Content, Footer, Header, Layout, Sider } from './layout/layout';
 import { Space } from './layout/space';
 import { Splitter } from './layout/splitter';
 
+import { Anchor } from './nav/anchor';
+import { Breadcrumb } from './nav/breadcrumb';
+
 export const components: IConfigComponents = {
   // 用于系统配置的基础组件
   Loading,
@@ -42,6 +46,7 @@ export const components: IConfigComponents = {
   // display
   Descriptions,
   Table,
+  Link,
 
   // entity
   Input,
@@ -68,4 +73,8 @@ export const components: IConfigComponents = {
   Sider,
   Space,
   Splitter,
+
+  // nav
+  Anchor,
+  Breadcrumb,
 };

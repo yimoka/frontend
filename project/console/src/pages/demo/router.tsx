@@ -7,6 +7,7 @@ import { TableDemo } from '@/pages/demo/display/table';
 import { DescriptionsDemo } from './display/descriptions';
 import { DrawerDemo } from './feedback/drawer';
 import { ModalDemo } from './feedback/modal';
+import { BreadcrumbDemo } from './nav/breadcrumb';
 import { TriggerDemo } from './trigger';
 
 export const DemoRouter = () => (
@@ -18,6 +19,8 @@ export const DemoRouter = () => (
 
       <Route path="feedback/drawer" element={<DrawerDemo />} />
       <Route path="feedback/modal" element={<ModalDemo />} />
+
+      <Route path="nav/breadcrumb" element={<BreadcrumbDemo />} />
     </Routes>
   </WithSiderLayout>
 );

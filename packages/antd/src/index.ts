@@ -24,4 +24,7 @@ export * from './layout/layout';
 export * from './layout/space';
 export * from './layout/splitter';
 
+export * from './nav/anchor';
+export * from './nav/breadcrumb';
+
 export * from './components';

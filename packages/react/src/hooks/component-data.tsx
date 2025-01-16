@@ -43,3 +43,5 @@ export const useComponentData = (dataSources: IAny[], storeDataKey?: string, sto
     return;
   }, [curStore, dataSources, storeDataKey]);
 };
+
+export type PropsWithComponentData<T> = T & { data?: IAny, dataKey?: string, store?: IStore };
