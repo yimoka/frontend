@@ -1,5 +1,5 @@
 import { IConfigComponents } from '@yimoka/react';
-import { Skeleton, Tag } from 'antd';
+import { Tag } from 'antd';
 
 import { Button } from './base/button';
 import { Icon } from './base/icon';
@@ -12,6 +12,7 @@ import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
 import { Loading } from './feedback/loading';
 import { Modal } from './feedback/modal';
+import { Skeleton } from './feedback/skeleton';
 import { Space } from './layout/space';
 
 export const components: IConfigComponents = {
