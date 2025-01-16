@@ -20,7 +20,12 @@ import { Skeleton } from './feedback/skeleton';
 import { Spin } from './feedback/spin';
 import { Watermark } from './feedback/watermark';
 
+import { Divider } from './layout/divider';
+import { Flex } from './layout/flex';
+import { Col, Row } from './layout/grid';
+import { Content, Footer, Header, Layout, Sider } from './layout/layout';
 import { Space } from './layout/space';
+import { Splitter } from './layout/splitter';
 
 export const components: IConfigComponents = {
   // 用于系统配置的基础组件
@@ -52,5 +57,15 @@ export const components: IConfigComponents = {
   Watermark,
 
   // layout
+  Divider,
+  Flex,
+  Row,
+  Col,
+  Layout,
+  Header,
+  Footer,
+  Content,
+  Sider,
   Space,
+  Splitter,
 };

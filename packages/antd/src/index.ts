@@ -17,6 +17,11 @@ export * from './feedback/skeleton';
 export * from './feedback/spin';
 export * from './feedback/watermark';
 
+export * from './layout/divider';
+export * from './layout/flex';
+export * from './layout/grid';
+export * from './layout/layout';
 export * from './layout/space';
+export * from './layout/splitter';
 
 export * from './components';
