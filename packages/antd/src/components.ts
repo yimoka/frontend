@@ -7,12 +7,19 @@ import { Descriptions } from './display/descriptions';
 import { Table } from './display/table';
 
 import { Input } from './enter/input';
+
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
 import { Loading } from './feedback/loading';
 import { Modal } from './feedback/modal';
+import { Popconfirm } from './feedback/popconfirm';
+import { Progress } from './feedback/progress';
+import { Result } from './feedback/result';
 import { Skeleton } from './feedback/skeleton';
+import { Spin } from './feedback/spin';
+import { Watermark } from './feedback/watermark';
+
 import { Space } from './layout/space';
 
 export const components: IConfigComponents = {
@@ -38,6 +45,11 @@ export const components: IConfigComponents = {
   Alert,
   Drawer,
   Modal,
+  Popconfirm,
+  Progress,
+  Result,
+  Spin,
+  Watermark,
 
   // layout
   Space,
