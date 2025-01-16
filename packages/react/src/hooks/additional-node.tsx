@@ -7,6 +7,7 @@ export const useAdditionalNode: <T = ReactNode> (propName: string, node?: T) => 
   const schema = additional?.[propName];
 
   return useMemo(() => {
+    // null 有意义
     if (node !== undefined || isBlank(schema)) {
       return node;
     }

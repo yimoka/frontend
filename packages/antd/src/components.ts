@@ -11,6 +11,7 @@ import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
 import { Loading } from './feedback/loading';
+import { Modal } from './feedback/modal';
 import { Space } from './layout/space';
 
 export const components: IConfigComponents = {
@@ -35,6 +36,7 @@ export const components: IConfigComponents = {
   // feedback
   Alert,
   Drawer,
+  Modal,
 
   // layout
   Space,
