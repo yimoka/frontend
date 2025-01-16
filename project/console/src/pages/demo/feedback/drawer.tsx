@@ -12,6 +12,9 @@ export const DrawerDemo = () => (
   </div>
 );
 
+const onOpen = () => console.log('onOpen');
+
+
 export const DrawerSchema = () => (
   <Entity
     store={{
@@ -27,6 +30,28 @@ export const DrawerSchema = () => (
           'x-component': 'Drawer',
           'x-component-props': {
             title: 'Drawer',
+            onOpen,
+          },
+          properties: {
+            name: {
+              type: 'string',
+              title: '姓名',
+              'x-component': 'Input',
+            },
+          },
+        },
+        icon: {
+          type: 'void',
+          'x-decorator': 'Tag',
+          'x-component': 'Drawer',
+          'x-component-props': {
+            onOpen,
+            trigger: {
+              component: 'Icon',
+              name: 'EditOutlined',
+              trigEvent: 'onMouseEnter',
+            },
+            title: 'Drawer',
           },
           properties: {
             name: {
@@ -41,5 +66,23 @@ export const DrawerSchema = () => (
   />);
 
 export const DrawerJSX = () => (
-  <Drawer />
+  <>
+    <Drawer
+      title="Drawer"
+      onOpen={onOpen}
+    >
+      <div>Content</div>
+    </Drawer>
+    <Drawer
+      title="Drawer"
+      onOpen={onOpen}
+      trigger={{
+        component: 'Icon',
+        name: 'EditOutlined',
+        trigEvent: 'onMouseEnter',
+      }}
+    >
+      <div>Content</div>
+    </Drawer>
+  </>
 );
