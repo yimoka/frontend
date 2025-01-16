@@ -7,6 +7,8 @@ import { Descriptions } from './display/descriptions';
 import { Table } from './display/table';
 
 import { Input } from './enter/input';
+import { Alert } from './feedback/alert';
+import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
 import { Loading } from './feedback/loading';
 import { Space } from './layout/space';
@@ -29,6 +31,10 @@ export const components: IConfigComponents = {
 
   // entity
   Input,
+
+  // feedback
+  Alert,
+  Drawer,
 
   // layout
   Space,

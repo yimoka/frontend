@@ -2,6 +2,8 @@
 export * from './base/button';
 export * from './base/icon';
 
+export * from './feedback/alert';
+export * from './feedback/drawer';
 export * from './feedback/error-content';
 export * from './feedback/loading';
 

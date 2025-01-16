@@ -5,6 +5,7 @@ import { WithSiderLayout } from '@/layout/with-sider';
 import { TableDemo } from '@/pages/demo/display/table';
 
 import { DescriptionsDemo } from './display/descriptions';
+import { DrawerDemo } from './feedback/drawer';
 import { TriggerDemo } from './trigger';
 
 export const DemoRouter = () => (
@@ -13,6 +14,8 @@ export const DemoRouter = () => (
       <Route path="trigger" element={<TriggerDemo />} />
       <Route path="display/table" element={<TableDemo />} />
       <Route path="display/descriptions" element={<DescriptionsDemo />} />
+
+      <Route path="feedback/drawer" element={<DrawerDemo />} />
     </Routes>
   </WithSiderLayout>
 );
