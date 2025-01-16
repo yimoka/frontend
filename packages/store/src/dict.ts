@@ -2,7 +2,7 @@ import { reaction } from '@formily/reactive';
 import { dataToOptions, IAny, IAnyObject, IKeys, IObjKey, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
 import { pick } from 'lodash-es';
 
-import { IStoreAPI, IStoreResponse, runStoreAPI } from './api';
+import { IStoreAPI, IStoreResponse, runAPI } from './api';
 import { BaseStore } from './base';
 import { getFieldSplitter, IField } from './field';
 
@@ -18,7 +18,7 @@ export const initStoreDict = (store: BaseStore) => {
       if (api) {
         store.setFieldDictLoading(field, true);
         const lastFetchID = store.incrDictFetchID(field);
-        runStoreAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
+        runAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
           if (lastFetchID === store.getDictFetchID(field)) {
             store.setFieldDictLoading(field, false);
             if (isSuccess(res)) {
@@ -65,7 +65,7 @@ export const watchStoreDict = (store: BaseStore) => {
           } else if (api) {
             const lastFetchID = store.incrDictFetchID(field);
             store.setFieldDictLoading(field, true);
-            runStoreAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
+            runAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
                 if (isSuccess(res)) {

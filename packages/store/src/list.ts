@@ -3,7 +3,7 @@ import { IAnyObject, IAny, IObjKey, mergeWithArrayOverride, isBlank, addWithLimi
 
 import { cloneDeep, get, pickBy, set } from 'lodash-es';
 
-import { IStoreResponse, runStoreAPI } from './api';
+import { IStoreResponse, runAPI } from './api';
 import { BaseStore, IBaseStoreConfig, IBaseStoreOptions } from './base';
 
 export const listKeysDefault: Record<string, string> = {
@@ -197,7 +197,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    * - `this.values`：当前分页的页码和每页大小。
    */
   get isHasNext() {
-    const { listData, response, nextResponse, options } = this;
+    const { listData, response: response, nextResponse, options } = this;
     const { page, pageSize, total } = options.keys ?? listKeysDefault;
     const data = nextResponse.data ?? response.data;
     if (!data) {
@@ -300,7 +300,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
     }
     const fetchID = this.nextLastFetchID;
     const { api } = this;
-    const nextResponse = await runStoreAPI<V, R>(api, this.apiExecutor, params, this.nextAPIController);
+    const nextResponse = await runAPI<V, R>(api, this.apiExecutor, params, this.nextAPIController);
     if (nextResponse && fetchID === this.nextLastFetchID) {
       this.setNextResponse(nextResponse);
       this.setNextLoading(false);

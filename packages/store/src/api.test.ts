@@ -1,31 +1,31 @@
 import { IAPIRequestConfig } from '@yimoka/shared';
 import { describe, it, expect, vi } from 'vitest';
 
-import { runStoreAPI } from './api';
+import { runAPI } from './api';
 
 describe('runStoreAPI', () => {
   it('should return error if api is not provided', async () => {
-    const result = await runStoreAPI();
+    const result = await runAPI();
     expect(result).toEqual({ code: 400, data: '', msg: 'api is required' });
   });
 
   it('should execute api function if provided', async () => {
     const apiFunction = vi.fn().mockResolvedValue({ success: true, data: { key: 'value' } });
-    const result = await runStoreAPI(apiFunction, undefined, { key: 'value' });
+    const result = await runAPI(apiFunction, undefined, { key: 'value' });
     expect(apiFunction).toHaveBeenCalledWith({ key: 'value' });
     expect(result).toEqual({ success: true, data: { key: 'value' } });
   });
 
   it('should return error if apiExecutor is not provided for api config', async () => {
     const apiConfig: IAPIRequestConfig = { method: 'GET', url: '/api/data' };
-    const result = await runStoreAPI(apiConfig);
+    const result = await runAPI(apiConfig);
     expect(result).toEqual({ code: 400, data: '', msg: 'apiExecutor is required' });
   });
 
   it('should execute apiExecutor with merged config for GET method', async () => {
     const apiConfig: IAPIRequestConfig = { method: 'GET', url: '/api/data', params: { id: 1 } };
     const apiExecutor = vi.fn().mockResolvedValue({ success: true, config: apiConfig });
-    const result = await runStoreAPI(apiConfig, apiExecutor, { extraParam: 'value' });
+    const result = await runAPI(apiConfig, apiExecutor, { extraParam: 'value' });
     expect(apiExecutor).toHaveBeenCalledWith({
       method: 'GET',
       url: '/api/data',
@@ -37,7 +37,7 @@ describe('runStoreAPI', () => {
   it('should execute apiExecutor with merged config for POST method', async () => {
     const apiConfig: IAPIRequestConfig = { method: 'POST', url: '/api/data', data: { id: 1 } };
     const apiExecutor = vi.fn().mockResolvedValue({ success: true, config: apiConfig });
-    const result = await runStoreAPI(apiConfig, apiExecutor, { extraParam: 'value' });
+    const result = await runAPI(apiConfig, apiExecutor, { extraParam: 'value' });
     expect(apiExecutor).toHaveBeenCalledWith({
       method: 'POST',
       url: '/api/data',
@@ -50,7 +50,7 @@ describe('runStoreAPI', () => {
     const apiConfig: IAPIRequestConfig = { method: 'GET', url: '/api/data' };
     const apiExecutor = vi.fn().mockResolvedValue({ success: true, config: apiConfig });
     const abortController = new AbortController();
-    const result = await runStoreAPI(apiConfig, apiExecutor, undefined, abortController);
+    const result = await runAPI(apiConfig, apiExecutor, undefined, abortController);
     expect(apiExecutor).toHaveBeenCalledWith({
       method: 'GET',
       url: '/api/data',

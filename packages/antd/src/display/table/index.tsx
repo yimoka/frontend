@@ -32,5 +32,5 @@ export type TableProps<T = IAnyObject> = Omit<AntTableProps<T>, 'rowKey'> & {
   rowKey?: AntTableProps<T>['rowKey'] | Array<string | number>
   value?: T[];
   dataKey?: string;
-  store?: IStore;
+  store?: IStore | false
 };

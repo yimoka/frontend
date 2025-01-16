@@ -30,7 +30,7 @@ import { useStore } from './store';
  * const data = useComponentData([]);
  * console.log(data); // 输出: undefined
  */
-export const useComponentData = (dataSources: IAny[], storeDataKey?: string, store?: IStore) => {
+export const useComponentData = (dataSources: IAny[], storeDataKey?: string, store?: IStore | false) => {
   const curStore = useStore(store);
   return useDeepMemo(() => {
     const data = dataSources.find(item => item !== undefined);

@@ -1,7 +1,7 @@
 
 import { observer } from '@formily/react';
 import { IAnyObject, isBlank, isSuccess } from '@yimoka/shared';
-import { IStore } from '@yimoka/store';
+import { IStore, IStoreResponse } from '@yimoka/store';
 import React, { PropsWithChildren, useMemo } from 'react';
 
 import { ISize } from '../../context/config';
@@ -9,18 +9,22 @@ import { useComponents } from '../../hooks/components';
 import { useStore } from '../../hooks/store';
 
 export type IEntityResponseProps = PropsWithChildren<{
-  store?: IStore,
+  store?: IStore | false
   skeleton?: IAnyObject | false
   returnIndex?: boolean
   again?: boolean
   load?: IAnyObject | boolean
   size?: ISize
+  loading?: boolean
+  response?: IStoreResponse
 }>
 
+// eslint-disable-next-line complexity
 export const EntityResponse = observer((props: IEntityResponseProps) => {
-  const { store, children, skeleton, returnIndex, again = true, load = false, size } = props;
+  const { store, children, skeleton, returnIndex, again = true, load = false, size, loading, response } = props;
   const curStore = useStore(store);
-  const { loading, response, fetch } = curStore;
+  const curLoading = loading ?? curStore?.loading;
+  const curResponse = response ?? curStore?.response;
 
   const components = useComponents();
 
@@ -30,18 +34,18 @@ export const EntityResponse = observer((props: IEntityResponseProps) => {
 
   const ErrorContent = useMemo(() => (components?.ErrorContent ?? (() => 'error')), [components?.ErrorContent]);
 
-  const curOnAgain = useMemo(() => (again ? fetch : undefined), [again, fetch]);
+  const curOnAgain = useMemo(() => (again ? curStore?.fetch : undefined), [again, curStore?.fetch]);
 
-  const isSkeleton = useMemo(() => loading && isBlank(response) && skeleton !== false, [loading, response, skeleton]);
+  const isSkeleton = useMemo(() => curLoading && isBlank(curResponse) && skeleton !== false, [curLoading, curResponse, skeleton]);
 
   const curChildren = useMemo(
     () => (load
-      ? <Loading size={size} {...(typeof load === 'object' ? load : {})} loading={loading}>{children}</Loading>
+      ? <Loading size={size} {...(typeof load === 'object' ? load : {})} loading={curLoading}>{children}</Loading>
       : children)
-    , [load, Loading, size, loading, children],
+    , [load, Loading, size, curLoading, children],
   );
 
-  if (isBlank(curStore) || isSuccess(response)) {
+  if (isBlank(curStore) || isSuccess(curResponse)) {
     return curChildren;
   }
 
@@ -49,5 +53,5 @@ export const EntityResponse = observer((props: IEntityResponseProps) => {
     return <Skeleton size={size} {...skeleton} />;
   }
 
-  return <ErrorContent size={size} response={response} returnIndex={returnIndex} onAgain={curOnAgain} loading={loading} />;
+  return <ErrorContent size={size} response={curResponse} returnIndex={returnIndex} onAgain={curOnAgain} loading={curLoading} />;
 });

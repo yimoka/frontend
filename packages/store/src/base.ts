@@ -4,7 +4,7 @@ import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess } from '@yi
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
-import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runStoreAPI } from './api';
+import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runAPI } from './api';
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
 import { valueToSearchParam, parseSearchParam, IField, IFieldsConfig } from './field';
 import { INotifier } from './notifier';
@@ -475,7 +475,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     const fetchID = this.lastFetchID;
     const { api } = this;
     const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : this.values) as V;
-    const response = await runStoreAPI<V, R>(api, this.apiExecutor, params, this.apiController);
+    const response = await runAPI<V, R>(api, this.apiExecutor, params, this.apiController);
     if (response && fetchID === this.lastFetchID) {
       this.setResponse(response);
       this.setLoading(false);

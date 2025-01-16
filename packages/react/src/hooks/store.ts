@@ -30,7 +30,7 @@ export function useInitStore<V extends object = IAnyObject, R extends object = I
   return curStore;
 }
 
-export const useStore = <V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R>) => {
+export const useStore = <V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | false) => {
   const scope = useExpressionScope();
-  return useMemo(() => store ?? (scope?.curStore as IStore<V, R> ?? {}), [store, scope]);
+  return useMemo(() => (store === false ? undefined : (store ?? (scope?.curStore as IStore<V, R>))), [store, scope]);
 };

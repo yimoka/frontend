@@ -27,12 +27,12 @@ import { IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shar
  * const result = runStoreAPI(apiConfig, apiExecutor, { extraParam: 'value' });
  * console.log(result); // 输出: { success: true, config: { method: 'GET', url: '/api/data', params: { id: 1, extraParam: 'value' } } }
  */
-export function runStoreAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController): IStoreResponse<R, V> {
+export async function runAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController): Promise<IStoreResponse<R, V>> {
   if (!api) {
     return { code: 400, data: '', msg: 'api is required' } as IStoreResponse;
   }
   if (typeof api === 'function') {
-    return api(params);
+    return await api(params) as Promise<IStoreResponse<R, V>>;
   };
   if (!apiExecutor) {
     return { code: 400, data: '', msg: 'apiExecutor is required' } as IStoreResponse;
