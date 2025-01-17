@@ -1,7 +1,10 @@
 import { IConfigComponents } from '@yimoka/react';
 
 import { Button } from './base/button';
+import { FloatButton } from './base/float-button';
 import { Icon } from './base/icon';
+import { Typography, Text, Title, Paragraph } from './base/typography';
+
 import { Descriptions } from './display/descriptions';
 import { Link } from './display/link';
 import { Table } from './display/table';
@@ -30,6 +33,10 @@ import { Splitter } from './layout/splitter';
 
 import { Anchor } from './nav/anchor';
 import { Breadcrumb } from './nav/breadcrumb';
+import { Dropdown } from './nav/dropdown';
+import { Menu } from './nav/menu';
+import { Pagination } from './nav/pagination';
+import { Steps } from './nav/steps';
 
 export const components: IConfigComponents = {
   // 用于系统配置的基础组件
@@ -39,7 +46,13 @@ export const components: IConfigComponents = {
 
   // base
   Button,
+  FloatButton,
+  BackTop: FloatButton.BackTop,
   Icon,
+  Typography,
+  Text,
+  Title,
+  Paragraph,
 
   // display
   Descriptions,
@@ -77,4 +90,8 @@ export const components: IConfigComponents = {
   // nav
   Anchor,
   Breadcrumb,
+  Dropdown,
+  Menu,
+  Pagination,
+  Steps,
 };

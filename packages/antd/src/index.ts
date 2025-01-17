@@ -1,9 +1,12 @@
 
 export * from './base/button';
+export * from './base/float-button';
 export * from './base/icon';
+export * from './base/typography';
 
 export * from './display/descriptions';
 export * from './display/table';
+export * from './display/link';
 export * from './display/tag';
 
 export * from './feedback/alert';
@@ -27,5 +30,9 @@ export * from './layout/splitter';
 
 export * from './nav/anchor';
 export * from './nav/breadcrumb';
+export * from './nav/dropdown';
+export * from './nav/menu';
+export * from './nav/pagination';
+export * from './nav/steps';
 
 export * from './components';
