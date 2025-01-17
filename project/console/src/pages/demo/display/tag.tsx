@@ -58,14 +58,14 @@ export const TagSchema = () => (
         },
         checkable: {
           type: 'boolean',
-          'x-component': 'Tag.CheckableTag',
+          'x-component': 'CheckableTag',
           'x-component-props': {
             children: 'CheckableTag',
           },
         },
         type: {
           type: 'string',
-          'x-component': 'Tag.CheckableTag',
+          'x-component': 'CheckableTag',
           'x-component-props': {
             children: '{{$self.value}}',
             values: { true: 'on', false: 'off' },

@@ -46,6 +46,7 @@ export const components: IConfigComponents = {
   Table,
   Link,
   Tag,
+  CheckableTag: Tag.CheckableTag,
 
   // entity
   Input,
