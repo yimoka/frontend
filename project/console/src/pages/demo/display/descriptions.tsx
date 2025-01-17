@@ -25,7 +25,9 @@ export const DescriptionsSchema = () => (
       type: 'object',
       properties: {
         in: {
-          type: 'string', title: 'In', 'x-component': 'Input',
+          type: 'string',
+          title: 'In',
+          'x-component': 'Input',
           'x-additional-schema': {
             addonAfter: {
               type: 'void',
@@ -85,10 +87,10 @@ export const DescriptionsSchema = () => (
                 type: 'void',
                 title: 'Name',
                 'x-component': 'Tag',
-                'x-hidden': '{{$value === "name1"}}',
+                'x-hidden': '{{$record.name === "name1"}}',
                 'x-component-props': {
                   color: 'blue',
-                  children: '{{$value}}',
+                  children: '{{$record.name}}',
                 },
               },
             },

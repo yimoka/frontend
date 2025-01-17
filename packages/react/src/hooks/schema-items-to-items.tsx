@@ -28,32 +28,36 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(itemSchema, fieldSchema);
 
       const getRecordIndex = () => index;
-      // 当顶层不包含 UI 属性或者 UI属性为 itemComponentName 或者 properties 为空时 则转为 component item
       const { 'x-component': component, 'x-decorator': decorator, properties } = itemSchema;
-      if (isBlank(properties) || (!(!component || component === itemComponentName) && (!decorator || decorator === itemComponentName))) {
+      if (
+        isBlank(properties) // 没有 properties 时直接使用 itemSchema
+        || (component) // 顶层 UI 属性不为空时使用 itemSchema
+        || (!component && decorator === itemComponentName) // 顶层 decorator 为 itemComponentName 时并且 component 为空时使用 itemSchema
+      ) {
         const itemProps = getPropsByItemSchema(itemSchema, itemComponentName, propsMap);
         if (isItemSchemaRecursion(itemSchema, itemComponentName)) {
           itemProps[valueNodeKey] = <SchemaItemRender value={record} name={schemaKey} record={record} schema={itemSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
-        } else {
+        } else if (typeof itemProps[valueNodeKey] === 'undefined') {
           itemProps[valueNodeKey] = <RenderAny value={record} />;
         }
-        return componentItems.push(itemProps);
-      }
-      // 当顶层没有 UI 属性且 properties 不为空时使用 properties 的每一个 prop 转为 item
-      Object.entries(properties).forEach(([propKey, propSchema]) => {
-        const value = get(record, propSchema.name ?? propKey);
-        if (!isItemSchemaVisible(propSchema, { ...scope, $index: index, $record: record, $value: value })) {
-          return;
-        }
-        const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(propSchema, fieldSchema);
-        const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
-        if (isItemSchemaRecursion(propSchema, itemComponentName)) {
-          itemProps[valueNodeKey] = <SchemaItemRender value={value} name={schemaKey} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
-        } else if (typeof itemProps[valueNodeKey] === 'undefined') {
-          itemProps[valueNodeKey] = <RenderAny value={value} />;
-        }
         componentItems.push(itemProps);
-      });
+      } else {
+        // 当顶层没有 UI 属性或者 UI 不为 itemComponentName 且 properties 不为空时使用 properties 的每一个 prop 转为 item
+        Object.entries(properties).forEach(([propKey, propSchema]) => {
+          const value = get(record, propSchema.name ?? propKey);
+          if (!isItemSchemaVisible(propSchema, { ...scope, $index: index, $record: record, $value: value })) {
+            return;
+          }
+          const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(propSchema, fieldSchema);
+          const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
+          if (isItemSchemaRecursion(propSchema, itemComponentName)) {
+            itemProps[valueNodeKey] = <SchemaItemRender value={value} name={schemaKey} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
+          } else if (typeof itemProps[valueNodeKey] === 'undefined') {
+            itemProps[valueNodeKey] = <RenderAny value={value} />;
+          }
+          componentItems.push(itemProps);
+        });
+      }
     });
 
     return componentItems;

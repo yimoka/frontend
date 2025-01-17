@@ -1,5 +1,4 @@
 import { IConfigComponents } from '@yimoka/react';
-import { Tag } from 'antd';
 
 import { Button } from './base/button';
 import { Icon } from './base/icon';
@@ -7,6 +6,7 @@ import { Descriptions } from './display/descriptions';
 import { Link } from './display/link';
 import { Table } from './display/table';
 
+import { Tag } from './display/tag';
 import { Input } from './enter/input';
 
 import { Alert } from './feedback/alert';
@@ -41,12 +41,11 @@ export const components: IConfigComponents = {
   Button,
   Icon,
 
-  Tag,
-
   // display
   Descriptions,
   Table,
   Link,
+  Tag,
 
   // entity
   Input,

@@ -11,13 +11,13 @@ export const RenderAny = (props: RenderAnyProps) => {
   const { value, props: cProps } = props;
   const type = typeof value;
 
+  if (isValidElement(value) || type === 'string') {
+    return value;
+  }
+
   if (isValidElementType(value)) {
     const C: IAny = value;
     return <C {...cProps} />;
-  }
-
-  if (isValidElement(value) || type === 'string') {
-    return value;
   }
 
   if (isBlank(value)) {

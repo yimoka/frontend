@@ -1,5 +1,6 @@
 import { observer } from '@formily/react';
 import { PropsWithComponentData, useAdditionalNode, useComponentData, useSchemaItemsToItems } from '@yimoka/react';
+import { IAny } from '@yimoka/shared';
 import { Breadcrumb as AntBreadcrumb, BreadcrumbProps } from 'antd';
 import React, { useMemo } from 'react';
 
@@ -7,12 +8,12 @@ import { Link } from '../display/link';
 
 const propsMap = { title: 'title' };
 
-const BreadcrumbFC = observer((props: PropsWithComponentData<Omit<BreadcrumbProps, 'itemRender'>> & { itemRender?: 'link' | BreadcrumbProps['itemRender'] }) => {
-  const { items, separator, data, dataKey, store, itemRender, ...rest } = props;
+const BreadcrumbFC = observer((props: PropsWithComponentData<Omit<BreadcrumbProps, 'itemRender'>> & { value?: IAny[], itemRender?: 'link' | BreadcrumbProps['itemRender'] }) => {
+  const { items, separator, value, data, dataKey, store, itemRender, ...rest } = props;
   const curSeparator = useAdditionalNode('separator', separator);
-  const curData = useComponentData([data], dataKey, store);
+  const curData = useComponentData([data, value], dataKey, store);
   const schemaItems = useSchemaItemsToItems(curData, propsMap, 'title');
-  const curItems = useMemo(() => [...(schemaItems ?? []), ...(items ?? [])], [items, schemaItems]);
+  const curItems = useMemo(() => [...(items ?? []), ...(schemaItems ?? [])], [items, schemaItems]);
 
   const curItemRender = useMemo(() => {
     if (itemRender === 'link') {

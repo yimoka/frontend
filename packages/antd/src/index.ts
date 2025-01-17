@@ -4,6 +4,7 @@ export * from './base/icon';
 
 export * from './display/descriptions';
 export * from './display/table';
+export * from './display/tag';
 
 export * from './feedback/alert';
 export * from './feedback/drawer';

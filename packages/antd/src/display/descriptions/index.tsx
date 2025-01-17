@@ -9,7 +9,7 @@ export const Descriptions = observer((props: PropsWithComponentData<Descriptions
   const { items, value, data, dataKey, store, ...rest } = props;
   const curData = useComponentData([data, value], dataKey, store);
   const schemaItems = useSchemaItemsToItems(curData, propsMap);
-  const curItems = useMemo(() => [...(schemaItems ?? []), ...(items ?? [])], [items, schemaItems]);
+  const curItems = useMemo(() => [...(items ?? []), ...(schemaItems ?? [])], [items, schemaItems]);
 
   return (
     <AntDescriptions {...rest} items={curItems} />
