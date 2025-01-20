@@ -47,6 +47,7 @@
     "test": "vitest --coverage"
   },
   "dependencies": {
+    "dayjs": "^1.11.13",
     "globals": "^15.14.0",
     "lodash-es": "^4.17.21"
   },

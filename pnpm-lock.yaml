@@ -290,6 +290,9 @@ importers:
 
   packages/shared:
     dependencies:
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       globals:
         specifier: ^15.14.0
         version: 15.14.0
