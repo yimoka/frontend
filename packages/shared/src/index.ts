@@ -1,6 +1,7 @@
 export * from './api';
 export * from './arr';
 export * from './compiler';
+export * from './date';
 export * from './json';
 export * from './num';
 export * from './obj';
