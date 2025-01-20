@@ -17,7 +17,6 @@ export interface CheckableTagProps<T = IAny> extends Omit<GetProps<typeof AntTag
   value?: T
   values?: { true: T, false: T }
   onChange?: (value: T, checked: boolean,) => void
-
 }
 
 const CheckableTag = (props: CheckableTagProps) => {
