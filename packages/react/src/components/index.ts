@@ -1,6 +1,7 @@
 import { IAny } from '@yimoka/shared';
 import { ComponentType } from 'react';
 
+import { RenderArray } from './array/render-array';
 import { SchemaItemRecursion } from './array/schema-item-recursion';
 import { SchemaItemRender } from './array/schema-item-render';
 import { EntityAdd } from './entity/add';
@@ -17,6 +18,7 @@ import { StoreRoute } from './store/route';
 import { Trigger } from './trigger';
 
 export const components: Record<string, ComponentType<IAny>> = {
+  RenderArray,
   SchemaItemRecursion,
   SchemaItemRender,
 

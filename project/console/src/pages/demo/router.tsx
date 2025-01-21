@@ -10,12 +10,14 @@ import { TagDemo } from './display/tag';
 import { DrawerDemo } from './feedback/drawer';
 import { ModalDemo } from './feedback/modal';
 import { BreadcrumbDemo } from './nav/breadcrumb';
+import { RenderArrayDemo } from './render-array';
 import { TriggerDemo } from './trigger';
 
 export const DemoRouter = () => (
   <WithSiderLayout>
     <Routes>
       <Route path="trigger" element={<TriggerDemo />} />
+      <Route path="render-array" element={<RenderArrayDemo />} />
 
       <Route path="display/calendar" element={<CalendarDemo />} />
       <Route path="display/descriptions" element={<DescriptionsDemo />} />

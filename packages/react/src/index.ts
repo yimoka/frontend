@@ -1,5 +1,6 @@
 export * from '@formily/react';
 
+export * from './components/array/render-array';
 export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';
 
