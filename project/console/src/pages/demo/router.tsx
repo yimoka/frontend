@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { WithSiderLayout } from '@/layout/with-sider';
 import { TableDemo } from '@/pages/demo/display/table';
 
+import { CalendarDemo } from './display/calendar';
 import { DescriptionsDemo } from './display/descriptions';
 import { TagDemo } from './display/tag';
 import { DrawerDemo } from './feedback/drawer';
@@ -15,8 +16,10 @@ export const DemoRouter = () => (
   <WithSiderLayout>
     <Routes>
       <Route path="trigger" element={<TriggerDemo />} />
-      <Route path="display/table" element={<TableDemo />} />
+
+      <Route path="display/calendar" element={<CalendarDemo />} />
       <Route path="display/descriptions" element={<DescriptionsDemo />} />
+      <Route path="display/table" element={<TableDemo />} />
       <Route path="display/tag" element={<TagDemo />} />
 
       <Route path="feedback/drawer" element={<DrawerDemo />} />
