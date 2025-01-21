@@ -5,6 +5,7 @@ import { FloatButton } from './base/float-button';
 import { Icon } from './base/icon';
 import { Typography, Text, Title, Paragraph } from './base/typography';
 
+import { Calendar } from './display/calendar';
 import { Descriptions } from './display/descriptions';
 import { Link } from './display/link';
 import { Table } from './display/table';
@@ -55,6 +56,7 @@ export const components: IConfigComponents = {
   Paragraph,
 
   // display
+  Calendar,
   Descriptions,
   Table,
   Link,

@@ -28,10 +28,12 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'lodash-es',
+        'dayjs',
       ],
       output: {
         globals: {
           'lodash-es': '_',
+          dayjs: 'dayjs',
         },
       },
     },
