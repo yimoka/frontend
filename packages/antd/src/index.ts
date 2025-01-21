@@ -4,7 +4,10 @@ export * from './base/float-button';
 export * from './base/icon';
 export * from './base/typography';
 
+export * from './display/avatar';
+export * from './display/badge';
 export * from './display/calendar';
+export * from './display/card';
 export * from './display/descriptions';
 export * from './display/table';
 export * from './display/link';
