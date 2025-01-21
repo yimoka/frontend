@@ -5,6 +5,7 @@ import { WithSiderLayout } from '@/layout/with-sider';
 import { TableDemo } from '@/pages/demo/display/table';
 
 import { CalendarDemo } from './display/calendar';
+import { CarouselDemo } from './display/carousel';
 import { DescriptionsDemo } from './display/descriptions';
 import { TagDemo } from './display/tag';
 import { DrawerDemo } from './feedback/drawer';
@@ -21,6 +22,7 @@ export const DemoRouter = () => (
 
       <Route path="display/calendar" element={<CalendarDemo />} />
       <Route path="display/descriptions" element={<DescriptionsDemo />} />
+      <Route path="display/carousel" element={<CarouselDemo />} />
       <Route path="display/table" element={<TableDemo />} />
       <Route path="display/tag" element={<TagDemo />} />
 
