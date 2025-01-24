@@ -1,4 +1,4 @@
-import * as AllIcon from '@ant-design/icons/lib/icons';
+import * as AllIcon from '@ant-design/icons';
 import { ConfigProvider, IConfig, IGetIcon } from '@yimoka/react';
 import { INotifier } from '@yimoka/store';
 import { App } from 'antd';
@@ -59,8 +59,9 @@ const titleMap: Record<string, string> = {
 const getIcon: IGetIcon = async (icon: string) => {
   if (!icon) return null;
   if (icon in AllIcon) {
-    return AllIcon[icon as keyof typeof AllIcon];
+    return AllIcon[icon as keyof typeof AllIcon] as React.ComponentType;
   }
+
   // TODO: 从远程加载
   return null;
 };

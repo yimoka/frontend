@@ -1,4 +1,5 @@
-import { observer } from '@formily/react';
+import { Field } from '@formily/core';
+import { observer, useField } from '@formily/react';
 import { useInitStore } from '@yimoka/react';
 import { Input, Modal, Space, Typography } from 'antd';
 import React, { useEffect } from 'react';
@@ -8,17 +9,17 @@ import { getImageCaptcha, getMailCaptcha } from '@/pages/user/api';
 import { ImageCaptcha } from './captcha-image';
 
 export interface MailCaptchaProps {
-  mailPrefix?: string;
-  mail: string;
   value?: string;
   onChange?: (value: string) => void;
 }
 
 export const MailCaptcha = observer((props: MailCaptchaProps) => {
-  const { mail, value, mailPrefix, onChange } = props;
+  const { value, onChange } = props;
+  const field = useField<Field>();
+
   const { values, setValues, fetch } = useInitStore({
     defaultValues: {
-      mail,
+      mail: value,
       needCaptcha: false,
       captchaID: '',
       captchaCode: '',
@@ -33,21 +34,22 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
   });
 
   useEffect(() => {
-    setValues({ mail });
-  }, [mailPrefix, mail, setValues]);
+    setValues({ mail: value });
+  }, [setValues, value]);
 
-  const { captchaCode, needCaptcha } = values;
+  const { mail, captchaCode, needCaptcha } = values;
 
   const getCode = () => {
     fetch();
   };
+
 
   return (
     <>
       <Input
         value={value}
         onChange={e => onChange?.(e.target.value)}
-        addonAfter={<Typography.Link onClick={getCode} disabled={!mail || mail?.length < 5} >获取验证码</Typography.Link>}
+        addonAfter={<Typography.Link onClick={getCode} disabled={!mail || !!field?.getState().errors?.length} >获取验证码</Typography.Link>}
       />
       <Modal
         maskClosable={false}

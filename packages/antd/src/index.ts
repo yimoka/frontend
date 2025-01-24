@@ -40,4 +40,7 @@ export * from './nav/menu';
 export * from './nav/pagination';
 export * from './nav/steps';
 
+// store
+export * from './store/form';
+
 export * from './components';

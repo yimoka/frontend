@@ -1,5 +1,6 @@
-import Icon from '@ant-design/icons';
 import React, { ReactNode } from 'react';
+
+import { Icon } from '../base/icon';
 
 export const strToIcon: <T = ReactNode>(name: T) => (T | ReactNode) = (name) => {
   if (typeof name === 'string' && name) {

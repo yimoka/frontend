@@ -42,6 +42,9 @@ import { Dropdown } from './nav/dropdown';
 import { Menu } from './nav/menu';
 import { Pagination } from './nav/pagination';
 import { Steps } from './nav/steps';
+import { FormItem, StoreForm } from './store/form';
+import { Reset } from './store/reset';
+import { Submit } from './store/submit';
 
 export const components: IConfigComponents = {
   // 用于系统配置的基础组件
@@ -104,4 +107,9 @@ export const components: IConfigComponents = {
   Menu,
   Pagination,
   Steps,
+  // store
+  StoreForm,
+  FormItem,
+  Reset,
+  Submit,
 };

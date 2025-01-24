@@ -21,6 +21,7 @@ export const Icon = (props: IconProps) => {
       return;
     }
     setLoading(true);
+
     const r = getIcon(file);
     if (r instanceof Promise) {
       r.then((c) => {

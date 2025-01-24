@@ -1,15 +1,12 @@
-import { Entity, IEntityProps } from '@yimoka/react';
+import { EntityOperation, IEntityProps } from '@yimoka/react';
 import React from 'react';
 
 import { loginMail } from './api';
 
 export const LoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
-  <Entity
+  <EntityOperation
     {...props}
-    store={{
-      defaultValues: { mail: '', code: '' },
-      api: loginMail,
-    }}
+    store={{ defaultValues: { mail: '', code: '' }, api: loginMail }}
     schema={{
       type: 'object',
       properties: {
@@ -35,7 +32,6 @@ export const LoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
               required: true,
               'x-validator': { format: 'email' },
               'x-component': 'MailCaptcha',
-              'x-component-props': { mail: '{{$record.mail}}' },
               'x-decorator': 'FormItem',
             },
             code: {
@@ -63,8 +59,6 @@ export const LoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
                   'x-component-props': {
                     style: { margin: 'auto' },
                     children: '登录',
-                    disabled: '{{$self.form.errors.length > 0}}',
-                    loading: '{{curStore.loading}}',
                   },
                 },
               },

@@ -66,6 +66,7 @@ export const listOptionsDefault: Partial<IBaseStoreOptions> = {
  * @param {IBaseStoreConfig<V, R>} config 配置对象
  */
 export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStore<V, R> {
+  isPaginate = true;
   /**
    * 选中的行键数组。
    *
@@ -100,6 +101,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
     if (sortOrder && typeof curDefaultValues[sortOrder] === 'undefined') {
       curDefaultValues[sortOrder] = [];
     }
+
     if (isPaginate) {
       if (typeof curDefaultValues[page] === 'undefined') {
         curDefaultValues[page] = 1;
@@ -114,7 +116,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
       options: curOptions,
       defaultValues: curDefaultValues,
     });
-
+    this.isPaginate = isPaginate;
     define(this, {
       selectedRowKeys: observable,
       nextLoading: observable,
