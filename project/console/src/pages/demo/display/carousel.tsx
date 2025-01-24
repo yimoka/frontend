@@ -35,30 +35,70 @@ export const CarouselSchema = () => (
             type: 'void',
             'x-component': 'Carousel',
             properties: {
-              arr: {
-                type: 'array',
-                'x-component': 'RenderArray',
-                items: {
-                  type: 'void',
-                  'x-component': 'div',
-                  properties: {
-                    h3: {
-                      type: 'void',
-                      'x-component': 'h3',
-                      'x-component-props': {
-                        style: {
-                          margin: 0,
-                          height: '160px',
-                          color: '#fff',
-                          lineHeight: '160px',
-                          textAlign: 'center',
-                          background: '#364d79',
-                        },
+              div1: {
+                type: 'void',
+                'x-component': 'div',
+                properties: {
+                  h3: {
+                    type: 'void',
+                    'x-component': 'h3',
+                    'x-component-props': {
+                      style: {
+                        margin: 0,
+                        height: '160px',
+                        color: '#fff',
+                        lineHeight: '160px',
+                        textAlign: 'center',
+                        background: '#364d79',
                       },
                     },
                   },
                 },
               },
+              dev2: {
+                type: 'void',
+                'x-component': 'div',
+                properties: {
+                  h3: {
+                    type: 'void',
+                    'x-component': 'h3',
+                    'x-component-props': {
+                      style: {
+                        margin: 0,
+                        height: '160px',
+                        color: '#fff',
+                        lineHeight: '160px',
+                        textAlign: 'center',
+                        background: '#364d79',
+                      },
+                    },
+                  },
+                },
+              },
+              // arr: {
+              //   type: 'array',
+              //   'x-component': 'RenderArray',
+              //   items: {
+              //     type: 'void',
+              //     'x-component': 'div',
+              //     properties: {
+              //       h3: {
+              //         type: 'void',
+              //         'x-component': 'h3',
+              //         'x-component-props': {
+              //           style: {
+              //             margin: 0,
+              //             height: '160px',
+              //             color: '#fff',
+              //             lineHeight: '160px',
+              //             textAlign: 'center',
+              //             background: '#364d79',
+              //           },
+              //         },
+              //       },
+              //     },
+              //   },
+              // },
             },
           },
         },

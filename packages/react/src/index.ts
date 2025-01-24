@@ -22,6 +22,7 @@ export * from './components/trigger';
 export * from './context/config';
 
 export * from './hooks/additional-node';
+export * from './hooks/children-without-fragment';
 export * from './hooks/component-data';
 export * from './hooks/components';
 export * from './hooks/deep-memo';
