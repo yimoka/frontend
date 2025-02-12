@@ -1,9 +1,11 @@
 import { observer } from '@formily/react';
 import { useRoot } from '@yimoka/react';
+import { IFetchListener } from '@yimoka/store';
 import { Card } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { clearAuthErr } from '@/root';
 import { setUserToken } from '@/token';
 
 import { LoginByMail } from './login-mail';
@@ -11,7 +13,6 @@ import { LoginByMail } from './login-mail';
 export const LoginPage = observer(() => {
   const { search } = useLocation();
   const redirect = new URLSearchParams(search).get('redirect') ?? '/';
-  const root = useRoot();
   const nav = useNavigate();
 
   return (
@@ -29,16 +30,25 @@ export const LoginPage = observer(() => {
           boxShadow: 'rgb(0 0 0 / 15%) 0px 3px 15px',
         }}
       >
-        <LoginByMail onSuccess={(res) => {
-          root.setUser(res);
-          if (res.token) {
-            setUserToken(res.token);
-          };
-          nav?.(`/user/tenant?redirect=${encodeURIComponent(redirect)}`, { replace: true });
-        }} />
+        <Login onSuccess={() => nav?.(`/user/tenant?redirect=${encodeURIComponent(redirect)}`, { replace: true })} />
       </Card>
     </div >
   );
 });
+
+export const Login = ({ onSuccess }: { onSuccess?: IFetchListener }) => {
+  const root = useRoot();
+
+  const success: IFetchListener = (res, store) => {
+    root.setUser(res);
+    if (res.token) {
+      setUserToken(res.token);
+    };
+    clearAuthErr();
+    onSuccess?.(res, store);
+  };
+
+  return <LoginByMail onSuccess={success} />;
+};
 
 

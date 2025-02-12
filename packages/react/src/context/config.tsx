@@ -28,17 +28,17 @@ export const useAPIExecutor = () => {
 
 export const useLocation = () => {
   const config = useConfig();
-  return config?.useLocation?.();
+  return config?.useLocation?.() as ReturnType<IUseLocation>;
 };
 
 export const useNavigate = () => {
   const config = useConfig();
-  return config?.useNavigate;
+  return config?.useNavigate as IUseNavigate;
 };
 
 export const useRouteParams = () => {
   const config = useConfig();
-  return config?.useRouteParams?.();
+  return config?.useRouteParams?.() as ReturnType<IUseRouteParams>;
 };
 
 export const useConfigComponents = () => {

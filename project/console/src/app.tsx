@@ -9,6 +9,7 @@ import { InitConfig } from '@/config';
 import { Pwa } from '@/pwa';
 import { RootRouter } from '@/router';
 
+import { HandleAuthErr } from './auth-err';
 import { BaseLayout } from './layout/base';
 
 dayjs.locale('zh-cn');
@@ -26,6 +27,7 @@ export default function app() {
             <BaseLayout>
               <RootRouter />
             </BaseLayout>
+            <HandleAuthErr />
           </InitConfig>
         </App>
       </ConfigProvider>

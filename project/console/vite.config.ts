@@ -13,6 +13,12 @@ export default defineConfig({
   },
   server: {
     port: 8001,
+    proxy: {
+      '/api': {
+        target: 'https://console.home.ickeep.com',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     port: 8101,

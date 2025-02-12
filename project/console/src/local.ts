@@ -2,12 +2,11 @@ import { isSuccess } from '@yimoka/shared';
 
 import { httpPost } from './http';
 
-
 export const localKey = {
   clientID: 'clientID',
   staffID: 'staffID',
   site: 'site',
-  token: 'token', // 员工的 token
+  staffToken: 'staffToken', // 员工的 token
   tenantID: 'tenantID',
   userID: 'userID',
   userToken: 'userToken', // 统一用户的 token
@@ -53,7 +52,6 @@ export const removeClientID = () => {
   clientID = '';
 };
 
-
 // 懒式单例远程获取 ClientID
 let fetchClientID: Promise<string> | null = null;
 const getFetchClientID = () => {
@@ -63,4 +61,27 @@ const getFetchClientID = () => {
     });
   }
   return fetchClientID;
+};
+
+let tenantID = '';
+export const getTenantID = () => {
+  if (tenantID) {
+    return tenantID;
+  }
+  const id = localStorage.getItem(localKey.tenantID);
+  if (id) {
+    tenantID = id;
+    return id;
+  }
+  return '';
+};
+
+export const setTenantID = (id: string) => {
+  tenantID = id;
+  localStorage.setItem(localKey.tenantID, id);
+};
+
+export const removeTenantID = () => {
+  localStorage.removeItem(localKey.tenantID);
+  tenantID = '';
 };
