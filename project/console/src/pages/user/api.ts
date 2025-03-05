@@ -20,6 +20,25 @@ export const getTenantStaffs = () => httpGet('/admin/tenant/bff/staff/userBind',
 export const LoginByUser = (values: { staffID: string, tenantID: string }) => httpPost('/admin/tenant/bff/loginByUser', values, { headers: getSassHeaders() });
 
 
+export interface IStaff {
+  id: string
+  name: string
+  realName: string
+  avatar: string
+  isChangePassword: boolean
+  userID: string
+  createTime: string
+  updateTime: string
+  tenantID: number
+  phonePrefix: string
+  phone: string
+  mail: string
+  switch: boolean
+  creatorByStaff: string
+  updaterByStaff: string
+}
+
+
 // export const addTenantJoin = (values: any) => httpPost('/admin/tenant/bff/tenant/join/add', values, { headers: getSassHeaders() });
 // export const editTenantJoin = (values: any) => httpPost('/admin/tenant/bff/tenant/join/edit', values, { headers: getSassHeaders() });
 // export const detailTenantJoin = (values: any) => httpPost('/admin/tenant/bff/tenant/join/detail', values, { headers: getSassHeaders() });

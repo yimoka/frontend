@@ -10,6 +10,7 @@ export * from './display/calendar';
 export * from './display/card';
 export * from './display/carousel';
 export * from './display/descriptions';
+export * from './display/empty';
 export * from './display/table';
 export * from './display/link';
 export * from './display/tag';

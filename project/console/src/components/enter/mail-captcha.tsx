@@ -1,8 +1,9 @@
 import { Field } from '@formily/core';
 import { observer, useField } from '@formily/react';
+import { Spin } from '@yimoka/antd';
 import { useInitStore } from '@yimoka/react';
 import { Input, Modal, Space, Typography } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { getImageCaptcha, getMailCaptcha } from '@/pages/user/api';
 
@@ -16,8 +17,9 @@ export interface MailCaptchaProps {
 export const MailCaptcha = observer((props: MailCaptchaProps) => {
   const { value, onChange } = props;
   const field = useField<Field>();
+  const [countdown, setCountdown] = useState(0);
 
-  const { values, setValues, fetch } = useInitStore({
+  const { values, setValues, fetch, loading } = useInitStore({
     defaultValues: {
       mail: value,
       needCaptcha: false,
@@ -29,9 +31,24 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
     afterAtFetch: {
       notify: true,
       failRun: (res, store) => res.metadata?.needCaptcha && store.setFieldValue('needCaptcha', true),
-      successRun: (_, store) => store.setFieldValue('needCaptcha', false),
+      successRun: (_, store) => {
+        store.setFieldValue('needCaptcha', false);
+        setCountdown(60);
+      },
     },
   });
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
 
   useEffect(() => {
     setValues({ mail: value });
@@ -43,13 +60,20 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
     fetch();
   };
 
-
   return (
     <>
       <Input
         value={value}
         onChange={e => onChange?.(e.target.value)}
-        addonAfter={<Typography.Link onClick={getCode} disabled={!mail || !!field?.getState().errors?.length} >获取验证码</Typography.Link>}
+        addonAfter={
+          <Typography.Link
+            onClick={getCode}
+            disabled={loading || !mail || !!field?.getState().errors?.length || countdown > 0}
+          >
+            {loading && <Spin size="small" />}
+            {countdown > 0 ? `${countdown}秒后重试` : '获取验证码'}
+          </Typography.Link>
+        }
       />
       <Modal
         maskClosable={false}

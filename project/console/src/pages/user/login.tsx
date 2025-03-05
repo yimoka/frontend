@@ -40,9 +40,10 @@ export const Login = ({ onSuccess }: { onSuccess?: IFetchListener }) => {
   const root = useRoot();
 
   const success: IFetchListener = (res, store) => {
-    root.setUser(res);
-    if (res.token) {
-      setUserToken(res.token);
+    const { data } = res;
+    root.setUser(data?.user);
+    if (data.token) {
+      setUserToken(data.token);
     };
     clearAuthErr();
     onSuccess?.(res, store);

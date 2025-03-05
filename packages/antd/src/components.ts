@@ -11,6 +11,7 @@ import { Calendar } from './display/calendar';
 import { Card } from './display/card';
 import { Carousel } from './display/carousel';
 import { Descriptions } from './display/descriptions';
+import { Empty } from './display/empty';
 import { Link } from './display/link';
 import { Table } from './display/table';
 
@@ -69,6 +70,7 @@ export const components: IConfigComponents = {
   Card,
   Carousel,
   Descriptions,
+  Empty,
   Table,
   Link,
   Tag,

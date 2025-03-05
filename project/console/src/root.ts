@@ -4,8 +4,12 @@ import { useRoot } from '@yimoka/react';
 import { IHTTPCode } from '@yimoka/shared';
 import { rootStore } from '@yimoka/store';
 
+import { IStaff } from './pages/user/api';
+
 const dataKey = {
   authErr: 'authErr',
+  // 员工
+  staff: 'staff',
 };
 
 export type IAuthErrData = {
@@ -29,4 +33,14 @@ export const useAuthErr = () => {
 
 export const clearAuthErr = () => {
   rootStore.setDataItem(dataKey.authErr, null);
+};
+
+export const setStaff = (data: IStaff) => {
+  rootStore.setDataItem(dataKey.staff, data);
+};
+
+export const useStaff = () => rootStore.getDataItem(dataKey.staff) as IStaff | null;
+
+export const clearStaff = () => {
+  rootStore.setDataItem(dataKey.staff, null);
 };

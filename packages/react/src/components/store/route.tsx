@@ -12,14 +12,14 @@ export const StoreRoute = (props: { store: IStore, resetMissingValues?: boolean 
 
   useEffect(() => {
     const { options, values, setValuesFromRoute, fetch, form } = store;
-    const { bindRoute, routeTrigger, entryRun } = options;
+    const { bindRoute, routeTrigger, runNow } = options;
     if (bindRoute) {
       const oldValues = cloneDeep(values);
       setValuesFromRoute(search, params, resetMissingValues);
       const hasChanged = !isEqual(oldValues, store.values) || routeTrigger === 'any';
       const first = isFirst.current;
       isFirst.current = false;
-      if ((hasChanged && (!first || entryRun)) || (!hasChanged && (first && entryRun))) {
+      if ((hasChanged && (!first || runNow)) || (!hasChanged && (first && runNow))) {
         form.submit().then(() => fetch());
       }
     }

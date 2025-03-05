@@ -16,7 +16,7 @@ const DF_OPTIONS: IBaseStoreOptions = {
   bindRoute: false,
   updateRouteType: 'push',
   routeTrigger: 'unequal',
-  entryRun: false,
+  runNow: false,
   urlWithDefaultFields: [] as string[],
   keys: {} as Record<string, string>,
 };
@@ -201,6 +201,12 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       fetch: action,
       ...defineConfig,
     });
+
+    const { runNow, bindRoute } = this.options;
+    // 绑定路由时，会使用组件在进行页面时进行参数赋值，再进行请求。
+    if (runNow && !bindRoute) {
+      this.fetch();
+    }
   }
 
   /**
@@ -556,7 +562,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
  * @property {boolean} bindRoute - 是否绑定路由。
  * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
  * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
- * @property {boolean} entryRun -  进入页面时是否立即拉取数据
+ * @property {boolean} runNow -  立即拉取数据
  * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
  * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
  */
@@ -565,7 +571,7 @@ export type IBaseStoreOptions = {
   bindRoute: boolean;
   updateRouteType: 'push' | 'replace';
   routeTrigger: 'unequal' | 'any';
-  entryRun: boolean
+  runNow: boolean
   urlWithDefaultFields: string[];
   keys: Record<string, string>;
 }

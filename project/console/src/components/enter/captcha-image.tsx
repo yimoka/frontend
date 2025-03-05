@@ -5,7 +5,7 @@ import { ButtonProps, SpinProps, Spin, Button } from 'antd';
 import React, { HTMLAttributes, useEffect } from 'react';
 
 export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
-  entryRun?: boolean;
+  runNow?: boolean;
   height?: number;
   onChange?: (id: string) => void;
   imgProps?: Omit<HTMLAttributes<HTMLImageElement>, 'src' | 'onClick'>;
@@ -14,9 +14,9 @@ export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
 }
 
 export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
-  const { onChange, entryRun = true, height = 32, imgProps, api, btnProps, ...args } = props;
+  const { onChange, runNow = true, height = 32, imgProps, api, btnProps, ...args } = props;
   const { loading, response: { data: { id, image } = {} }, fetch } = useInitStore({
-    options: { entryRun },
+    options: { runNow },
     defaultValues: {},
     api: api ?? { url: '/admin/tenant/bff/captcha/image' },
   });
