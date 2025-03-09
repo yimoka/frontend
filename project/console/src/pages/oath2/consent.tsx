@@ -5,10 +5,16 @@ import { useLocation } from 'react-router-dom';
 
 export const Oauth2ConsentPage = observer(() => {
   const { search } = useLocation();
+  const params = new URLSearchParams(search);
   const store = useInitStore({
     api: { url: '/admin/tenant/bff/oauth/acceptConsent', method: 'POST' },
     // 暂时写死 后续再写页面让用户选择
-    defaultValues: { challenge: '', scope: ['openid'], remember: true },
+    defaultValues: { challenge: params.get('consent_challenge'), scope: ['openid'], remember: true },
+    afterAtFetch: {
+      successRun: (res) => {
+        window.location.href = res.data.redirect;
+      },
+    },
   });
 
   useEffect(() => {
