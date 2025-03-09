@@ -130,5 +130,6 @@ export interface ErrorProps {
   icon?: string
   children?: ReactNode
   size?: ISize,
+  trace?: string | false
   [key: string]: IAny
 }

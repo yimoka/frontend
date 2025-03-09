@@ -8,6 +8,7 @@ import { IndexPage } from '@/pages';
 import { AutoPage } from '@/pages/auto';
 
 import { DemoRouter } from './pages/demo/router';
+import { Oauth2Router } from './pages/oath2/router';
 import { StaffRouter } from './pages/staff/router';
 import { UserRouter } from './pages/user/router';
 import { setStaff } from './root';
@@ -17,6 +18,7 @@ import { setStaffToken } from './token';
 export const NeedLoginRouter = () => (
   <Routes>
     <Route path="/" element={<IndexPage />} />
+    <Route path="/oauth2/*" element={<Oauth2Router />} />
     <Route path="*" element={<AutoPage />} />
   </Routes>
 );
@@ -49,7 +51,9 @@ export const GuardRouter = observer(() => {
 
   const { response, loading } = store;
   if (isUnauthorized(response)) {
-    return <Navigate to="/user/login" />;
+    const { pathname, search } = window.location;
+    const redirect = encodeURIComponent(`${pathname}${search}`);
+    return <Navigate to={`/user/login?redirect=${redirect}`} />;
   }
 
   if (loading || !isSuccess(response)) {

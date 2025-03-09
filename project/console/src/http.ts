@@ -112,7 +112,7 @@ export const handleResponse = <T = Record<string | number | symbol, any>>(respon
 export const getResponseData = (response: AxiosResponse): Record<string | number | symbol, any> => {
   const { data } = response;
   return (typeof data?.code !== 'undefined'
-    && (typeof data?.msg !== 'undefined' || typeof data?.message !== 'undefined' || typeof data?.data !== 'undefined')) ? { msg: '', data: null, ...data } : response;
+    && (typeof data?.msg !== 'undefined' || typeof data?.message !== 'undefined' || typeof data?.data !== 'undefined')) ? { data: null, ...data } : response;
 };
 
 export type IHTTPRequest = <R = any, P = any>(config: AxiosRequestConfig<P>) => Promise<IHTTPResponse<R, P>>;
