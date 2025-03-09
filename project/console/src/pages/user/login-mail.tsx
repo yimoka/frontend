@@ -3,7 +3,7 @@ import React from 'react';
 
 import { loginMail } from './api';
 
-export const LoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
+export const UserLoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
   <EntityOperation
     {...props}
     store={{ defaultValues: { mail: '', code: '' }, api: loginMail }}

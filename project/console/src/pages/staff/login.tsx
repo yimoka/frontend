@@ -1,18 +1,16 @@
 import { observer } from '@formily/react';
-import { useRoot } from '@yimoka/react';
 import { IFetchListener } from '@yimoka/store';
 import { Card } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { clearAuthErr } from '@/root';
-import { setUserToken } from '@/token';
+import { clearAuthErr, setStaff } from '@/root';
+import { setStaffToken } from '@/token';
 
-import { UserLoginByMail } from './login-mail';
+import { StaffLoginByName } from './login-name';
 
-export const UserLoginPage = observer(() => {
+export const StaffLoginPage = observer(() => {
   const { search } = useLocation();
-  const redirect = new URLSearchParams(search).get('redirect') ?? '/';
   const nav = useNavigate();
 
   return (
@@ -30,26 +28,26 @@ export const UserLoginPage = observer(() => {
           boxShadow: 'rgb(0 0 0 / 15%) 0px 3px 15px',
         }}
       >
-        <Login onSuccess={() => nav?.(`/user/tenant?redirect=${encodeURIComponent(redirect)}`, { replace: true })} />
+        <Login onSuccess={() => {
+          const redirect = new URLSearchParams(search).get('redirect') ?? '/';
+          nav?.(redirect, { replace: true });
+        }} />
       </Card>
     </div >
   );
 });
 
 export const Login = ({ onSuccess }: { onSuccess?: IFetchListener }) => {
-  const root = useRoot();
-
   const success: IFetchListener = (res, store) => {
     const { data } = res;
-    root.setUser(data?.user);
+    setStaff(data?.user);
     if (data.token) {
-      setUserToken(data.token);
+      setStaffToken(data.token);
     };
     clearAuthErr();
     onSuccess?.(res, store);
   };
 
-  return <UserLoginByMail onSuccess={success} />;
+  return <StaffLoginByName onSuccess={success} />;
 };
-
 

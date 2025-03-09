@@ -3,13 +3,13 @@ import { Route, Routes } from 'react-router-dom';
 
 import { WithFooterLayout } from '@/layout/with-footer';
 
-import { LoginPage } from './login';
+import { UserLoginPage } from './login';
 import { UserTenant } from './tenant';
 
 export const UserRouter = () => (
   <WithFooterLayout>
     <Routes>
-      <Route path="login" element={<LoginPage />} />
+      <Route path="login" element={<UserLoginPage />} />
       {/* <Route path="password/change" element={<ChangePassword />} /> */}
       <Route path="tenant" element={<UserTenant />} />
       {/* <Route path="tenant/join/*" element={<TenantJoinRouter />} /> */}
