@@ -39,10 +39,10 @@ export const StaffLoginPage = observer(() => {
 
 export const Login = ({ onSuccess }: { onSuccess?: IFetchListener }) => {
   const success: IFetchListener = (res, store) => {
-    const { data } = res;
-    setStaff(data?.user);
-    if (data.token) {
-      setStaffToken(data.token);
+    const { data: { staff, token } = {} } = res;
+    if (staff) {
+      setStaff(staff);
+      setStaffToken(token);
     };
     clearAuthErr();
     onSuccess?.(res, store);
