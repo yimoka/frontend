@@ -13,6 +13,8 @@ export default defineConfig({
   },
   server: {
     port: 8001,
+    // 本地开发环境 允许任意域名访问
+    host: true,
     proxy: {
       '/api': {
         target: 'https://console.home.ickeep.com',
