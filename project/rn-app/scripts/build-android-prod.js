@@ -21,7 +21,8 @@ const {
   rootDir,
   androidBuildDir,
   cleanAndroidBuildDir,
-  checkEASCliAndLogin
+  checkEASCliAndLogin,
+  findAndroidSdkPath
 } = utils;
 
 // 清理旧的构建文件
@@ -81,6 +82,8 @@ async function main() {
       console.log(colors.blue(`\n开始构建Android ${isApk ? 'APK' : 'AAB'} 生产客户端...`));
 
       try {
+        // 查找Android SDK路径
+        const androidSdkPath = findAndroidSdkPath();
         console.log(colors.blue(`使用配置文件: ${profile}`));
         execSync(`eas build --platform android --profile ${profile} --local --non-interactive`, {
           stdio: 'inherit',
