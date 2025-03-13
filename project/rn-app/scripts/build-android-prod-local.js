@@ -125,7 +125,11 @@ async function main() {
           console.log(colors.blue(`使用配置文件: ${profile}`));
           execSync(`eas build --platform android --profile ${profile} --local --non-interactive`, {
             stdio: 'inherit',
-            cwd: rootDir
+            cwd: rootDir,
+            env: {
+              ...process.env,
+              ANDROID_HOME: androidSdkPath
+            }
           });
           console.log(colors.green(`${isApk ? 'APK' : 'AAB'} 构建成功!`));
         } catch (error) {

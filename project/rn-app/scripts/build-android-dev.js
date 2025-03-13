@@ -52,7 +52,11 @@ try {
   console.log(colors.blue('开始构建Android开发版APK...'));
   execSync('eas build --platform android --profile development --local --non-interactive', {
     stdio: 'inherit',
-    cwd: rootDir
+    cwd: rootDir,
+    env: {
+      ...process.env,
+      ANDROID_HOME: androidSdkPath
+    }
   });
 
   // 查找构建的APK文件
