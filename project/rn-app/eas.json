@@ -1,0 +1,58 @@
+{
+  "cli": {
+    "version": ">= 10.0.0"
+  },
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "withoutCredentials": true,
+      "developmentClient": true,
+      "ios": {
+        "simulator": true
+      },
+      "cache": {
+        "disabled": false,
+        "paths": [
+          "~/.cocoapods",
+          "ios/Pods",
+          "node_modules/.cache/metro"
+        ]
+      },
+      "env": {
+        "CCACHE_ENABLE": "1"
+      }
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {},
+    "prodLocal": {
+      "distribution": "internal",
+      "withoutCredentials": true,
+      "android": {},
+      "ios": {
+        "simulator": true
+      },
+      "cache": {
+        "disabled": false,
+        "paths": [
+          "~/.gradle/caches",
+          "node_modules/.cache/metro"
+        ]
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "YOUR_APPLE_ID",
+        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
+        "appleTeamId": "YOUR_APPLE_TEAM_ID"
+      },
+      "android": {
+        "serviceAccountKeyPath": "path/to/service-account.json",
+        "track": "production"
+      }
+    }
+  }
+}
