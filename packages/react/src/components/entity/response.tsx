@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 
 import { observer } from '@formily/react';
 import { IAnyObject, isBlank, isSuccess } from '@yimoka/shared';

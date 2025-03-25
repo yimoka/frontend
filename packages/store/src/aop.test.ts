@@ -16,7 +16,7 @@ describe('handleAfterAtFetch', () => {
     store.form.submit().catch(async (errs) => {
       store.form.setState({ errors: errs });
       expect(store.form.errors.length).toBe(1);
-      const res = { data: { name: 'test' } } as IHTTPResponse;
+      const res: IHTTPResponse = { code: 0, msg: '', data: { name: 'test' } };
       store.afterAtFetch.resetValues = true;
       handleAfterAtFetch(res, store);
       expect(store.form.errors.length).toBe(0);

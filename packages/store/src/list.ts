@@ -96,7 +96,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
     const { options, defineConfig, defaultValues, isPaginate = true, ...args } = config;
     const curOptions = mergeWithArrayOverride<IBaseStoreOptions>(cloneDeep(listOptionsDefault), options);
     const { page, pageSize, sortOrder } = mergeWithArrayOverride(cloneDeep(listKeysDefault), curOptions.keys);
-    const curDefaultValues = { ...defaultValues } as IAnyObject;
+    const curDefaultValues: IAnyObject = { ...defaultValues };
 
     if (sortOrder && typeof curDefaultValues[sortOrder] === 'undefined') {
       curDefaultValues[sortOrder] = [];
@@ -253,7 +253,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    */
   loadNextData = (data: IAny[]) => {
     if (!isBlank(data) && Array.isArray(data)) {
-      const newResponse = { ...this.response } as IAny;
+      const newResponse: IAny = { ...this.response };
       if (Array.isArray(newResponse.data)) {
         newResponse.data = [...newResponse.data, ...data];
       } else if (Array.isArray(newResponse.data?.data)) {

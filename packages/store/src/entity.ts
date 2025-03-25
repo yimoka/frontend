@@ -30,7 +30,7 @@ export function getEntryStore<V extends object = IAnyObject, R extends object = 
     conf.afterAtFetch = { ...opStoreAfterAtFetch };
   }
 
-  const curStore = store ?? {} as IStoreConfig<V, R>;
+  const curStore = store ?? {};
 
   curStore.fieldsConfig = { ...conf.fieldsConfig, ...curStore.fieldsConfig };
   curStore.defaultValues = { ...conf.defaultValues, ...curStore.defaultValues };

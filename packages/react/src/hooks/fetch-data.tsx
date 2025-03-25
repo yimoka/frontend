@@ -39,11 +39,10 @@ export function useFetchData<T = IAny>(api: IStoreAPI, params?: IAnyObject, conf
       dict: curStore.dict,
       extInfo: curStore.extInfo,
     }[watchParamsSource] ?? curStore;
-
-    return Object.entries(watchParamsKeys).reduce((acc, [key, value]) => {
+    return Object.entries(watchParamsKeys).reduce<Record<string, unknown>>((acc, [key, value]) => {
       acc[key] = get(watchObj, value);
       return acc;
-    }, {} as IAnyObject);
+    }, {});
   }, [curStore, watchParamsKeys, watchParamsSource]);
 
   useDeepEffect(() => {

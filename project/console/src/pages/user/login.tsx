@@ -30,7 +30,9 @@ export const UserLoginPage = observer(() => {
           boxShadow: 'rgb(0 0 0 / 15%) 0px 3px 15px',
         }}
       >
-        <Login onSuccess={() => nav?.(`/user/tenant?redirect=${encodeURIComponent(redirect)}`, { replace: true })} />
+        <Login onSuccess={() => {
+          nav?.(`/user/tenant?redirect=${encodeURIComponent(redirect)}`, { replace: true });
+        }} />
       </Card>
     </div >
   );

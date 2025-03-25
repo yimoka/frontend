@@ -18,7 +18,7 @@ const DF_OPTIONS: IBaseStoreOptions = {
   routeTrigger: 'unequal',
   runNow: false,
   urlWithDefaultFields: [] as string[],
-  keys: {} as Record<string, string>,
+  keys: {},
 };
 
 // 事件名称
@@ -45,16 +45,6 @@ export const EVENT_NAMES = {
  * ```
  */
 export class BaseStore<V extends object = IAnyObject, R = IAny> {
-  /**
-   * 事件监听器。
-   * @private
-   */
-  private eventListeners: Record<string, Array<(...args: IAny[]) => void>> = {};
-
-  /**
-   * 选项对象，包含默认选项。
-   * @type {IBaseStoreOptions}
-   */
   options: IBaseStoreOptions = cloneDeep(DF_OPTIONS);
 
   /**
@@ -89,10 +79,6 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    */
   dictLoading: IStoreDictLoading<V> = {};
 
-  /**
-   * 字典请求时序 ID
-   */
-  private dictFetchIDMap: Record<IObjKey, number> = {};
 
   /**
    * 字典数据 用于存储 dictConfig 中配置生成的数据。主要用于下拉框 tag 等数据源。
@@ -136,24 +122,13 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * 请求加载状态
    * @type {boolean}
    */
-  loading: boolean = false;
+  loading = false;
   /**
    * 请求响应数据
    * @type {IStoreResponse<R, V>}
    */
   response: IStoreResponse<R, V> = {};
 
-  /**
-   * 最后一次请求的 ID，请求时序保护。
-   * @private
-   */
-  private lastFetchID = 0;
-  /**
-   * 请求控制器 用于取消请求
-   * @type {AbortController}
-   * @private
-  */
-  private apiController: AbortController | undefined;
 
   /**
   * 通知器 用于通知消息的方法
@@ -166,6 +141,32 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
    * @type {IAfterAtFetch}
    */
   afterAtFetch: IAfterAtFetch = {};
+
+  /**
+   * 事件监听器。
+   * @private
+   */
+  private eventListeners: Record<string, Array<(...args: IAny[]) => void>> = {};
+  /**
+   * 字典请求时序 ID
+   */
+  private dictFetchIDMap: Record<IObjKey, number> = {};
+
+  /**
+   * 最后一次请求的 ID，请求时序保护。
+   * @private
+   */
+  private lastFetchID = 0;
+  /**
+   * 请求控制器 用于取消请求
+   * @type {AbortController}
+   * @private
+  */
+  private apiController: AbortController | undefined;
+  /**
+   * 选项对象，包含默认选项。
+   * @type {IBaseStoreOptions}
+   */
 
   constructor(config: IBaseStoreConfig<V, R> = {}) {
     const { defaultValues = {}, dictConfig, apiExecutor, api, options, extInfo, formConfig, fieldsConfig, defineConfig, notifier, afterAtFetch } = config;
@@ -326,7 +327,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   setValuesFromRoute = (
     search?: string | IAnyObject,
     params?: IAnyObject,
-    resetMissingValues: boolean = true,
+    resetMissingValues = true,
   ) => {
     let newValues: IAnyObject = {};
     const keys = Object.keys(this.values);
