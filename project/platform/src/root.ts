@@ -4,7 +4,6 @@ import { useRoot } from '@yimoka/react';
 import { IHTTPCode } from '@yimoka/shared';
 import { rootStore } from '@yimoka/store';
 
-import { IStaff } from './pages/user/api';
 
 const dataKey = {
   authErr: 'authErr',
@@ -44,3 +43,22 @@ export const useStaff = () => rootStore.getDataItem(dataKey.staff) as IStaff | n
 export const clearStaff = () => {
   rootStore.setDataItem(dataKey.staff, null);
 };
+
+
+export interface IStaff {
+  id: string
+  name: string
+  realName: string
+  avatar: string
+  isChangePassword: boolean
+  userID: string
+  createTime: string
+  updateTime: string
+  tenantID: number
+  phonePrefix: string
+  phone: string
+  mail: string
+  switch: boolean
+  creatorByStaff: string
+  updaterByStaff: string
+}

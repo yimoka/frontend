@@ -1,6 +1,6 @@
 import { Spin } from '@yimoka/antd';
 import { EntityResponse, observer, useInitStore } from '@yimoka/react';
-import { isSuccess, isUnauthorized } from '@yimoka/shared';
+import { isForbidden, isSuccess, isUnauthorized } from '@yimoka/shared';
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -47,9 +47,11 @@ export const GuardRouter = observer(() => {
 
   const { response, loading } = store;
   if (isUnauthorized(response)) {
-    const { pathname, search } = window.location;
-    const redirect = encodeURIComponent(`${pathname}${search}`);
-    return <Navigate to={`/staff/login?redirect=${redirect}`} />;
+    return <Navigate to={`/staff/login${getRedirect()}`} />;
+  }
+
+  if (isForbidden(response) && response?.metadata?.isChangePassword) {
+    return <Navigate to={`/staff/password/change${getRedirect()}`} />;
   }
 
   if (loading || !isSuccess(response)) {
@@ -65,4 +67,8 @@ export const GuardRouter = observer(() => {
   return <NeedLoginRouter />;
 });
 
-
+const getRedirect = () => {
+  const { pathname, search } = window.location;
+  const redirect = `${pathname}${search}`;
+  return redirect && redirect !== '/' ? `?redirect=${encodeURIComponent(redirect)}` : '';
+};
