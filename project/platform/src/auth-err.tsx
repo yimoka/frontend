@@ -3,15 +3,15 @@ import { IHTTPCode } from '@yimoka/shared';
 import { Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import { Login } from '@/pages/user/login';
 import { setAuthErr, useAuthErr } from '@/root';
 
 const LoginModal = (props: { onSuccess: () => void }) => {
   const { onSuccess } = props;
+  console.log('onSuccess', onSuccess);
 
   return (
     <Modal open title="登录" footer={null}>
-      <Login onSuccess={onSuccess} />
+
     </Modal>
   );
 };
@@ -33,7 +33,7 @@ export const HandleAuthErr = observer(() => {
       if (code === IHTTPCode.unauthorized || code === IHTTPCode.forbidden) {
         if (!processing) {
           // 当 url 为默认获取用户信息时，跳转到登录页，否则弹窗进行完成登录，以避免用户表单信息丢失
-          const isModal = url === '/admin/tenant/bff/staff/info';
+          const isModal = url === '/base/iam/portal/staff/info';
           setAuthErr({ ...errData, processing: true });
           const { href, origin } = window.location;
           const redirect = encodeURIComponent(href.replace(origin, ''));
@@ -41,14 +41,14 @@ export const HandleAuthErr = observer(() => {
             if (isModal) {
               setModel('login');
             } else {
-              nav(`/user/login?redirect=${redirect}`, { replace: true });
+              nav(`/staff/login?redirect=${redirect}`, { replace: true });
             }
           } else if (code === IHTTPCode.forbidden) {
             if (metadata?.isChangePassword) {
               if (isModal) {
                 setModel('changePassword');
               } else {
-                nav(`/user/password/change?redirect=${redirect}`, { replace: true });
+                nav(`/staff/password/change?redirect=${redirect}`, { replace: true });
               }
             }
           }

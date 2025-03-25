@@ -2,12 +2,12 @@
 import { getCodeByStatus, IAnyObject, IHTTPCode, IHTTPResponse, isBlank } from '@yimoka/shared';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { getClientIDSync, getTenantID } from './local';
+import { getClientIDSync } from './local';
 import { setAuthErr } from './root';
 import { getStaffToken } from './token';
 
 export const http = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -15,6 +15,8 @@ export const http = axios.create({
     'x-md-global-channel': 'web',
     'x-md-global-use-type': 'tenant',
     'x-md-global-platform': navigator.platform,
+    // 平台固定租户 ID
+    'x-md-global-tenantID': '1000',
   },
 });
 
@@ -27,9 +29,6 @@ http.interceptors.request.use((config) => {
   }
   if (isBlank(newConfig.headers['x-md-global-client-id'])) {
     newConfig.headers['x-md-global-client-id'] = getClientIDSync();
-  }
-  if (isBlank(newConfig.headers['x-md-global-tenantID'])) {
-    newConfig.headers['x-md-global-tenantID'] = getTenantID();
   }
   return newConfig;
 });

@@ -7,7 +7,7 @@ export const Oauth2ConsentPage = observer(() => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const store = useInitStore({
-    api: { url: '/admin/tenant/bff/oauth/acceptConsent', method: 'POST' },
+    api: { url: '/base/iam/portal/oauth/acceptConsent', method: 'POST' },
     // 暂时写死 后续再写页面让用户选择
     defaultValues: { challenge: params.get('consent_challenge'), scope: ['openid'], remember: true },
     afterAtFetch: {

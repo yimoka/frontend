@@ -5,8 +5,6 @@ import { useInitStore } from '@yimoka/react';
 import { Input, Modal, Space, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import { getImageCaptcha, getMailCaptcha } from '@/pages/user/api';
-
 import { ImageCaptcha } from './captcha-image';
 
 export interface MailCaptchaProps {
@@ -27,7 +25,7 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
       captchaCode: '',
     },
     options: { filterBlankAtRun: true },
-    api: getMailCaptcha,
+    api: { url: '/base/iam/portal/captcha/mail' },
     afterAtFetch: {
       notify: true,
       failRun: (res, store) => res.metadata?.needCaptcha && store.setFieldValue('needCaptcha', true),
@@ -90,7 +88,7 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
             onPressEnter={() => captchaCode.length === 4 && getCode()}
             onChange={e => setValues({ captchaCode: e.target.value })}
           />
-          <ImageCaptcha api={getImageCaptcha} onChange={v => setValues({ captchaID: v })} />
+          <ImageCaptcha api={{ url: '/base/iam/portal/captcha/image' }} onChange={v => setValues({ captchaID: v })} />
         </Space>
       </Modal>
     </>

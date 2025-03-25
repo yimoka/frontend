@@ -15,6 +15,7 @@
     "dbaeumer",
     "kohler",
     "moxios",
-    "tseslint"
+    "tseslint",
+    "VITE"
   ]
 }

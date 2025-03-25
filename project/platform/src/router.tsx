@@ -7,10 +7,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { IndexPage } from '@/pages';
 import { AutoPage } from '@/pages/auto';
 
-import { DemoRouter } from './pages/demo/router';
 import { Oauth2Router } from './pages/oath2/router';
 import { StaffRouter } from './pages/staff/router';
-import { UserRouter } from './pages/user/router';
 import { setStaff } from './root';
 import { setStaffToken } from './token';
 
@@ -25,8 +23,6 @@ export const NeedLoginRouter = () => (
 
 export const RootRouter = () => (
   <Routes>
-    <Route path="/demo/*" element={<DemoRouter />} />
-    <Route path="/user/*" element={<UserRouter />} />
     <Route path="/staff/*" element={<StaffRouter />} />
     <Route path="*" element={<GuardRouter />} />
   </Routes>
@@ -37,7 +33,7 @@ export const GuardRouter = observer(() => {
   //  获取用户信息的 store 判断用户是否登录
   const store = useInitStore({
     options: { runNow: true },
-    api: { url: '/admin/tenant/bff/staff/info' },
+    api: { url: '/base/iam/portal/staff/info' },
     afterAtFetch: {
       successRun: (res) => {
         const { data: { staff, token } = {} } = res;
@@ -53,7 +49,7 @@ export const GuardRouter = observer(() => {
   if (isUnauthorized(response)) {
     const { pathname, search } = window.location;
     const redirect = encodeURIComponent(`${pathname}${search}`);
-    return <Navigate to={`/user/login?redirect=${redirect}`} />;
+    return <Navigate to={`/staff/login?redirect=${redirect}`} />;
   }
 
   if (loading || !isSuccess(response)) {

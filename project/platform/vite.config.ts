@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8001,
+    port: 8002,
     // 本地开发环境 允许任意域名访问
     host: true,
     proxy: {
@@ -23,7 +23,7 @@ export default defineConfig({
     },
   },
   preview: {
-    port: 8101,
+    port: 8102,
   },
   build: {
     sourcemap: true,

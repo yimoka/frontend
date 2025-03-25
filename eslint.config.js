@@ -388,7 +388,7 @@ export default tseslint.config(
       // 但不检查最后一个使用的参数之前的参数
       // 也不检查 rest 属性的兄弟属性
       'no-unused-vars': [
-        "error",
+        "warn",
         {
           "args": "after-used",
           "ignoreRestSiblings": true,
@@ -534,8 +534,6 @@ export default tseslint.config(
       ],
       // 限制代码复杂度，超过10会警告
       complexity: ['warn', 10],
-      // 关闭未使用变量的检查
-      'no-unused-vars': "off",
       // TypeScript 版本的未使用变量检查，允许以下划线开头的未使用变量
       "@typescript-eslint/no-unused-vars": [
         "warn",
@@ -843,16 +841,6 @@ export default tseslint.config(
           "allowShortCircuit": true,
           "allowTernary": true,
           "allowTaggedTemplates": true
-        }
-      ],
-      // TypeScript 版本的未使用变量检查
-      '@typescript-eslint/no-unused-vars': [
-        "error",
-        {
-          "args": "after-used",
-          "ignoreRestSiblings": true,
-          "argsIgnorePattern": "^_.+",
-          "varsIgnorePattern": "^_.+"
         }
       ],
       // 禁止出现没必要的 constructor

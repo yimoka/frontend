@@ -4,14 +4,12 @@ import { IAnyObject } from '@yimoka/shared';
 import React from 'react';
 
 import { httpPost } from '@/http';
-import { setTenantID } from '@/local';
 import { encrypt } from '@/utils/crypt';
 
 const loginAPI = async (values: IAnyObject) => {
-  const { password, tenantID, ...rest } = values;
-  setTenantID(tenantID);
+  const { password, ...rest } = values;
   const curPassword = await encrypt(password, 'login');
-  return httpPost('/admin/tenant/bff/login', { ...rest, password: curPassword });
+  return httpPost('/base/iam/portal/login', { ...rest, password: curPassword });
 };
 
 export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 'schema'>) => (
@@ -27,7 +25,6 @@ export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 's
         needCaptcha: false,
         captchaID: '',
         captchaCode: '',
-        tenantID: '',
       },
       api: loginAPI,
       afterAtFetch: {
@@ -58,13 +55,6 @@ export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 's
                 style: { textAlign: 'center' },
               },
             },
-            // 租户
-            tenantID: {
-              title: '租户',
-              required: true,
-              'x-component': 'Input',
-              'x-decorator': 'FormItem',
-            },
             name: {
               title: '用户名',
               required: true,
@@ -84,7 +74,7 @@ export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 's
             code: {
               type: 'void',
               'x-component': 'Row',
-              'x-component-props': { gutter: 20 },
+              'x-component-props': { gutter: 10 },
               'x-hidden': '{{ !$self.form.values.needCaptcha }}',
               properties: {
                 c1: {

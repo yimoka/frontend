@@ -1,8 +1,10 @@
 import { observer } from '@formily/react';
 import { useInitStore } from '@yimoka/react';
 import { IStoreAPI } from '@yimoka/store';
-import { ButtonProps, SpinProps, Spin, Button } from 'antd';
+import { ButtonProps, SpinProps, Spin, Button, theme } from 'antd';
 import React, { HTMLAttributes, useEffect } from 'react';
+
+const { useToken } = theme;
 
 export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
   runNow?: boolean;
@@ -14,12 +16,15 @@ export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
 }
 
 export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
-  const { onChange, runNow = true, height = 32, imgProps, api, btnProps, ...args } = props;
-  const { loading, response: { data: { id, image } = {} }, fetch } = useInitStore({
+  const token = useToken();
+  const { onChange, runNow = true, height = token.token.controlHeight, imgProps, api, btnProps, ...args } = props;
+  const { loading, response, fetch } = useInitStore({
     options: { runNow },
     defaultValues: {},
-    api: api ?? { url: '/admin/tenant/bff/captcha/image' },
+    api: api ?? { url: '/base/iam/portal/captcha/image' },
   });
+
+  const { id, image } = response?.data ?? {};
 
   useEffect(() => {
     onChange?.(id);
@@ -34,7 +39,7 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
   return (
     <Spin {...args} spinning={loading} >
       {image
-        ? <img height={height} alt='验证码' style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }} {...imgProps} src={image} onClick={getImg} />
+        ? <img height={height} width="100%" alt='验证码' style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }} {...imgProps} src={image} onClick={getImg} />
         : <Button type="primary" ghost {...btnProps} disabled={loading} onClick={getImg}>
           获取验证码
         </Button>}

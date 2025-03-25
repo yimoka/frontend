@@ -4,7 +4,7 @@ import { httpGet } from '@/http';
 
 // 获取服务器的时间戳 秒
 export const getServerTime = async () => {
-  const res = await httpGet('/admin/tenant/bff/timestamp');
+  const res = await httpGet('/base/iam/portal/timestamp');
   if (isSuccess(res)) {
     return Number(res.data);
   }

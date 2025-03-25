@@ -7,7 +7,6 @@ export const localKey = {
   staffID: 'staffID',
   site: 'site',
   staffToken: 'staffToken', // 员工的 token
-  tenantID: 'tenantID',
   userID: 'userID',
   userToken: 'userToken', // 统一用户的 token
 };
@@ -57,31 +56,9 @@ let fetchClientID: Promise<string> | null = null;
 const getFetchClientID = () => {
   if (!fetchClientID) {
     fetchClientID = new Promise<string>((resolve) => {
-      httpPost('/admin/tenant/bff/id/create').then(res => resolve(isSuccess(res) ? res.data : ''));
+      httpPost('/base/iam/portal/id/create').then(res => resolve(isSuccess(res) ? res.data : ''));
     });
   }
   return fetchClientID;
 };
 
-let tenantID = '';
-export const getTenantID = () => {
-  if (tenantID) {
-    return tenantID;
-  }
-  const id = localStorage.getItem(localKey.tenantID);
-  if (id) {
-    tenantID = id;
-    return id;
-  }
-  return '';
-};
-
-export const setTenantID = (id: string) => {
-  tenantID = id;
-  localStorage.setItem(localKey.tenantID, id);
-};
-
-export const removeTenantID = () => {
-  localStorage.removeItem(localKey.tenantID);
-  tenantID = '';
-};
