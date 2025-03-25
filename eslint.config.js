@@ -4,8 +4,6 @@ import importPlugin from 'eslint-plugin-import';
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
-import tencentBase from 'eslint-config-tencent/base'
-import tencentImport from 'eslint-config-tencent/import'
 
 export default tseslint.config(
   { ignores: ['dist', 'build', "**/*.d.ts"] },
@@ -23,8 +21,6 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      ...tencentBase.rules,
-      ...tencentImport.rules,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
