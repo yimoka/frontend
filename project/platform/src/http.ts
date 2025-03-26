@@ -3,7 +3,7 @@ import { getCodeByStatus, IAnyObject, IHTTPCode, IHTTPResponse, isBlank } from '
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getClientIDSync } from './local';
-import { setAuthErr } from './root';
+import { getLanguage, setAuthErr } from './root';
 import { getStaffToken } from './token';
 
 export const http = axios.create({
@@ -29,6 +29,10 @@ http.interceptors.request.use((config) => {
   }
   if (isBlank(newConfig.headers['x-md-global-client-id'])) {
     newConfig.headers['x-md-global-client-id'] = getClientIDSync();
+  }
+  // 通过 headers accept-language 传递的语言在无法在微服务内部 RPC 中传递，需要通过 headers x-md-global-language 传递
+  if (isBlank(newConfig.headers['x-md-global-language'])) {
+    newConfig.headers['x-md-global-language'] = getLanguage();
   }
   return newConfig;
 });

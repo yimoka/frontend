@@ -9,6 +9,7 @@ export const localKey = {
   staffToken: 'staffToken', // 员工的 token
   userID: 'userID',
   userToken: 'userToken', // 统一用户的 token
+  language: 'language',
 };
 
 let clientID = '';
@@ -31,6 +32,13 @@ export const getClientID = async () => {
   }
   return clientID;
 };
+
+// 获取本地语言
+export const getLocalLanguage = () => localStorage.getItem(localKey.language);
+
+// 设置本地语言
+export const setLocalLanguage = (lang: string) => localStorage.setItem(localKey.language, lang);
+
 
 // 同步获取 ClientID
 export const getClientIDSync = () => {

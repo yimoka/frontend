@@ -4,12 +4,17 @@ import { useRoot } from '@yimoka/react';
 import { IHTTPCode } from '@yimoka/shared';
 import { rootStore } from '@yimoka/store';
 
+import { getLocalLanguage, setLocalLanguage } from './local';
+
 
 const dataKey = {
   authErr: 'authErr',
   // 员工
   staff: 'staff',
+  // 语言
+  language: 'language',
 };
+
 
 export type IAuthErrData = {
   code: IHTTPCode,
@@ -44,6 +49,27 @@ export const clearStaff = () => {
   rootStore.setDataItem(dataKey.staff, null);
 };
 
+export const setLanguage = (lang: string) => {
+  rootStore.setDataItem(dataKey.language, lang);
+  setLocalLanguage(lang);
+};
+
+export const getLanguage = () => {
+  const rLang = rootStore.getDataItem(dataKey.language);
+  if (rLang) {
+    return rLang;
+  }
+
+  const localLang = getLocalLanguage();
+  if (localLang) {
+    rootStore.setDataItem(dataKey.language, localLang);
+    return localLang;
+  }
+
+  return navigator.language;
+};
+
+export const useLanguage = () => getLanguage();
 
 export interface IStaff {
   id: string
