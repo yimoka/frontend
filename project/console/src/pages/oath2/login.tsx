@@ -20,5 +20,5 @@ export const Oauth2LoginPage = observer(() => {
     },
   });
 
-  return <EntityResponse store={store} skeleton={false}><Spin spinning={true} tip="授权中……" /></EntityResponse>;
+  return <EntityResponse skeleton={false} store={store}><Spin spinning={true} tip="授权中……" /></EntityResponse>;
 });

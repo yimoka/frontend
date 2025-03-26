@@ -8,7 +8,7 @@ import { StaffLoginPage } from './login';
 export const StaffRouter = () => (
   <WithFooterLayout>
     <Routes>
-      <Route path="login" element={<StaffLoginPage />} />
+      <Route element={<StaffLoginPage />} path="login" />
     </Routes>
   </WithFooterLayout>
 );

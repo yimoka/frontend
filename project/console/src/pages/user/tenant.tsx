@@ -61,7 +61,7 @@ export const UserTenant = observer(() => {
         <Text>请选择你要登录的租户:</Text>
         <Divider />
         <Spin spinning={enterTenant.loading}>
-          <Space style={{ display: 'flex' }} direction="vertical">
+          <Space direction="vertical" style={{ display: 'flex' }}>
             {staffsStore?.response?.data?.map?.((item: IAny) => (
               <Card
                 key={item.id}
@@ -71,12 +71,12 @@ export const UserTenant = observer(() => {
                   enterTenant.fetch();
                 }}>
                 <Card.Meta
-                  title={[item?.name, item?.actualName, item?.phone, item?.mail].find(item => item)}
                   description={<>
                     账号 ID: {item.id}<br />
                     租户 ID: {item.tenant.id}<br />
                     租户名称: {item.tenant.company}
-                  </>} />
+                  </>}
+                  title={[item?.name, item?.actualName, item?.phone, item?.mail].find(item => item)} />
               </Card>
             ))}
           </Space>

@@ -5,10 +5,11 @@ import React from 'react';
 
 export const TriggerDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <TriggerJSX /> },
-      { key: 'schema', label: 'Schema', children: <TriggerSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <TriggerJSX /> },
+  { key: 'schema', label: 'Schema', children: <TriggerSchema /> },
+]} />
   </div>
 );
 
@@ -19,7 +20,6 @@ const api = () => {
 
 export const TriggerSchema = () => (
   <Entity
-    store={{ api }}
     schema={
       {
         type: 'object',
@@ -60,19 +60,20 @@ export const TriggerSchema = () => (
         },
 
       }}
+    store={{ api }}
   />);
 
 export const TriggerJSX = () => (
   <Space>
     <Trigger
-      onClick={() => console.log('click')}
-      trigEvent="onClick"
-      component="Button"
       children="触发"
+      component="Button"
+      trigEvent="onClick"
+      onClick={() => console.log('click')}
     />
     <Trigger
-      onClick={() => console.log('click')}
       trigEvent="onClick"
+      onClick={() => console.log('click')}
     >
       <Button>触发</Button>
     </Trigger>

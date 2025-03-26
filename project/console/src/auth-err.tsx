@@ -10,7 +10,7 @@ const LoginModal = (props: { onSuccess: () => void }) => {
   const { onSuccess } = props;
 
   return (
-    <Modal open title="登录" footer={null}>
+    <Modal open footer={null} title="登录">
       <Login onSuccess={onSuccess} />
     </Modal>
   );

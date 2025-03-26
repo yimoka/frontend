@@ -5,22 +5,16 @@ import React from 'react';
 
 export const TagDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <TagJSX /> },
-      { key: 'schema', label: 'Schema', children: <TagSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <TagJSX /> },
+  { key: 'schema', label: 'Schema', children: <TagSchema /> },
+]} />
   </div>
 );
 
 export const TagSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        v1: 'v1',
-        checkable: true,
-        type: 'on',
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -71,6 +65,13 @@ export const TagSchema = () => (
             values: { true: 'on', false: 'off' },
           },
         },
+      },
+    }}
+    store={{
+      defaultValues: {
+        v1: 'v1',
+        checkable: true,
+        type: 'on',
       },
     }}
   />);

@@ -5,10 +5,11 @@ import React from 'react';
 
 export const CalendarDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <CalendarJSX /> },
-      { key: 'schema', label: 'Schema', children: <CalendarSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <CalendarJSX /> },
+  { key: 'schema', label: 'Schema', children: <CalendarSchema /> },
+]} />
   </div>
 );
 
@@ -16,12 +17,6 @@ const change = console.log;
 
 export const CalendarSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        timestamp: 1640995200000,
-        c3: undefined,
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -86,6 +81,12 @@ export const CalendarSchema = () => (
             onClick: '{{()=>console.log($store.values)}}',
           },
         },
+      },
+    }}
+    store={{
+      defaultValues: {
+        timestamp: 1640995200000,
+        c3: undefined,
       },
     }}
   />);

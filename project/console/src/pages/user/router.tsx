@@ -9,9 +9,9 @@ import { UserTenant } from './tenant';
 export const UserRouter = () => (
   <WithFooterLayout>
     <Routes>
-      <Route path="login" element={<UserLoginPage />} />
+      <Route element={<UserLoginPage />} path="login" />
       {/* <Route path="password/change" element={<ChangePassword />} /> */}
-      <Route path="tenant" element={<UserTenant />} />
+      <Route element={<UserTenant />} path="tenant" />
       {/* <Route path="tenant/join/*" element={<TenantJoinRouter />} /> */}
     </Routes>
   </WithFooterLayout>

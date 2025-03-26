@@ -5,10 +5,11 @@ import React from 'react';
 
 export const ModalDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <ModalJSX /> },
-      { key: 'schema', label: 'Schema', children: <ModalSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <ModalJSX /> },
+  { key: 'schema', label: 'Schema', children: <ModalSchema /> },
+]} />
   </div>
 );
 
@@ -17,11 +18,6 @@ const onOpen = () => console.log('onOpen');
 
 export const ModalSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        name: 'name',
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -63,6 +59,11 @@ export const ModalSchema = () => (
         },
       },
     }}
+    store={{
+      defaultValues: {
+        name: 'name',
+      },
+    }}
   />);
 
 export const ModalJSX = () => (
@@ -75,12 +76,12 @@ export const ModalJSX = () => (
     </Modal>
     <Modal
       title="Modal"
-      onOpen={onOpen}
       trigger={{
         component: 'Icon',
         name: 'EditOutlined',
         trigEvent: 'onMouseEnter',
       }}
+      onOpen={onOpen}
     >
       <div>Content</div>
     </Modal>

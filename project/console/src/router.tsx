@@ -17,18 +17,18 @@ import { setStaffToken } from './token';
 // 需要登录的路由
 export const NeedLoginRouter = () => (
   <Routes>
-    <Route path="/" element={<IndexPage />} />
-    <Route path="/oauth2/*" element={<Oauth2Router />} />
-    <Route path="*" element={<AutoPage />} />
+    <Route element={<IndexPage />} path="/" />
+    <Route element={<Oauth2Router />} path="/oauth2/*" />
+    <Route element={<AutoPage />} path="*" />
   </Routes>
 );
 
 export const RootRouter = () => (
   <Routes>
-    <Route path="/demo/*" element={<DemoRouter />} />
-    <Route path="/user/*" element={<UserRouter />} />
-    <Route path="/staff/*" element={<StaffRouter />} />
-    <Route path="*" element={<GuardRouter />} />
+    <Route element={<DemoRouter />} path="/demo/*" />
+    <Route element={<UserRouter />} path="/user/*" />
+    <Route element={<StaffRouter />} path="/staff/*" />
+    <Route element={<GuardRouter />} path="*" />
   </Routes>
 );
 
@@ -60,7 +60,7 @@ export const GuardRouter = observer(() => {
     return (
       <Spin spinning={loading} tip="登录中……" >
         <div style={{ minHeight: 400 }}>
-          <EntityResponse store={store} skeleton={false} />
+          <EntityResponse skeleton={false} store={store} />
         </div>
       </Spin>
     );

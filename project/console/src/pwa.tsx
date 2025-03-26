@@ -88,19 +88,19 @@ export const Pwa = () => {
     return (
       <Modal
         destroyOnClose
-        maskClosable={false}
-        zIndex={9999}
-        title="更新"
-        open={open}
-        okText="马上更新"
         cancelText="下一次"
-        onOk={() => handleUpdate()}
+        maskClosable={false}
+        okText="马上更新"
+        open={open}
+        title="更新"
+        zIndex={9999}
         onCancel={() => {
           isCheckUpdate = true;
           // 更新时间
           updateDate = new Date().getTime();
           setOpen(false);
         }}
+        onOk={() => handleUpdate()}
       >
         <p>发现新版本，是否刷新页面更新？如不更新, 下次打开将自动更新。</p>
       </Modal>

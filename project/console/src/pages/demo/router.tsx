@@ -17,19 +17,19 @@ import { TriggerDemo } from './trigger';
 export const DemoRouter = () => (
   <WithSiderLayout>
     <Routes>
-      <Route path="trigger" element={<TriggerDemo />} />
-      <Route path="render-array" element={<RenderArrayDemo />} />
+      <Route element={<TriggerDemo />} path="trigger" />
+      <Route element={<RenderArrayDemo />} path="render-array" />
 
-      <Route path="display/calendar" element={<CalendarDemo />} />
-      <Route path="display/descriptions" element={<DescriptionsDemo />} />
-      <Route path="display/carousel" element={<CarouselDemo />} />
-      <Route path="display/table" element={<TableDemo />} />
-      <Route path="display/tag" element={<TagDemo />} />
+      <Route element={<CalendarDemo />} path="display/calendar" />
+      <Route element={<DescriptionsDemo />} path="display/descriptions" />
+      <Route element={<CarouselDemo />} path="display/carousel" />
+      <Route element={<TableDemo />} path="display/table" />
+      <Route element={<TagDemo />} path="display/tag" />
 
-      <Route path="feedback/drawer" element={<DrawerDemo />} />
-      <Route path="feedback/modal" element={<ModalDemo />} />
+      <Route element={<DrawerDemo />} path="feedback/drawer" />
+      <Route element={<ModalDemo />} path="feedback/modal" />
 
-      <Route path="nav/breadcrumb" element={<BreadcrumbDemo />} />
+      <Route element={<BreadcrumbDemo />} path="nav/breadcrumb" />
     </Routes>
   </WithSiderLayout>
 );
