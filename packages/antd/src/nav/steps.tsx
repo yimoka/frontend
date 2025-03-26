@@ -23,7 +23,15 @@ const Step = (props: StepProps) => {
   const curSubTitle = useAdditionalNode('subTitle', subTitle);
   const curDescription = useAdditionalNode('description', description);
 
-  return <AntSteps.Step {...rest} icon={strToIcon(icon)} title={curTitle} subTitle={curSubTitle} description={curDescription} />;
+  return (
+    <AntSteps.Step
+      {...rest}
+      description={curDescription}
+      icon={strToIcon(icon)}
+      subTitle={curSubTitle}
+      title={curTitle}
+    />
+  );
 };
 
 export const Steps = Object.assign(StepsFC, { Step });

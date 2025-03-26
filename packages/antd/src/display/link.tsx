@@ -37,7 +37,14 @@ export const Link = observer((props: LinkProps) => {
     return (<LinkAdapter {...args} target={curTarget} to={curTo} />);
   }
 
-  return <ALink rel="noopener noreferrer" {...args} href={curTo} target={curTarget} />;
+  return (
+    <ALink
+      rel="noopener noreferrer"
+      {...args}
+      href={curTo}
+      target={curTarget}
+    />
+  );
 });
 
 export const LinkAdapter = (props: LinkProps) => {
@@ -49,13 +56,13 @@ export const LinkAdapter = (props: LinkProps) => {
     <ALink
       {...args}
       href={href}
+      target={target}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented) {
           handleClick(event);
         }
       }}
-      target={target}
     />
   );
 };

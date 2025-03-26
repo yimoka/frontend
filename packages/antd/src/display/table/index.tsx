@@ -20,7 +20,11 @@ const TableFn = <T extends IAnyObject>(props: TableProps<T>) => {
 
   return (
     <RecordsScope getRecords={() => (data ?? []) as T[]} >
-      <AntTable<T> {...rest} rowKey={curRowKey} dataSource={data} columns={curColumns} />
+      <AntTable<T>
+        {...rest}
+        columns={curColumns}
+        dataSource={data}
+        rowKey={curRowKey} />
     </RecordsScope>
   );
 };

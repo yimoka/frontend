@@ -5,6 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import * as tsParser from '@typescript-eslint/parser'
+import reactPlugin from 'eslint-plugin-react'
 
 export default tseslint.config(
   { ignores: ['dist', 'build', "**/*.d.ts"] },
@@ -21,11 +22,28 @@ export default tseslint.config(
       },
     },
     plugins: {
+      'react': reactPlugin,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       import: importPlugin,
     },
     rules: {
+      'react/jsx-max-props-per-line': ['error', {
+        maximum: {
+          single: 3,
+          multi: 1
+        }
+      }], // 单行最多3个属性，换行后每行一个属性
+      'react/jsx-sort-props': [
+        'error',
+        {
+          callbacksLast: true,    // 回调函数（如 onXXX）放在最后
+          shorthandFirst: true,  // 简写属性（如 {visible}）放在最前
+          multiline: 'ignore',   // 多行属性不参与排序（可选值：ignore/first/last）
+          noSortAlphabetically: false, // 是否禁用字母排序（若为 true，需自定义排序）
+          reservedFirst: true,   // 保留 React 内置属性（key、ref 等）在前
+        },
+      ],
       // 不要在中括号中添加空格
       'array-bracket-spacing': [
         "error",

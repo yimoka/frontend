@@ -15,9 +15,9 @@ export const Submit = observer((props: Omit<ButtonProps, 'loading' | 'disabled' 
       children='提交'
       type='primary'
       {...rest}
-      loading={curStore?.loading}
       disabled={curStore?.form?.disabled || !!curStore?.form?.errors?.length}
       htmlType='submit'
+      loading={curStore?.loading}
     />
   );
 });

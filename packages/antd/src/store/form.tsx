@@ -63,7 +63,7 @@ export const FormItem = observer((props: FormItemProps) => {
   const context = useContext(FormContext);
   const curLabelWidth = labelWidth ?? context.labelWidth;
 
-  const curRequired = useMemo(() => ((required ?? field?.required) ? <Text type="danger" style={{ marginRight: 2 }}>*</Text> : null), [required, field?.required]);
+  const curRequired = useMemo(() => ((required ?? field?.required) ? <Text style={{ marginRight: 2 }} type="danger">*</Text> : null), [required, field?.required]);
 
   const curTooltip = useMemo(() => {
     if (tooltip) {
@@ -89,9 +89,9 @@ export const FormItem = observer((props: FormItemProps) => {
     <Form.Item
       {...args}
       // 为了实现宽度统一在 label 上实现
-      label={curLabel}
-      help={curHelp}
       extra={curExtra}
+      help={curHelp}
+      label={curLabel}
       validateStatus={curValidateStatus}
     />);
 

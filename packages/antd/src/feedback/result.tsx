@@ -13,10 +13,10 @@ export const Result = (props: AntResultProps) => {
   return (
     <AntResult
       {...rest}
-      icon={strToIcon(icon)}
-      title={titleNode}
-      subTitle={descriptionNode}
       extra={extraNode}
+      icon={strToIcon(icon)}
+      subTitle={descriptionNode}
+      title={titleNode}
     />
   );
 };

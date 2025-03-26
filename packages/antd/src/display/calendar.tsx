@@ -29,8 +29,8 @@ export const Calendar = (props: CalendarProps) => {
     <AntCalendar
       {...rest}
       defaultValue={curDefaultValue}
-      value={curValue}
       validRange={curValidRange}
+      value={curValue}
       onChange={date => onChange?.(getDateValue(date, { type: valueType, format }), date)}
     />
   );

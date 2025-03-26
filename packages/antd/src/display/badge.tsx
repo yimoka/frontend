@@ -8,7 +8,7 @@ const BadgeFC = (props: BadgeProps & { value?: BadgeProps['count'] }) => {
   const textNode = useAdditionalNode('text', text);
   const countNode = useAdditionalNode('count', count);
 
-  return <AntBadge {...rest} text={textNode} count={countNode ?? value} />;
+  return <AntBadge {...rest} count={countNode ?? value} text={textNode} />;
 };
 
 const Ribbon = (props: RibbonProps) => {

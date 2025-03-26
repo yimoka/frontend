@@ -14,7 +14,14 @@ const MenuFC = observer((props: PropsWithComponentData<Omit<MenuProps, 'itemRend
   const schemaItems = useSchemaItemsToItems(curData, propsMap, 'title');
   const curItems = useMemo(() => [...(items ?? []), ...(schemaItems ?? [])]?.map(item => (typeof item.icon === 'string' ? { ...item, icon: strToIcon(item.icon) } : item)), [items, schemaItems]);
 
-  return <AntMenu {...rest} items={curItems} expandIcon={strToIcon(expandIcon)} overflowedIndicator={strToIcon(overflowedIndicator)} />;
+  return (
+    <AntMenu
+      {...rest}
+      expandIcon={strToIcon(expandIcon)}
+      items={curItems}
+      overflowedIndicator={strToIcon(overflowedIndicator)}
+    />
+  );
 });
 
 export const Menu = Object.assign(MenuFC, AntMenu);

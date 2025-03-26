@@ -35,7 +35,7 @@ export const Icon = (props: IconProps) => {
   }, [file, getIcon]);
 
   if (component) {
-    return <RenderAny value={TIcon} props={{ component, ...args }} />;
+    return <RenderAny props={{ component, ...args }} value={TIcon} />;
   }
   return <Spin size='small' spinning={loading} />;
 };

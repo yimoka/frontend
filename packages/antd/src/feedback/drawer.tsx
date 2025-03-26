@@ -26,8 +26,8 @@ export const Drawer = (props: DrawerProps) => {
     <>
       {trigger !== false && (
         <Trigger
-          component={Button}
           children={triggerText ?? titleNode}
+          component={Button}
           {...trigger}
           onTrig={(...args) => {
             setOpen(true);
@@ -41,8 +41,8 @@ export const Drawer = (props: DrawerProps) => {
         closeIcon={strToIcon(closeIcon)}
         extra={extraNode}
         footer={footerNode}
-        title={titleNode}
         open={open}
+        title={titleNode}
         onClose={(e) => {
           setOpen(false);
           onClose?.(e);

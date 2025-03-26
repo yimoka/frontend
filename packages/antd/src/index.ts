@@ -4,6 +4,11 @@ export * from './base/float-button';
 export * from './base/icon';
 export * from './base/typography';
 
+export * from './enter/auto-complete';
+export * from './enter/input-number';
+export * from './enter/input';
+export * from './enter/tree-select';
+
 export * from './display/avatar';
 export * from './display/badge';
 export * from './display/calendar';

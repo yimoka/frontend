@@ -29,8 +29,8 @@ export const Modal = (props: ModalProps) => {
     <>
       {trigger !== false && (
         <Trigger
-          component={Button}
           children={triggerText ?? titleNode}
+          component={Button}
           {...trigger}
           onTrig={(...args) => {
             setOpen(true);
@@ -41,19 +41,19 @@ export const Modal = (props: ModalProps) => {
       )}
       <AntModal
         {...rest}
-        closeIcon={strToIcon(closeIcon)}
         cancelText={cancelTextNode}
-        okText={okTextNode}
+        closeIcon={strToIcon(closeIcon)}
         footer={footerNode}
-        title={titleNode}
+        okText={okTextNode}
         open={open}
-        onClose={(e) => {
-          setOpen(false);
-          onClose?.(e);
-        }}
+        title={titleNode}
         onCancel={(e) => {
           setOpen(false);
           onCancel?.(e);
+        }}
+        onClose={(e) => {
+          setOpen(false);
+          onClose?.(e);
         }}
         onOk={(e) => {
           if (closeOnOk) {
