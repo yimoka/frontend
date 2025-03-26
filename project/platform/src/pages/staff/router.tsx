@@ -9,8 +9,8 @@ import { ChangePassword } from './password/change';
 export const StaffRouter = () => (
   <WithFooterLayout>
     <Routes>
-      <Route path="login" element={<StaffLoginPage />} />
-      <Route path="password/change" element={<ChangePassword />} />
+      <Route element={<StaffLoginPage />} path="login" />
+      <Route element={<ChangePassword />} path="password/change" />
     </Routes>
   </WithFooterLayout>
 );

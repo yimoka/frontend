@@ -1,8 +1,11 @@
 // root 私有数据管理
 
+import { Link } from '@yimoka/antd';
 import { useRoot } from '@yimoka/react';
-import { IHTTPCode } from '@yimoka/shared';
+import { IAny, IHTTPCode, isBlank } from '@yimoka/shared';
 import { rootStore } from '@yimoka/store';
+
+import React from 'react';
 
 import { getLocalLanguage, setLocalLanguage } from './local';
 
@@ -13,6 +16,8 @@ const dataKey = {
   staff: 'staff',
   // 语言
   language: 'language',
+  // apiMap
+  apiMap: 'apiMap',
 };
 
 
@@ -71,6 +76,14 @@ export const getLanguage = () => {
 
 export const useLanguage = () => getLanguage();
 
+export const setApiMap = (data: IApiMap) => {
+  rootStore.setDataItem(dataKey.apiMap, data);
+};
+
+export const useApiMap = () => rootStore.getDataItem(dataKey.apiMap) as IApiMap | undefined;
+
+export type IApiMap = Map<string, boolean>;
+
 export interface IStaff {
   id: string
   name: string
@@ -88,3 +101,42 @@ export interface IStaff {
   creatorByStaff: string
   updaterByStaff: string
 }
+
+// 处理权限的数据
+export const handlePermission = (data: IPermissionTreeItem[]) => {
+  const apiMap = new Map<string, boolean>();
+  const handleTree = (tree?: IPermissionTreeItem[], level = 0): IAny => tree?.filter((item) => {
+    const { isAPI, isMenu, isPage, path } = item;
+    isAPI && apiMap.set(path, true);
+    return isMenu || isPage;
+  }).map((item) => {
+    const { path, name, icon, children } = item;
+    const child = handleTree(children, level + 1);
+    return {
+      title: name,
+      key: path,
+      label: level === 0 || isBlank(child) ? <Link style={{ color: 'inherit' }} to={path}>{name}</Link> : name,
+      icon: icon ? icon : undefined,
+      children: isBlank(child) ? undefined : child,
+    };
+  });
+  rootStore.setMenus(handleTree(data));
+  setApiMap(apiMap);
+};
+
+export type IPermissionTreeItem = {
+  key: string;
+  id: string
+  updateTime: string
+  createTime: string
+  parentID: string
+  name: string
+  path: string
+  icon: string
+  sort: number
+  desc: string
+  isMenu: string
+  isPage: string
+  isAPI: string
+  children: IPermissionTreeItem[];
+};

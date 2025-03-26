@@ -41,15 +41,6 @@ export const ChangePassword = observer(() => {
         }}
       >
         <EntityOperation
-          store={{
-            defaultValues: {
-              oldPassword: '',
-              newPassword: '',
-              newPasswordConfirm: '',
-            },
-            api,
-          }}
-          onSuccess={success}
           schema={{
             type: 'object',
             properties: {
@@ -121,7 +112,16 @@ export const ChangePassword = observer(() => {
                 },
               },
             },
-          }}>
+          }}
+          store={{
+            defaultValues: {
+              oldPassword: '',
+              newPassword: '',
+              newPasswordConfirm: '',
+            },
+            api,
+          }}
+          onSuccess={success}>
         </EntityOperation>
       </Card>
     </div >

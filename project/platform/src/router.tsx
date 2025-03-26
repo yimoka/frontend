@@ -7,29 +7,37 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { IndexPage } from '@/pages';
 import { AutoPage } from '@/pages/auto';
 
-import { Oauth2Router } from './pages/oath2/router';
-import { StaffRouter } from './pages/staff/router';
-import { setStaff } from './root';
-import { setStaffToken } from './token';
+import { Oauth2Router } from '@/pages/oath2/router';
+import { StaffRouter } from '@/pages/staff/router';
+import { SystemRouter } from '@/pages/system/router';
+import { handlePermission, setStaff } from '@/root';
+import { setStaffToken } from '@/token';
 
 // 需要登录的路由
 export const NeedLoginRouter = () => (
   <Routes>
-    <Route path="/" element={<IndexPage />} />
-    <Route path="/oauth2/*" element={<Oauth2Router />} />
-    <Route path="*" element={<AutoPage />} />
+    <Route element={<IndexPage />} path="/" />
+    <Route element={<Oauth2Router />} path="/oauth2/*" />
+    <Route element={<SystemRouter />} path="/system/*" />
+    <Route element={<AutoPage />} path="*" />
   </Routes>
 );
 
 export const RootRouter = () => (
   <Routes>
-    <Route path="/staff/*" element={<StaffRouter />} />
-    <Route path="*" element={<GuardRouter />} />
+    <Route element={<StaffRouter />} path="/staff/*" />
+    <Route element={<GuardRouter />} path="*" />
   </Routes>
 );
 
 // 路由守卫
 export const GuardRouter = observer(() => {
+  // 获取权限的 store
+  const permissionStore = useInitStore({
+    api: { url: '/base/iam/portal/my/permission' },
+    afterAtFetch: { successRun: res => handlePermission(res.data) },
+  });
+
   //  获取用户信息的 store 判断用户是否登录
   const store = useInitStore({
     options: { runNow: true },
@@ -41,6 +49,7 @@ export const GuardRouter = observer(() => {
           setStaff(staff);
           setStaffToken(token);
         }
+        permissionStore.fetch();
       },
     },
   });
@@ -58,7 +67,7 @@ export const GuardRouter = observer(() => {
     return (
       <Spin spinning={loading} tip="登录中……" >
         <div style={{ minHeight: 400 }}>
-          <EntityResponse store={store} skeleton={false} />
+          <EntityResponse skeleton={false} store={store} />
         </div>
       </Spin>
     );
@@ -72,3 +81,5 @@ const getRedirect = () => {
   const redirect = `${pathname}${search}`;
   return redirect && redirect !== '/' ? `?redirect=${encodeURIComponent(redirect)}` : '';
 };
+
+

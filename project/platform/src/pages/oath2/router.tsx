@@ -11,8 +11,8 @@ export const Oauth2Router = () => (
   <WithFooterLayout>
     <PageContent>
       <Routes>
-        <Route path="login" element={<Oauth2LoginPage />} />
-        <Route path="consent" element={<Oauth2ConsentPage />} />
+        <Route element={<Oauth2LoginPage />} path="login" />
+        <Route element={<Oauth2ConsentPage />} path="consent" />
       </Routes>
     </PageContent>
   </WithFooterLayout>

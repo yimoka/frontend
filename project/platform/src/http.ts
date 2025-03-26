@@ -13,7 +13,7 @@ export const http = axios.create({
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'x-md-global-channel': 'web',
-    'x-md-global-use-type': 'tenant',
+    'x-md-global-use-type': 'platform',
     'x-md-global-platform': navigator.platform,
     // 平台固定租户 ID
     'x-md-global-tenantID': '1000',

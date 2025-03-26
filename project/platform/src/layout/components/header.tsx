@@ -15,7 +15,7 @@ export const Header = observer(() => {
         },
       }}
     >
-      <Layout.Header title='标题' style={{ zIndex: 9, boxShadow: `0 1px 6px ${token.colorBorder}` }} ></Layout.Header>
+      <Layout.Header style={{ zIndex: 9, boxShadow: `0 1px 6px ${token.colorBorder}` }} title='标题' ></Layout.Header>
     </ConfigProvider>
   );
 });
