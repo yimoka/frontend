@@ -13,10 +13,17 @@ export const EntityEdit = observer((props: IEntityEditProps) => {
   const editStore = useDeepMemo(() => getEntryStore(store, 'edit', config), [store, config]);
 
   if (isBlank(values)) {
-    return <FetchDetail {...args} store={editStore} config={config} />;
+    return <FetchDetail {...args} config={config} store={editStore} />;
   }
 
-  return <EntityValues {...args} values={values} store={editStore} config={config} />;
+  return (
+    <EntityValues
+      {...args}
+      config={config}
+      store={editStore}
+      values={values}
+    />
+  );
 });
 
 export type IEntityEditProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityValuesProps<V, R>> & {

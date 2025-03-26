@@ -54,5 +54,13 @@ export const EntityResponse = observer((props: IEntityResponseProps) => {
     return <Skeleton size={size} {...skeleton} />;
   }
 
-  return <ErrorContent size={size} response={curResponse} returnIndex={returnIndex} onAgain={curOnAgain} loading={curLoading} />;
+  return (
+    <ErrorContent
+      loading={curLoading}
+      response={curResponse}
+      returnIndex={returnIndex}
+      size={size}
+      onAgain={curOnAgain}
+    />
+  );
 });

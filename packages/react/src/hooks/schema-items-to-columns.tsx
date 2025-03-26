@@ -32,11 +32,11 @@ const schemaToItemProps = (schema: Schema, scope: IAnyObject, getRecordIndex?: I
   if (isItemSchemaRecursion(schema, itemComponentName)) {
     itemProps.render = (value: IAny, record: IAny) => (
       <SchemaItemRender
-        value={value}
+        componentName={itemComponentName}
+        getRecordIndex={getRecordIndex}
         record={record}
         schema={schema}
-        getRecordIndex={getRecordIndex}
-        componentName={itemComponentName}
+        value={value}
       />
     );
   }

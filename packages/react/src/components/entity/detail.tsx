@@ -28,7 +28,12 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
   return (
     <Entity store={curDetailStore} >
       <EntityResponse store={curDetailStore}>
-        <EntityValues  {...args} scope={{ ...scope, $detailStore: detailStore }} config={config} values={curDetailStore?.response?.data ?? {}} />
+        <EntityValues
+          {...args}
+          config={config}
+          scope={{ ...scope, $detailStore: detailStore }}
+          values={curDetailStore?.response?.data ?? {}}
+        />
       </EntityResponse>
     </Entity>
   );
@@ -52,7 +57,7 @@ export const EntityValues = observer((props: IEntityValuesProps) => {
   }, [curStore, notPickValues, values]);
 
   return (
-    <Entity {...args} store={curStore} scope={useScope} />
+    <Entity {...args} scope={useScope} store={curStore} />
   );
 });
 

@@ -23,7 +23,7 @@ export const SchemaItemRecursion = (props: { schema: Schema, componentName?: str
   }, [componentName, schema, voidField]);
 
   if (componentName && componentName === schema['x-component']) {
-    return <RecursionField schema={curSchema} onlyRenderProperties name={name} />;
+    return <RecursionField onlyRenderProperties name={name} schema={curSchema} />;
   }
-  return <RecursionField schema={curSchema} name={curName} />;
+  return <RecursionField name={curName} schema={curSchema} />;
 };

@@ -11,6 +11,6 @@ export const useAdditionalNode: <T = ReactNode> (propName: string, node?: T) => 
     if (node !== undefined || isBlank(schema)) {
       return node;
     }
-    return <RecursionField name={name} onlyRenderProperties schema={{ type: 'void', properties: { [propName]: schema } }} />;
+    return <RecursionField onlyRenderProperties name={name} schema={{ type: 'void', properties: { [propName]: schema } }} />;
   }, [node, schema, name, propName]);
 };

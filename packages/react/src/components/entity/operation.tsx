@@ -14,7 +14,7 @@ export const EntityOperation = observer((props: IEntityOpProps) => {
 
   const useScope = useDeepMemo(() => ({ $config: config, ...scope }), [config, scope]);
 
-  return <Entity {...args} store={curStore} scope={useScope} />;
+  return <Entity {...args} scope={useScope} store={curStore} />;
 });
 
 export type IEntityOpProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityProps<V, R>> & {
