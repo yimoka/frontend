@@ -69,6 +69,11 @@ describe('Field 模块', () => {
       const schema = { type: 'array' };
       const result = parseSearchParam(value, schema);
       expect(result).toEqual([1, 2, 3]);
+      const result2 = parseSearchParam(value, {}, []);
+      expect(result2).toEqual([1, 2, 3]);
+      // 序列化后的值 如果不是数组，则返回空数组
+      const result3 = parseSearchParam('{"name":"test","age":18}', schema, []);
+      expect(result3).toEqual([]);
     });
 
     it('应该正确解析对象类型', () => {
@@ -130,13 +135,37 @@ describe('Field 模块', () => {
         type: 'number',
         required: true,
       },
+      obj: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          age: {
+            type: 'number',
+          },
+        },
+      },
     };
+
+    it('异常情况', () => {
+      // @ts-expect-error 类型错误
+      const result = getFieldConfig(1, fieldConfig);
+      expect(result).toBeUndefined();
+      // @ts-expect-error 类型错误
+      const result2 = getFieldConfig(null, fieldConfig);
+      expect(result2).toBeUndefined();
+    });
 
     it('应该获取顶层字段配置', () => {
       const result = getFieldConfig('user.name', fieldConfig);
       expect(result).toEqual({
         type: 'string',
         required: true,
+      });
+      const result2 = getFieldConfig('obj.name', fieldConfig);
+      expect(result2).toEqual({
+        type: 'string',
       });
     });
 
@@ -151,6 +180,8 @@ describe('Field 模块', () => {
     it('应该处理不存在的字段', () => {
       const result = getFieldConfig('nonexistent', fieldConfig);
       expect(result).toBeUndefined();
+      const result2 = getFieldConfig('obj.nonexistent', fieldConfig);
+      expect(result2).toBeUndefined();
     });
 
     it('应该处理空配置', () => {

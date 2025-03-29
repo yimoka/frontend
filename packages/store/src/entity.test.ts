@@ -22,6 +22,11 @@ describe('Entity 模块', () => {
       expect(result).toBe(store);
     });
 
+    it('应该返回空配置对象', () => {
+      const result = getEntryStore({});
+      expect(result.fieldsConfig).toEqual({});
+    });
+
     it('应该正确合并字段配置', () => {
       const config: IEntityConfig = {
         fieldsConfig: {
@@ -126,6 +131,88 @@ describe('Entity 模块', () => {
         resetValues: 'success',
         notify: true,
       });
+    });
+
+    it('应该正确处理查询模式', () => {
+      const config: IEntityConfig = {
+        defaultQueryValues: {
+          status: 1,
+          keyword: '',
+        },
+      };
+      const store = {};
+      const result = getEntryStore(store, 'query', config);
+      expect(result.defaultValues).toEqual({
+        status: 1,
+        keyword: '',
+      });
+      expect((result as IStoreConfig).type).toBe('list');
+    });
+
+    it('应该正确处理自定义 idKey', () => {
+      const config: IEntityConfig = {
+        idKey: 'userId',
+        defaultDetailValues: {
+          name: 'test',
+        },
+      };
+      const store = {};
+      const result = getEntryStore(store, 'detail', config);
+      expect(result.defaultValues).toEqual({
+        name: 'test',
+        userId: undefined,
+      });
+    });
+
+    it('应该正确处理空配置和空模式', () => {
+      const result = getEntryStore();
+      expect(result.fieldsConfig).toEqual({});
+    });
+
+    it('应该正确处理编辑模式', () => {
+      const config: IEntityConfig = {
+        defaultFormValues: {
+          name: 'test',
+        },
+      };
+      const store = {};
+      const result = getEntryStore(store, 'edit', config);
+      expect(result.defaultValues).toEqual({
+        name: 'test',
+      });
+      expect(result.afterAtFetch).toEqual({
+        resetValues: 'success',
+        notify: true,
+      });
+    });
+
+    it('应该正确处理列表模式', () => {
+      const config: IEntityConfig = {
+        defaultQueryValues: {
+          page: 1,
+          pageSize: 10,
+        },
+      };
+      const store = {};
+      const result = getEntryStore(store, 'list', config);
+      expect(result.defaultValues).toEqual({
+        page: 1,
+        pageSize: 10,
+      });
+      expect((result as IStoreConfig).type).toBe('list');
+    });
+
+    it('应该正确处理已存在的 API 配置', () => {
+      const config: IEntityConfig = {
+        api: {
+          add: { url: '/api/add' },
+        },
+      };
+      const store = {
+        api: { url: '/api/existing' },
+      };
+      const result = getEntryStore(store, 'add', config);
+      expect(result.api).toEqual({ url: '/api/existing' });
     });
   });
 });
