@@ -23,7 +23,7 @@ import { IStore, IStoreConfig, opStoreAfterAtFetch } from '.';
  * @description 根据不同的操作模式配置存储实例
  */
 // eslint-disable-next-line complexity
-export function getEntryStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>, isOperation?: boolean): IStore<V, R> | IStoreConfig<V, R> {
+export function getEntityStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>, isOperation?: boolean): IStore<V, R> | IStoreConfig<V, R> {
   if (store instanceof BaseStore) {
     return store;
   }

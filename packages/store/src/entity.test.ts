@@ -9,21 +9,21 @@
 import { describe, it, expect } from 'vitest';
 
 import { BaseStore } from './base';
-import { getEntryStore, IEntityConfig } from './entity';
+import { getEntityStore, IEntityConfig } from './entity';
 import { IFieldConfig } from './field';
 
 import { IStoreConfig } from '.';
 
 describe('Entity 模块', () => {
-  describe('getEntryStore', () => {
+  describe('getEntityStore', () => {
     it('应该返回 BaseStore 实例', () => {
       const store = new BaseStore();
-      const result = getEntryStore(store);
+      const result = getEntityStore(store);
       expect(result).toBe(store);
     });
 
     it('应该返回空配置对象', () => {
-      const result = getEntryStore({});
+      const result = getEntityStore({});
       expect(result.fieldsConfig).toEqual({});
     });
 
@@ -38,7 +38,7 @@ describe('Entity 模块', () => {
           age: { type: 'number' } satisfies IFieldConfig,
         },
       };
-      const result = getEntryStore(store, 'add', config);
+      const result = getEntityStore(store, 'add', config);
       expect(result.fieldsConfig).toEqual({
         name: { type: 'string' },
         age: { type: 'number' },
@@ -56,7 +56,7 @@ describe('Entity 模块', () => {
           age: 18,
         },
       };
-      const result = getEntryStore(store, 'add', config);
+      const result = getEntityStore(store, 'add', config);
       expect(result.defaultValues).toEqual({
         name: 'test',
         age: 18,
@@ -74,7 +74,7 @@ describe('Entity 模块', () => {
           notify: false,
         },
       };
-      const result = getEntryStore(store, 'add', config);
+      const result = getEntityStore(store, 'add', config);
       expect(result.afterAtFetch).toEqual({
         resetValues: 'success',
         notify: false,
@@ -88,7 +88,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'list', config);
+      const result = getEntityStore(store, 'list', config);
       expect((result as IStoreConfig).type).toBe('list');
     });
 
@@ -100,7 +100,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'add', config);
+      const result = getEntityStore(store, 'add', config);
       expect(result.api).toEqual({ url: '/api/add' });
     });
 
@@ -112,7 +112,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'detail', config);
+      const result = getEntityStore(store, 'detail', config);
       expect(result.defaultValues).toEqual({
         name: 'test',
         id: undefined,
@@ -126,7 +126,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'del', config, true);
+      const result = getEntityStore(store, 'del', config, true);
       expect(result.afterAtFetch).toEqual({
         resetValues: 'success',
         notify: true,
@@ -141,7 +141,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'query', config);
+      const result = getEntityStore(store, 'query', config);
       expect(result.defaultValues).toEqual({
         status: 1,
         keyword: '',
@@ -157,7 +157,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'detail', config);
+      const result = getEntityStore(store, 'detail', config);
       expect(result.defaultValues).toEqual({
         name: 'test',
         userId: undefined,
@@ -165,7 +165,7 @@ describe('Entity 模块', () => {
     });
 
     it('应该正确处理空配置和空模式', () => {
-      const result = getEntryStore();
+      const result = getEntityStore();
       expect(result.fieldsConfig).toEqual({});
     });
 
@@ -176,7 +176,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'edit', config);
+      const result = getEntityStore(store, 'edit', config);
       expect(result.defaultValues).toEqual({
         name: 'test',
       });
@@ -194,7 +194,7 @@ describe('Entity 模块', () => {
         },
       };
       const store = {};
-      const result = getEntryStore(store, 'list', config);
+      const result = getEntityStore(store, 'list', config);
       expect(result.defaultValues).toEqual({
         page: 1,
         pageSize: 10,
@@ -211,7 +211,7 @@ describe('Entity 模块', () => {
       const store = {
         api: { url: '/api/existing' },
       };
-      const result = getEntryStore(store, 'add', config);
+      const result = getEntityStore(store, 'add', config);
       expect(result.api).toEqual({ url: '/api/existing' });
     });
   });
