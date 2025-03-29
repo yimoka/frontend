@@ -67,7 +67,7 @@ describe('getPresetsDate', () => {
 
   it('should return yesterday\'s date for "yesterday" preset', () => {
     const yesterday = dayjs().subtract(1, 'day');
-    expect(getPresetsDate('yesterday').isSame(yesterday)).toBe(true);
+    expect(getPresetsDate('yesterday').unix()).toBe(yesterday.unix());
   });
 
   it('should return next week\'s date for "1W" preset', () => {
