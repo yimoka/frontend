@@ -7,7 +7,6 @@ import { initStoreDict } from './dict';
 describe('initStoreDict', () => {
   it('should set dictionary data directly if data is provided', async () => {
     const apiExecutor = vi.fn((params?: IAny) => Promise.resolve({ code: params?.code ?? 0, msg: '', data: params?.data }));
-    vi.useFakeTimers();
     const store = new BaseStore({ apiExecutor });
     store.dictConfig = [
       { field: 'a', data: [{ value: '1', label: 'a1' }] },
@@ -25,14 +24,15 @@ describe('initStoreDict', () => {
     expect(store.dict.c).toEqual([{ value: '1', label: 'a1' }]);
     expect(store.dict.d).toEqual([{ value: '1', label: 'a1' }]);
 
-    await vi.runAllTimers();
-    expect(store.dict.b).toEqual([{ value: '2', label: 'a2' }]);
-    expect(store.dict.c).toEqual([{ value: '2', label: 'a2' }]);
-    // 接口错误不更新数据
-    expect(store.dict.d).toEqual([{ value: '1', label: 'a1' }]);
-    // toMap
-    expect(store.dict.e).toEqual({ 2: 'a2' });
-    // keys
-    expect(store.dict.f).toEqual([{ value: '2', label: 'a2' }]);
+    await vi.waitFor(() => {
+      expect(store.dict.b).toEqual([{ value: '2', label: 'a2' }]);
+      expect(store.dict.c).toEqual([{ value: '2', label: 'a2' }]);
+      // 接口错误不更新数据
+      expect(store.dict.d).toEqual([{ value: '1', label: 'a1' }]);
+      // toMap
+      expect(store.dict.e).toEqual({ 2: 'a2' });
+      // keys
+      expect(store.dict.f).toEqual([{ value: '2', label: 'a2' }]);
+    });
   });
 });

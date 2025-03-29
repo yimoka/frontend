@@ -6,7 +6,7 @@ import { runAPI } from './api';
 describe('runStoreAPI', () => {
   it('should return error if api is not provided', async () => {
     const result = await runAPI();
-    expect(result).toEqual({ code: 400, data: '', msg: 'api is required' });
+    expect(result).toEqual({ code: 400, data: '', msg: 'api / apiExecutor is required' });
   });
 
   it('should execute api function if provided', async () => {
@@ -19,7 +19,7 @@ describe('runStoreAPI', () => {
   it('should return error if apiExecutor is not provided for api config', async () => {
     const apiConfig: IAPIRequestConfig = { method: 'GET', url: '/api/data' };
     const result = await runAPI(apiConfig);
-    expect(result).toEqual({ code: 400, data: '', msg: 'apiExecutor is required' });
+    expect(result).toEqual({ code: 400, data: '', msg: 'api / apiExecutor is required' });
   });
 
   it('should execute apiExecutor with merged config for GET method', async () => {
