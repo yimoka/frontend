@@ -1,8 +1,6 @@
 /**
- * @file dict.ts
- * @description 字典管理模块，提供数据字典的初始化、监听和更新功能
+ * @remarks 字典管理模块，提供数据字典的初始化、监听和更新功能
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b - 2025-03-29
  * @module @yimoka/store
  */
 
@@ -17,7 +15,7 @@ import { getFieldSplitter, IField } from './field';
 /**
  * 初始化字典数据
  * @param store - 存储实例
- * @description 根据配置初始化字典数据，支持静态数据和 API 请求
+ * @remarks 根据配置初始化字典数据，支持静态数据和 API 请求
  * @example
  * ```ts
  * const store = new BaseStore({
@@ -73,7 +71,7 @@ export const initStoreDict = (store: BaseStore) => {
 /**
  * 监听字典数据变化
  * @param store - 存储实例
- * @description 监听表单值变化，根据配置更新字典数据
+ * @remarks 监听表单值变化，根据配置更新字典数据
  * @returns 清理函数数组
  * @example
  * ```ts
@@ -171,7 +169,7 @@ export const watchStoreDict = (store: BaseStore) => {
  * @param config - 字典配置项
  * @param dict - 字典数据
  * @param store - 存储实例
- * @description 根据字典配置更新相关字段的值
+ * @remarks 根据字典配置更新相关字段的值
  */
 export const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
   const { field, isUpdateValue = true, keys, childrenKey } = config;

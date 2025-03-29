@@ -1,8 +1,6 @@
 /**
- * @file root.test.ts
- * @description Root 模块单元测试
+ * @remarks Root 模块单元测试
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b
  */
 
 import { describe, it, expect } from 'vitest';

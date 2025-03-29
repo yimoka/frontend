@@ -1,8 +1,6 @@
 /**
- * @file field.ts
- * @description 字段管理模块，提供字段值的转换、解析和配置管理功能
+ * @remarks 字段管理模块，提供字段值的转换、解析和配置管理功能
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b - 2025-03-29
  * @module @yimoka/store
  */
 
@@ -15,7 +13,7 @@ import { ISchema } from './schema';
  * 将值转换为搜索参数字符串
  * @param value - 要转换的值
  * @returns 转换后的字符串
- * @description 如果值是对象，则转换为 JSON 字符串；否则转换为普通字符串。null 或 undefined 返回空字符串
+ * @remarks 如果值是对象，则转换为 JSON 字符串；否则转换为普通字符串。null 或 undefined 返回空字符串
  * @example
  * ```ts
  * // 对象转 JSON 字符串
@@ -43,7 +41,7 @@ export const valueToSearchParam = (value: IAny) => (typeof value === 'object' ? 
  * @param schema - 字段模式定义
  * @param dfValue - 默认值，用于类型推断
  * @returns 解析后的值
- * @description 根据模式定义将字符串参数转换为对应类型的值
+ * @remarks 根据模式定义将字符串参数转换为对应类型的值
  * @example
  * ```ts
  * // 解析数字类型
@@ -88,7 +86,7 @@ export const parseSearchParam = (searchParam?: string, schema: ISchema = {}, dfV
  * @param field - 字段名或字段对象
  * @param store - 存储实例
  * @returns 字段分隔符
- * @description 根据字段配置获取对应的分隔符，用于处理数组类型的字段值
+ * @remarks 根据字段配置获取对应的分隔符，用于处理数组类型的字段值
  * @example
  * ```ts
  * const store = new BaseStore({
@@ -110,7 +108,7 @@ export const getFieldSplitter = (field: IField, store: BaseStore) => {
  * @param field - 字段名或字段对象
  * @param fieldsConfig - 字段配置对象
  * @returns 字段配置
- * @description 根据字段名获取对应的配置信息
+ * @remarks 根据字段名获取对应的配置信息
  * @example
  * ```ts
  * const fieldsConfig = {
@@ -146,18 +144,18 @@ export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
 /**
  * 字段类型
  * @template P - 对象类型
- * @description 字段可以是对象的键名或字符串
+ * @remarks 字段可以是对象的键名或字符串
  */
 export type IField<P extends object = IStrKeyObject> = keyof P | string;
 
 /**
  * 字段配置类型
- * @description 字段配置的键值对映射
+ * @remarks 字段配置的键值对映射
  */
 export type IFieldsConfig = Record<string, IFieldConfig>;
 
 /**
  * 字段配置项类型
- * @description 字段配置项继承自模式定义
+ * @remarks 字段配置项继承自模式定义
  */
 export type IFieldConfig = ISchema

@@ -1,8 +1,6 @@
 /**
- * @file schema.ts
- * @description 模式定义模块，提供表单和字段的模式定义功能
+ * @remarks 模式定义模块，提供表单和字段的模式定义功能
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b - 2025-03-29
  * @module @yimoka/store
  */
 
@@ -19,7 +17,7 @@ import { IAny, IAnyObject, IObjKey } from '@yimoka/shared';
  * @template Display - 显示类型
  * @template Validator - 验证器类型
  * @template Message - 消息类型
- * @description 定义模式属性的键值对映射
+ * @remarks 定义模式属性的键值对映射
  */
 export declare type SchemaProperties<Decorator, Component, DecoratorProps, ComponentProps, Pattern, Display, Validator, Message> = Record<string, ISchema<Decorator, Component, DecoratorProps, ComponentProps, Pattern, Display, Validator, Message>>;
 
@@ -33,7 +31,7 @@ export declare type SchemaProperties<Decorator, Component, DecoratorProps, Compo
  * @template Display - 显示类型
  * @template Validator - 验证器类型
  * @template Message - 消息类型
- * @description 定义模式项，可以是单个模式或模式数组
+ * @remarks 定义模式项，可以是单个模式或模式数组
  */
 export declare type SchemaItems<Decorator, Component, DecoratorProps, ComponentProps, Pattern, Display, Validator, Message> = ISchema<Decorator, Component, DecoratorProps, ComponentProps, Pattern, Display, Validator, Message> | ISchema<Decorator, Component, DecoratorProps, ComponentProps, Pattern, Display, Validator, Message>[];
 
@@ -48,7 +46,7 @@ export declare type SchemaItems<Decorator, Component, DecoratorProps, ComponentP
  * @template Validator - 验证器类型
  * @template Message - 消息类型
  * @template ReactionField - 响应字段类型
- * @description 扩展 Formily 的模式定义，添加自定义属性
+ * @remarks 扩展 Formily 的模式定义，添加自定义属性
  * @example
  * ```ts
  * const schema: ISchema = {

@@ -1,8 +1,7 @@
 /**
  * @file api.test.ts
- * @description API 模块单元测试
+ * @remarks API 模块单元测试
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b - 2025-03-29
  * @module @yimoka/store
  */
 

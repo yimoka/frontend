@@ -1,8 +1,6 @@
 /**
- * @file field.test.ts
- * @description Field 模块单元测试
+ * @remarks Field 模块单元测试
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';

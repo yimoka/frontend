@@ -1,8 +1,6 @@
 /**
- * @file root.ts
- * @description 根存储模块，用于管理全局状态
+ * @remarks 根存储模块，用于管理全局状态
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b
  * @module root
  */
 
@@ -12,7 +10,7 @@ import { IAny, IAnyObject } from '@yimoka/shared';
 /**
  * 根存储类
  * @class RootStore
- * @description 用于管理全局状态，包括用户信息、菜单、配置、语言等
+ * @remarks 用于管理全局状态，包括用户信息、菜单、配置、语言等
  * @template U - 用户信息类型
  * @template M - 菜单类型
  * @template D - 自定义数据类型
@@ -44,7 +42,7 @@ export class RootStore<
   /**
    * 创建根存储实例
    * @param initVal - 初始值
-   * @description 初始化根存储，设置响应式属性和方法
+   * @remarks 初始化根存储，设置响应式属性和方法
    */
   constructor(initVal?: IRootInitVal<U, M, D, C, L>) {
     define(this, {
@@ -99,7 +97,7 @@ export class RootStore<
   /**
    * 初始化根存储
    * @param value - 初始值
-   * @description 根据提供的初始值初始化根存储的各项数据
+   * @remarks 根据提供的初始值初始化根存储的各项数据
    */
   init = (value: IRootInitVal<U, M, D, C, L>) => {
     const { user, menus, data, config, lang } = value;
@@ -127,7 +125,7 @@ export const rootStore = new RootStore();
 /**
  * 根存储初始值接口
  * @interface IRootInitVal
- * @description 定义根存储初始化值的类型
+ * @remarks 定义根存储初始化值的类型
  * @template U - 用户信息类型
  * @template M - 菜单类型
  * @template D - 自定义数据类型

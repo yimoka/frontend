@@ -1,8 +1,6 @@
 /**
- * @file entity.ts
- * @description 实体模块，用于管理实体相关的配置和操作
+ * @remarks 实体模块，用于管理实体相关的配置和操作
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b
  * @module entity
  */
 
@@ -20,7 +18,7 @@ import { IStore, IStoreConfig, opStoreAfterAtFetch } from '.';
  * @param config - 实体配置
  * @param isOperation - 是否为操作模式
  * @returns 存储实例或配置
- * @description 根据不同的操作模式配置存储实例
+ * @remarks 根据不同的操作模式配置存储实例
  */
 // eslint-disable-next-line complexity
 export function getEntityStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>, isOperation?: boolean): IStore<V, R> | IStoreConfig<V, R> {
@@ -64,7 +62,7 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
 /**
  * 实体配置接口
  * @interface IEntityConfig
- * @description 定义实体相关的配置项
+ * @remarks 定义实体相关的配置项
  * @template V - 实体数据类型
  */
 export interface IEntityConfig<V extends object = IAnyObject> {
@@ -103,7 +101,7 @@ export interface IEntityConfig<V extends object = IAnyObject> {
 /**
  * 面包屑项接口
  * @interface IBreadcrumbItem
- * @description 定义面包屑导航项的配置
+ * @remarks 定义面包屑导航项的配置
  */
 export interface IBreadcrumbItem {
   /** 显示文本 */
@@ -118,7 +116,7 @@ export interface IBreadcrumbItem {
 /**
  * API操作模式类型
  * @type IAPIKey
- * @description 定义所有可用的API操作模式
+ * @remarks 定义所有可用的API操作模式
  */
 export type IAPIKey =
   | 'add' | 'edit' | 'detail' | 'del' | 'delOne'

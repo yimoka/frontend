@@ -1,8 +1,6 @@
 /**
- * @file list.test.ts
- * @description List 模块单元测试
+ * @remarks List 模块单元测试
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b
  */
 
 import { IAnyObject, IHTTPResponse } from '@yimoka/shared';

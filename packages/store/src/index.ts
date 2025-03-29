@@ -1,8 +1,6 @@
 /**
- * @file index.ts
- * @description 存储模块的入口文件，导出所有核心类型和类
+ * @remarks 存储模块的入口文件，导出所有核心类型和类
  * @author ickeep <i@ickeep.com>
- * @version 3ab441b - 2025-03-29
  * @module @yimoka/store
  */
 
@@ -25,7 +23,7 @@ export * from './schema';
 
 /**
  * 存储类型
- * @description 支持基础存储和列表存储两种类型
+ * @remarks 支持基础存储和列表存储两种类型
  */
 export type IStoreType = 'base' | 'list';
 
@@ -33,7 +31,7 @@ export type IStoreType = 'base' | 'list';
  * 存储实例类型
  * @template V - 值的类型
  * @template R - 响应的类型
- * @description 存储实例可以是基础存储或列表存储
+ * @remarks 存储实例可以是基础存储或列表存储
  * @example
  * ```ts
  * // 基础存储
@@ -49,7 +47,7 @@ export type IStore<V extends object = IAnyObject, R = IAny> = BaseStore<V, R> | 
  * 存储配置类型
  * @template V - 值的类型
  * @template R - 响应的类型
- * @description 存储配置包含类型和基础配置
+ * @remarks 存储配置包含类型和基础配置
  * @example
  * ```ts
  * const config: IStoreConfig = {
@@ -63,7 +61,7 @@ export type IStoreConfig<V extends object = IAnyObject, R = IAny> = { type?: ISt
 
 /**
  * 存储类型映射
- * @description 将存储类型映射到对应的存储类
+ * @remarks 将存储类型映射到对应的存储类
  * @example
  * ```ts
  * const Store = StoreMap[config.type || 'base'];
