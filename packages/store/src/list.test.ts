@@ -5,7 +5,7 @@
  * @version 3ab441b
  */
 
-import { IAnyObject } from '@yimoka/shared';
+import { IAnyObject, IHTTPResponse } from '@yimoka/shared';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { IStoreResponse } from './api';
@@ -50,6 +50,11 @@ describe('List 模块', () => {
 
     it('应该正确初始化自定义默认值', () => {
       const customStore = new ListStore({
+        options: {
+          keys: {
+            page: 'currentPage',
+          },
+        },
         defaultValues: {
           page: 2,
           pageSize: 20,
@@ -57,9 +62,24 @@ describe('List 模块', () => {
         },
       });
 
+
       expect(customStore.values.page).toBe(2);
       expect(customStore.values.pageSize).toBe(20);
       expect(customStore.values.sortOrder).toEqual(['name', 'desc']);
+
+      customStore.setResponse({
+        data: {
+          data: [],
+          currentPage: 2,
+          size: 20,
+        },
+      });
+
+      expect(customStore.pagination).toEqual({
+        page: 2,
+        pageSize: 20,
+        total: 0,
+      });
     });
 
     it('应该正确处理非分页模式', () => {
@@ -198,7 +218,7 @@ describe('List 模块', () => {
     });
   });
 
-  it('should get list data from response', () => {
+  it('应该从响应中获取列表数据', () => {
     store.setResponse({
       code: 0,
       data: {
@@ -208,7 +228,7 @@ describe('List 模块', () => {
     expect(store.listData).toEqual([{ id: 1 }, { id: 2 }]);
   });
 
-  it('should get list data directly if not paginated', () => {
+  it('非分页模式下应该直接获取列表数据', () => {
     const store = new ListStore({ isPaginate: false });
     store.setResponse({
       code: 0,
@@ -217,7 +237,7 @@ describe('List 模块', () => {
     expect(store.listData).toEqual([{ id: 1 }, { id: 2 }]);
   });
 
-  it('should get pagination info', () => {
+  it('应该正确获取分页信息', () => {
     store.setResponse({
       success: true,
       data: {
@@ -234,7 +254,7 @@ describe('List 模块', () => {
     });
   });
 
-  it('should check if has next page', () => {
+  it('应该正确判断是否有下一页', () => {
     store.setResponse({
       code: 0,
       data: {
@@ -258,17 +278,17 @@ describe('List 模块', () => {
     expect(store.isHasNext).toBe(false);
   });
 
-  it('should set selected row keys', () => {
+  it('应该正确设置选中的行键', () => {
     store.setSelectedRowKeys([1, 2, 3]);
     expect(store.selectedRowKeys).toEqual([1, 2, 3]);
   });
 
-  it('should set next loading state', () => {
+  it('应该正确设置下一页加载状态', () => {
     store.setNextLoading(true);
     expect(store.nextLoading).toBe(true);
   });
 
-  it('should set next response', () => {
+  it('应该正确设置下一页响应数据', () => {
     const response: IStoreResponse = {
       code: 0,
       data: {
@@ -279,7 +299,7 @@ describe('List 模块', () => {
     expect(store.nextResponse).toEqual(response);
   });
 
-  it('should load next data', () => {
+  it('应该正确加载下一页数据', () => {
     store.setResponse({
       code: 0,
       data: {
@@ -293,9 +313,19 @@ describe('List 模块', () => {
       { id: 3 },
       { id: 4 },
     ]);
+    store.setResponse({
+      data: [{ id: 1 }, { id: 2 }],
+    });
+    store.loadNextData([{ id: 7 }, { id: 8 }]);
+    expect(store.listData).toEqual([
+      { id: 1 },
+      { id: 2 },
+      { id: 7 },
+      { id: 8 },
+    ]);
   });
 
-  it('should not load next data if data is not array', () => {
+  it('当数据不是数组时不应该加载下一页数据', () => {
     store.setResponse({
       code: 0,
       data: {
@@ -306,7 +336,7 @@ describe('List 模块', () => {
     expect(store.listData).toEqual([{ id: 1 }, { id: 2 }]);
   });
 
-  it('should fetch next page', async () => {
+  it('应该正确获取下一页数据', async () => {
     const mockApiResponse: IStoreResponse = {
       code: 0,
       data: {
@@ -339,13 +369,30 @@ describe('List 模块', () => {
     expect(store.values.page).toBe(2);
   });
 
-  it('should not fetch next page if already loading', async () => {
-    store.setNextLoading(true);
-    const response = await store.fetchNext();
-    expect(response).toBeNull();
+  // 不过滤空间 加载下一页
+  it('不过滤空间 加载下一页', async () => {
+    store.setValues({ page: 1, name: '' });
+    store.setResponse({
+      code: 0,
+      data: {
+        data: [{ id: 1 }, { id: 2 }],
+        total: 100,
+        page: 1,
+        pageSize: 10,
+      },
+    });
+    store.api = vi.fn();
+    store.options.filterBlankAtRun = false;
+    store.fetchNext();
+    expect(store.api).toHaveBeenCalledWith({
+      page: 2,
+      pageSize: 10,
+      name: '',
+      sortOrder: [],
+    });
   });
 
-  it('should not fetch next page if no more data', async () => {
+  it('没有更多数据时不应该获取下一页数据', async () => {
     store.setResponse({
       code: 0,
       data: {
@@ -359,7 +406,7 @@ describe('List 模块', () => {
     expect(response).toBeNull();
   });
 
-  it('should handle fetch next error', async () => {
+  it('应该正确处理获取下一页数据时的错误', async () => {
     store.setResponse({
       success: true,
       data: {
@@ -382,7 +429,7 @@ describe('List 模块', () => {
     }
   });
 
-  it('should handle AbortController error', async () => {
+  it('应该正确处理 AbortController 错误', async () => {
     vi.spyOn(globalThis, 'AbortController').mockImplementation(() => {
       throw new Error('AbortController error');
     });
@@ -400,5 +447,270 @@ describe('List 模块', () => {
         expect(error.message).toBe('AbortController error');
       }
     }
+  });
+
+  it('应该正确处理22 next AbortController ', async () => {
+    const abortController = vi.spyOn(globalThis, 'AbortController').mockImplementation(() => ({ abort: vi.fn(), signal: vi.fn() } as unknown as AbortController));
+    const store = new ListStore({
+      api: {
+        url: '/api/list',
+      },
+      apiExecutor: () => new Promise<IHTTPResponse<IAnyObject, IAnyObject>>(resolve => setTimeout(() => resolve({ code: 0, data: {}, msg: '' }), 100)),
+    });
+    store.setResponse({
+      code: 0,
+      data: {
+        data: [{ id: 1 }, { id: 2 }],
+        total: 100,
+        page: 1,
+        pageSize: 2,
+      },
+    });
+
+    try {
+      store.fetchNext();
+      // 等待 20 ms
+      vi.advanceTimersByTime(20);
+      store.fetchNext();
+      await vi.runAllTimersAsync();
+      expect(abortController.mock.calls.length).toBe(2);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        expect(error.message).toBe('AbortController error');
+      }
+    }
+  });
+
+  it('应该正确处理 next AbortController 错误', async () => {
+    vi.spyOn(globalThis, 'AbortController').mockImplementation(() => {
+      throw new Error('AbortController error');
+    });
+
+    const store = new ListStore({
+      api: {
+        url: '/api/list',
+      },
+    });
+    store.setResponse({
+      success: true,
+      data: {
+        data: [{ id: 1 }, { id: 2 }],
+        total: 100,
+        page: 1,
+        pageSize: 2,
+      },
+    });
+
+    try {
+      store.fetchNext();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        expect(error.message).toBe('AbortController error');
+      }
+    }
+  });
+
+  /**
+   * 测试自定义分页键名
+   */
+  describe('ListStore 自定义分页键名', () => {
+    it('应该支持自定义分页键名', () => {
+      const customStore = new ListStore({
+        options: {
+          keys: {
+            page: 'currentPage',
+            pageSize: 'size',
+            total: 'totalCount',
+          },
+        },
+      });
+
+      customStore.setResponse({
+        data: {
+          data: [1, 2, 3],
+          currentPage: 2,
+          size: 5,
+          totalCount: 15,
+        },
+      });
+
+      expect(customStore.pagination).toEqual({
+        page: 2,
+        pageSize: 5,
+        total: 15,
+      });
+    });
+
+    it('当自定义键名数据缺失时应使用默认值', () => {
+      const customStore = new ListStore({
+        options: {
+          keys: {
+            page: 'currentPage',
+            pageSize: 'size',
+            total: 'totalCount',
+          },
+        },
+      });
+
+      customStore.setResponse({
+        data: {
+          data: [1, 2, 3],
+        },
+      });
+
+      expect(customStore.pagination).toEqual({
+        page: 1,
+        pageSize: 10,
+        total: 3,
+      });
+    });
+  });
+
+  /**
+   * 测试异常数据格式
+   */
+  describe('ListStore 异常数据格式', () => {
+    it('当 data 不是数组时应返回 undefined', () => {
+      store.setResponse({
+        data: {
+          data: 'not an array',
+        },
+      });
+      expect(store.pagination).toBeUndefined();
+    });
+
+    it('当 data 是对象但缺少 data 字段时应返回 undefined', () => {
+      store.setResponse({
+        data: {
+          page: 1,
+          pageSize: 10,
+          total: 100,
+        },
+      });
+      expect(store.pagination).toBeUndefined();
+    });
+
+    it('当 data 是对象但 data 字段不是数组时应返回 undefined', () => {
+      store.setResponse({
+        data: {
+          data: 'not an array',
+          page: 1,
+          pageSize: 10,
+          total: 100,
+        },
+      });
+      expect(store.pagination).toBeUndefined();
+    });
+  });
+
+  /**
+   * 测试边界情况
+   */
+  describe('ListStore 边界情况', () => {
+    it('当数据为空数组时应返回正确的分页信息', () => {
+      store.setResponse({
+        data: {
+          data: [],
+          page: 1,
+          pageSize: 10,
+          total: 0,
+        },
+      });
+      expect(store.pagination).toEqual({
+        page: 1,
+        pageSize: 10,
+        total: 0,
+      });
+    });
+
+    it('当分页数据为 0 时应正确处理', () => {
+      store.setResponse({
+        data: {
+          data: [],
+          page: 0,
+          pageSize: 0,
+          total: 0,
+        },
+      });
+      expect(store.pagination).toEqual({
+        page: 0,
+        pageSize: 0,
+        total: 0,
+      });
+    });
+
+    it('当 options.keys 为空时应使用默认键名', () => {
+      const customStore = new ListStore({
+        options: {
+          keys: undefined,
+        },
+      });
+
+      customStore.setResponse({
+        data: {
+          data: [1, 2, 3],
+          page: 2,
+          pageSize: 5,
+          total: 15,
+        },
+      });
+
+      expect(customStore.pagination).toEqual({
+        page: 2,
+        pageSize: 5,
+        total: 15,
+      });
+    });
+
+    it('当 data.data 为 undefined 时应返回 undefined', () => {
+      store.setResponse({
+        data: {
+          data: undefined,
+          page: 1,
+          pageSize: 10,
+          total: 100,
+        },
+      });
+      expect(store.pagination).toBeUndefined();
+    });
+
+    it('当 total 字段缺失时应使用 data.data.length', () => {
+      store.setResponse({
+        data: {
+          data: [1, 2, 3],
+          page: 1,
+          pageSize: 10,
+        },
+      });
+      expect(store.pagination).toEqual({
+        page: 1,
+        pageSize: 10,
+        total: 3,
+      });
+    });
+
+    it('当 filterBlankAtRun 为 true 时应过滤空值', async () => {
+      const api = vi.fn();
+      const customStore = new ListStore({
+        options: {
+          filterBlankAtRun: true,
+        },
+        api,
+      });
+
+      customStore.setValues({
+        page: 1,
+        pageSize: 10,
+        name: '',
+        age: null,
+        status: undefined,
+      });
+
+      await customStore.fetch();
+      expect(api).toHaveBeenCalledWith({
+        page: 1,
+        pageSize: 10,
+      });
+    });
   });
 });

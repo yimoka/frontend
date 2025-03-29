@@ -1,6 +1,6 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess } from '@yimoka/shared';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
@@ -178,7 +178,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     this.apiExecutor = apiExecutor;
     this.api = api;
     this.extInfo = extInfo || {};
-    this.options = { ...this.options, ...options };
+    this.options = mergeWithArrayOverride(this.options, options);
     this.form = createForm({ ...formConfig, initialValues: defaultValues });
     this.notifier = notifier;
     if (afterAtFetch) {
