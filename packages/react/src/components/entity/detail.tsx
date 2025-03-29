@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
-import { getEntryStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
+import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
 import React, { useEffect } from 'react';
 
@@ -22,7 +22,7 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
 
 export const FetchDetail = observer((props: IFetchDetailProps) => {
   const { config, detailStore, scope, ...args } = props;
-  const curDetailConfig = useDeepMemo(() => getEntryStore(detailStore, 'detail', config), [detailStore, config]);
+  const curDetailConfig = useDeepMemo(() => getEntityStore(detailStore, 'detail', config), [detailStore, config]);
   const curDetailStore = useInitStore(curDetailConfig);
 
   return (
