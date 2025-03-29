@@ -21,15 +21,15 @@ import { ISchema } from './schema';
  * // 对象转 JSON 字符串
  * valueToSearchParam({ key: 'value' });
  * // 返回: '{"key":"value"}'
- * 
+ *
  * // 数字转字符串
  * valueToSearchParam(123);
  * // 返回: '123'
- * 
+ *
  * // 字符串保持不变
  * valueToSearchParam('hello');
  * // 返回: 'hello'
- * 
+ *
  * // null 返回空字符串
  * valueToSearchParam(null);
  * // 返回: ''
@@ -49,15 +49,15 @@ export const valueToSearchParam = (value: IAny) => (typeof value === 'object' ? 
  * // 解析数字类型
  * parseSearchParam('123', { type: 'number' });
  * // 返回: 123
- * 
+ *
  * // 解析布尔类型
  * parseSearchParam('true', { type: 'boolean' });
  * // 返回: true
- * 
+ *
  * // 解析数组类型
  * parseSearchParam('[1,2,3]', { type: 'array' });
  * // 返回: [1, 2, 3]
- * 
+ *
  * // 解析对象类型
  * parseSearchParam('{"name":"张三"}', { type: 'object' });
  * // 返回: { name: '张三' }

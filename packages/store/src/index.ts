@@ -38,7 +38,7 @@ export type IStoreType = 'base' | 'list';
  * ```ts
  * // 基础存储
  * const baseStore: IStore = new BaseStore();
- * 
+ *
  * // 列表存储
  * const listStore: IStore = new ListStore();
  * ```

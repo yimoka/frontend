@@ -6,7 +6,7 @@
  * @module @yimoka/store
  */
 
-import { IHTTPResponse, isBlank, isSuccess } from '@yimoka/shared';
+import { IHTTPResponse, isSuccess } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 
@@ -43,22 +43,21 @@ export const handleAfterAtFetch = (res: Partial<IHTTPResponse>, store: BaseStore
 const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { resetValues } = store.afterAtFetch;
   const reset = () => {
-    store.resetValues();
-    // 清除表单错误
+    store.resetValues?.();
     store.form?.clearErrors();
   };
-  // 根据配置决定是否重置
+
   if (resetValues === true) {
     reset();
+    return;
   }
+
   if (isSuccess(res)) {
     if (resetValues === 'success') {
       reset();
     }
-  } else {
-    if (resetValues === 'fail') {
-      reset();
-    }
+  } else if (resetValues === 'fail') {
+    reset();
   }
 };
 
@@ -70,14 +69,17 @@ const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
  */
 const handleAfterAtFetchRun = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { run, failRun, successRun } = store.afterAtFetch;
-  const runFn = (fn: IAfterAtFetch['run']) => typeof fn === 'function' && fn(res, store);
-  // 执行通用回调
-  runFn(run);
-  // 根据响应状态执行相应回调
+
+  if (typeof run === 'function') {
+    run(res, store);
+  }
+
   if (isSuccess(res)) {
-    runFn(successRun);
-  } else {
-    runFn(failRun);
+    if (typeof successRun === 'function') {
+      successRun(res, store);
+    }
+  } else if (typeof failRun === 'function') {
+    failRun(res, store);
   }
 };
 
@@ -89,18 +91,23 @@ const handleAfterAtFetchRun = (res: Partial<IHTTPResponse>, store: BaseStore) =>
  */
 const handleAfterAtFetchNotify = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { notify, failNotify: notifyOnFail = notify, successNotify: notifyOnSuccess = notify } = store.afterAtFetch;
-  const getMsg = (notify: true | string, df?: string) => {
-    const msg = notify === true ? res.msg : notify;
-    return isBlank(msg) ? df : msg;
+
+  const getMsg = (notify: boolean | string | undefined, df: string): string => {
+    if (!notify) return '';
+    if (notify === true) return res.msg || df;
+    return notify;
   };
-  // 根据响应状态显示通知
-  if (isSuccess(res)) {
-    if (notifyOnSuccess) {
-      store.notifier?.('success', getMsg(notifyOnSuccess, '成功了'));
+
+  const success = res.success ?? isSuccess(res);
+  if (success) {
+    const msg = getMsg(notifyOnSuccess, '成功了');
+    if (msg && store.notifier) {
+      store.notifier('success', msg);
     }
   } else {
-    if (notifyOnFail) {
-      store.notifier?.('error', getMsg(notifyOnFail, '出错了'));
+    const msg = getMsg(notifyOnFail, '出错了');
+    if (msg && store.notifier) {
+      store.notifier('error', msg);
     }
   }
 };

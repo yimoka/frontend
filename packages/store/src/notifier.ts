@@ -15,10 +15,10 @@ import { IAny, IAnyObject } from '@yimoka/shared';
  * ```ts
  * // 成功通知
  * notifier('success', '操作成功');
- * 
+ *
  * // 错误通知
  * notifier('error', '操作失败');
- * 
+ *
  * // 确认对话框
  * notifier('confirm', '确定要删除吗？');
  * ```

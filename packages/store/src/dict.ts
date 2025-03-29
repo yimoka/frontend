@@ -51,15 +51,20 @@ export const initStoreDict = (store: BaseStore) => {
       if (api) {
         store.setFieldDictLoading(field, true);
         const lastFetchID = store.incrDictFetchID(field);
-        runAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
+        runAPI(api, apiExecutor).then((res: IStoreResponse) => {
           if (lastFetchID === store.getDictFetchID(field)) {
-            store.setFieldDictLoading(field, false);
             if (isSuccess(res)) {
               const apiData = getDictAPIData(res.data, conf);
               store.setFieldDict(field, apiData);
             }
+            store.setFieldDictLoading(field, false);
           }
-        });
+        })
+          .catch(() => {
+            if (lastFetchID === store.getDictFetchID(field)) {
+              store.setFieldDictLoading(field, false);
+            }
+          });
       }
     }
   });
@@ -101,44 +106,54 @@ export const watchStoreDict = (store: BaseStore) => {
           store.incrDictFetchID(field);
           store.setFieldDict(field, []);
           updateValueByDict(conf, [], store);
-        } else {
-          // 使用 getData 或 API 获取字典数据
-          if (getData) {
-            const dictData = getData(newValues, store);
-            if (dictData instanceof Promise) {
-              store.setFieldDictLoading(field, true);
-              const lastFetchID = store.incrDictFetchID(field);
-              dictData.then((data: IOptions | IAny) => {
-                if (lastFetchID === store.getDictFetchID(field)) {
-                  store.setFieldDictLoading(field, false);
-                  store.setFieldDict(field, data);
-                  updateValueByDict(conf, data, store);
-                }
-              });
-            } else {
-              store.setFieldDict(field, dictData);
-              updateValueByDict(conf, dictData, store);
-            }
-          } else if (api) {
-            const lastFetchID = store.incrDictFetchID(field);
+          return;
+        }
+
+        // 使用 getData 或 API 获取字典数据
+        if (getData) {
+          const dictData = getData(newValues, store);
+          if (dictData instanceof Promise) {
             store.setFieldDictLoading(field, true);
-            runAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
+            const lastFetchID = store.incrDictFetchID(field);
+            dictData.then((data: IOptions | IAny) => {
+              if (lastFetchID === store.getDictFetchID(field)) {
+                store.setFieldDict(field, data);
+                updateValueByDict(conf, data, store);
+                store.setFieldDictLoading(field, false);
+              }
+            }).catch(() => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
-                if (isSuccess(res)) {
-                  const apiData = res.data;
-                  if (toMap && Array.isArray(apiData)) {
-                    store.setFieldDict(field, optionsToObj(res.data, keys));
-                  } else if (toOptions) {
-                    store.setFieldDict(field, dataToOptions(res.data, keys));
-                  } else {
-                    store.setFieldDict(field, apiData);
-                  }
-                  updateValueByDict(conf, apiData, store);
-                }
               }
             });
+          } else {
+            store.setFieldDict(field, dictData);
+            updateValueByDict(conf, dictData, store);
           }
+        } else if (api) {
+          const lastFetchID = store.incrDictFetchID(field);
+          store.setFieldDictLoading(field, true);
+          runAPI(api, apiExecutor, newValues).then((res: IStoreResponse) => {
+            if (lastFetchID === store.getDictFetchID(field)) {
+              if (isSuccess(res)) {
+                const apiData = res.data;
+                if (toMap && Array.isArray(apiData)) {
+                  store.setFieldDict(field, optionsToObj(apiData, keys));
+                } else if (toOptions) {
+                  store.setFieldDict(field, dataToOptions(apiData, keys));
+                } else {
+                  store.setFieldDict(field, apiData);
+                }
+                updateValueByDict(conf, apiData, store);
+              }
+              store.setFieldDictLoading(field, false);
+            }
+          })
+            .catch(() => {
+              if (lastFetchID === store.getDictFetchID(field)) {
+                store.setFieldDictLoading(field, false);
+              }
+            });
         }
       };
       const obj = pick(values, byField);

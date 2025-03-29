@@ -1,6 +1,17 @@
-import { IAny, IAnyObject } from '@yimoka/shared';
+/// <reference types="node" />
+
+/**
+ * @file base.test.ts
+ * @description BaseStore 模块单元测试
+ * @author ickeep <i@ickeep.com>
+ * @version 3ab441b - 2025-03-29
+ * @module @yimoka/store
+ */
+
+import { IAnyObject, IHTTPResponse } from '@yimoka/shared';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
+import { IStoreResponse } from './api';
 import { BaseStore } from './base';
 
 interface IUser {
@@ -11,7 +22,229 @@ interface IUser {
   tags?: string[];
 }
 
-describe('BaseStore', () => {
+describe('BaseStore 模块', () => {
+  let baseStore: BaseStore;
+
+  beforeEach(() => {
+    baseStore = new BaseStore();
+  });
+
+  describe('构造函数', () => {
+    it('应该正确初始化默认值', () => {
+      const defaultValues = { name: 'test', age: 18 };
+      const store = new BaseStore({ defaultValues });
+      expect(store.defaultValues).toEqual(defaultValues);
+    });
+
+    it('应该正确初始化字段配置', () => {
+      const fieldsConfig = { name: { type: 'string' } };
+      const store = new BaseStore({ fieldsConfig });
+      expect(store.fieldsConfig).toEqual(fieldsConfig);
+    });
+
+    it('应该正确初始化字典配置', () => {
+      const dictConfig = [{ field: 'type', data: [{ label: '类型1', value: 1 }] }];
+      const store = new BaseStore({ dictConfig });
+      expect(store.dictConfig).toEqual(dictConfig);
+    });
+
+    it('应该正确初始化 API 配置', () => {
+      const api = { url: '/api/test', method: 'GET' };
+      const store = new BaseStore({ api });
+      expect(store.api).toEqual(api);
+    });
+
+    it('应该正确初始化选项', () => {
+      const options = { filterBlankAtRun: true, bindRoute: true };
+      const store = new BaseStore({ options });
+      expect(store.options.filterBlankAtRun).toBe(true);
+      expect(store.options.bindRoute).toBe(true);
+    });
+
+    it('应该正确初始化扩展信息', () => {
+      const extInfo = { key: 'value' };
+      const store = new BaseStore({ extInfo });
+      expect(store.extInfo).toEqual(extInfo);
+    });
+  });
+
+  describe('表单值管理', () => {
+    it('应该正确获取表单值', () => {
+      const defaultValues = { name: 'test', age: 18 };
+      const store = new BaseStore({ defaultValues });
+      expect(store.values).toEqual(defaultValues);
+    });
+
+    it('应该正确设置表单值', () => {
+      const store = new BaseStore({ defaultValues: { name: 'test', age: 18 } });
+      store.setValues({ name: 'new' });
+      expect(store.values).toEqual({ name: 'new', age: 18 });
+    });
+
+    it('应该正确设置字段值', () => {
+      const store = new BaseStore({ defaultValues: { name: 'test', age: 18 } });
+      store.setFieldValue('name', 'new');
+      expect(store.values.name).toBe('new');
+    });
+
+    it('应该正确重置表单值', () => {
+      const defaultValues = { name: 'test', age: 18 };
+      const store = new BaseStore({ defaultValues });
+      store.setValues({ name: 'new' });
+      store.resetValues();
+      expect(store.values).toEqual(defaultValues);
+    });
+
+    it('应该正确重置字段值', () => {
+      const defaultValues = { name: 'test', age: 18 };
+      const store = new BaseStore({ defaultValues });
+      store.setFieldValue('name', 'new');
+      store.resetFieldsValue('name');
+      expect(store.values.name).toBe('test');
+    });
+  });
+
+  describe('字典管理', () => {
+    it('应该正确设置字典数据', () => {
+      const dict = { type: [{ label: '类型1', value: 1 }] };
+      baseStore.setDict(dict);
+      expect(baseStore.dict).toEqual(dict);
+    });
+
+    it('应该正确设置字段字典数据', () => {
+      baseStore.setFieldDict('type', [{ label: '类型1', value: 1 }]);
+      expect(baseStore.dict.type).toEqual([{ label: '类型1', value: 1 }]);
+    });
+
+    it('应该正确设置字段字典加载状态', () => {
+      baseStore.setFieldDictLoading('type', true);
+      expect(baseStore.dictLoading.type).toBe(true);
+    });
+
+    it('应该正确增加字典请求 ID', () => {
+      baseStore.incrDictFetchID('type');
+      expect(baseStore.getDictFetchID('type')).toBe(1);
+    });
+  });
+
+  describe('API 请求', () => {
+    it('应该正确设置加载状态', () => {
+      baseStore.setLoading(true);
+      expect(baseStore.loading).toBe(true);
+    });
+
+    it('应该正确设置响应数据', () => {
+      const response: IStoreResponse<IAnyObject, IAnyObject> = {
+        data: { name: 'test' },
+        success: true,
+      };
+      baseStore.setResponse(response);
+      expect(baseStore.response).toEqual(response);
+    });
+
+    it('应该正确取消请求', async () => {
+      const mockAbort = vi.spyOn(AbortController.prototype, 'abort');
+      const apiExecutor = vi.fn((params?: Record<string, unknown>) => new Promise<IHTTPResponse<Record<string, unknown>, IAnyObject>>((resolve) => {
+        setTimeout(() => {
+          resolve({ code: params?.code as number ?? 0, msg: '', data: params as Record<string, unknown> });
+        }, 100);
+      }));
+      baseStore.apiExecutor = apiExecutor;
+      baseStore.api = { url: 'test' };
+
+      // Start first fetch and wait for it to start
+      await baseStore.fetch();
+      // Wait a bit to ensure first fetch has started
+      await new Promise(resolve => setTimeout(resolve, 50));
+      // Start second fetch which should abort the first one
+      await baseStore.fetch();
+
+      expect(mockAbort).toHaveBeenCalled();
+    });
+  });
+
+  describe('事件管理', () => {
+    it('应该正确添加事件监听器', () => {
+      const listener = vi.fn();
+      baseStore.on('test', listener);
+      baseStore.emit('test', 'data');
+      expect(listener).toHaveBeenCalledWith('data');
+    });
+
+    it('应该正确移除事件监听器', () => {
+      const listener = vi.fn();
+      baseStore.on('test', listener);
+      baseStore.off('test', listener);
+      baseStore.emit('test', 'data');
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('应该正确触发事件', () => {
+      const listener = vi.fn();
+      baseStore.on('test', listener);
+      baseStore.emit('test', 'data');
+      expect(listener).toHaveBeenCalledWith('data');
+    });
+
+    it('应该正确添加获取成功监听器', () => {
+      const listener = vi.fn();
+      baseStore.onFetchSuccess(listener);
+      baseStore.emitFetchSuccess({ data: { name: 'test' }, success: true }, baseStore);
+      expect(listener).toHaveBeenCalledWith({ data: { name: 'test' }, success: true }, baseStore);
+    });
+
+    it('应该正确移除获取成功监听器', () => {
+      const listener = vi.fn();
+      baseStore.onFetchSuccess(listener);
+      baseStore.offFetchSuccess(listener);
+      baseStore.emitFetchSuccess({ data: { name: 'test' }, success: true }, baseStore);
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('应该正确触发获取成功事件', () => {
+      const listener = vi.fn();
+      baseStore.onFetchSuccess(listener);
+      const response = { data: { name: 'test' }, success: true };
+      baseStore.emitFetchSuccess(response, baseStore);
+      expect(listener).toHaveBeenCalledWith(response, baseStore);
+    });
+
+    it('应该正确添加获取失败监听器', () => {
+      const listener = vi.fn();
+      baseStore.onFetchError(listener);
+      baseStore.emitFetchError({ data: { name: 'test' }, success: false }, baseStore);
+      expect(listener).toHaveBeenCalledWith({ data: { name: 'test' }, success: false }, baseStore);
+    });
+
+    it('应该正确移除获取失败监听器', () => {
+      const listener = vi.fn();
+      baseStore.onFetchError(listener);
+      baseStore.offFetchError(listener);
+      baseStore.emitFetchError({ data: { name: 'test' }, success: false }, baseStore);
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('应该正确触发获取失败事件', () => {
+      const listener = vi.fn();
+      baseStore.onFetchError(listener);
+      const response = { data: { name: 'test' }, success: false };
+      baseStore.emitFetchError(response, baseStore);
+      expect(listener).toHaveBeenCalledWith(response, baseStore);
+    });
+  });
+
+  describe('扩展信息管理', () => {
+    it('应该正确设置扩展信息', () => {
+      baseStore.setExtInfo('key', 'value');
+      expect(baseStore.getExtInfo('key')).toBe('value');
+    });
+
+    it('应该正确获取扩展信息', () => {
+      baseStore.setExtInfo('key', 'value');
+      expect(baseStore.getExtInfo('key')).toBe('value');
+    });
+  });
+
   let store: BaseStore<IUser>;
   beforeEach(() => {
     store = new BaseStore<IUser>({ defaultValues: { name: '张三', age: 18 } });
@@ -281,20 +514,30 @@ describe('BaseStore', () => {
   });
 
   it('should call apiExecutor if provided', async () => {
-    const apiExecutor = vi.fn((params?: IAny) => Promise.resolve({ code: params?.code ?? 0, msg: '', data: params?.data }));
+    const apiExecutor = vi.fn((params?: Record<string, unknown>) => Promise.resolve({ code: 0, msg: '', data: params?.data }));
     store.apiExecutor = apiExecutor;
     store.api = { url: 'test' };
     await store.fetch();
-    expect(apiExecutor).toHaveLength(1);
+    expect(apiExecutor).toHaveBeenCalledTimes(1);
   });
 
   it('should abort previous fetch if new fetch is called', async () => {
     const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
-    const apiExecutor = vi.fn((params?: IAny) => Promise.resolve({ code: params?.code ?? 0, msg: '', data: params?.data }));
+    const apiExecutor = vi.fn((params?: Record<string, unknown>) => new Promise<IHTTPResponse<Record<string, unknown>, Record<string, unknown>>>((resolve) => {
+      setTimeout(() => {
+        resolve({ code: params?.code as number ?? 0, msg: '', data: params?.data as Record<string, unknown> });
+      }, 100);
+    }));
     store.apiExecutor = apiExecutor;
     store.api = { url: 'test' };
-    store.fetch();
+
+    // Start first fetch and wait for it to start
     await store.fetch();
+    // Wait a bit to ensure first fetch has started
+    await new Promise(resolve => setTimeout(resolve, 50));
+    // Start second fetch which should abort the first one
+    await store.fetch();
+
     expect(abortSpy).toHaveBeenCalled();
   });
 
@@ -480,10 +723,12 @@ describe('BaseStore', () => {
     vi.spyOn(globalThis, 'AbortController').mockImplementation(() => {
       throw new Error('AbortController is not a constructor');
     });
-    const apiExecutor = vi.fn((params?: IAny) => Promise.resolve({ code: params?.code ?? 0, msg: '', data: params?.data }));
+    const apiExecutor = vi.fn((params?: Record<string, unknown>) => Promise.resolve({ code: Number(params?.code ?? 0), msg: '', data: params?.data }));
     store.apiExecutor = apiExecutor;
     store.api = { url: 'test' };
     await store.fetch();
     expect(store.loading).toBe(false);
   });
 });
+
+

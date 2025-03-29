@@ -11,7 +11,7 @@ export default tseslint.config(
   { ignores: ['dist', 'build', "**/*.d.ts"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}', '**/*.test.{ts,tsx}',],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
