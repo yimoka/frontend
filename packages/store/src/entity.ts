@@ -1,3 +1,11 @@
+/**
+ * @file entity.ts
+ * @description 实体模块，用于管理实体相关的配置和操作
+ * @author ickeep <i@ickeep.com>
+ * @version 3ab441b
+ * @module entity
+ */
+
 import { IAny, IAnyObject, IAPIRequestConfig, IObjKey, IOptions } from '@yimoka/shared';
 
 import { BaseStore } from './base';
@@ -5,6 +13,15 @@ import { IFieldsConfig } from './field';
 
 import { IStore, IStoreConfig, opStoreAfterAtFetch } from '.';
 
+/**
+ * 获取实体存储实例
+ * @param store - 存储实例或配置
+ * @param mode - API操作模式
+ * @param config - 实体配置
+ * @param isOperation - 是否为操作模式
+ * @returns 存储实例或配置
+ * @description 根据不同的操作模式配置存储实例
+ */
 // eslint-disable-next-line complexity
 export function getEntryStore<V extends object = IAnyObject, R extends object = IAnyObject>(store?: IStore<V, R> | IStoreConfig<V, R>, mode?: IAPIKey, config?: IEntityConfig<V>, isOperation?: boolean): IStore<V, R> | IStoreConfig<V, R> {
   if (store instanceof BaseStore) {
@@ -44,48 +61,67 @@ export function getEntryStore<V extends object = IAnyObject, R extends object = 
   return curStore;
 }
 
+/**
+ * 实体配置接口
+ * @interface IEntityConfig
+ * @description 定义实体相关的配置项
+ * @template V - 实体数据类型
+ */
 export interface IEntityConfig<V extends object = IAnyObject> {
-  // 实体名称
+  /** 实体名称 */
   name?: string;
-  // 实体的唯一标识字段 默认 id
+  /** 实体的唯一标识字段，默认 id */
   idKey?: string;
-  // 批量操作的唯一标识字段 默认 ids
+  /** 批量操作的唯一标识字段，默认 ids */
   idsKey?: string;
-  // 实体的显示字段 默认 name
+  /** 实体的显示字段，默认 name */
   labelKey?: string;
-  // 基础路径
-  basePath?: string
-  // 路径配置 如 add: '/add' edit: '/edit'
-  path?: Record<IAPIKey, string>
-  // 页面的面包屑配置
-  breadcrumb?: IBreadcrumbItem[]
-  // 字段配置
-  fieldsConfig?: IFieldsConfig
-  // 接口配置
-  api?: Record<IAPIKey, IAPIRequestConfig>
-  // 字典 map 映射配置 如 status: { 1: '启用', 0: '禁用' }
-  map?: Record<IObjKey, IAnyObject>
-  // 字典选项配置 如 status: [{ label: '启用', value: 1 }, { label: '禁用', value: 0 }]
-  options?: Record<IObjKey, IOptions>
-  // 表单默认值 用于添加/编辑页面 编辑会多一个 idKey
-  defaultFormValues?: Partial<V>
-  // 查询默认参数的值 用于列表/查询页面
-  defaultQueryValues?: Partial<V> & IAnyObject
-  // 详情默认参数的值 用于详情页面
-  defaultDetailValues?: IAnyObject
+  /** 基础路径 */
+  basePath?: string;
+  /** 路径配置，如 add: '/add' edit: '/edit' */
+  path?: Record<IAPIKey, string>;
+  /** 页面的面包屑配置 */
+  breadcrumb?: IBreadcrumbItem[];
+  /** 字段配置 */
+  fieldsConfig?: IFieldsConfig;
+  /** 接口配置 */
+  api?: Record<IAPIKey, IAPIRequestConfig>;
+  /** 字典 map 映射配置，如 status: { 1: '启用', 0: '禁用' } */
+  map?: Record<IObjKey, IAnyObject>;
+  /** 字典选项配置，如 status: [{ label: '启用', value: 1 }, { label: '禁用', value: 0 }] */
+  options?: Record<IObjKey, IOptions>;
+  /** 表单默认值，用于添加/编辑页面，编辑会多一个 idKey */
+  defaultFormValues?: Partial<V>;
+  /** 查询默认参数的值，用于列表/查询页面 */
+  defaultQueryValues?: Partial<V> & IAnyObject;
+  /** 详情默认参数的值，用于详情页面 */
+  defaultDetailValues?: IAnyObject;
 
   [key: IObjKey]: IAny;
 }
 
+/**
+ * 面包屑项接口
+ * @interface IBreadcrumbItem
+ * @description 定义面包屑导航项的配置
+ */
 export interface IBreadcrumbItem {
+  /** 显示文本 */
   label?: string;
+  /** 图标 */
   icon?: string;
+  /** 链接地址 */
   url?: string;
   [key: IObjKey]: IAny;
 }
 
+/**
+ * API操作模式类型
+ * @type IAPIKey
+ * @description 定义所有可用的API操作模式
+ */
 export type IAPIKey =
-  'add' | 'edit' | 'detail' | 'del' | 'delOne'
+  | 'add' | 'edit' | 'detail' | 'del' | 'delOne'
   | 'list' | 'queryOne' | 'query' | 'count'
   | 'getCache' | 'setCache' | 'delCache'
   | 'enableOne' | 'disableOne' | 'enable' | 'disable'

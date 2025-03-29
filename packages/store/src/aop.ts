@@ -1,13 +1,45 @@
+/**
+ * @file aop.ts
+ * @description AOP 模块，提供数据获取后的处理功能，包括重置值、执行回调、显示通知等
+ * @author ickeep <i@ickeep.com>
+ * @version 3ab441b - 2025-03-29
+ * @module @yimoka/store
+ */
+
 import { IHTTPResponse, isBlank, isSuccess } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 
+/**
+ * 处理数据获取后的操作
+ * @param res - HTTP 响应数据
+ * @param store - 存储实例
+ * @description 按顺序执行重置值、执行回调、显示通知等操作
+ * @example
+ * ```ts
+ * const store = new BaseStore({
+ *   afterAtFetch: {
+ *     resetValues: 'success',
+ *     notify: true,
+ *     successRun: (res) => {
+ *       console.log('数据获取成功:', res);
+ *     }
+ *   }
+ * });
+ * ```
+ */
 export const handleAfterAtFetch = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   handleResetValues(res, store);
   handleAfterAtFetchRun(res, store);
   handleAfterAtFetchNotify(res, store);
 };
 
+/**
+ * 处理重置值的操作
+ * @param res - HTTP 响应数据
+ * @param store - 存储实例
+ * @description 根据配置和响应状态决定是否重置表单值
+ */
 const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { resetValues } = store.afterAtFetch;
   const reset = () => {
@@ -15,13 +47,14 @@ const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
     // 清除表单错误
     store.form?.clearErrors();
   };
+  // 根据配置决定是否重置
   if (resetValues === true) {
     reset();
   }
   if (isSuccess(res)) {
     if (resetValues === 'success') {
       reset();
-    };
+    }
   } else {
     if (resetValues === 'fail') {
       reset();
@@ -29,47 +62,80 @@ const handleResetValues = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   }
 };
 
+/**
+ * 处理数据获取后的回调函数
+ * @param res - HTTP 响应数据
+ * @param store - 存储实例
+ * @description 根据响应状态执行相应的回调函数
+ */
 const handleAfterAtFetchRun = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { run, failRun, successRun } = store.afterAtFetch;
   const runFn = (fn: IAfterAtFetch['run']) => typeof fn === 'function' && fn(res, store);
+  // 执行通用回调
   runFn(run);
+  // 根据响应状态执行相应回调
   if (isSuccess(res)) {
     runFn(successRun);
   } else {
     runFn(failRun);
-  };
+  }
 };
 
+/**
+ * 处理数据获取后的通知
+ * @param res - HTTP 响应数据
+ * @param store - 存储实例
+ * @description 根据响应状态显示相应的通知消息
+ */
 const handleAfterAtFetchNotify = (res: Partial<IHTTPResponse>, store: BaseStore) => {
   const { notify, failNotify: notifyOnFail = notify, successNotify: notifyOnSuccess = notify } = store.afterAtFetch;
   const getMsg = (notify: true | string, df?: string) => {
     const msg = notify === true ? res.msg : notify;
     return isBlank(msg) ? df : msg;
   };
+  // 根据响应状态显示通知
   if (isSuccess(res)) {
     if (notifyOnSuccess) {
       store.notifier?.('success', getMsg(notifyOnSuccess, '成功了'));
-    };
+    }
   } else {
     if (notifyOnFail) {
       store.notifier?.('error', getMsg(notifyOnFail, '出错了'));
-    };
+    }
   }
 };
 
+/**
+ * 数据获取后的回调函数类型
+ * @param res - HTTP 响应数据
+ * @param store - 存储实例
+ */
 export type IAfterAtFetchFn = (res: Partial<IHTTPResponse>, store: BaseStore) => void;
 
+/**
+ * 数据获取后的处理配置接口
+ */
 export interface IAfterAtFetch {
+  /** 重置值的时机 */
   resetValues?: boolean | 'success' | 'fail';
-  notify?: boolean | string
-  failNotify?: boolean | string
-  successNotify?: boolean | string
-  run?: IAfterAtFetchFn
-  failRun?: IAfterAtFetchFn
-  successRun?: IAfterAtFetchFn
+  /** 通知消息 */
+  notify?: boolean | string;
+  /** 失败时的通知消息 */
+  failNotify?: boolean | string;
+  /** 成功时的通知消息 */
+  successNotify?: boolean | string;
+  /** 通用回调函数 */
+  run?: IAfterAtFetchFn;
+  /** 失败时的回调函数 */
+  failRun?: IAfterAtFetchFn;
+  /** 成功时的回调函数 */
+  successRun?: IAfterAtFetchFn;
 }
 
-// 操作类型 store 的 afterAtFetch 配置
+/**
+ * 操作类型存储的默认 afterAtFetch 配置
+ * @description 默认在成功时重置值并显示通知
+ */
 export const opStoreAfterAtFetch: IAfterAtFetch = {
   resetValues: 'success',
   notify: true,
