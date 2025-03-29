@@ -27,6 +27,7 @@ describe('BaseStore 模块', () => {
 
   beforeEach(() => {
     baseStore = new BaseStore();
+    vi.restoreAllMocks();
   });
 
   describe('构造函数', () => {
@@ -65,6 +66,18 @@ describe('BaseStore 模块', () => {
       const extInfo = { key: 'value' };
       const store = new BaseStore({ extInfo });
       expect(store.extInfo).toEqual(extInfo);
+    });
+
+    it('应该在 runNow 为 true 且 bindRoute 为 false 时立即执行 fetch', async () => {
+      const apiMock = vi.fn();
+      new BaseStore({ options: { runNow: true, bindRoute: false }, api: apiMock });
+      expect(apiMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('不应该在 runNow 为 true 但 bindRoute 为 true 时立即执行 fetch', async () => {
+      const apiMock = vi.fn();
+      new BaseStore({ options: { runNow: true, bindRoute: true }, api: apiMock });
+      expect(apiMock).not.toHaveBeenCalled();
     });
   });
 
@@ -207,6 +220,12 @@ describe('BaseStore 模块', () => {
       const response = { data: { name: 'test' }, success: true };
       baseStore.emitFetchSuccess(response, baseStore);
       expect(listener).toHaveBeenCalledWith(response, baseStore);
+    });
+
+    it('应该正确触发获取成功事件，即使没有监听器', () => {
+      const response = { data: { name: 'test' }, success: true };
+      // 确保没有监听器的情况下也能正常触发事件
+      expect(() => baseStore.emitFetchSuccess(response, baseStore)).not.toThrow();
     });
 
     it('应该正确添加获取失败监听器', () => {
