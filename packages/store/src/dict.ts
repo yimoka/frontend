@@ -102,7 +102,7 @@ export const watchStoreDict = (store: BaseStore) => {
       const { field, getData, api, byField, isEmptyGetData = false, toMap, toOptions, keys } = conf;
       const updateDict = (newValues: IAny) => {
         // 处理空值情况
-        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) && byField.every(item => isBlank(newValues[item]))))) {
+        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) ? byField.every(item => isBlank(newValues[item])) : isBlank(newValues[byField])))) {
           store.incrDictFetchID(field);
           store.setFieldDict(field, []);
           updateValueByDict(conf, [], store);
@@ -173,7 +173,7 @@ export const watchStoreDict = (store: BaseStore) => {
  * @param store - 存储实例
  * @description 根据字典配置更新相关字段的值
  */
-const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
+export const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
   const { field, isUpdateValue = true, keys, childrenKey } = config;
   if (isUpdateValue) {
     const { values } = store;
@@ -216,7 +216,7 @@ const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseSto
  * @param dictConf - 字典配置
  * @returns 处理后的字典数据
  */
-const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
+export const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
   const { toMap, toOptions = true, keys } = dictConf;
   if (toMap && Array.isArray(data)) {
     return optionsToObj(data, keys);
@@ -285,6 +285,6 @@ export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBa
   paramKeys?: string | Record<string, IAny>;
   /** 字典变化时是否更新值 */
   isUpdateValue?: boolean;
-  /** 字典为空时是否获取数据 */
+  /** by 的值为空时是否获取数据 */
   isEmptyGetData?: boolean;
 }
