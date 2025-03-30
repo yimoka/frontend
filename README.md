@@ -77,15 +77,15 @@ graph TB
 
 ## 扩展
 ### 为什么需要扩展？
-* 在前端的 MVVM 框架中， 数据驱动视图， 视图驱动数据，而 Formily 为了减少对业务的侵入，本身并管 Model 这层实际业务数据。
-* Formily 它提供了 View 和 ViewModel 两层能力，View 则是@formily/react @formily/vue，专门用来与@formily/core 做桥接通讯的，所以，@formily/core 的定位就是 ViewModel 层，
+* 在前端的 MVVM 框架中， 数据驱动视图， 视图驱动数据，而 Formily 为了减少对业务的侵入，本身并不管 Model 这层实际业务数据。
+* Formily 它提供了 View 和 ViewModel 两层能力，View 则是 @formily/react @formily/vue，专门用来与 @formily/core 做桥接通讯的。 @formily/core 的定位 是 ViewModel层
 
 ### 扩展的思路
 * 用一个 Store 来管理 Model 层, 来实现通用的业务数据管理
-* 将 Store 与 Formily 的 ViewModel 层进行桥接， 来实现业务数据与 UI 的联动
-* 将 Store 与 UI 组件进行结合, 即可实现 业务组件 如 Submit 按钮， 可以实现点击按钮， 调用接口, loading 和 disabled 从 Store 中获取。
-* 建立实体，将实体的配置、操作、数据、事件等进行统一管理， 并将其封装成与 UI 无关可跨端的业务组件。
-* 低码可跨端组件和功能,主要是一些常见通用的数据处理 适配 主要是为了简化 UI 组件适配和降低成本
+* 将 Store 与 Formily 的 ViewModel 层进行桥接，来实现业务数据与 UI 的联动
+* 将 Store 与 UI 组件进行结合, 即可实现 业务组件 如 Submit 按钮，可以实现点击按钮，调用接口, loading 和 disabled 从 Store 中获取。
+* 建立实体，将实体的配置、操作、数据、事件等进行统一管理，并将其封装成与 UI 无关可跨端的业务组件。
+* 开低码可跨端组件和功能，主要是一些常见通用的数据处理和组件适配，简化 UI 组件适配和降低其成本
 * UI 组件的适配
 * Store 组件的增强
 
@@ -99,7 +99,7 @@ graph TB
 * 事件管理: 提供 on、off、emit 来管理事件，可做为基础的事件总线，提供组件间通讯。
 
 ### 扩展之 Entity(实体) 和 实体操作
- 实体对应的是 DDD 中 业务生命周期的领域对象,主要就是封装业务逻辑。简单点说就是利用 Store 来管理业务数据，利用 Entity 来管理业务逻辑,实现 CRUD 操作。
+ 实体对应的是 DDD 中业务生命周期的领域对象，主要就是封装业务逻辑。简单点说就是利用 Store 来管理业务数据，利用 Entity 来管理业务逻辑，实现 CRUD 操作。
 #### 实体配置:
 ```ts
 export interface IEntityConfig<V extends object = IAnyObject> {
@@ -136,18 +136,17 @@ export interface IEntityConfig<V extends object = IAnyObject> {
 }
 ```
 #### 实体操作:
-有了 store 和 约定好了实体配置，那么就可以实现实体操作了,并将其封装成与 UI 无关可跨端的业务组件。根据常见的业务场景，可以实现如下的实体操作：
+有了 store 和 约定好了实体配置，那么就可以实现实体操作了，并将其封装成与 UI 无关可跨端的业务组件。根据常见的业务场景，可以实现如下的实体操作：
 * 列表 EntityList 如用户列表
 * 添加 EntityAdd 如用户添加
 * 编辑 EntityEdit 如用户编辑
 * 详情 EntityDetail 如用户详情
 * 操作 EntityOperation 可实现 删除、 禁用、 启用、 导出、 导入、 批量操作等
 
-### 扩展之 低码可跨端组件:
+### 扩展之 低码可跨端组件/能力:
 formily/react 本身就提供了 connect、mapProps、mapReadPretty 等能力，大部分场景下，可用其适配各端 UI 组件，但 formily 大部分场景是针对表单，在数据展示方面，相比弱一下
 
 #### 低码可跨端组件:
-##### 通用组件
 * StoreDict Store 字典组件 用来获取字典数据
 * StoreRoute Store 路由组件 用来实现路由参数与 values 的联动
 * FetchData 通用的低码接口请求组件
@@ -157,7 +156,7 @@ formily/react 本身就提供了 connect、mapProps、mapReadPretty 等能力，
 * SchemaItemRecursion 通用的低码数组 Item 递归组件
 * SchemaItemRender 通用的低码数组 Item 展示组件
 * EntityResponse 通用的低码接口响应组件（需依赖注入：Loading Skeleton ErrorContent UI 组件）
-##### 一些 hooks
+#### 一些 hooks
 * useAdditionalNode 用来支持在 Schema 中为组件添加自定义 ReactNode
 * useChildrenWithoutFragment 用来解决低码中 Fragment 嵌套问题
 * useComponentData 用来获取组件数据
@@ -201,7 +200,7 @@ const Select = (props) => {
   );
 };
 ```
-当然 还有典型的时间/日期组件， 如 DatePicker 组件,组件的值是一个 dayjs, 而 store 中是时间戳或字符串， 如适配 antd 的 DatePicker 组件, 可添加一个 props valueType: 'dayjs'|'timestamp' 来解决
+还有典型的时间/日期组件， 如 DatePicker 组件，值是一个 dayjs, 而 store 中是时间戳或字符串， 如适配 antd 的 DatePicker 组件, 可添加一个 props valueType 来解决
 ```tsx
 const DatePicker = (props) => {
   const { value, onChange, valueType,format,picker ...rest } = props;
@@ -261,11 +260,11 @@ export const InputNumber=(props) => {
     />);
 };
 ```
-4. 远程数据支持,全局已经有 API 执行器，那么就可以在组件中实现远程数据的加载，如 Select 的 options，针对这个 我们可以统一的使用 RemoteSelect 来表示，这一项并非必要，因为其实可以通过 store 中的字典来实现
+4. 远程数据支持，全局已经有 API 执行器，那么就可以在组件中实现远程数据的加载，如 Select 的 options，针对这个 我们可以统一的使用 RemoteSelect 来表示，这一项并非必要，因为其实可以通过 store 中的字典来实现
 
-5. 搜索组件,同样因为有 API 执行器，那么就可以在组件中实现搜索，通过 Search 组件，并且可配置 UI 组件展示为 Select or AutoComplete，在具体业务中基于可以配置 SearchUser 组件，来实现用户搜索
+5. 搜索组件，同样因为有 API 执行器，那么就可以在组件中实现搜索，Search 组件，且可配置 UI 组件展示为 Select or AutoComplete，在具体业务中甚至可以封闭 SearchUser 组件，来实现用户搜索
 
-6. 弹出组件,在低码中，很难去定义变量和操作变量来控制弹出的 open, 所以 需要对弹出相关的组件进行改造。通过触发器来控制弹出组件的 open 状态，如 Trigger 组件
+6. 弹出组件，在低码中，很难去定义变量和操作变量来控制弹出的 open, 所以需要对弹出相关的组件进行改造。通过触发器来控制弹出组件的 open 状态，如 Trigger 组件
 
 ```tsx
 export const Drawer = (props: DrawerProps) => {
@@ -356,21 +355,21 @@ export const Reset = (props: ButtonProps & { store?: IStore }) => {
 ```
 * ListFilter 列表筛选组件, 通过与 store 中的查询参数进行联动，提供 Submit 和 Reset 按钮,来实现列表的搜索
 * StoreForm 有了 store 就可以直接与 form 进行关联
-* StoreTable 表格组件, 不受控,则获取 store 中的数据和状态如 loading 进行展示，如受控其 分页 排序 筛选 则可以直接与 store 中的数据进行关联，并在对应的操作后，执行 API或者 更新 store 中的数据
+* StoreTable 表格组件, 不受控，则获取 store 中的数据和状态如 loading 进行展示，如受控其分页、排序、筛选可以直接与 store 中的数据进行关联，并在对应的操作后，执行 API 或者 更新 store 中的数据
 * StoreDesc 描述组件, 通过与 store 中的数据进行关联，来实现描述的展示 常见于详情页面
-* StoreAction 操作组件, 通过与 store 中的数据进行关联，如 删除、 禁用、 启用、 导出、 导入、 批量操作等
+* StoreAction 操作组件, 通过与 store 和 实体中的数据或配置进行关联，实现相关操作。如 删除、禁用、启用、导出、导入、批量操作等
 
 ## designable 低代码可视化设计器 （待实现）
 ### 基于  https://github.com/alibaba/designable 实现
 designable 已经很久没更新了 目前也基本不维护了 使用的 UI 也是 antd 4.x 的版本
 #### 对 designable 的改造
-* 对 designable/shared designable/core 和 designable/react designable/react-sandbox 利用 AI 进行中文注释,生成READMD,修复 eslint 问题 部分完善单例测试,
+* 对 designable/shared designable/core 和 designable/react designable/react-sandbox 利用 AI 进行中文注释，生成READMD，修复 eslint 问题、完善单例测试,
 * 对 designable/react-settings-form 进行重构，移除依赖 @formily/antd 和 antd 改为项目自行适配的 antd,
 * 添加对 Store 的适配
 * 添加对 Entity 的适配
 
 ## 利用低代码实现 SAAS 中的租户定制 （待实现）
-在 SAAS 中， 租户定制是一个非常常见的需求，通常整体业务流程差异不大，是一些参数的输入输出或者表格的展示需要定制， 并且可以利用低代码的特性，实现租户定制的灵活性和可扩展性。
+在 SAAS 中，租户定制是一个非常常见的需求，通常整体业务流程差异不大，是一些参数的输入输出或者表格的展示需要定制，可以利用低代码的特性，实现租户定制的灵活性和可扩展性。
 #### 租户定制的实现
 * 平台侧给出一份标准的 JSON Schema 和 实体/Store 的配置, 配置中也声明了哪部分可以进行修改
 * 租户侧不提供全功能的设计器（功能越多，越难用），提供一个简易的设计器 对 JSON Schema 进行修改，如调整字段的顺序，删除字段 添加字段，或者简单的修改界面的样式
