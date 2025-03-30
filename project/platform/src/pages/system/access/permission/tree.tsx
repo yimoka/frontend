@@ -26,29 +26,30 @@ export const PermissionTreePage = observer(() => {
 
   return (
     <EntityOperation config={permissionConfig}
-schema={{
-  type: 'object',
-  properties: {
-    header: {
-      type: 'void',
-      'x-component': 'Space',
-      properties: {
-        add: {
-          type: 'void',
-          'x-decorator': 'Modal',
-          'x-decorator-props': {
-            trigger: { type: 'primary' },
-            title: '新增',
-          },
-          'x-component': PermissionAdd,
-          'x-component-props': {
-            success,
+      schema={{
+        type: 'object',
+        properties: {
+          header: {
+            type: 'void',
+            'x-component': 'Space',
+            properties: {
+              add: {
+                type: 'void',
+                'x-decorator': 'Modal',
+                'x-decorator-props': {
+                  bindChildStore: true,
+                  trigger: { type: 'primary' },
+                  title: '新增',
+                },
+                'x-component': PermissionAdd,
+                'x-component-props': {
+                  success,
+                },
+              },
+            },
           },
         },
-      },
-    },
-  },
-}} />
+      }} />
   );
 });
 
