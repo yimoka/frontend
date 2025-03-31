@@ -1,13 +1,13 @@
 import { observer } from '@formily/react';
-import { EntityAdd, IEntityAddProps } from '@yimoka/react';
+import { EntityEdit, IEntityEditProps } from '@yimoka/react';
 import React from 'react';
 
 import { permissionConfig } from './conf';
 
-export const PermissionAdd = observer((props: Omit<IEntityAddProps, 'config' | 'schema' | 'store'>) => {
+export const PermissionEdit = observer((props: Omit<IEntityEditProps, 'config' | 'schema' | 'store'>) => {
   const { ...args } = props;
   return (
-    <EntityAdd
+    <EntityEdit
       {...args}
       config={permissionConfig}
       schema={{
@@ -55,35 +55,3 @@ export const PermissionAdd = observer((props: Omit<IEntityAddProps, 'config' | '
       store={{ dictConfig: [{ field: 'parentID', api: permissionConfig.api?.tree }] }}
     />);
 });
-
-
-// export const PermissionBatchAddModal = (props: Omit<ModalProps, 'children'> & { onSuccess?: () => any }) => {
-//   const { onSuccess, ...args } = props;
-//   return (
-//     <Modal title='批量添加权限' width={1000} isBindStore isBindContent trigger={{ children: '批量添加' }} {...args}  >
-//       <StorePage
-//         store={{
-//           type: 'operate',
-//           defaultValues: { data: [] },
-//           api: permissionConfig.api.batchAdd,
-//           runAfter: { runOnSuccess: onSuccess },
-//         }}
-//         schema={{
-//           type: 'object',
-//           properties: {
-//             form: {
-//               type: 'void',
-//               'x-component': 'StoreForm',
-//               properties: {
-//                 data: {
-//                   type: 'array',
-//                   'x-component': 'JSONEditor',
-//                 },
-//               },
-//             },
-//           },
-//         }}
-//       />
-//     </Modal>
-//   );
-// };
