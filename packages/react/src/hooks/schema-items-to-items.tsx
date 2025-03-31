@@ -36,7 +36,16 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       ) {
         const itemProps = getPropsByItemSchema(itemSchema, itemComponentName, propsMap);
         if (isItemSchemaRecursion(itemSchema, itemComponentName)) {
-          itemProps[valueNodeKey] = <SchemaItemRender value={record} name={schemaKey} record={record} schema={itemSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
+          itemProps[valueNodeKey] = (
+            <SchemaItemRender
+              componentName={itemComponentName}
+              getRecordIndex={getRecordIndex}
+              name={schemaKey}
+              record={record}
+              schema={itemSchema}
+              value={record}
+            />
+          );
         } else if (typeof itemProps[valueNodeKey] === 'undefined') {
           itemProps[valueNodeKey] = <RenderAny value={record} />;
         }
@@ -51,7 +60,16 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
           const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(propSchema, fieldSchema);
           const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
           if (isItemSchemaRecursion(propSchema, itemComponentName)) {
-            itemProps[valueNodeKey] = <SchemaItemRender value={value} name={schemaKey} record={record} schema={propSchema} componentName={itemComponentName} getRecordIndex={getRecordIndex} />;
+            itemProps[valueNodeKey] = (
+              <SchemaItemRender
+                componentName={itemComponentName}
+                getRecordIndex={getRecordIndex}
+                name={schemaKey}
+                record={record}
+                schema={propSchema}
+                value={value}
+              />
+            );
           } else if (typeof itemProps[valueNodeKey] === 'undefined') {
             itemProps[valueNodeKey] = <RenderAny value={value} />;
           }

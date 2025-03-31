@@ -15,6 +15,7 @@ export * from './components/entity/schema';
 
 export * from './components/store/dict';
 export * from './components/store/route';
+export * from './components/store/watchChildStore';
 export * from './components/index.ts';
 export * from './components/render-any';
 export * from './components/trigger';

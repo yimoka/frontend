@@ -39,6 +39,7 @@ export default defineConfig({
         '@yimoka/store',
         '@yimoka/react',
         'react',
+        'dayjs',
         'react-is',
         'react-dom',
         'react-router-dom',
@@ -48,6 +49,7 @@ export default defineConfig({
       output: {
         globals: {
           'lodash-es': '_',
+          dayjs: 'dayjs',
           '@formily/core': 'Formily.Core',
           '@formily/json-schema': 'Formily.JSONSchema',
           '@formily/reactive': 'Formily.Reactive',

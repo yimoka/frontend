@@ -9,7 +9,13 @@ const FloatButtonFC = (props: FloatButtonProps) => {
   const curDescription = useAdditionalNode('description', description);
   const curTooltip = useAdditionalNode('tooltip', tooltip);
 
-  return <AntFloatButton {...args} icon={strToIcon(icon)} description={curDescription} tooltip={curTooltip} />;
+  return (
+    <AntFloatButton {...args}
+      description={curDescription}
+      icon={strToIcon(icon)}
+      tooltip={curTooltip}
+    />
+  );
 };
 
 const Group = (props: FloatButtonGroupProps) => {

@@ -27,7 +27,14 @@ const Meta = (props: CardMetaProps) => {
   const descriptionNode = useAdditionalNode('description', description);
   const titleNode = useAdditionalNode('title', title);
 
-  return <AntCard.Meta {...rest} avatar={avatarNode} description={descriptionNode} title={titleNode} />;
+  return (
+    <AntCard.Meta
+      {...rest}
+      avatar={avatarNode}
+      description={descriptionNode}
+      title={titleNode}
+    />
+  );
 };
 
 export const Card = Object.assign(CardFC, { Meta, Grid: AntCard.Grid });

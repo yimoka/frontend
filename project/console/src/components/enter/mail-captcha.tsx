@@ -63,32 +63,32 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
   return (
     <>
       <Input
-        value={value}
-        onChange={e => onChange?.(e.target.value)}
         addonAfter={
           <Typography.Link
-            onClick={getCode}
             disabled={loading || !mail || !!field?.getState().errors?.length || countdown > 0}
+            onClick={getCode}
           >
             {loading && <Spin size="small" />}
             {countdown > 0 ? `${countdown}秒后重试` : '获取验证码'}
           </Typography.Link>
         }
+        value={value}
+        onChange={e => onChange?.(e.target.value)}
       />
       <Modal
         maskClosable={false}
+        okButtonProps={{ disabled: captchaCode.length < 4 }}
+        open={needCaptcha}
         title="请输入图形验证码"
         width={300}
-        open={needCaptcha}
-        okButtonProps={{ disabled: captchaCode.length < 4 }}
-        onOk={getCode}
         onCancel={() => setValues({ needCaptcha: false })}
+        onOk={getCode}
       >
         <Space>
           <Input
             value={captchaCode}
-            onPressEnter={() => captchaCode.length === 4 && getCode()}
             onChange={e => setValues({ captchaCode: e.target.value })}
+            onPressEnter={() => captchaCode.length === 4 && getCode()}
           />
           <ImageCaptcha api={getImageCaptcha} onChange={v => setValues({ captchaID: v })} />
         </Space>

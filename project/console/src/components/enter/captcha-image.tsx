@@ -34,8 +34,17 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
   return (
     <Spin {...args} spinning={loading} >
       {image
-        ? <img height={height} alt='验证码' style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }} {...imgProps} src={image} onClick={getImg} />
-        : <Button type="primary" ghost {...btnProps} disabled={loading} onClick={getImg}>
+        ? <img alt='验证码'
+height={height}
+style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }}
+{...imgProps}
+src={image}
+onClick={getImg} />
+        : <Button ghost
+type="primary"
+{...btnProps}
+disabled={loading}
+onClick={getImg}>
           获取验证码
         </Button>}
     </Spin>

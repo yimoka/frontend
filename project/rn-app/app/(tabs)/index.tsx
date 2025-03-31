@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Platform, Button } from 'react-native';
 import { useState, useEffect } from 'react';
+import { Image, StyleSheet, Platform, Button } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { images } from '@/constants/assets';
 
 export default function HomeScreen() {
   const [count, setCount] = useState(0);
@@ -23,7 +24,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={images.reactLogo}
           style={styles.reactLogo}
         />
       }>
@@ -51,7 +52,7 @@ export default function HomeScreen() {
             {Platform.select({
               ios: 'cmd + d',
               android: 'cmd + m',
-              web: 'F12'
+              web: 'F12',
             })}
           </ThemedText>{' '}
           to open developer tools.

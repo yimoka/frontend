@@ -5,10 +5,11 @@ import React from 'react';
 
 export const DrawerDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <DrawerJSX /> },
-      { key: 'schema', label: 'Schema', children: <DrawerSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <DrawerJSX /> },
+  { key: 'schema', label: 'Schema', children: <DrawerSchema /> },
+]} />
   </div>
 );
 
@@ -17,11 +18,6 @@ const onOpen = () => console.log('onOpen');
 
 export const DrawerSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        name: 'name',
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -63,6 +59,11 @@ export const DrawerSchema = () => (
         },
       },
     }}
+    store={{
+      defaultValues: {
+        name: 'name',
+      },
+    }}
   />);
 
 export const DrawerJSX = () => (
@@ -75,12 +76,12 @@ export const DrawerJSX = () => (
     </Drawer>
     <Drawer
       title="Drawer"
-      onOpen={onOpen}
       trigger={{
         component: 'Icon',
         name: 'EditOutlined',
         trigEvent: 'onMouseEnter',
       }}
+      onOpen={onOpen}
     >
       <div>Content</div>
     </Drawer>

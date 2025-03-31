@@ -18,11 +18,11 @@ const InputFC = (props: Omit<InputProps, 'onChange'> & { onChange?: IOnChange })
   return (
     <AntInput
       {...rest}
+      addonAfter={curAddonAfter}
+      addonBefore={curAddonBefore}
       allowClear={handleAllowClear(allowClear)}
       prefix={curPrefix}
       suffix={curSuffix}
-      addonBefore={curAddonBefore}
-      addonAfter={curAddonAfter}
       onChange={e => onChange?.(e.target.value, e)}
     />);
 };
@@ -49,11 +49,11 @@ const Password = (props: Omit<PasswordProps, 'onChange'> & { onChange?: IOnChang
   return (
     <AntInput.Password
       {...rest}
+      addonAfter={curAddonAfter}
+      addonBefore={curAddonBefore}
+      allowClear={handleAllowClear(allowClear)}
       prefix={curPrefix}
       suffix={curSuffix}
-      addonBefore={curAddonBefore}
-      addonAfter={curAddonAfter}
-      allowClear={handleAllowClear(allowClear)}
       onChange={e => onChange?.(e.target.value, e)}
     />);
 };
@@ -70,12 +70,12 @@ const Search = (props: Omit<SearchProps, 'onChange'> & { onChange?: IOnChange })
   return (
     <AntInput.Search
       {...rest}
+      addonAfter={curAddonAfter}
+      addonBefore={curAddonBefore}
+      allowClear={handleAllowClear(allowClear)}
+      enterButton={curEnterButton}
       prefix={curPrefix}
       suffix={curSuffix}
-      addonBefore={curAddonBefore}
-      addonAfter={curAddonAfter}
-      enterButton={curEnterButton}
-      allowClear={handleAllowClear(allowClear)}
       onChange={e => onChange?.(e.target.value, e)}
     />);
 };

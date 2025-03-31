@@ -10,7 +10,15 @@ const AlertFC = (props: AlertProps) => {
   const descriptionNode = useAdditionalNode('description', description);
   const messageNode = useAdditionalNode('message', message);
 
-  return <AntAlert icon={strToIcon(icon)} message={messageNode} description={descriptionNode} action={actionNode} {...rest} />;
+  return (
+    <AntAlert
+      action={actionNode}
+      description={descriptionNode}
+      icon={strToIcon(icon)}
+      message={messageNode}
+      {...rest}
+    />
+  );
 };
 
 export const Alert = Object.assign(AlertFC, {

@@ -12,9 +12,9 @@ export const Popconfirm = (props: AntPopconfirmProps) => {
   return (
     <AntPopconfirm
       {...rest}
+      description={descriptionNode}
       icon={strToIcon(icon)}
       title={titleNode}
-      description={descriptionNode}
     />
   );
 };

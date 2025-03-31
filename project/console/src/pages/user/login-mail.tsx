@@ -6,7 +6,6 @@ import { loginMail } from './api';
 export const UserLoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) => (
   <EntityOperation
     {...props}
-    store={{ defaultValues: { mail: '', code: '' }, api: loginMail }}
     schema={{
       type: 'object',
       properties: {
@@ -77,5 +76,6 @@ export const UserLoginByMail = (props: Omit<IEntityProps, 'store' | 'schema'>) =
         },
       },
     }}
+    store={{ defaultValues: { mail: '', code: '' }, api: loginMail }}
   />
 );

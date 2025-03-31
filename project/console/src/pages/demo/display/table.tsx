@@ -5,25 +5,16 @@ import React from 'react';
 
 export const TableDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <TableJSX /> },
-      { key: 'schema', label: 'Schema', children: <TableSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <TableJSX /> },
+  { key: 'schema', label: 'Schema', children: <TableSchema /> },
+]} />
   </div>
 );
 
 export const TableSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        inTable: [
-          { id: 1, name: 'name1' }, {
-            id: 2, name: 'name2',
-            obj: { k1: 'v1', k2: 'v2' },
-          }],
-        name: 'name1',
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -104,11 +95,22 @@ export const TableSchema = () => (
         // },
       },
     }}
+    store={{
+      defaultValues: {
+        inTable: [
+          { id: 1, name: 'name1' }, {
+            id: 2, name: 'name2',
+            obj: { k1: 'v1', k2: 'v2' },
+          }],
+        name: 'name1',
+      },
+    }}
   />);
 
 export const TableJSX = () => (
-  <Table dataSource={[{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }]} columns={[
+  <Table columns={[
     { title: 'ID', dataIndex: 'id' },
     { title: 'Name', dataIndex: 'name' },
-  ]} />
+  ]}
+dataSource={[{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }]} />
 );

@@ -4,10 +4,11 @@ import React from 'react';
 
 export const RenderArrayDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <RenderArrayJSX /> },
-      { key: 'schema', label: 'Schema', children: <RenderArraySchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <RenderArrayJSX /> },
+  { key: 'schema', label: 'Schema', children: <RenderArraySchema /> },
+]} />
   </div>
 );
 
@@ -18,7 +19,6 @@ const api = () => {
 
 export const RenderArraySchema = () => (
   <Entity
-    store={{ api, defaultValues: { arr: ['a', 'b', 'c'] } }}
     schema={
       {
         type: 'object',
@@ -107,6 +107,7 @@ export const RenderArraySchema = () => (
           },
         },
       }}
+    store={{ api, defaultValues: { arr: ['a', 'b', 'c'] } }}
   />);
 
 export const RenderArrayJSX = () => (

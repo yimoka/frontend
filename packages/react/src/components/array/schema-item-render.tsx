@@ -25,9 +25,9 @@ export const SchemaItemRender = (props: { value: IAny, record: IAny, schema: Sch
   }, [name, index, schema, fieldSchema]);
 
   return (
-    <RecordScope getRecord={() => record} getIndex={() => index ?? 0} >
+    <RecordScope getIndex={() => index ?? 0} getRecord={() => record} >
       <ExpressionScope value={{ $value: value }}>
-        <SchemaItemRecursion schema={schema} componentName={componentName} name={curName} />
+        <SchemaItemRecursion componentName={componentName} name={curName} schema={schema} />
       </ExpressionScope>
     </RecordScope>
   );

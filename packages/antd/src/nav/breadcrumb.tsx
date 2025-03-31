@@ -37,7 +37,14 @@ const BreadcrumbFC = observer((props: PropsWithComponentData<Omit<BreadcrumbProp
     return itemRender;
   }, [itemRender]);
 
-  return <AntBreadcrumb {...rest} items={curItems} separator={curSeparator} itemRender={curItemRender} />;
+  return (
+    <AntBreadcrumb
+      {...rest}
+      itemRender={curItemRender}
+      items={curItems}
+      separator={curSeparator}
+    />
+  );
 });
 
 export const Breadcrumb = Object.assign(BreadcrumbFC, AntBreadcrumb);

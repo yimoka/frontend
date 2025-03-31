@@ -17,27 +17,6 @@ const loginAPI = async (values: IAnyObject) => {
 export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 'schema'>) => (
   <EntityOperation
     {...props}
-    store={{
-      options: {
-        filterBlankAtRun: true,
-      },
-      defaultValues: {
-        name: '',
-        password: '',
-        needCaptcha: false,
-        captchaID: '',
-        captchaCode: '',
-        tenantID: '',
-      },
-      api: loginAPI,
-      afterAtFetch: {
-        failRun: (res, store) => {
-          if (res?.metadata?.needCaptcha) {
-            store.setFieldValue('needCaptcha', res?.metadata?.needCaptcha);
-          }
-        },
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -148,6 +127,27 @@ export const StaffLoginByName = observer((props: Omit<IEntityProps, 'store' | 's
               },
             },
           },
+        },
+      },
+    }}
+    store={{
+      options: {
+        filterBlankAtRun: true,
+      },
+      defaultValues: {
+        name: '',
+        password: '',
+        needCaptcha: false,
+        captchaID: '',
+        captchaCode: '',
+        tenantID: '',
+      },
+      api: loginAPI,
+      afterAtFetch: {
+        failRun: (res, store) => {
+          if (res?.metadata?.needCaptcha) {
+            store.setFieldValue('needCaptcha', res?.metadata?.needCaptcha);
+          }
         },
       },
     }}>

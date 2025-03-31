@@ -28,10 +28,10 @@ const promiseMap: IPromiseMap = {};
 export function promiseSingleton<T>(promise: (...rest: IAny) => Promise<T>, name: string, map?: IPromiseMap<T>) {
   return new Promise<T>((resolve, reject) => {
     const curMap = map ?? promiseMap;
-    if (!curMap[name]) {
+    if (!(name in curMap)) {
       curMap[name] = promise();
     }
-    curMap[name]?.then?.((res) => {
+    curMap[name].then((res) => {
       delete curMap[name];
       resolve(res);
     })?.catch?.((e) => {

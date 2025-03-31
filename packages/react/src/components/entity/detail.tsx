@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isBlank } from '@yimoka/shared';
-import { getEntryStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
+import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
 import React, { useEffect } from 'react';
 
@@ -22,13 +22,18 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
 
 export const FetchDetail = observer((props: IFetchDetailProps) => {
   const { config, detailStore, scope, ...args } = props;
-  const curDetailConfig = useDeepMemo(() => getEntryStore(detailStore, 'detail', config), [detailStore, config]);
+  const curDetailConfig = useDeepMemo(() => getEntityStore(detailStore, 'detail', config), [detailStore, config]);
   const curDetailStore = useInitStore(curDetailConfig);
 
   return (
     <Entity store={curDetailStore} >
       <EntityResponse store={curDetailStore}>
-        <EntityValues  {...args} scope={{ ...scope, $detailStore: detailStore }} config={config} values={curDetailStore?.response?.data ?? {}} />
+        <EntityValues
+          {...args}
+          config={config}
+          scope={{ ...scope, $detailStore: detailStore }}
+          values={curDetailStore?.response?.data ?? {}}
+        />
       </EntityResponse>
     </Entity>
   );
@@ -52,7 +57,7 @@ export const EntityValues = observer((props: IEntityValuesProps) => {
   }, [curStore, notPickValues, values]);
 
   return (
-    <Entity {...args} store={curStore} scope={useScope} />
+    <Entity {...args} scope={useScope} store={curStore} />
   );
 });
 

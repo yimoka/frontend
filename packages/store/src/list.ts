@@ -96,7 +96,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
     const { options, defineConfig, defaultValues, isPaginate = true, ...args } = config;
     const curOptions = mergeWithArrayOverride<IBaseStoreOptions>(cloneDeep(listOptionsDefault), options);
     const { page, pageSize, sortOrder } = mergeWithArrayOverride(cloneDeep(listKeysDefault), curOptions.keys);
-    const curDefaultValues = { ...defaultValues } as IAnyObject;
+    const curDefaultValues: IAnyObject = { ...defaultValues };
 
     if (sortOrder && typeof curDefaultValues[sortOrder] === 'undefined') {
       curDefaultValues[sortOrder] = [];
@@ -167,7 +167,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    */
   get pagination() {
     const data = this.response.data as Array<IAny> | { data?: Array<IAny> };
-    const { page, pageSize, total } = this.options.keys ?? listKeysDefault;
+    const { page, pageSize, total } = mergeWithArrayOverride({}, listKeysDefault, this.options.keys);
     if (Array.isArray(data)) {
       return { page: this.values[page], pageSize: this.values[pageSize], total: data.length };
     }
@@ -175,7 +175,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
       return {
         page: get(data, page, this.values[page]),
         pageSize: get(data, pageSize, this.values[pageSize]),
-        total: get(data, total, data?.data?.length ?? 0),
+        total: get(data, total, data.data.length),
       };
     }
     return undefined;
@@ -200,7 +200,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    */
   get isHasNext() {
     const { listData, response: response, nextResponse, options } = this;
-    const { page, pageSize, total } = options.keys ?? listKeysDefault;
+    const { page, pageSize, total } = mergeWithArrayOverride({}, listKeysDefault, options.keys);
     const data = nextResponse.data ?? response.data;
     if (!data) {
       return false;
@@ -253,7 +253,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    */
   loadNextData = (data: IAny[]) => {
     if (!isBlank(data) && Array.isArray(data)) {
-      const newResponse = { ...this.response } as IAny;
+      const newResponse: IAny = { ...this.response };
       if (Array.isArray(newResponse.data)) {
         newResponse.data = [...newResponse.data, ...data];
       } else if (Array.isArray(newResponse.data?.data)) {
@@ -279,10 +279,10 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    */
   // eslint-disable-next-line complexity
   fetchNext = async () => {
-    if (this.nextLoading || !this.isHasNext) {
+    if (!this.isHasNext) {
       return null;
     }
-    const { page } = this.options.keys ?? listKeysDefault;
+    const { page } = mergeWithArrayOverride({}, listKeysDefault, this.options.keys);
     const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : { ...this.values }) as V;
     const nextPage = this.values[page] + 1;
     set(params, page, nextPage);

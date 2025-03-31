@@ -15,6 +15,7 @@ import { EntitySchema } from './entity/schema';
 import { RenderAny } from './render-any';
 import { StoreDict } from './store/dict';
 import { StoreRoute } from './store/route';
+import { WatchChildStore } from './store/watchChildStore';
 import { Trigger } from './trigger';
 
 export const components: Record<string, ComponentType<IAny>> = {
@@ -33,6 +34,7 @@ export const components: Record<string, ComponentType<IAny>> = {
 
   StoreDict,
   StoreRoute,
+  WatchChildStore,
 
   RenderAny,
   Trigger,

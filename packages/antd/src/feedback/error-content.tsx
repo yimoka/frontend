@@ -32,7 +32,14 @@ export const ErrorContent: ErrorComponent = observer((props) => {
     extra: <>
       {returnIndex && <Link to='/'><Button >返回首页</Button></Link>}
       {onAgain && <Button type='primary' onClick={onAgain}>再试一次</Button>}
-      {traceID && <Paragraph type='secondary' style={{ marginTop: 10 }} italic copyable={{ text: traceID }}>traceID: {traceID}</Paragraph>}
+      {traceID && (
+        <Paragraph italic
+          copyable={{ text: traceID }}
+          style={{ marginTop: 10 }}
+          type='secondary'>
+          traceID: {traceID}
+        </Paragraph>
+      )}
     </>,
     children,
   };

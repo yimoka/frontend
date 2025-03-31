@@ -5,21 +5,16 @@ import React from 'react';
 
 export const BreadcrumbDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <BreadcrumbJSX /> },
-      { key: 'schema', label: 'Schema', children: <BreadcrumbSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <BreadcrumbJSX /> },
+  { key: 'schema', label: 'Schema', children: <BreadcrumbSchema /> },
+]} />
   </div>
 );
 
 export const BreadcrumbSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        name: 'name',
-        data: [{ title: 'Home', path: '/' }, { title: '列表', path: 'list' }],
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -99,6 +94,12 @@ export const BreadcrumbSchema = () => (
             },
           },
         },
+      },
+    }}
+    store={{
+      defaultValues: {
+        name: 'name',
+        data: [{ title: 'Home', path: '/' }, { title: '列表', path: 'list' }],
       },
     }}
   />);

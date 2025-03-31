@@ -22,5 +22,5 @@ export const Oauth2ConsentPage = observer(() => {
     store.fetch();
   }, [search, store]);
 
-  return <EntityResponse store={store} skeleton={false}><Spin spinning={true} tip="同意授权中……" /></EntityResponse>;
+  return <EntityResponse skeleton={false} store={store}><Spin spinning={true} tip="同意授权中……" /></EntityResponse>;
 });

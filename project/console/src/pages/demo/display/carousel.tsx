@@ -5,10 +5,11 @@ import React from 'react';
 
 export const CarouselDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <CarouselJSX /> },
-      { key: 'schema', label: 'Schema', children: <CarouselSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <CarouselJSX /> },
+  { key: 'schema', label: 'Schema', children: <CarouselSchema /> },
+]} />
   </div>
 );
 
@@ -19,7 +20,6 @@ const api = () => {
 
 export const CarouselSchema = () => (
   <Entity
-    store={{ api, defaultValues: { arr: [1, 2, 3, 4] } }}
     schema={
       {
         type: 'object',
@@ -103,6 +103,7 @@ export const CarouselSchema = () => (
           },
         },
       }}
+    store={{ api, defaultValues: { arr: [1, 2, 3, 4] } }}
   />);
 
 const contentStyle: React.CSSProperties = {

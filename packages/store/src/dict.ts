@@ -1,3 +1,9 @@
+/**
+ * @remarks 字典管理模块，提供数据字典的初始化、监听和更新功能
+ * @author ickeep <i@ickeep.com>
+ * @module @yimoka/store
+ */
+
 import { reaction } from '@formily/reactive';
 import { dataToOptions, IAny, IAnyObject, IKeys, IObjKey, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
 import { pick } from 'lodash-es';
@@ -6,82 +12,146 @@ import { IStoreAPI, IStoreResponse, runAPI } from './api';
 import { BaseStore } from './base';
 import { getFieldSplitter, IField } from './field';
 
-// 初始化字典数据
+/**
+ * 初始化字典数据
+ * @param store - 存储实例
+ * @remarks 根据配置初始化字典数据，支持静态数据和 API 请求
+ * @example
+ * ```ts
+ * const store = new BaseStore({
+ *   dictConfig: [
+ *     {
+ *       field: 'gender',
+ *       data: [
+ *         { label: '男', value: 'male' },
+ *         { label: '女', value: 'female' }
+ *       ]
+ *     },
+ *     {
+ *       field: 'status',
+ *       api: { url: '/api/status-options' }
+ *     }
+ *   ]
+ * });
+ * initStoreDict(store);
+ * ```
+ */
 export const initStoreDict = (store: BaseStore) => {
   const { dictConfig, apiExecutor } = store;
   dictConfig?.forEach((conf) => {
     const { type, field, data, api } = conf;
+    // 设置静态数据
     if (data) {
       store.setFieldDict(field, data);
     }
+    // 处理非 by 类型的字典配置
     if (type !== 'by') {
       if (api) {
         store.setFieldDictLoading(field, true);
         const lastFetchID = store.incrDictFetchID(field);
-        runAPI(api, apiExecutor)?.then?.((res: IStoreResponse) => {
+        runAPI(api, apiExecutor).then((res: IStoreResponse) => {
           if (lastFetchID === store.getDictFetchID(field)) {
-            store.setFieldDictLoading(field, false);
             if (isSuccess(res)) {
               const apiData = getDictAPIData(res.data, conf);
               store.setFieldDict(field, apiData);
             }
+            store.setFieldDictLoading(field, false);
           }
-        });
+        })
+          .catch(() => {
+            if (lastFetchID === store.getDictFetchID(field)) {
+              store.setFieldDictLoading(field, false);
+            }
+          });
       }
     }
   });
 };
 
-// 字典数据处理
+/**
+ * 监听字典数据变化
+ * @param store - 存储实例
+ * @remarks 监听表单值变化，根据配置更新字典数据
+ * @returns 清理函数数组
+ * @example
+ * ```ts
+ * const store = new BaseStore({
+ *   dictConfig: [
+ *     {
+ *       type: 'by',
+ *       field: 'city',
+ *       byField: 'province',
+ *       api: { url: '/api/cities' }
+ *     }
+ *   ]
+ * });
+ * const disposers = watchStoreDict(store);
+ * // 清理监听器
+ * disposers.forEach(dispose => dispose());
+ * ```
+ */
 export const watchStoreDict = (store: BaseStore) => {
   const disposerArr: (() => void)[] = [];
   const { values, dictConfig, apiExecutor } = store;
   dictConfig?.forEach((conf) => {
     const { type } = conf;
+    // 处理 by 类型的字典配置
     if (type === 'by') {
       const { field, getData, api, byField, isEmptyGetData = false, toMap, toOptions, keys } = conf;
       const updateDict = (newValues: IAny) => {
-        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) && byField.every(item => isBlank(newValues[item]))))) {
+        // 处理空值情况
+        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) ? byField.every(item => isBlank(newValues[item])) : isBlank(newValues[byField])))) {
           store.incrDictFetchID(field);
           store.setFieldDict(field, []);
           updateValueByDict(conf, [], store);
-        } else {
-          if (getData) {
-            const dictData = getData(newValues, store);
-            if (dictData instanceof Promise) {
-              store.setFieldDictLoading(field, true);
-              const lastFetchID = store.incrDictFetchID(field);
-              dictData.then((data: IOptions | IAny) => {
-                if (lastFetchID === store.getDictFetchID(field)) {
-                  store.setFieldDictLoading(field, false);
-                  store.setFieldDict(field, data);
-                  updateValueByDict(conf, data, store);
-                }
-              });
-            } else {
-              store.setFieldDict(field, dictData);
-              updateValueByDict(conf, dictData, store);
-            }
-          } else if (api) {
-            const lastFetchID = store.incrDictFetchID(field);
+          return;
+        }
+
+        // 使用 getData 或 API 获取字典数据
+        if (getData) {
+          const dictData = getData(newValues, store);
+          if (dictData instanceof Promise) {
             store.setFieldDictLoading(field, true);
-            runAPI(api, apiExecutor, newValues)?.then((res: IStoreResponse) => {
+            const lastFetchID = store.incrDictFetchID(field);
+            dictData.then((data: IOptions | IAny) => {
+              if (lastFetchID === store.getDictFetchID(field)) {
+                store.setFieldDict(field, data);
+                updateValueByDict(conf, data, store);
+                store.setFieldDictLoading(field, false);
+              }
+            }).catch(() => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
-                if (isSuccess(res)) {
-                  const apiData = res.data;
-                  if (toMap && Array.isArray(apiData)) {
-                    store.setFieldDict(field, optionsToObj(res.data, keys));
-                  } else if (toOptions) {
-                    store.setFieldDict(field, dataToOptions(res.data, keys));
-                  } else {
-                    store.setFieldDict(field, apiData);
-                  }
-                  updateValueByDict(conf, apiData, store);
-                }
               }
             });
+          } else {
+            store.setFieldDict(field, dictData);
+            updateValueByDict(conf, dictData, store);
           }
+        } else if (api) {
+          const lastFetchID = store.incrDictFetchID(field);
+          store.setFieldDictLoading(field, true);
+          runAPI(api, apiExecutor, newValues).then((res: IStoreResponse) => {
+            if (lastFetchID === store.getDictFetchID(field)) {
+              if (isSuccess(res)) {
+                const apiData = res.data;
+                if (toMap && Array.isArray(apiData)) {
+                  store.setFieldDict(field, optionsToObj(apiData, keys));
+                } else if (toOptions) {
+                  store.setFieldDict(field, dataToOptions(apiData, keys));
+                } else {
+                  store.setFieldDict(field, apiData);
+                }
+                updateValueByDict(conf, apiData, store);
+              }
+              store.setFieldDictLoading(field, false);
+            }
+          })
+            .catch(() => {
+              if (lastFetchID === store.getDictFetchID(field)) {
+                store.setFieldDictLoading(field, false);
+              }
+            });
         }
       };
       const obj = pick(values, byField);
@@ -91,12 +161,17 @@ export const watchStoreDict = (store: BaseStore) => {
       }));
     }
   });
-  return () => {
-    disposerArr.forEach(disposer => disposer());
-  };
+  return disposerArr;
 };
 
-const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
+/**
+ * 根据字典更新字段值
+ * @param config - 字典配置项
+ * @param dict - 字典数据
+ * @param store - 存储实例
+ * @remarks 根据字典配置更新相关字段的值
+ */
+export const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseStore) => {
   const { field, isUpdateValue = true, keys, childrenKey } = config;
   if (isUpdateValue) {
     const { values } = store;
@@ -133,8 +208,13 @@ const updateValueByDict = (config: IDictConfigItemBy, dict: IAny, store: BaseSto
   }
 };
 
-// 获取字典的接口数据
-const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
+/**
+ * 处理 API 返回的字典数据
+ * @param data - API 返回的数据
+ * @param dictConf - 字典配置
+ * @returns 处理后的字典数据
+ */
+export const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
   const { toMap, toOptions = true, keys } = dictConf;
   if (toMap && Array.isArray(data)) {
     return optionsToObj(data, keys);
@@ -144,36 +224,65 @@ const getDictAPIData = (data: IAny, dictConf: IDictConfigItemBase) => {
   return data;
 };
 
+/**
+ * 存储字典类型
+ * @template V - 值的类型
+ */
 export type IStoreDict<V extends object = IAnyObject> = { [key in IField<V>]?: IAny };
 
+/**
+ * 字典加载状态类型
+ * @template V - 值的类型
+ */
 export type IStoreDictLoading<V extends object = IAnyObject> = { [key in IField<V> | IObjKey]?: boolean };
 
+/**
+ * 字典配置类型
+ * @template V - 值的类型
+ */
 export type IStoreDictConfig<V extends object = IAnyObject> = Array<IDictConfigItem<V>>;
 
+/**
+ * 基础字典配置项类型
+ */
 type IDictConfigItemBase = {
-  field: string,
-  data?: IOptions | IAny,
-  api?: IStoreAPI
-  // 只处理 api 返回值 默认为 true
-  toOptions?: boolean
-  // 只处理 api 返回值
-  toMap?: boolean
-  // 只处理 api 返回值
-  keys?: IKeys
-  // 只处理 api 返回值
-  childrenKey?: string
+  /** 字段名 */
+  field: string;
+  /** 静态数据 */
+  data?: IOptions | IAny;
+  /** API 配置 */
+  api?: IStoreAPI;
+  /** 是否转换为选项格式，默认为 true */
+  toOptions?: boolean;
+  /** 是否转换为 Map 格式 */
+  toMap?: boolean;
+  /** 键值映射 */
+  keys?: IKeys;
+  /** 子节点键名 */
+  childrenKey?: string;
 }
 
+/**
+ * 字典配置项类型
+ * @template V - 值的类型
+ */
 export type IDictConfigItem<V extends object = IAnyObject> = ({ type?: 'self' } & IDictConfigItemBase) | IDictConfigItemBy<V>;
 
+/**
+ * 基于字段值的字典配置项类型
+ * @template V - 值的类型
+ */
 export type IDictConfigItemBy<V extends object = IAnyObject> = IDictConfigItemBase & {
-  type: 'by'
-  byField: string | string[],
-  // 当存在 getData 不会调用 api
-  getData?: (values: V | IAnyObject, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>,
-  paramKeys?: string | Record<string, IAny>
-  // 字典变化时是否更新值
-  isUpdateValue?: boolean
-  // 字典为空时是否获取数据
-  isEmptyGetData?: boolean
+  /** 配置类型 */
+  type: 'by';
+  /** 依赖的字段 */
+  byField: string | string[];
+  /** 获取数据的函数，优先级高于 API */
+  getData?: (values: V | IAnyObject, store: BaseStore) => IOptions | IAny | Promise<IOptions | IAny>;
+  /** 参数键名映射 */
+  paramKeys?: string | Record<string, IAny>;
+  /** 字典变化时是否更新值 */
+  isUpdateValue?: boolean;
+  /** by 的值为空时是否获取数据 */
+  isEmptyGetData?: boolean;
 }

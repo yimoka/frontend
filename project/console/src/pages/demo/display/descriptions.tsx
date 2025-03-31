@@ -5,22 +5,16 @@ import React from 'react';
 
 export const DescriptionsDemo = () => (
   <div>
-    <Tabs defaultActiveKey="schema" items={[
-      { key: 'JSX', label: 'JSX 调用', children: <DescriptionsJSX /> },
-      { key: 'schema', label: 'Schema', children: <DescriptionsSchema /> },
-    ]} />
+    <Tabs defaultActiveKey="schema"
+items={[
+  { key: 'JSX', label: 'JSX 调用', children: <DescriptionsJSX /> },
+  { key: 'schema', label: 'Schema', children: <DescriptionsSchema /> },
+]} />
   </div>
 );
 
 export const DescriptionsSchema = () => (
   <Entity
-    store={{
-      defaultValues: {
-        in: 'in',
-        arr: [{ id: 1, name: 'name1' }],
-        obj: { id: 1, name: 'name1' },
-      },
-    }}
     schema={{
       type: 'object',
       properties: {
@@ -96,6 +90,13 @@ export const DescriptionsSchema = () => (
             },
           },
         },
+      },
+    }}
+    store={{
+      defaultValues: {
+        in: 'in',
+        arr: [{ id: 1, name: 'name1' }],
+        obj: { id: 1, name: 'name1' },
       },
     }}
   />);
