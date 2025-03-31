@@ -19,7 +19,7 @@ export * from './display/empty';
 export * from './display/table';
 export * from './display/link';
 export * from './display/tag';
-
+export * from './display/tree';
 export * from './feedback/alert';
 export * from './feedback/drawer';
 export * from './feedback/error-content';

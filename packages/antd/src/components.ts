@@ -18,6 +18,7 @@ import { Link } from './display/link';
 import { Table } from './display/table';
 
 import { Tag } from './display/tag';
+import { Tree } from './display/tree';
 import { Input } from './enter/input';
 
 import { InputNumber } from './enter/input-number';
@@ -78,6 +79,8 @@ export const components: IConfigComponents = {
   Link,
   Tag,
   CheckableTag: Tag.CheckableTag,
+
+  Tree,
 
   // entity
   AutoComplete,
