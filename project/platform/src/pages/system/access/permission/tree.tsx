@@ -1,7 +1,8 @@
 import { observer } from '@formily/react';
-import { Dropdown, Icon, Modal, Space } from '@yimoka/antd';
+import { Dropdown, Icon, Modal, RecordDel, Space } from '@yimoka/antd';
 import { EntityOperation, useInitStore } from '@yimoka/react';
 import { IHTTPResponse, isBlank, isSuccess } from '@yimoka/shared';
+import { IStore } from '@yimoka/store';
 import React from 'react';
 
 import { handlePermission, IPermissionTreeItem } from '@/root';
@@ -17,6 +18,7 @@ export const PermissionTreePage = observer(() => {
   });
 
   const success = (_res?: IHTTPResponse, isUpdate?: boolean) => {
+    console.log('success', _res, isUpdate);
     treeStore.fetch().then((res) => {
       if (isUpdate && isSuccess(res) && Array.isArray(res.data)) {
         handlePermission(res.data);
@@ -44,7 +46,7 @@ export const PermissionTreePage = observer(() => {
                 },
                 'x-component': PermissionAdd,
                 'x-component-props': {
-                  success,
+                  onSuccess: success,
                 },
               },
             },
@@ -59,7 +61,7 @@ export const PermissionTreePage = observer(() => {
                 'x-component-props': {
                   fieldNames: { key: 'id', title: 'name' },
                   data: '{{$store.response.data}}',
-                  titleRender: (node: IPermissionTreeItem) => <TitleRender node={node} onSuccess={success} />,
+                  titleRender: (node: IPermissionTreeItem) => <TitleRender node={node} treeStore={treeStore} onSuccess={success} />,
                 },
               },
             },
@@ -72,7 +74,7 @@ export const PermissionTreePage = observer(() => {
 });
 
 
-const TitleRender = observer(({ node, onSuccess }: { node: IPermissionTreeItem, onSuccess: () => void }) => (
+const TitleRender = observer(({ node, onSuccess, treeStore }: { node: IPermissionTreeItem, onSuccess: () => void, treeStore: IStore }) => (
   <Space>
     {node.icon && <Icon name={node.icon} />}
     <span>{node.name}</span>
@@ -100,15 +102,19 @@ const TitleRender = observer(({ node, onSuccess }: { node: IPermissionTreeItem, 
             key: 'del',
             disabled: !isBlank(node.children),
             label: (
-              <div>删除</div>
+              <RecordDel
+                isRefresh
+                parentStore={treeStore}
+                record={node}
+                trigger={{ component: 'Text', type: 'danger', disabled: !isBlank(node.children), children: '删除' }} />
             ),
           },
         ],
       }}
     >
-      <div style={{ display: 'inline-block' }}>
+      <span>
         <Icon name='EllipsisOutlined' />
-      </div>
+      </span>
     </Dropdown>
   </Space>
 ));
