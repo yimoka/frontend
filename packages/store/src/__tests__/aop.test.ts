@@ -7,8 +7,8 @@
 
 import { describe, it, expect, vi } from 'vitest';
 
-import { handleAfterAtFetch } from './aop';
-import { BaseStore } from './base';
+import { handleAfterAtFetch } from '../aop';
+import { BaseStore } from '../base';
 
 describe('AOP 模块', () => {
   describe('handleAfterAtFetch', () => {

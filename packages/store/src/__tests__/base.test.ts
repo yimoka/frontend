@@ -10,8 +10,8 @@
 import { IAnyObject, IHTTPResponse } from '@yimoka/shared';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { IStoreResponse } from './api';
-import { BaseStore } from './base';
+import { IStoreResponse } from '../api';
+import { BaseStore } from '../base';
 
 interface IUser {
   name: string;

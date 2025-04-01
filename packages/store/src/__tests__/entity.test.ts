@@ -6,11 +6,10 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { BaseStore } from './base';
-import { getEntityStore, IEntityConfig } from './entity';
-import { IFieldConfig } from './field';
-
-import { IStoreConfig } from '.';
+import { IStoreConfig } from '../';
+import { BaseStore } from '../base';
+import { getEntityStore, IEntityConfig } from '../entity';
+import { IFieldConfig } from '../field';
 
 describe('Entity 模块', () => {
   describe('getEntityStore', () => {

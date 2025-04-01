@@ -7,7 +7,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 
-import { runAPI } from './api';
+import { runAPI } from '../api';
 
 describe('API 模块', () => {
   describe('runAPI', () => {

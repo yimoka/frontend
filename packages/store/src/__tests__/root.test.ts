@@ -5,7 +5,7 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { RootStore, rootStore } from './root';
+import { RootStore, rootStore } from '../root';
 
 describe('Root 模块', () => {
   /**

@@ -5,8 +5,8 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { BaseStore } from './base';
-import { valueToSearchParam, parseSearchParam, getFieldSplitter, getFieldConfig } from './field';
+import { BaseStore } from '../base';
+import { valueToSearchParam, parseSearchParam, getFieldSplitter, getFieldConfig } from '../field';
 
 describe('Field 模块', () => {
   /**

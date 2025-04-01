@@ -6,8 +6,8 @@
 import { IAnyObject, IHTTPResponse } from '@yimoka/shared';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { IStoreResponse } from './api';
-import { ListStore } from './list';
+import { IStoreResponse } from '../api';
+import { ListStore } from '../list';
 
 describe('List 模块', () => {
   let store: ListStore<IAnyObject>;

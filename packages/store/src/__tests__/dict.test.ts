@@ -8,9 +8,9 @@
 import { observable } from '@formily/reactive';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { IStoreHTTPRequest } from './api';
-import { BaseStore } from './base';
-import { initStoreDict, watchStoreDict, IDictConfigItem, getDictAPIData, updateValueByDict } from './dict';
+import { IStoreHTTPRequest } from '../api';
+import { BaseStore } from '../base';
+import { initStoreDict, watchStoreDict, IDictConfigItem, getDictAPIData, updateValueByDict } from '../dict';
 
 function createMockStore(config: {
   values?: Record<string, unknown>;
