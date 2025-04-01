@@ -56,6 +56,10 @@ export const PermissionTreePage = observer(() => {
             properties: {
               data: {
                 type: 'void',
+                'x-decorator': 'Loading',
+                'x-decorator-props': {
+                  loading: '{{$store.loading}}',
+                },
                 'x-component': 'Tree',
                 'x-component-props': {
                   fieldNames: { key: 'id', title: 'name' },
