@@ -4,32 +4,32 @@ import { describe, it, expect } from 'vitest';
 import { toDayjs, getDateValue, getPresetsDate, getPresetsDateRange } from '../date';
 
 describe('toDayjs', () => {
-  it('should return the same Dayjs object if input is a Dayjs object', () => {
+  it('如果输入是 Dayjs 对象，应该返回相同的 Dayjs 对象', () => {
     const dayjsObj = dayjs();
     expect(toDayjs(dayjsObj)).toBe(dayjsObj);
   });
 
-  it('should convert Date object to Dayjs object', () => {
+  it('应该将 Date 对象转换为 Dayjs 对象', () => {
     const dateObj = new Date();
     expect(toDayjs(dateObj).isSame(dayjs(dateObj))).toBe(true);
   });
 
-  it('should convert milliseconds timestamp to Dayjs object', () => {
+  it('应该将毫秒时间戳转换为 Dayjs 对象', () => {
     const timestamp = Date.now();
     expect(toDayjs(timestamp).isSame(dayjs(timestamp))).toBe(true);
   });
 
-  it('should convert seconds timestamp to Dayjs object', () => {
+  it('应该将秒时间戳转换为 Dayjs 对象', () => {
     const unixTimestamp = Math.floor(Date.now() / 1000);
     expect(toDayjs(unixTimestamp, { type: 's' }).isSame(dayjs.unix(unixTimestamp))).toBe(true);
   });
 
-  it('should convert numeric string to Dayjs object', () => {
+  it('应该将数字字符串转换为 Dayjs 对象', () => {
     const numericString = '1633072800000';
     expect(toDayjs(numericString).isSame(dayjs(Number(numericString)))).toBe(true);
   });
 
-  it('should convert formatted date string to Dayjs object', () => {
+  it('应该将格式化的日期字符串转换为 Dayjs 对象', () => {
     const dateString = '2021-10-01';
     expect(toDayjs(dateString, { format: 'YYYY-MM-DD' }).isSame(dayjs(dateString, 'YYYY-MM-DD'))).toBe(true);
   });
@@ -38,60 +38,61 @@ describe('toDayjs', () => {
 describe('getDateValue', () => {
   const date = dayjs('2023-10-05');
 
-  it('should return milliseconds', () => {
+  it('应该返回毫秒时间戳', () => {
     expect(getDateValue(date, { type: 'ms' })).toBe(date.valueOf());
   });
 
-  it('should return seconds', () => {
+  it('应该返回秒时间戳', () => {
     expect(getDateValue(date, { type: 's' })).toBe(date.unix());
   });
 
-  it('should return formatted string', () => {
+  it('应该返回格式化的字符串', () => {
     expect(getDateValue(date, { type: 'string', format: 'YYYY-MM-DD' })).toBe('2023-10-05');
   });
 
-  it('should return Date object', () => {
+  it('应该返回 Date 对象', () => {
     expect(getDateValue(date, { type: 'date' })).toEqual(date.toDate());
   });
 
-  it('should return Dayjs object', () => {
+  it('应该返回 Dayjs 对象', () => {
     expect(getDateValue(date, {})).toBe(date);
   });
 });
 
 describe('getPresetsDate', () => {
-  it('should return today\'s date for "today" preset', () => {
+  it('对于 "today" 预设应该返回今天的日期', () => {
     const today = dayjs().startOf('day');
     expect(getPresetsDate('today').isSame(today)).toBe(true);
   });
 
-  it('should return yesterday\'s date for "yesterday" preset', () => {
+  it('对于 "yesterday" 预设应该返回昨天的日期', () => {
     const yesterday = dayjs().subtract(1, 'day');
     expect(getPresetsDate('yesterday').unix()).toBe(yesterday.unix());
   });
 
-  it('should return next week\'s date for "1W" preset', () => {
+  it('对于 "1W" 预设应该返回下周的日期', () => {
     const nextWeek = dayjs().add(1, 'week');
     expect(getPresetsDate('1w').isSame(nextWeek)).toBe(true);
   });
 
-  it('should return next month\'s date for "1M" preset', () => {
+  it('对于 "1M" 预设应该返回下个月的日期', () => {
     const nextMonth = dayjs().add(1, 'month');
     expect(getPresetsDate('1M').isSame(nextMonth)).toBe(true);
   });
 
-  it('should return today\'s date for "1" preset', () => {
+  it('对于 "1" 预设应该返回今天的日期', () => {
     const today = dayjs();
     expect(getPresetsDate('1x').isSame(today)).toBe(true);
   });
-  it('should return today\'s date for "1" preset', () => {
+
+  it('对于无效预设应该返回今天的日期', () => {
     const today = dayjs();
     expect(getPresetsDate('xxxx').isSame(today)).toBe(true);
   });
 });
 
 describe('getPresetsDateRange', () => {
-  it('should return today\'s date range for "today" preset', () => {
+  it('对于 "today" 预设应该返回今天的日期范围', () => {
     const todayStart = dayjs().startOf('day');
     const todayEnd = dayjs().endOf('day');
     const [start, end] = getPresetsDateRange('today');
@@ -99,7 +100,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(todayEnd)).toBe(true);
   });
 
-  it('should return yesterday\'s date range for "yesterday" preset', () => {
+  it('对于 "yesterday" 预设应该返回昨天的日期范围', () => {
     const yesterdayStart = dayjs().subtract(1, 'day')
       .startOf('day');
     const yesterdayEnd = dayjs().subtract(1, 'day')
@@ -109,7 +110,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(yesterdayEnd)).toBe(true);
   });
 
-  it('should return last3Days\'s date range for "last3Days" preset', () => {
+  it('对于 "last3Days" 预设应该返回最近3天的日期范围', () => {
     const last3DaysStart = dayjs().subtract(2, 'day');
     const last3DaysEnd = dayjs();
     const [start, end] = getPresetsDateRange('last3Days');
@@ -117,7 +118,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(last3DaysEnd)).toBe(true);
   });
 
-  it('should return past3Days\'s date range for "past3Days" preset', () => {
+  it('对于 "past3Days" 预设应该返回过去3天的日期范围', () => {
     const past3DaysStart = dayjs().subtract(3, 'day')
       .startOf('day');
     const past3DaysEnd = dayjs().subtract(1, 'day')
@@ -127,7 +128,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(past3DaysEnd)).toBe(true);
   });
 
-  it('should return this week\'s date range for "week" preset', () => {
+  it('对于 "week" 预设应该返回本周的日期范围', () => {
     const weekStart = dayjs().startOf('week');
     const weekEnd = dayjs().endOf('week');
     const [start, end] = getPresetsDateRange('week');
@@ -135,7 +136,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(weekEnd)).toBe(true);
   });
 
-  it('should return this week\'s date range for "weekSoFar" preset', () => {
+  it('对于 "weekSoFar" 预设应该返回本周至今的日期范围', () => {
     const weekStart = dayjs().startOf('week');
     const weekEnd = dayjs();
     const [start, end] = getPresetsDateRange('weekSoFar');
@@ -143,7 +144,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(weekEnd)).toBe(true);
   });
 
-  it('should return last week\'s date range for "lastWeek" preset', () => {
+  it('对于 "lastWeek" 预设应该返回上周的日期范围', () => {
     const lastWeekStart = dayjs().subtract(1, 'week');
     const lastWeekEnd = dayjs();
     const [start, end] = getPresetsDateRange('lastWeek');
@@ -151,8 +152,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(lastWeekEnd)).toBe(true);
   });
 
-  // pastWeek
-  it('should return past week\'s date range for "pastWeek" preset', () => {
+  it('对于 "pastWeek" 预设应该返回过去一周的日期范围', () => {
     const pastWeekStart = dayjs().add(-1, 'week')
       .startOf('day');
     const pastWeekEnd = dayjs().subtract(1, 'day')
@@ -162,8 +162,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(pastWeekEnd)).toBe(true);
   });
 
-  // prevWeek
-  it('should return prev week\'s date range for "prevWeek" preset', () => {
+  it('对于 "prevWeek" 预设应该返回上一周的日期范围', () => {
     const prevWeekStart = dayjs().subtract(1, 'week')
       .startOf('week');
     const prevWeekEnd = dayjs().subtract(1, 'week')
@@ -173,7 +172,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(prevWeekEnd)).toBe(true);
   });
 
-  it('should return this month\'s date range for "month" preset', () => {
+  it('对于 "month" 预设应该返回本月的日期范围', () => {
     const monthStart = dayjs().startOf('month');
     const monthEnd = dayjs().endOf('month');
     const [start, end] = getPresetsDateRange('month');
@@ -181,7 +180,7 @@ describe('getPresetsDateRange', () => {
     expect(end.isSame(monthEnd)).toBe(true);
   });
 
-  it('should return today\'s date for "xxxx" preset', () => {
+  it('对于无效预设应该返回今天的日期范围', () => {
     const today = dayjs();
     const [start, end] = getPresetsDateRange('xxxx');
     expect(start.isSame(today)).toBe(true);
