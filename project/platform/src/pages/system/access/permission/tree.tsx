@@ -18,7 +18,6 @@ export const PermissionTreePage = observer(() => {
   });
 
   const success = (_res?: IHTTPResponse, isUpdate?: boolean) => {
-    console.log('success', _res, isUpdate);
     treeStore.fetch().then((res) => {
       if (isUpdate && isSuccess(res) && Array.isArray(res.data)) {
         handlePermission(res.data);

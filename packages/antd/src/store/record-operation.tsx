@@ -87,7 +87,6 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
     const newValues = pick({ $index, ...$record, ...record }, idKey, Object.keys(runStore.defaultValues));
     runStore.setValues(newValues);
     setLoading(true);
-    console.log('runStore', runStore);
     const res = await runStore.fetch();
     (isSuccess(res) && isRefresh) && await pStore?.fetch();
     setLoading(false);
