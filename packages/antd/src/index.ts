@@ -48,5 +48,9 @@ export * from './nav/steps';
 
 // store
 export * from './store/form';
+export * from './store/record-operation';
+export * from './store/record-del';
+export * from './store/reset';
+export * from './store/submit';
 
 export * from './components';

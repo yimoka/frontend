@@ -48,6 +48,8 @@ import { Menu } from './nav/menu';
 import { Pagination } from './nav/pagination';
 import { Steps } from './nav/steps';
 import { FormItem, StoreForm } from './store/form';
+import { RecordDel } from './store/record-del';
+import { RecordOperation } from './store/record-operation';
 import { Reset } from './store/reset';
 import { Submit } from './store/submit';
 
@@ -121,6 +123,8 @@ export const components: IConfigComponents = {
   // store
   StoreForm,
   FormItem,
+  RecordOperation,
+  RecordDel,
   Reset,
   Submit,
 };
