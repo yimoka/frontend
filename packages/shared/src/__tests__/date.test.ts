@@ -89,6 +89,43 @@ describe('getPresetsDate', () => {
     const today = dayjs();
     expect(getPresetsDate('xxxx').isSame(today)).toBe(true);
   });
+
+  it('对于无效单位应该返回当前日期', () => {
+    const today = dayjs();
+    // 测试无效的数字+单位格式
+    expect(getPresetsDate('1xyz').isSame(today)).toBe(true);
+    expect(getPresetsDate('-1xyz').isSame(today)).toBe(true);
+    expect(getPresetsDate('1').isSame(today)).toBe(true); // 测试只有数字没有单位的情况
+    expect(getPresetsDate('1 ').isSame(today)).toBe(true); // 测试数字后面跟空格
+    expect(getPresetsDate('1!').isSame(today)).toBe(true); // 测试特殊字符作为单位
+    expect(getPresetsDate('1@').isSame(today)).toBe(true); // 测试特殊字符作为单位
+    expect(getPresetsDate('1#').isSame(today)).toBe(true); // 测试特殊字符作为单位
+    expect(getPresetsDate('-1 ').isSame(today)).toBe(true); // 测试负数后面跟空格
+    expect(getPresetsDate('1abc').isSame(today)).toBe(true); // 测试完全匹配正则但单位不在 units 数组中
+    expect(getPresetsDate('-1abc').isSame(today)).toBe(true); // 测试完全匹配正则但单位不在 units 数组中（负数）
+    expect(getPresetsDate('123abc').isSame(today)).toBe(true); // 测试多位数字
+    expect(getPresetsDate('-123abc').isSame(today)).toBe(true); // 测试多位负数
+    expect(getPresetsDate('0abc').isSame(today)).toBe(true); // 测试零
+    expect(getPresetsDate('-0abc').isSame(today)).toBe(true); // 测试负零
+    // 测试无效的 start/end 格式
+    expect(getPresetsDate('start-xyz').isSame(today)).toBe(true);
+    expect(getPresetsDate('end-xyz').isSame(today)).toBe(true);
+    // 测试其他无效格式
+    expect(getPresetsDate('invalid').isSame(today)).toBe(true);
+  });
+
+  it('对于无效的 start/end 单位应该返回当前日期', () => {
+    const today = dayjs();
+    expect(getPresetsDate('start-invalid').isSame(today)).toBe(true);
+    expect(getPresetsDate('end-invalid').isSame(today)).toBe(true);
+    expect(getPresetsDate('start-').isSame(today)).toBe(true);
+    expect(getPresetsDate('end-').isSame(today)).toBe(true);
+  });
+
+  it('对于数组预设应该正确处理无效单位', () => {
+    const today = dayjs();
+    expect(getPresetsDate(['1xyz', 'start-xyz']).isSame(today)).toBe(true);
+  });
 });
 
 describe('getPresetsDateRange', () => {
@@ -111,11 +148,12 @@ describe('getPresetsDateRange', () => {
   });
 
   it('对于 "last3Days" 预设应该返回最近3天的日期范围', () => {
-    const last3DaysStart = dayjs().subtract(2, 'day');
-    const last3DaysEnd = dayjs();
+    const today = dayjs();
     const [start, end] = getPresetsDateRange('last3Days');
-    expect(start.isSame(last3DaysStart)).toBe(true);
-    expect(end.isSame(last3DaysEnd)).toBe(true);
+    const expectedStart = today.subtract(2, 'day');
+    const expectedEnd = today;
+    expect(start.isSame(expectedStart)).toBe(true);
+    expect(end.isSame(expectedEnd)).toBe(true);
   });
 
   it('对于 "past3Days" 预设应该返回过去3天的日期范围', () => {
@@ -185,5 +223,40 @@ describe('getPresetsDateRange', () => {
     const [start, end] = getPresetsDateRange('xxxx');
     expect(start.isSame(today)).toBe(true);
     expect(end.isSame(today)).toBe(true);
+  });
+
+  // 新增测试用例：测试未覆盖的分支
+  it('对于无效的预设应该返回默认日期范围', () => {
+    const today = dayjs();
+    // 测试不在 ruleMap 中的预设
+    const [start1, end1] = getPresetsDateRange('invalid_preset');
+    expect(start1.isSame(today)).toBe(true);
+    expect(end1.isSame(today)).toBe(true);
+
+    // 测试带有默认值的情况
+    const defaultStart = dayjs().subtract(1, 'day');
+    const defaultEnd = dayjs().add(1, 'day');
+    const [start2, end2] = getPresetsDateRange('invalid_preset', [defaultStart, defaultEnd]);
+    expect(start2.isSame(defaultStart)).toBe(true);
+    expect(end2.isSame(defaultEnd)).toBe(true);
+  });
+
+  it('对于数组格式的预设应该正确处理', () => {
+    const today = dayjs();
+    // 测试正常的数组格式
+    const [start1, end1] = getPresetsDateRange(['1d', '2d']);
+    const expectedStart1 = today.add(1, 'day');
+    const expectedEnd1 = today.add(2, 'day');
+    expect(start1.isSame(expectedStart1)).toBe(true);
+    expect(end1.isSame(expectedEnd1)).toBe(true);
+
+    // 测试带有默认值的数组格式
+    const defaultStart = dayjs().subtract(1, 'day');
+    const defaultEnd = dayjs().add(1, 'day');
+    const [start2, end2] = getPresetsDateRange(['1d', '2d'], [defaultStart, defaultEnd]);
+    const expectedStart2 = defaultStart.add(1, 'day');
+    const expectedEnd2 = defaultEnd.add(2, 'day');
+    expect(start2.isSame(expectedStart2)).toBe(true);
+    expect(end2.isSame(expectedEnd2)).toBe(true);
   });
 });

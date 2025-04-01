@@ -154,7 +154,7 @@ export const getPresetsDate = (presets: IPresetsDate, d?: Dayjs) => {
 };
 
 
-const getPresetDate = (preset: string, d?: Dayjs): Dayjs => {
+const getPresetDate = (preset: string, d: Dayjs): Dayjs => {
   const ruleMap: Record<string, string> = {
     cur: '',
     today: 'start-D',
@@ -168,7 +168,7 @@ const getPresetDate = (preset: string, d?: Dayjs): Dayjs => {
     second: 'start-s',
   };
   const curRule = (ruleMap[preset] ?? preset)?.trim();
-  const day = d ?? dayjs();
+  const day = d;
   if (!curRule) {
     return day;
   }
