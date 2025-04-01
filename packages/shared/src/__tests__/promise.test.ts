@@ -1,6 +1,6 @@
 import { describe, expect, it, vitest } from 'vitest';
 
-import { promiseSingleton } from './promise';
+import { promiseSingleton } from '../promise';
 
 describe('promiseSingleton', () => {
   it('should return the same promise instance for the same name', async () => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { describe, it, expect } from 'vitest';
 
-import { arrToOptions, strToOptions, objToOptions, dataToOptions, isValueInOptions, optionsToObj, DF_KEYS } from './options';
+import { arrToOptions, strToOptions, objToOptions, dataToOptions, isValueInOptions, optionsToObj, DF_KEYS } from '../options';
 
 describe('arrToOptions', () => {
   it('should convert array to options with default keys', () => {

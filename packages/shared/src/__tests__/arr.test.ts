@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { normalizeToArray } from './arr';
+import { normalizeToArray } from '../arr';
 
 describe('normalizeToArray', () => {
   it('should return the same array if the input is already an array', () => {

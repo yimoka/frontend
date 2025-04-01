@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import { strToArr } from './str';
-import { IAnyObject } from './type';
+import { strToArr } from '../str';
+import { IAnyObject } from '../type';
 
 describe('str', () => {
   const testArr: IAnyObject[] = [

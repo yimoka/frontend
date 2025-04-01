@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { isBlank } from './val';
+import { isBlank } from '../val';
 
 describe('isBlank', () => {
   it('should return true for null', () => {

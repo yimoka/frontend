@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { autoTry } from './try';
+import { autoTry } from '../try';
 
 describe('autoTry', () => {
   it('should return the result of the function if no error is thrown', () => {

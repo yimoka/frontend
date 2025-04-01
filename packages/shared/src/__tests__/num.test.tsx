@@ -2,7 +2,7 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { addWithLimit, toNumber } from './num';
+import { addWithLimit, toNumber } from '../num';
 
 describe('num', () => {
   it('toNumber', () => {

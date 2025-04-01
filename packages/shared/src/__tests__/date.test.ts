@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { describe, it, expect } from 'vitest';
 
-import { toDayjs, getDateValue, getPresetsDate, getPresetsDateRange } from './date';
+import { toDayjs, getDateValue, getPresetsDate, getPresetsDateRange } from '../date';
 
 describe('toDayjs', () => {
   it('should return the same Dayjs object if input is a Dayjs object', () => {

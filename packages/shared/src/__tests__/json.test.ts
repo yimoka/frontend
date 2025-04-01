@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 
-import { JSONParse, JSONStringify } from './json';
+import { JSONParse, JSONStringify } from '../json';
 
 describe('JSONParse', () => {
   vi.spyOn(console, 'error');

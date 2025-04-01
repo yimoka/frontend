@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { mergeWithArrayOverride } from './obj';
+import { mergeWithArrayOverride } from '../obj';
 
 describe('mergeWithArrayOverride', () => {
   it('should merge two simple objects', () => {

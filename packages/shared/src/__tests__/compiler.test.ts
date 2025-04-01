@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { compiler, calculate } from './compiler';
+import { compiler, calculate } from '../compiler';
 
 describe('compiler', () => {
   it('should return undefined for empty expression', () => {

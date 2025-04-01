@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { isSuccess, isUnauthorized, isForbidden, isNetworkError, getCodeByStatus } from './api';
+import { isSuccess, isUnauthorized, isForbidden, isNetworkError, getCodeByStatus } from '../api';
 
 describe('api', () => {
   it('isSuccess', () => {
