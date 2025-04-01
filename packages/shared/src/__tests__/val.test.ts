@@ -2,44 +2,44 @@ import { describe, it, expect } from 'vitest';
 
 import { isBlank } from '../val';
 
-describe('isBlank', () => {
-  it('should return true for null', () => {
+describe('空值检查', () => {
+  it('应正确识别 null 值', () => {
     expect(isBlank(null)).toBe(true);
   });
 
-  it('should return true for undefined', () => {
+  it('应正确识别 undefined 值', () => {
     expect(isBlank(undefined)).toBe(true);
   });
 
-  it('should return true for empty string', () => {
+  it('应正确识别空字符串', () => {
     expect(isBlank('')).toBe(true);
   });
 
-  it('should return false for non-empty string', () => {
+  it('应正确识别非空字符串', () => {
     expect(isBlank('hello')).toBe(false);
   });
 
-  it('should return false for number 0', () => {
+  it('应正确识别数字 0', () => {
     expect(isBlank(0)).toBe(false);
   });
 
-  it('should return false for boolean false', () => {
+  it('应正确识别布尔值 false', () => {
     expect(isBlank(false)).toBe(false);
   });
 
-  it('should return true for empty object', () => {
+  it('应正确识别空对象', () => {
     expect(isBlank({})).toBe(true);
   });
 
-  it('should return true for empty array', () => {
+  it('应正确识别空数组', () => {
     expect(isBlank([])).toBe(true);
   });
 
-  it('should return false for non-empty object', () => {
+  it('应正确识别非空对象', () => {
     expect(isBlank({ key: 'value' })).toBe(false);
   });
 
-  it('should return false for non-empty array', () => {
+  it('应正确识别非空数组', () => {
     expect(isBlank([1, 2, 3])).toBe(false);
   });
 });

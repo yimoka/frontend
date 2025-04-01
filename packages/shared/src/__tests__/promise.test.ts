@@ -2,8 +2,8 @@ import { describe, expect, it, vitest } from 'vitest';
 
 import { promiseSingleton } from '../promise';
 
-describe('promiseSingleton', () => {
-  it('should return the same promise instance for the same name', async () => {
+describe('Promise 单例模式', () => {
+  it('对于相同的名称应返回相同的 Promise 实例', async () => {
     const promise = vitest.fn(() => Promise.resolve('foo'));
     const name = 'test';
     const promise1 = promiseSingleton(promise, name);
@@ -14,7 +14,7 @@ describe('promiseSingleton', () => {
     expect(promise).toHaveBeenCalledTimes(1);
   });
 
-  it('should reject the promise if the underlying promise rejects', async () => {
+  it('当底层 Promise 被拒绝时应正确传递错误', async () => {
     const promise = vitest.fn(() => Promise.reject(new Error('bar')));
     const name = 'test';
     const promise1 = promiseSingleton(promise, name);
@@ -24,7 +24,7 @@ describe('promiseSingleton', () => {
     expect(promise).toHaveBeenCalledTimes(1);
   });
 
-  it('should support custom promise maps', async () => {
+  it('应支持自定义 Promise 映射', async () => {
     const promise = vitest.fn(() => Promise.resolve('baz'));
     const name = 'test';
     const map = { [name]: Promise.resolve('qux') };
