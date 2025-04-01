@@ -1,3 +1,4 @@
+export { ConfigProvider } from 'antd';
 
 export * from './base/button';
 export * from './base/float-button';
