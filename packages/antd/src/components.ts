@@ -22,6 +22,7 @@ import { Tree } from './display/tree';
 import { Input } from './enter/input';
 
 import { InputNumber } from './enter/input-number';
+import { Switch } from './enter/switch';
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
@@ -89,6 +90,7 @@ export const components: IConfigComponents = {
   AutoComplete,
   InputNumber,
   Input,
+  Switch,
   TreeSelect,
 
   // feedback

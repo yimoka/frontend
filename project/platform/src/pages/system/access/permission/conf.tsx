@@ -2,6 +2,8 @@
 import { IAnyObject } from '@yimoka/shared';
 import { IEntityConfig } from '@yimoka/store';
 
+import { getBoolField } from '@/fields/bool';
+import { getRemarkField } from '@/fields/remark';
 
 export const permissionConfig: IEntityConfig = {
   name: '权限',
@@ -55,10 +57,10 @@ export const permissionConfig: IEntityConfig = {
       'x-decorator': 'FormItem',
       'x-component': 'InputNumber',
     },
-    // remark: getRemarkField(),
-    // isMenu: getBoolField({ title: '是否菜单' }),
-    // isPage: getBoolField({ title: '是否页面' }),
-    // isAPI: getBoolField({ title: '是否接口' }),
+    remark: getRemarkField(),
+    isMenu: getBoolField({ title: '是否菜单' }),
+    isPage: getBoolField({ title: '是否页面' }),
+    isAPI: getBoolField({ title: '是否接口' }),
   },
   api: {
     add: { url: '/base/iam/manage/permission/add', method: 'POST' },
