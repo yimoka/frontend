@@ -33,7 +33,7 @@ export const PermissionTreePage = observer(() => {
         properties: {
           header: {
             type: 'void',
-            'x-component': 'Space',
+            'x-component': 'PageHeader',
             properties: {
               add: {
                 type: 'void',

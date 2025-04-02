@@ -7,9 +7,9 @@ export const permissionConfig: IEntityConfig = {
   name: '权限',
   basePath: '/system/access/permission',
   breadcrumb: [
-    { label: '首页', href: '/' },
-    { label: '系统管理', href: '/system' },
-    { label: '权限管理', href: '/system/access' },
+    { label: '首页', path: '/' },
+    { label: '系统管理', path: '/system' },
+    { label: '权限管理', path: '/system/access' },
   ],
   options: {},
   defaultValues: { parentID: '', name: '', path: '', remark: '', sort: 0, icon: '', isMenu: true, isPage: true, isAPI: false },

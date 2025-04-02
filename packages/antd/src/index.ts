@@ -47,6 +47,8 @@ export * from './nav/menu';
 export * from './nav/pagination';
 export * from './nav/steps';
 
+export * from './page/page-header';
+
 // store
 export * from './store/form';
 export * from './store/record-operation';

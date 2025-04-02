@@ -109,7 +109,9 @@ export interface IBreadcrumbItem {
   /** 图标 */
   icon?: string;
   /** 链接地址 */
-  url?: string;
+  href?: string;
+  /** 路径 */
+  path?: string;
   [key: IObjKey]: IAny;
 }
 
