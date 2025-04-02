@@ -19,7 +19,7 @@ export default function app() {
     <BrowserRouter>
       <ConfigProvider
         locale={zhCN}
-        theme={{ algorithm: [theme.compactAlgorithm] }}
+        theme={{ algorithm: [theme.compactAlgorithm], components: { Divider: { margin: 12, marginLG: 12 } } }}
       >
         <App component={false}>
           <Pwa />
