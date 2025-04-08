@@ -43,7 +43,30 @@ describe('getAutoFilterConfig', () => {
 
       expect(onFilter('', testData[0])).toBe(true);
       expect(onFilter(undefined, testData[0])).toBe(true);
+      expect(onFilter(null, testData[0])).toBe(true);
       expect(onFilter('张', {})).toBe(false);
+    });
+
+    it('应该处理isBlank的情况', () => {
+      // 测试意图：验证like模式下isBlank的处理
+      const config = getAutoFilterConfig('like', undefined, 'name');
+      const onFilter = config.onFilter!;
+
+      // 测试空字符串
+      expect(onFilter('', testData[0])).toBe(true);
+      // 测试undefined
+      expect(onFilter(undefined, testData[0])).toBe(true);
+      // 测试null
+      expect(onFilter(null, testData[0])).toBe(true);
+      // 测试空对象
+      expect(onFilter({}, testData[0])).toBe(true);
+      // 测试空数组
+      expect(onFilter([], testData[0])).toBe(true);
+      // 测试非空值
+      expect(onFilter('张', testData[0])).toBe(true);
+      expect(onFilter(' ', testData[0])).toBe(false);
+      expect(onFilter('\t', testData[0])).toBe(false);
+      expect(onFilter('\n', testData[0])).toBe(false);
     });
   });
 
@@ -82,6 +105,28 @@ describe('getAutoFilterConfig', () => {
       expect(config.filters).toEqual([
         { label: 'undefined', value: undefined, text: 'undefined' },
       ]);
+    });
+
+    it('应该处理isBlank的情况', () => {
+      // 测试意图：验证enum模式下isBlank的处理
+      const config = getAutoFilterConfig('enum', testData, 'status');
+      const onFilter = config.onFilter!;
+
+      // 测试空字符串
+      expect(onFilter('', testData[0])).toBe(true);
+      // 测试undefined
+      expect(onFilter(undefined, testData[0])).toBe(true);
+      // 测试null
+      expect(onFilter(null, testData[0])).toBe(true);
+      // 测试空对象
+      expect(onFilter({}, testData[0])).toBe(true);
+      // 测试空数组
+      expect(onFilter([], testData[0])).toBe(true);
+      // 测试非空值
+      expect(onFilter('active', testData[0])).toBe(true);
+      expect(onFilter(' ', testData[0])).toBe(false);
+      expect(onFilter('\t', testData[0])).toBe(false);
+      expect(onFilter('\n', testData[0])).toBe(false);
     });
   });
 
