@@ -78,8 +78,6 @@ export declare type ISchema<Decorator = IAny, Component = IAny, DecoratorProps =
   'x-splitter'?: string;
   /** 字段提示信息 */
   'x-tooltip'?: string | IAnyObject;
-  /** 表格列配置（已注释） */
-  // 'x-column'?: IAnyObject & { key?: IObjKey, width?: number | string }
   /** 用于渲染组件属性的模式 */
   'x-additional-schema'?: Record<IObjKey, ISchema>;
   /** 唯一标识字段，用于多级系统编辑时的数据匹配 */

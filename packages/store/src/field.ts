@@ -171,6 +171,8 @@ export type IFieldConfig = ISchema & {
  * @remarks 表格列配置项
  */
 export type IFieldColumn = {
+  /** 列唯一标识 */
+  key?: IObjKey;
   /** 列标题 */
   title?: string;
   /** 列宽 */
@@ -178,9 +180,7 @@ export type IFieldColumn = {
   /** 列对齐方式 */
   align?: 'left' | 'center' | 'right';
   /** 自动过滤 根据数据自动生成过滤选项 */
-  autoFilter?: boolean | 'like' | 'option';
-  /** 自动排序 根据数据自动生成排序选项 */
-  /** 列配置 */
+  autoFilter?: boolean | 'like' | 'enum';
   [key: IObjKey]: IAny;
 } & IAutoSorter
 
