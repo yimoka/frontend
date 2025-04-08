@@ -7,6 +7,7 @@ export * from './num';
 export * from './obj';
 export * from './options';
 export * from './promise';
+export * from './sorter';
 export * from './str';
 export * from './val';
 export * from './try';

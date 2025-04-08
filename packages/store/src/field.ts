@@ -4,7 +4,7 @@
  * @module @yimoka/store
  */
 
-import { IAny, IStrKeyObject, JSONParse, JSONStringify } from '@yimoka/shared';
+import { IAny, IObjKey, IStrKeyObject, IAutoSorter, JSONParse, JSONStringify } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 import { ISchema } from './schema';
@@ -158,4 +158,29 @@ export type IFieldsConfig = Record<string, IFieldConfig>;
  * 字段配置项类型
  * @remarks 字段配置项继承自模式定义
  */
-export type IFieldConfig = ISchema
+export type IFieldConfig = ISchema & {
+  /** 输出显示的 schema */
+  'x-output-schema'?: ISchema;
+  /** 表格列配置 */
+  'x-column'?: IFieldColumn
+};
+
+
+/**
+ * 表格列配置
+ * @remarks 表格列配置项
+ */
+export type IFieldColumn = {
+  /** 列标题 */
+  title?: string;
+  /** 列宽 */
+  width?: number | string;
+  /** 列对齐方式 */
+  align?: 'left' | 'center' | 'right';
+  /** 自动过滤 根据数据自动生成过滤选项 */
+  autoFilter?: boolean | 'like' | 'option';
+  /** 自动排序 根据数据自动生成排序选项 */
+  /** 列配置 */
+  [key: IObjKey]: IAny;
+} & IAutoSorter
+
