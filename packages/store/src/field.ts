@@ -4,7 +4,7 @@
  * @module @yimoka/store
  */
 
-import { IAny, IObjKey, IStrKeyObject, IAutoSorter, JSONParse, JSONStringify } from '@yimoka/shared';
+import { IAny, IObjKey, IStrKeyObject, IAutoSorter, JSONParse, JSONStringify, IAutoFilter } from '@yimoka/shared';
 
 import { BaseStore } from './base';
 import { ISchema } from './schema';
@@ -180,7 +180,7 @@ export type IFieldColumn = {
   /** 列对齐方式 */
   align?: 'left' | 'center' | 'right';
   /** 自动过滤 根据数据自动生成过滤选项 */
-  autoFilter?: boolean | 'like' | 'enum';
+  autoFilter?: IAutoFilter;
   [key: IObjKey]: IAny;
 } & IAutoSorter
 
