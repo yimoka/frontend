@@ -17,7 +17,8 @@ import { get } from 'lodash-es';
  * @returns 组件属性对象
  * @remarks 从 Schema 中提取组件所需的属性，支持从 x-decorator-props 和 x-component-props 中合并属性
  */
-export const getPropsByItemSchema = (schema: Schema, componentName?: string, propsMap?: IAnyObject) => {
+// eslint-disable-next-line complexity
+export const getPropsByItemSchema = (schema: Schema, componentName?: string, propsMap?: IAnyObject, scope?: IAnyObject) => {
   let itemProps: IAnyObject = {};
   if (!isBlank(propsMap)) {
     Object.entries(propsMap).forEach(([itemKey, schemaKey]) => {
@@ -34,6 +35,13 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
   }
   if (component === componentName) {
     itemProps = { ...itemProps, ...schema['x-component-props'] };
+  }
+  const sName = schema.name;
+  if (componentName === 'Column' && !isBlank(scope) && sName) {
+    const fieldColumnProps = scope?.$config?.[sName]?.['x-column'];
+    if (!isBlank(fieldColumnProps)) {
+      itemProps = { ...fieldColumnProps, ...itemProps };
+    }
   }
   return itemProps;
 };

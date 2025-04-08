@@ -15,7 +15,7 @@ export const useSchemaItemsToColumns = (getRecordIndex: IRecordIndexFn, propsMap
 
 const schemaToItemProps = (schema: Schema, scope: IAnyObject, getRecordIndex?: IRecordIndexFn, propsMap?: IAnyObject) => {
   const itemComponentName = 'Column';
-  const itemProps = getPropsByItemSchema(schema, itemComponentName, propsMap);
+  const itemProps = getPropsByItemSchema(schema, itemComponentName, propsMap, scope);
   // 如果组件名称等于 ColumnGroup 等 将 schema 的 properties 转换为 children
   if (schema['x-component'] === 'ColumnGroup') {
     itemProps.children = [];
