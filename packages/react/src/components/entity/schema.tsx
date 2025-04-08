@@ -17,7 +17,17 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
       return schema;
     }
     const { definitions = {}, ...args } = schema ?? {};
-    return { definitions: typeof definitions === 'object' ? { ...fieldsConfig, ...definitions } : fieldsConfig, ...args };
+
+    const outputSchemas: Record<string, ISchema> = {};
+    Object.entries(fieldsConfig).forEach(([key, value]) => {
+      const s = value['x-output-schema'];
+      if (!isBlank(s)) {
+        outputSchemas[`__output_${key}`] = s;
+      }
+    });
+
+    const withOutputSchemas = isBlank(outputSchemas) ? fieldsConfig : { ...fieldsConfig, ...outputSchemas };
+    return { definitions: typeof definitions === 'object' ? { ...withOutputSchemas, ...definitions } : withOutputSchemas, ...args };
   }, [schema, fieldsConfig]);
 
   const SchemaField = useMemo(() => createSchemaField({
