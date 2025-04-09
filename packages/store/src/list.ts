@@ -1,5 +1,5 @@
 import { action, define, observable } from '@formily/reactive';
-import { IAnyObject, IAny, IObjKey, mergeWithArrayOverride, isBlank, addWithLimit, isSuccess } from '@yimoka/shared';
+import { IAnyObject, IAny, mergeWithArrayOverride, isBlank, addWithLimit, isSuccess, IKey } from '@yimoka/shared';
 
 import { cloneDeep, get, pickBy, set } from 'lodash-es';
 
@@ -70,9 +70,9 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
   /**
    * 选中的行键数组。
    *
-   * @type {IObjKey[]}
+   * @type {IKey[]}
    */
-  selectedRowKeys: IObjKey[] = [];
+  selectedRowKeys: IKey[] = [];
 
   /**
    * 表示是否正在加载下一页数据的标志。
@@ -224,7 +224,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    *
    * @param {IObjKey[]} [keys=[]] - 要设置的行键数组，默认为空数组。
    */
-  setSelectedRowKeys = (keys: IObjKey[] = []) => {
+  setSelectedRowKeys = (keys: IKey[] = []) => {
     this.selectedRowKeys = keys;
   };
 

@@ -21,6 +21,8 @@ export * from './notifier';
 export * from './root';
 export * from './schema';
 
+export * from '@formily/reactive';
+
 /**
  * 存储类型
  * @remarks 支持基础存储和列表存储两种类型

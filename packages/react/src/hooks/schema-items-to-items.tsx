@@ -20,7 +20,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       return componentItems;
     }
     // eslint-disable-next-line complexity
-    normalizeToArray(data).forEach((record, index) => {
+    normalizeToArray(data).forEach((record: IAny, index: number) => {
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
       if (isBlank(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
