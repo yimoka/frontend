@@ -7,7 +7,7 @@
 import { IAny, IObjKey, IStrKeyObject, IAutoSorter, JSONParse, JSONStringify, IAutoFilter } from '@yimoka/shared';
 
 import { BaseStore } from './base';
-import { ISchema } from './schema';
+import { ISchema, ITooltip } from './schema';
 
 /**
  * 将值转换为搜索参数字符串
@@ -146,7 +146,7 @@ export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
  * @template P - 对象类型
  * @remarks 字段可以是对象的键名或字符串
  */
-export type IField<P extends object = IStrKeyObject> = keyof P | string;
+export type IField<P extends object = IStrKeyObject> = keyof P | string | number
 
 /**
  * 字段配置类型
@@ -174,7 +174,7 @@ export type IFieldColumn = {
   /** 列唯一标识 */
   key?: IObjKey;
   /** 列标题 */
-  title?: string;
+  title?: string | IAny
   /** 列宽 */
   width?: number | string;
   /** 列对齐方式 */
@@ -183,6 +183,9 @@ export type IFieldColumn = {
   autoFilter?: IAutoFilter
   /** 筛选值的 key */
   filterValueKey?: string
+  /** 提示信息 */
+  tooltip?: ITooltip
+
   [key: IObjKey]: IAny;
 } & IAutoSorter
 

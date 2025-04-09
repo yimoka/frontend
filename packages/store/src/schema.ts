@@ -77,7 +77,7 @@ export declare type ISchema<Decorator = IAny, Component = IAny, DecoratorProps =
   /** 分割符，用于将字符串转换为数组 */
   'x-splitter'?: string;
   /** 字段提示信息 */
-  'x-tooltip'?: string | IAnyObject;
+  'x-tooltip'?: ITooltip;
   /** 用于渲染组件属性的模式 */
   'x-additional-schema'?: Record<IObjKey, ISchema>;
   /** 唯一标识字段，用于多级系统编辑时的数据匹配 */
@@ -85,3 +85,5 @@ export declare type ISchema<Decorator = IAny, Component = IAny, DecoratorProps =
   /** 编辑配置，用于实现租户/用户自定义配置 */
   'x-edit-config'?: IAnyObject;
 }
+
+export type ITooltip = string | IAnyObject | boolean;

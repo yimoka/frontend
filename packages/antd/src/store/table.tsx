@@ -12,7 +12,7 @@ import { cloneDeep, get, isEqual, pick, set } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
 
 import { Table, TableProps } from '../display/table';
-import { dataIndexToKey, tableSchemaItemPropsMap } from '../display/table/fn';
+import { dataIndexToKey, getTableColumnTitleWithTooltip, tableSchemaItemPropsMap } from '../display/table/fn';
 import { useTableRowKey } from '../display/table/hook';
 
 /**
@@ -116,9 +116,13 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
   // eslint-disable-next-line complexity
   const curColumns = useMemo(() => columnsWithSchema.map((column) => {
-    const withFilterAndSort: ColumnType<T> = {};
-    const { dataIndex, key, filters } = column;
+    const withFilterAndSortAndTitle: ColumnType<T> = {};
+    const { dataIndex, key, filters, title } = column;
     const keyValue = dataIndexToKey(key ?? dataIndex);
+    const curTitle = getTableColumnTitleWithTooltip(column, curStore);
+    if (curTitle !== title) {
+      withFilterAndSortAndTitle.title = curTitle;
+    }
     //  处理过滤和排序
     if (column.autoFilter === true) {
       let fVal;
@@ -128,13 +132,13 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         fVal = get(values, keyValue);
       }
       if (Array.isArray(fVal)) {
-        withFilterAndSort.filteredValue = fVal;
+        withFilterAndSortAndTitle.filteredValue = fVal;
       } else if (typeof fVal === 'string' && fVal) {
-        withFilterAndSort.filteredValue = fVal.split(getFieldSplitter(dataIndex, curStore) ?? ',');
+        withFilterAndSortAndTitle.filteredValue = fVal.split(getFieldSplitter(dataIndex, curStore) ?? ',');
       } else if (isBlank(fVal)) {
-        withFilterAndSort.filteredValue = null;
+        withFilterAndSortAndTitle.filteredValue = null;
       } else {
-        withFilterAndSort.filteredValue = [fVal];
+        withFilterAndSortAndTitle.filteredValue = [fVal];
       }
       if (!filters) {
         let options: IAnyObject[] = [];
@@ -161,7 +165,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
           }
         }
         if (!isBlank(options)) {
-          withFilterAndSort.filters = dataToOptions<keyof ColumnFilterItem>(options, { keys: { label: 'label', value: 'value' } }) as ColumnFilterItem[];
+          withFilterAndSortAndTitle.filters = dataToOptions<keyof ColumnFilterItem>(options, { keys: { label: 'label', value: 'value' } }) as ColumnFilterItem[];
         }
       }
     }
@@ -170,12 +174,12 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       if (Array.isArray(sorterValue)) {
         const sorter = sorterValue.find(item => item.field === keyValue);
         if (sorter) {
-          withFilterAndSort.sortOrder = sorter.order;
+          withFilterAndSortAndTitle.sortOrder = sorter.order;
         }
       }
     }
-    if (!isBlank(withFilterAndSort)) {
-      return { ...column, ...withFilterAndSort };
+    if (!isBlank(withFilterAndSortAndTitle)) {
+      return { ...column, ...withFilterAndSortAndTitle };
     }
     return column;
   }), [columnsWithSchema, curStore, sortOrderKey, values]);

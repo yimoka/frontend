@@ -147,7 +147,6 @@ describe('Field 模块', () => {
     };
 
     it('异常情况', () => {
-      // @ts-expect-error 类型错误
       const result = getFieldConfig(1, fieldConfig);
       expect(result).toBeUndefined();
       // @ts-expect-error 类型错误

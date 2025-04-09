@@ -1,22 +1,32 @@
 // 对表格进行增强 支持 json schema 以及 自动生成 rowKey
 import { RecordsScope } from '@formily/react';
-import { observer, useComponentData, useRecordIndexFn, useSchemaItemsToColumns } from '@yimoka/react';
+import { observer, useComponentData, useRecordIndexFn, useSchemaItemsToColumns, useStore } from '@yimoka/react';
 import { IAnyObject } from '@yimoka/shared';
-import { IFieldColumn, IStore } from '@yimoka/store';
+import { IFieldColumn, IStore, ITooltip } from '@yimoka/store';
 import { Table as AntTable, TableProps as AntTableProps } from 'antd';
 import { ColumnGroupType, ColumnType } from 'antd/es/table';
 import React, { useMemo } from 'react';
 
-import { getTableColumnsWithAutoFilterAndSorter, tableSchemaItemPropsMap } from './fn';
+import { getTableColumnTitleWithTooltip, getTableColumnWithAutoFilterAndSorter, tableSchemaItemPropsMap } from './fn';
 import { useTableRowKey } from './hook';
 
 const TableFn = <T extends IAnyObject>(props: TableProps<T>) => {
   const { rowKey, dataSource, columns, value, dataKey, store, ...rest } = props;
+  const curStore = useStore(store);
   const data = useComponentData([dataSource, value], dataKey, store);
   const getRecordIndex = useRecordIndexFn(data);
   const curRowKey = useTableRowKey(rowKey, getRecordIndex);
   const schemaColumns = useSchemaItemsToColumns(getRecordIndex, tableSchemaItemPropsMap);
-  const curColumns = useMemo(() => getTableColumnsWithAutoFilterAndSorter([...(schemaColumns ?? []), ...(columns ?? [])], data), [columns, data, schemaColumns]);
+
+  const curColumns = useMemo(() => ([...(schemaColumns ?? []), ...(columns ?? [])].map((column) => {
+    const handleColumn = (column: ITableColumn) => {
+      const { title, children, ...rest } = column;
+      const curTitle = getTableColumnTitleWithTooltip(column, curStore);
+      const curChildren = children?.map?.((col: ITableColumn) => handleColumn(col));
+      return getTableColumnWithAutoFilterAndSorter({ ...rest, title: curTitle, children: curChildren }, data);
+    };
+    return handleColumn(column);
+  }), data), [columns, curStore, data, schemaColumns]);
 
   return (
     <RecordsScope getRecords={() => (data ?? []) as T[]} >
@@ -40,4 +50,4 @@ export type TableProps<T = IAnyObject> = Omit<AntTableProps<T>, 'rowKey' | 'colu
   columns?: Array<ITableColumn<T>>
 };
 
-export type ITableColumn<T = IAnyObject> = ColumnGroupType<T> | (ColumnType<T> & IFieldColumn)
+export type ITableColumn<T = IAnyObject> = (ColumnGroupType<T> & { tooltip?: ITooltip }) | (ColumnType<T> & IFieldColumn)

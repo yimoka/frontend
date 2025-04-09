@@ -35,3 +35,4 @@ export * from './hooks/schema-items-to-columns';
 export * from './hooks/store';
 
 export * from './tools/schema-items';
+export * from './tools/tooltip';
