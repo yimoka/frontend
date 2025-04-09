@@ -23,7 +23,7 @@ export function getTableColumnsWithAutoFilterAndSorter(columns: TableProps['colu
     const newColumn: ColumnType = {};
     if ('autoFilter' in column) {
       const { autoFilter, dataIndex, key, filteredValue, filters, onFilter } = column;
-      if (autoFilter && [filters, filteredValue, onFilter].every(v => typeof v === 'undefined')) {
+      if (autoFilter && autoFilter !== true && [filters, filteredValue, onFilter].every(v => typeof v === 'undefined')) {
         const path = dataIndex ? dataIndexToKey(dataIndex) : key;
         const { filters, onFilter } = getAutoFilterConfig(autoFilter, data, path);
         newColumn.filters = filters;

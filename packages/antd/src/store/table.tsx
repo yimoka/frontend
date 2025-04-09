@@ -1,9 +1,9 @@
 import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
-import { IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
-import { IFieldColumn, ListStore, reaction } from '@yimoka/store';
+import { dataToOptions, IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
+import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
 import { TablePaginationConfig } from 'antd';
-import { ColumnGroupType, ColumnType, SorterResult } from 'antd/es/table/interface';
-import { cloneDeep, isEqual, pick } from 'lodash-es';
+import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
+import { cloneDeep, get, isEqual, pick, set } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
 
 import { Table, TableProps } from '../display/table';
@@ -40,15 +40,15 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
   const [filterValues, setFilterValues] = useState<IAnyObject | null>(null);
   const nav = useNavigate();
   const curStore = useStore(store) as ListStore;
-  const { listData = [], pagination: storePagination, loading, fetch, selectedRowKeys, setSelectedRowKeys, options, genURLSearch, setFieldValue, values } = curStore;
-  const { bindRoute, updateRouteType } = options ?? {};
+  const { listData = [], pagination: storePagination, loading, fetch, selectedRowKeys, setSelectedRowKeys, options, genURLSearch, setFieldValue, setValues, values } = curStore;
+  const { bindRoute, updateRouteType, keys } = options;
   const getRecordIndex = useRecordIndexFn(listData);
   const curRowKey = useTableRowKey(rowKey, getRecordIndex);
   const schemaColumns = useSchemaItemsToColumns(getRecordIndex, tableSchemaItemPropsMap);
   const columnsWithSchema = useMemo(() => [...(columns ?? []), ...(schemaColumns ?? [])], [columns, schemaColumns]);
-  const pageKey = options.keys.page;
-  const pageSizeKey = options.keys.pageSize;
-  const sortOrderKey = options.keys.sortOrder;
+  const pageKey = keys.page;
+  const pageSizeKey = keys.pageSize;
+  const sortOrderKey = keys.sortOrder;
 
   const filterValueKeys = useMemo(() => {
     const keys: string[] = [];
@@ -97,20 +97,71 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
     };
   }, [pagination, storePagination]);
 
+  // eslint-disable-next-line complexity
   const curColumns = useMemo(() => columnsWithSchema.map((column) => {
-    const withFilterAndSort = {};
+    const withFilterAndSort: ColumnType<T> = {};
+    const { dataIndex, key, filters } = column;
+    const keyValue = dataIndexToKey(key ?? dataIndex);
     //  处理过滤和排序
-    if (column.enableFilter) {
-      // withFilterAndSort.filterValue = filterValues[column.filterValueKey];
+    if (column.autoFilter === true) {
+      let fVal;
+      if (keyValue in values) {
+        fVal = values[keyValue];
+      } else {
+        fVal = get(values, keyValue);
+      }
+      if (Array.isArray(fVal)) {
+        withFilterAndSort.filteredValue = fVal;
+      } else if (typeof fVal === 'string' && fVal) {
+        withFilterAndSort.filteredValue = fVal.split(getFieldSplitter(dataIndex, curStore) ?? ',');
+      } else if (isBlank(fVal)) {
+        withFilterAndSort.filteredValue = null;
+      } else {
+        withFilterAndSort.filteredValue = [fVal];
+      }
+      if (!filters) {
+        let options: IAnyObject[] = [];
+        const metaDict = curStore.response?.meta?.dict;
+        if (metaDict) {
+          if (keyValue in metaDict) {
+            options = metaDict[keyValue];
+          } else {
+            const tmp = get(metaDict, keyValue);
+            if (tmp) {
+              options = tmp;
+            }
+          }
+        }
+        if (!options) {
+          // 尝试从字典中取
+          if (keyValue in curStore.dict) {
+            options = curStore.dict[keyValue];
+          } else {
+            const tmp = get(curStore.dict, keyValue);
+            if (tmp) {
+              options = tmp;
+            }
+          }
+        }
+        if (!isBlank(options)) {
+          withFilterAndSort.filters = dataToOptions<keyof ColumnFilterItem>(options, { keys: { label: 'label', value: 'value' } }) as ColumnFilterItem[];
+        }
+      }
     }
     if (column.sorter === true) {
-      // withFilterAndSort.sortValue = column.sortValueKey;
+      const sorterValue = get(values, sortOrderKey);
+      if (Array.isArray(sorterValue)) {
+        const sorter = sorterValue.find(item => item.field === keyValue);
+        if (sorter) {
+          withFilterAndSort.sortOrder = sorter.order;
+        }
+      }
     }
     if (!isBlank(withFilterAndSort)) {
       return { ...column, ...withFilterAndSort };
     }
     return column;
-  }), [columnsWithSchema]);
+  }), [columnsWithSchema, curStore, sortOrderKey, values]);
 
   const curRowSelection = useMemo(() => (rowSelection
     ? {
@@ -157,6 +208,53 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
     queryData();
   };
 
+  const handleFilters = (filters: Record<string, FilterValue | null>) => {
+    const newValues: IAnyObject = {};
+    // eslint-disable-next-line complexity
+    Object.entries(filters).forEach(([key, value]) => {
+      const val = value === null ? [] : value;
+      const col = columnsWithSchema.find((item) => {
+        if (item.key === key) {
+          return true;
+        }
+        if ('dataIndex' in item) {
+          const index = dataIndexToKey(item.dataIndex);
+          return index === key;
+        }
+        return false;
+      });
+      if (col) {
+        let fVal: unknown;
+        let oldVal: unknown;
+        const keyValue = col.filterValueKey ?? key;
+        if (keyValue in values) {
+          oldVal = values[keyValue];
+        } else {
+          oldVal = get(values, keyValue);
+        }
+        if (col?.filterMultiple === false) {
+          fVal = val?.[0];
+        } else if (typeof oldVal === 'string') {
+          fVal = val.join(getFieldSplitter(col.dataIndex, curStore) ?? ',');
+        } else {
+          fVal = val;
+        }
+        if (!isEqual(fVal, oldVal)) {
+          if (keyValue in values) {
+            newValues[keyValue] = fVal;
+          } else {
+            set(newValues, keyValue, fVal);
+          }
+        }
+      }
+    });
+    if (!isBlank(newValues)) {
+      setFieldValue(pageKey, 1);
+      setValues(newValues);
+      queryData();
+    }
+  };
+
   return (
     <RecordsScope getRecords={() => listData} >
       <Table
@@ -173,9 +271,9 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
           if (action === 'paginate') {
             handlePagination(pagination);
           }
-          // if (action === 'filter') {
-          //   handleFilters(filters, extra);
-          // }
+          if (action === 'filter') {
+            handleFilters(filters);
+          }
           if (action === 'sort') {
             handleSorter(sorter);
           }
@@ -187,21 +285,12 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
 const StoreBindTable = observer(StoreBindTableFn) as <T = IAnyObject>(props: Omit<StoreTableProps<T>, 'bindValue'>) => React.ReactElement;
 
-export type StoreTableProps<T = IAnyObject> = Omit<TableProps<T>, 'dataSource' | 'data' | 'value' | 'dataKey' | 'store' | 'columns'> & {
+export type StoreTableProps<T = IAnyObject> = Omit<TableProps<T>, 'dataSource' | 'data' | 'value' | 'dataKey' | 'store'> & {
   store?: ListStore
   bindValue?: boolean
-  columns?: Array<IStoreTableColumn<T>>
 }
 
 export interface ISortOrder {
   field: string,
   order: 'ascend' | 'descend' | false
 }
-
-export type IStoreTableColumn<T = IAnyObject> = ColumnGroupType<T> | (ColumnType<T> & IFieldColumn & {
-  filterValueKey?: string
-  // 启用受控筛选
-  enableFilter?: boolean
-  // 排序参数名
-  // sortValueKey?: string
-})

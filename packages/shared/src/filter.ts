@@ -28,7 +28,7 @@ import { isBlank } from './val';
  * @property {string} like - 模糊匹配模式，使用字符串包含关系进行匹配
  * @property {string} enum - 枚举匹配模式，使用精确相等进行匹配
  */
-export type IAutoFilter = 'like' | 'enum';
+export type IAutoFilter = 'like' | 'enum' | true;
 
 /**
  * 获取表格列的自动过滤配置

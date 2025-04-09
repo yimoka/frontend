@@ -91,7 +91,7 @@ export const parseSearchParam = (searchParam?: string, schema: ISchema = {}, dfV
  * ```ts
  * const store = new BaseStore({
  *   fieldsConfig: {
- *     tags: { splitter: ',' }
+ *     tags: { 'x-splitter': ',' }
  *   }
  * });
  * getFieldSplitter('tags', store);
@@ -179,8 +179,10 @@ export type IFieldColumn = {
   width?: number | string;
   /** 列对齐方式 */
   align?: 'left' | 'center' | 'right';
-  /** 自动过滤 根据数据自动生成过滤选项 */
-  autoFilter?: IAutoFilter;
+  /** 自动过滤 根据数据自动生成过滤选项 当为 true 时,为受控跟 store 关联*/
+  autoFilter?: IAutoFilter
+  /** 筛选值的 key */
+  filterValueKey?: string
   [key: IObjKey]: IAny;
 } & IAutoSorter
 
