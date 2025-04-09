@@ -23,6 +23,7 @@ export * from './components/trigger';
 export * from './context/config';
 
 export * from './hooks/additional-node';
+export * from './hooks/array-string-transform';
 export * from './hooks/children-without-fragment';
 export * from './hooks/component-data';
 export * from './hooks/components';
@@ -32,6 +33,7 @@ export * from './hooks/record-index-fn';
 export * from './hooks/root';
 export * from './hooks/schema-items-to-items';
 export * from './hooks/schema-items-to-columns';
+export * from './hooks/splitter';
 export * from './hooks/store';
 
 export * from './tools/schema-items';

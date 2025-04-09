@@ -1,8 +1,8 @@
-import { PropsWithComponentData, useComponentData } from '@yimoka/react';
+import { PropsWithComponentData, useArrayStringTransform, useComponentData, useSplitter } from '@yimoka/react';
 import { IAnyObject } from '@yimoka/shared';
 import { Tree as AntTree, TreeProps as AntTreeProps } from 'antd';
 import { BasicDataNode } from 'antd/es/tree';
-import React, { Key, useMemo } from 'react';
+import React, { Key } from 'react';
 
 import { strToIcon } from '../tools/icon';
 
@@ -15,22 +15,11 @@ export type TreeProps<T extends BasicDataNode = IAnyObject> = PropsWithComponent
 }>
 
 export const Tree = (props: TreeProps) => {
-  const { switcherLoadingIcon, icon, treeData, data, store, dataKey, checkedKeys, value, valueType, splitter = ',',
+  const { switcherLoadingIcon, icon, treeData, data, store, dataKey, checkedKeys, value, valueType, splitter,
     onChange, onCheck, ...args } = props;
   const curData = useComponentData([treeData, data], dataKey, store);
-
-  const curCheckedKeys = useMemo(() => {
-    if (typeof checkedKeys !== 'undefined') {
-      return checkedKeys;
-    }
-    if (typeof value === 'string') {
-      return value.split(splitter);
-    }
-    if (Array.isArray(value)) {
-      return value;
-    }
-    return [];
-  }, [checkedKeys, splitter, value]);
+  const curSplitter = useSplitter(splitter);
+  const curCheckedKeys = useArrayStringTransform(checkedKeys, curSplitter);
 
   return (
     <AntTree {...args}
