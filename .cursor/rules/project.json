@@ -27,6 +27,7 @@
     "使用 @type 标签说明类型定义",
     "使用 @param 标签详细说明参数",
     "使用 @returns 标签说明返回值",
+    "typedoc 不支持 @description 标签，如需请使用 @summary 标签说明函数功能",
     "如需使用 @summary 标签说明函数功能，请使用中文",
     "如需使用 @remarks 标签说明函数详细功能",
     "如需使用 @throws 标签说明异常场景",

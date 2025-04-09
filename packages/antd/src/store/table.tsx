@@ -1,3 +1,8 @@
+/**
+ * @file 表格组件与 Store 的集成实现
+ * @summary 该模块实现了基于 Store 的表格组件，支持数据绑定、分页、排序、筛选等功能
+ */
+
 import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
 import { dataToOptions, IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
@@ -10,6 +15,12 @@ import { Table, TableProps } from '../display/table';
 import { dataIndexToKey, tableSchemaItemPropsMap } from '../display/table/fn';
 import { useTableRowKey } from '../display/table/hook';
 
+/**
+ * StoreTable 组件的实现函数
+ * @template T - 表格数据项的类型
+ * @param props - 组件属性
+ * @returns React 元素
+ */
 const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
   const { store, bindValue, ...rest } = props;
   const curStore = useStore(store) as ListStore;
@@ -35,6 +46,12 @@ const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
 
 export const StoreTable = observer(StoreTableFn) as <T = IAnyObject>(props: StoreTableProps<T>) => React.ReactElement;
 
+/**
+ * 绑定 Store 的表格组件实现函数
+ * @template T - 表格数据项的类型
+ * @param props - 组件属性
+ * @returns React 元素
+ */
 const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 'bindValue'>) => {
   const { store, pagination, onChange, rowSelection, columns, rowKey, ...rest } = props;
   const [filterValues, setFilterValues] = useState<IAnyObject | null>(null);
@@ -195,7 +212,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
   const handleSorter = (sorter: SorterResult<IAnyObject> | SorterResult<IAnyObject>[]) => {
     const val: ISortOrder[] = [];
-    (normalizeToArray(sorter)).forEach((item) => {
+    normalizeToArray(sorter).forEach((item) => {
       const { field, columnKey, order } = item;
       const keys = columnKey ?? field;
       const key = dataIndexToKey(Array.isArray(keys) ? keys : [keys]);
@@ -285,12 +302,23 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
 const StoreBindTable = observer(StoreBindTableFn) as <T = IAnyObject>(props: Omit<StoreTableProps<T>, 'bindValue'>) => React.ReactElement;
 
+/**
+ * 表格组件的属性类型定义
+ * @template T - 表格数据项的类型
+ */
 export type StoreTableProps<T = IAnyObject> = Omit<TableProps<T>, 'dataSource' | 'data' | 'value' | 'dataKey' | 'store'> & {
+  /** Store 实例 */
   store?: ListStore
+  /** 是否绑定值 */
   bindValue?: boolean
 }
 
+/**
+ * 排序顺序的类型定义
+ */
 export interface ISortOrder {
+  /** 排序字段 */
   field: string,
+  /** 排序方向 */
   order: 'ascend' | 'descend' | false
 }
