@@ -291,7 +291,7 @@ export const isValueInOptions = (value: any, options: IOptions<'value'>, conf?: 
  * console.log(map); // {}
  */
 
-export const optionsToObj = (options: IOptions, keys?: IKeys) => {
+export const optionsToObj = (options: IOptions | IAnyObject, keys?: IKeys) => {
   const map: Record<IObjKey, any> = Object({});
   const valueKey = keys?.value ?? DF_KEYS.value;
   const labelKey = keys?.label ?? DF_KEYS.label;

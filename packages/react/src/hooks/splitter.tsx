@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { useStore } from './store';
 
-export const useSplitter = (splitter?: string) => {
+export const useSplitter = (splitter?: string): string => {
   const field = useFieldSchema();
   const store = useStore();
 

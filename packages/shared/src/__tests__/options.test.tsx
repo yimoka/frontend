@@ -151,7 +151,6 @@ describe('optionsToMap', () => {
   it('应该处理选项的异常值', () => {
     // @ts-expect-error
     expect(optionsToObj(null)).toEqual({});
-    // @ts-expect-error
     expect(optionsToObj({ a: 'a' })).toEqual({ a: 'a' });
   });
 });
