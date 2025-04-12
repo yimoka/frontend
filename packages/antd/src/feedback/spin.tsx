@@ -1,10 +1,10 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { Spin as AntSpin, SpinProps as AntSpinProps } from 'antd';
+import { Spin as AntSpin, SpinProps } from 'antd';
 import React from 'react';
 
-export const Spin = (props: AntSpinProps) => {
+export const Spin = (props: SpinProps) => {
   const { indicator, tip, ...rest } = props;
-  const indicatorNode = useAdditionalNode('indicator', indicator) as AntSpinProps['indicator'];
+  const indicatorNode = useAdditionalNode('indicator', indicator) as SpinProps['indicator'];
   const tipNode = useAdditionalNode('tip', tip);
 
   return (
@@ -15,3 +15,5 @@ export const Spin = (props: AntSpinProps) => {
     />
   );
 };
+
+export type { SpinProps };

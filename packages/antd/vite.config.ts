@@ -16,7 +16,6 @@ export default defineConfig({
       tsconfigPath: path.resolve(__dirname, 'tsconfig.app.json'),
     }),
   ],
-  publicDir: false,
   build: {
     sourcemap: !process.env.VITE_WATCH,
     target: process.env.VITE_WATCH ? 'modules' : 'es2015',

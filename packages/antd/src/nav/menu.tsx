@@ -25,3 +25,5 @@ const MenuFC = observer((props: PropsWithComponentData<Omit<MenuProps, 'itemRend
 });
 
 export const Menu = Object.assign(MenuFC, AntMenu);
+
+export type { MenuProps };

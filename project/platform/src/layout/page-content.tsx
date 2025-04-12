@@ -1,6 +1,5 @@
 import { observer } from '@formily/react';
-import { Content } from '@yimoka/antd';
-import { GetProps, theme } from 'antd';
+import { Content, GetProps, theme } from '@yimoka/antd';
 import React from 'react';
 
 const { useToken } = theme;

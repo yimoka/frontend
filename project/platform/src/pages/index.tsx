@@ -1,4 +1,4 @@
-import { Flex, theme } from 'antd';
+import { Flex, theme } from '@yimoka/antd';
 import React from 'react';
 
 import { WithFooterLayout } from '@/layout/with-footer';

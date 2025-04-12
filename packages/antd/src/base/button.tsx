@@ -8,3 +8,4 @@ export const Button = (props: ButtonProps) => {
   return <AntButton {...args} icon={strToIcon(icon)} />;
 };
 
+export type { ButtonProps };

@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Modal } from '@yimoka/antd';
 import React, { useEffect, useState } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
@@ -93,6 +93,7 @@ export const Pwa = () => {
         okText="马上更新"
         open={open}
         title="更新"
+        trigger={false}
         zIndex={9999}
         onCancel={() => {
           isCheckUpdate = true;

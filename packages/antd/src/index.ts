@@ -1,4 +1,7 @@
-export { ConfigProvider } from 'antd';
+import { GetProps } from 'antd';
+
+export { ConfigProvider, theme, App } from 'antd';
+export type { GetProps };
 
 export * from './base/button';
 export * from './base/float-button';

@@ -19,7 +19,6 @@
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
     "@yimoko/safe": "^1.0.0",
-    "antd": "^5.23.1",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "lodash-es": "^4.17.21",

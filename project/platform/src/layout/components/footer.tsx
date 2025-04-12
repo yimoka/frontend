@@ -1,5 +1,5 @@
 import { observer } from '@formily/react';
-import { Layout } from 'antd';
+import { Layout } from '@yimoka/antd';
 import React from 'react';
 
 export const Footer = observer(() => (

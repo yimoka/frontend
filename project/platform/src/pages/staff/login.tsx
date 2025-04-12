@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
+import { Card } from '@yimoka/antd';
 import { IFetchListener } from '@yimoka/store';
-import { Card } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 

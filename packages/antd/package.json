@@ -15,9 +15,16 @@
   },
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js",
       "default": "./src/index.ts"
+    },
+    "./locale/*": {
+      "types": "./types/locale/*.d.ts",
+      "import": "./dist/locale/*.js",
+      "require": "./dist/locale/*.js",
+      "default": "./dist/locale/*.js"
     }
   },
   "main": "src/index.ts",

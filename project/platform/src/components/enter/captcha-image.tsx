@@ -1,7 +1,7 @@
 import { observer } from '@formily/react';
+import { ButtonProps, SpinProps, Spin, Button, theme } from '@yimoka/antd';
 import { useInitStore } from '@yimoka/react';
 import { IStoreAPI } from '@yimoka/store';
-import { ButtonProps, SpinProps, Spin, Button, theme } from 'antd';
 import React, { HTMLAttributes, useEffect } from 'react';
 
 const { useToken } = theme;
@@ -40,17 +40,17 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
     <Spin {...args} spinning={loading} >
       {image
         ? <img alt='验证码'
-height={height}
-style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }}
-width="100%"
-{...imgProps}
-src={image}
-onClick={getImg} />
+          height={height}
+          style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }}
+          width="100%"
+          {...imgProps}
+          src={image}
+          onClick={getImg} />
         : <Button ghost
-type="primary"
-{...btnProps}
-disabled={loading}
-onClick={getImg}>
+          type="primary"
+          {...btnProps}
+          disabled={loading}
+          onClick={getImg}>
           获取验证码
         </Button>}
     </Spin>
