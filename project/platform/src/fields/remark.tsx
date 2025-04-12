@@ -1,5 +1,5 @@
+import { mergeWithArrayOverride } from '@yimoka/shared';
 import { IFieldConfig } from '@yimoka/store';
-import { merge } from 'lodash-es';
 
 export const RemarkField: IFieldConfig = {
   title: '备注',
@@ -8,4 +8,4 @@ export const RemarkField: IFieldConfig = {
 };
 
 // 深度合并
-export const getRemarkField = (conf: IFieldConfig = {}) => merge({}, RemarkField, conf);
+export const getRemarkField = (conf: IFieldConfig = {}) => mergeWithArrayOverride({}, RemarkField, conf);
