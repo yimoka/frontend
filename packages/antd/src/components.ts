@@ -1,7 +1,5 @@
 import { IConfigComponents } from '@yimoka/react';
 
-import { AutoComplete, TreeSelect } from 'antd';
-
 import { Button } from './base/button';
 import { FloatButton } from './base/float-button';
 import { Icon } from './base/icon';
@@ -20,10 +18,16 @@ import { Table } from './display/table';
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
+import { AutoComplete } from './enter/auto-complete';
+import { Cascader } from './enter/cascader';
+import { Checkbox, CheckboxGroup } from './enter/checkbox';
+import { ColorPicker } from './enter/color-picker';
 import { Input } from './enter/input';
-
 import { InputNumber } from './enter/input-number';
 import { Switch } from './enter/switch';
+import { TreeSelect } from './enter/tree-select';
+
+
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
@@ -89,6 +93,10 @@ export const components: IConfigComponents = {
 
   // entity
   AutoComplete,
+  Cascader,
+  Checkbox,
+  CheckboxGroup,
+  ColorPicker,
   InputNumber,
   Input,
   Switch,
