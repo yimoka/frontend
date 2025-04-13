@@ -9,10 +9,9 @@ export const Carousel = (props: CarouselProps) => {
   const items = useSchemaItemsToItems(curData);
   const curChildren = useChildrenWithoutFragment(children);
 
+  // TODO: 实现
   console.log('Carousel', items);
-
 
   return <AntCarousel {...rest}>{curChildren}</AntCarousel>;
 };
-
 

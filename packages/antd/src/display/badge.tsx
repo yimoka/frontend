@@ -1,9 +1,9 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { BadgeProps, Badge as AntBadge } from 'antd';
+import { BadgeProps as AntBadgeProps, Badge as AntBadge } from 'antd';
 import { RibbonProps } from 'antd/lib/badge/Ribbon';
 import React from 'react';
 
-const BadgeFC = (props: BadgeProps & { value?: BadgeProps['count'] }) => {
+const BadgeFC = (props: BadgeProps) => {
   const { count, text, value, ...rest } = props;
   const textNode = useAdditionalNode('text', text);
   const countNode = useAdditionalNode('count', count);
@@ -19,3 +19,7 @@ const Ribbon = (props: RibbonProps) => {
 };
 
 export const Badge = Object.assign(BadgeFC, { Ribbon });
+
+export type BadgeProps = AntBadgeProps & { value?: BadgeProps['count'] };
+
+export type { RibbonProps };

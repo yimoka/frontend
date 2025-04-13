@@ -1,13 +1,15 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { Input as AntInput, InputProps } from 'antd';
-import { PasswordProps, SearchProps, TextAreaProps } from 'antd/lib/input';
+import { Input as AntInput, InputProps as AntInputProps } from 'antd';
+import { PasswordProps as AntPasswordProps, SearchProps as AntSearchProps, TextAreaProps as AntTextAreaProps } from 'antd/lib/input';
 import React from 'react';
 
 import { handleAllowClear } from '../tools/icon';
 
 type IOnChange<T = HTMLInputElement> = (value: string, e: React.ChangeEvent<T>) => void;
 
-const InputFC = (props: Omit<InputProps, 'onChange'> & { onChange?: IOnChange }) => {
+export type InputProps = Omit<AntInputProps, 'onChange'> & { onChange?: IOnChange }
+
+const InputFC = (props: InputProps) => {
   const { onChange, prefix, suffix, addonBefore, addonAfter, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
@@ -27,7 +29,9 @@ const InputFC = (props: Omit<InputProps, 'onChange'> & { onChange?: IOnChange })
     />);
 };
 
-const TextArea = (props: Omit<TextAreaProps, 'onChange'> & { onChange?: IOnChange<HTMLTextAreaElement> }) => {
+export type TextAreaProps = Omit<AntTextAreaProps, 'onChange'> & { onChange?: IOnChange<HTMLTextAreaElement> }
+
+const TextArea = (props: TextAreaProps) => {
   const { onChange, allowClear, ...rest } = props;
 
   return (
@@ -38,7 +42,9 @@ const TextArea = (props: Omit<TextAreaProps, 'onChange'> & { onChange?: IOnChang
     />);
 };
 
-const Password = (props: Omit<PasswordProps, 'onChange'> & { onChange?: IOnChange }) => {
+export type PasswordProps = Omit<AntPasswordProps, 'onChange'> & { onChange?: IOnChange }
+
+const Password = (props: PasswordProps) => {
   const { onChange, prefix, suffix, addonBefore, addonAfter, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
@@ -58,7 +64,9 @@ const Password = (props: Omit<PasswordProps, 'onChange'> & { onChange?: IOnChang
     />);
 };
 
-const Search = (props: Omit<SearchProps, 'onChange'> & { onChange?: IOnChange }) => {
+export type SearchProps = Omit<AntSearchProps, 'onChange'> & { onChange?: IOnChange }
+
+const Search = (props: SearchProps) => {
   const { onChange, prefix, suffix, addonBefore, addonAfter, enterButton, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);

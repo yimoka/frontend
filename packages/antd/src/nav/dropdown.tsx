@@ -18,3 +18,5 @@ const DropdownFC = observer((props: PropsWithComponentData<DropdownProps> & { va
 });
 
 export const Dropdown = Object.assign(DropdownFC, AntDropdown);
+
+export type { DropdownProps };

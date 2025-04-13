@@ -16,4 +16,3 @@ export const Spin = (props: SpinProps) => {
   );
 };
 
-export type { SpinProps };

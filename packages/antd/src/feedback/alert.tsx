@@ -24,3 +24,5 @@ const AlertFC = (props: AlertProps) => {
 export const Alert = Object.assign(AlertFC, {
   ErrorBoundary: AntAlert.ErrorBoundary,
 });
+
+export type { AlertProps };

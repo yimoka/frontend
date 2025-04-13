@@ -27,3 +27,5 @@ export const FloatButton = Object.assign(FloatButtonFC, {
   Group,
   BackTop: AntFloatButton.BackTop,
 });
+
+export type { FloatButtonProps, FloatButtonGroupProps };

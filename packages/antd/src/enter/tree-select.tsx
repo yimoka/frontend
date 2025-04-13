@@ -1,5 +1,5 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { TreeSelect as AntTreeSelect, TreeSelectProps } from 'antd';
+import { TreeSelect as AntTreeSelect, TreeSelectProps as AntTreeSelectProps } from 'antd';
 import React from 'react';
 
 import { handleAllowClear, strToIcon } from '../tools/icon';
@@ -21,3 +21,5 @@ export const TreeSelect = (props: TreeSelectProps) => {
     />
   );
 };
+
+export type TreeSelectProps = AntTreeSelectProps;

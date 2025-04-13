@@ -1,9 +1,9 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { InputNumber as AntInputNumber } from 'antd';
-import React, { forwardRef } from 'react';
+import { InputNumber as AntInputNumber, InputNumberProps as AntInputNumberProps } from 'antd';
+import React from 'react';
 
 
-export const InputNumber: React.ForwardRefExoticComponent<React.PropsWithoutRef<React.ComponentProps<typeof AntInputNumber>>> = forwardRef<HTMLInputElement, React.ComponentProps<typeof AntInputNumber>>((props, ref) => {
+export const InputNumber = (props: InputNumberProps) => {
   const { prefix, suffix, addonBefore, addonAfter, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);
@@ -14,10 +14,11 @@ export const InputNumber: React.ForwardRefExoticComponent<React.PropsWithoutRef<
   return (
     <AntInputNumber
       {...rest}
-      ref={ref}
       addonAfter={curAddonAfter}
       addonBefore={curAddonBefore}
       prefix={curPrefix}
       suffix={curSuffix}
     />);
-});
+};
+
+export type InputNumberProps = AntInputNumberProps;

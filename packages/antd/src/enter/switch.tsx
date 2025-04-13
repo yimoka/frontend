@@ -1,5 +1,5 @@
 import { useAdditionalNode } from '@yimoka/react';
-import { Switch as AntSwitch, SwitchProps } from 'antd';
+import { Switch as AntSwitch, SwitchProps as AntSwitchProps } from 'antd';
 import React from 'react';
 
 export const Switch = (props: SwitchProps) => {
@@ -9,3 +9,5 @@ export const Switch = (props: SwitchProps) => {
 
   return <AntSwitch {...rest} checkedChildren={curCheckedChildren} unCheckedChildren={curUnCheckedChildren} />;
 };
+
+export type SwitchProps = AntSwitchProps;

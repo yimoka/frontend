@@ -10,3 +10,4 @@ export const Empty = (props: EmptyProps) => {
   return <AntEmpty {...args} description={descriptionNode} image={imageNode} />;
 };
 
+export type { EmptyProps };

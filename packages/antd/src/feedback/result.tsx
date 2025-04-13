@@ -20,3 +20,5 @@ export const Result = (props: AntResultProps) => {
     />
   );
 };
+
+export type ResultProps = AntResultProps;

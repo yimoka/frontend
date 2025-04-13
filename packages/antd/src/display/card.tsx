@@ -38,3 +38,5 @@ const Meta = (props: CardMetaProps) => {
 };
 
 export const Card = Object.assign(CardFC, { Meta, Grid: AntCard.Grid });
+
+export type { CardProps, CardMetaProps };

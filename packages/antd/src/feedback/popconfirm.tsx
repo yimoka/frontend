@@ -18,3 +18,5 @@ export const Popconfirm = (props: AntPopconfirmProps) => {
     />
   );
 };
+
+export type PopconfirmProps = AntPopconfirmProps;

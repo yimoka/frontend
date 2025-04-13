@@ -1,7 +1,7 @@
 import { Progress as AntProgress, ProgressProps as AntProgressProps } from 'antd';
 import React from 'react';
 
-export const Progress = (props: AntProgressProps & { value?: number }) => {
+export const Progress = (props: ProgressProps) => {
   const { percent, value, ...rest } = props;
 
   return (
@@ -11,3 +11,5 @@ export const Progress = (props: AntProgressProps & { value?: number }) => {
     />
   );
 };
+
+export type ProgressProps = AntProgressProps & { value?: number }
