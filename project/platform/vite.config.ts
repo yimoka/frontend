@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL, fileURLToPath } from 'url';
 
 import react from '@vitejs/plugin-react';
@@ -43,7 +44,7 @@ export default defineConfig({
   },
 
   plugins: [
-    react(),
+    react() as any,
     VitePWA({
       registerType: 'prompt',
       manifestFilename: 'manifest.json',

@@ -1,5 +1,5 @@
 import { observer } from '@formily/react';
-import { ButtonProps, SpinProps, Spin, Button, theme } from '@yimoka/antd';
+import { ButtonProps, SpinProps, Button, theme, Loading } from '@yimoka/antd';
 import { useInitStore } from '@yimoka/react';
 import { IStoreAPI } from '@yimoka/store';
 import React, { HTMLAttributes, useEffect } from 'react';
@@ -37,7 +37,7 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
   };
 
   return (
-    <Spin {...args} spinning={loading} >
+    <Loading {...args} spinning={loading} >
       {image
         ? <img alt='验证码'
           height={height}
@@ -53,6 +53,6 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
           onClick={getImg}>
           获取验证码
         </Button>}
-    </Spin>
+    </Loading>
   );
 });
