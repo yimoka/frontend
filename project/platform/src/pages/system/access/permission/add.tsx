@@ -16,7 +16,7 @@ export const PermissionAdd = observer((props: Omit<IEntityAddProps, 'config' | '
             type: 'void',
             'x-component': 'StoreForm',
             'x-component-props': {
-              labelWidth: 80,
+              labelWidth: 50,
             },
             properties: {
               parentID: {
