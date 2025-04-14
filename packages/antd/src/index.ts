@@ -44,6 +44,7 @@ export * from './display/list';
 export * from './display/popover';
 export * from './display/qr-code';
 export * from './display/segmented';
+export * from './display/statistic';
 export * from './display/table';
 export * from './display/link';
 export * from './display/tag';

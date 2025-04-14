@@ -20,6 +20,7 @@ import { List } from './display/list';
 import { Popover } from './display/popover';
 import { QRCode } from './display/qr-code';
 import { Segmented } from './display/segmented';
+import { Countdown, Statistic } from './display/statistic';
 import { Table } from './display/table';
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
@@ -111,6 +112,8 @@ export const components: IConfigComponents = {
   Popover,
   QRCode,
   Segmented,
+  Statistic,
+  Countdown,
   Table,
   Link,
   Tag,
