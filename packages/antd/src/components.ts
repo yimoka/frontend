@@ -22,6 +22,7 @@ import { QRCode } from './display/qr-code';
 import { Segmented } from './display/segmented';
 import { Countdown, Statistic } from './display/statistic';
 import { Table } from './display/table';
+import { Tabs } from './display/tabs';
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
@@ -108,6 +109,7 @@ export const components: IConfigComponents = {
   Empty,
   HTMLContent,
   Image,
+  Link,
   List,
   Popover,
   QRCode,
@@ -115,7 +117,7 @@ export const components: IConfigComponents = {
   Statistic,
   Countdown,
   Table,
-  Link,
+  Tabs,
   Tag,
   CheckableTag: Tag.CheckableTag,
   Tree,
