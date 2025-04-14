@@ -4,6 +4,9 @@ import { describe, it, expect } from 'vitest';
 import { toDayjs, getDateValue, getPresetsDate, getPresetsDateRange } from '../date';
 
 describe('toDayjs', () => {
+  it('如果输入是 undefined，应该返回 undefined', () => {
+    expect(toDayjs(undefined)).toBe(undefined);
+  });
   it('如果输入是 Dayjs 对象，应该返回相同的 Dayjs 对象', () => {
     const dayjsObj = dayjs();
     expect(toDayjs(dayjsObj)).toBe(dayjsObj);

@@ -6,26 +6,6 @@ import React, { ComponentProps, useMemo } from 'react';
 
 import { handleAllowClear, strToIcon } from '../tools/icon';
 
-export type DatePickerBaseProps = Omit<ComponentProps<typeof AntDatePicker>, 'defaultValue' | 'value' | 'onChange' | 'multiple'> & { dataValueType?: IDateType }
-
-type DatePickerOneProps = DatePickerBaseProps & {
-  multiple?: false
-  value?: IDate
-  defaultValue?: IDate
-  onChange?: (value: IDate, day: Dayjs | null) => void
-}
-
-type DatePickerMultipleProps = DatePickerBaseProps & {
-  multiple: true
-  value?: IDate[] | string
-  defaultValue?: IDate[] | string
-  onChange?: (value: IDate[] | string, day: Dayjs[] | null) => void
-  valueType?: 'string' | 'array'
-  splitter?: string
-}
-
-export type DatePickerProps = DatePickerOneProps | DatePickerMultipleProps
-
 function DatePickerFC(props: DatePickerProps) {
   if (props.multiple) {
     return <DatePickerMultiple {...props} />;
@@ -40,7 +20,7 @@ function DatePickerOne(props: DatePickerOneProps) {
     ...rest
   } = props;
 
-  // 默认值不能使用 useMemo 否则无法第一次
+  // 默认值不能使用 useMemo 否则无法生效
   const curDefaultValue = toDayjs(defaultValue, { type: dataValueType, format: toFormat(format, picker) });
   const curValue = useMemo(() => toDayjs(value, { type: dataValueType, format: toFormat(format, picker) }), [value, dataValueType, format, picker]);
 
@@ -77,17 +57,6 @@ function DatePickerOne(props: DatePickerOneProps) {
   );
 };
 
-const toDayjsArray = (value: IDate[] | string | undefined, splitter: string, dataValueType: IDateType = 'string', format: DatePickerProps['format'], picker: DatePickerProps['picker']): Dayjs[] | undefined => {
-  if (typeof value === 'undefined') {
-    return undefined;
-  }
-  const arr = typeof value === 'string' ? value.split(splitter) : value;
-  if (!Array.isArray(arr)) {
-    return undefined;
-  }
-  const formatStr = toFormat(format, picker);
-  return arr.map(item => toDayjs(item, { type: dataValueType, format: formatStr }))?.filter(Boolean) as Dayjs[];
-};
 
 function DatePickerMultiple(props: DatePickerMultipleProps) {
   const {
@@ -147,6 +116,19 @@ function DatePickerMultiple(props: DatePickerMultipleProps) {
   );
 }
 
+const toDayjsArray = (value: IDate[] | string | undefined, splitter: string, dataValueType: IDateType = 'string', format: DatePickerProps['format'], picker: DatePickerProps['picker']): Dayjs[] | undefined => {
+  if (typeof value === 'undefined') {
+    return undefined;
+  }
+  const arr = typeof value === 'string' ? value.split(splitter) : value;
+  if (!Array.isArray(arr)) {
+    return undefined;
+  }
+  const formatStr = toFormat(format, picker);
+  return arr.map(item => toDayjs(item, { type: dataValueType, format: formatStr }))?.filter(Boolean) as Dayjs[];
+};
+
+
 // eslint-disable-next-line complexity
 const toFormat = (format: DatePickerProps['format'], picker: DatePickerProps['picker']): string => {
   if (isVacuous(format)) {
@@ -185,6 +167,27 @@ const toFormat = (format: DatePickerProps['format'], picker: DatePickerProps['pi
   }
   return '';
 };
+
+
+export type DatePickerBaseProps = Omit<ComponentProps<typeof AntDatePicker>, 'defaultValue' | 'value' | 'onChange' | 'multiple'> & { dataValueType?: IDateType }
+
+type DatePickerOneProps = DatePickerBaseProps & {
+  multiple?: false
+  value?: IDate
+  defaultValue?: IDate
+  onChange?: (value: IDate, day: Dayjs | null) => void
+}
+
+type DatePickerMultipleProps = DatePickerBaseProps & {
+  multiple: true
+  value?: IDate[] | string
+  defaultValue?: IDate[] | string
+  onChange?: (value: IDate[] | string, day: Dayjs[] | null) => void
+  valueType?: 'string' | 'array'
+  splitter?: string
+}
+
+export type DatePickerProps = DatePickerOneProps | DatePickerMultipleProps
 
 // type AntRangePickerProps = Omit<RangePickerBaseProps<IAny>, 'defaultValue' | 'value' | 'onChange'> | Omit<RangePickerDateProps<IAny>, 'defaultValue' | 'value' | 'onChange'> | Omit<RangePickerTimeProps<IAny>, 'defaultValue' | 'value' | 'onChange'>;
 // export type RangePickerProps<T = string> = AntRangePickerProps & {

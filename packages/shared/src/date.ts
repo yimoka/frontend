@@ -37,32 +37,30 @@ import dayjs, { Dayjs, ManipulateType } from 'dayjs';
  * console.log(toDayjs(dateString, { format: 'YYYY-MM-DD' })); // 输出: Dayjs 对象，表示 2021-10-01
  * ```
  */
-export const toDayjs = (date: IDate, options?: IDateOptions): Dayjs | undefined => {
+export const toDayjs = <T extends IDate = IDate>(date: T, options?: IDateOptions): T extends undefined ? undefined : Dayjs => {
   if (date === undefined) {
-    return undefined;
+    return undefined as T extends undefined ? undefined : Dayjs;
   }
   if (dayjs.isDayjs(date)) {
-    return date;
+    return (date as unknown) as T extends undefined ? undefined : Dayjs;
   }
   if (date instanceof Date) {
-    return dayjs(date);
+    return (dayjs(date) as unknown) as T extends undefined ? undefined : Dayjs;
   }
   const { type, format } = options || {};
   if (typeof date === 'number') {
     if (type === 's') {
-      return dayjs.unix(date);
+      return (dayjs.unix(date) as unknown) as T extends undefined ? undefined : Dayjs;
     }
-    // 默认为毫秒
-    return dayjs(date);
+    return (dayjs(date) as unknown) as T extends undefined ? undefined : Dayjs;
   }
   if (typeof date === 'string') {
     const str = date.trim();
-    // 为纯数字的字符串
     if (/^\d+$/.test(str)) {
-      return toDayjs(Number(str), options);
+      return (toDayjs(Number(str), options) as unknown) as T extends undefined ? undefined : Dayjs;
     }
   }
-  return dayjs(date, format);
+  return (dayjs(date, format) as unknown) as T extends undefined ? undefined : Dayjs;
 };
 
 /**
