@@ -33,6 +33,7 @@ import { Mentions } from './enter/mentions';
 import { Radio, RadioGroup } from './enter/radio';
 import { Rate } from './enter/rate';
 import { Select } from './enter/select';
+import { Slider } from './enter/slider';
 import { Switch } from './enter/switch';
 import { TreeSelect } from './enter/tree-select';
 
@@ -117,6 +118,7 @@ export const components: IConfigComponents = {
   RadioGroup,
   Rate,
   Select,
+  Slider,
   Switch,
   TreeSelect,
 
