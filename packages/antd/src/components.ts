@@ -11,6 +11,7 @@ import { Calendar } from './display/calendar';
 import { Card } from './display/card';
 import { Carousel } from './display/carousel';
 import { Collapse } from './display/collapse';
+import { DateText } from './display/date-text';
 import { Descriptions } from './display/descriptions';
 import { Empty } from './display/empty';
 import { HTMLContent } from './display/html-content';
@@ -107,6 +108,7 @@ export const components: IConfigComponents = {
   Card,
   Carousel,
   Collapse,
+  DateText,
   Descriptions,
   Empty,
   HTMLContent,
