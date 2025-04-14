@@ -29,15 +29,15 @@ function DatePickerOne(props: DatePickerOneProps) {
 
   const change: AntDatePickerProps['onChange'] = (date, dateString) => {
     if (!date) {
-      onChange?.(dateString as IDate, date);
+      onChange?.(dateString as IDate, date, dateString as string);
     } else if (dataValueType === 'dayjs') {
-      onChange?.(date, date);
+      onChange?.(date, date, dateString as string);
     } else if (dataValueType === 's') {
-      onChange?.(date.unix(), date);
+      onChange?.(date.unix(), date, dateString as string);
     } else if (dataValueType === 'ms') {
-      onChange?.(date.valueOf(), date);
+      onChange?.(date.valueOf(), date, dateString as string);
     } else {
-      onChange?.(dateString as IDate, date);
+      onChange?.(dateString as IDate, date, dateString as string);
     }
   };
 
@@ -79,11 +79,11 @@ function DatePickerMultiple(props: DatePickerMultipleProps) {
       return;
     }
     if (dataValueType === 'dayjs') {
-      onChange(dates, dates);
+      onChange(dates, dates, dateString as string[]);
       return;
     }
     if (isVacuous(dates)) {
-      onChange(valueType === 'string' ? '' : [], dates);
+      onChange(valueType === 'string' ? '' : [], dates, dateString as string[]);
       return;
     }
 
@@ -96,7 +96,7 @@ function DatePickerMultiple(props: DatePickerMultipleProps) {
       arr = normalizeToArray(dateString);
     }
     arr = arr.filter(Boolean);
-    onChange(valueType === 'string' ? arr.join(curSplitter) : arr, dates);
+    onChange(valueType === 'string' ? arr.join(curSplitter) : arr, dates, dateString as string[]);
   };
 
   return (
@@ -125,14 +125,14 @@ type DatePickerOneProps = DatePickerBaseProps & {
   multiple?: false
   value?: IDate
   defaultValue?: IDate
-  onChange?: (value: IDate, day: Dayjs | null) => void
+  onChange?: (value: IDate, day: Dayjs | null, dateString: string) => void
 }
 
 type DatePickerMultipleProps = DatePickerBaseProps & {
   multiple: true
   value?: IDate[] | string
   defaultValue?: IDate[] | string
-  onChange?: (value: IDate[] | string, day: Dayjs[] | null) => void
+  onChange?: (value: IDate[] | string, day: Dayjs[] | null, dateString: string[]) => void
   valueType?: 'string' | 'array'
   splitter?: string
 }

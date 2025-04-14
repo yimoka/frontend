@@ -28,11 +28,11 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
       return;
     }
     if (dataValueType === 'dayjs') {
-      onChange(dates, dates);
+      onChange(dates, dates, dateString);
       return;
     }
     if (isVacuous(dates)) {
-      onChange(valueType === 'string' ? '' : [], dates);
+      onChange(valueType === 'string' ? '' : [], dates, dateString);
       return;
     }
 
@@ -45,7 +45,7 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
       arr = normalizeToArray(dateString);
     }
     arr = arr.filter(Boolean);
-    onChange(valueType === 'string' ? arr.join(curSplitter) : arr, dates);
+    onChange(valueType === 'string' ? arr.join(curSplitter) : arr, dates, dateString);
   };
 
   return (
@@ -73,7 +73,7 @@ type AntRangePickerProps = ComponentProps<typeof AntDatePicker.RangePicker>
 export type DateRangePickerProps = Omit<AntRangePickerProps, 'defaultValue' | 'value' | 'onChange'> & {
   value?: [IDate, IDate] | string
   defaultValue?: [IDate, IDate] | string
-  onChange?: (value: [IDate | null, IDate | null] | null | [] | string | Array<string | number>, day: [Dayjs | null, Dayjs | null] | null) => void
+  onChange?: (value: [IDate | null, IDate | null] | null | [] | string | Array<string | number>, day: [Dayjs | null, Dayjs | null] | null, dateString: [string, string]) => void
   valueType?: 'string' | 'array'
   splitter?: string
   dataValueType?: IDateType
