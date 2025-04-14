@@ -8,6 +8,8 @@ const AvatarFC = (props: AvatarProps) => {
   return <AntAvatar icon={strToIcon(icon)}  {...rest} src={src ?? value} />;
 };
 
-export const Avatar = Object.assign(AvatarFC, AntAvatar);
+export const Avatar = Object.assign(AvatarFC, {
+  Group: AntAvatar.Group,
+});
 
 export type AvatarProps = AntAvatarProps & { value?: AvatarProps['src'] };

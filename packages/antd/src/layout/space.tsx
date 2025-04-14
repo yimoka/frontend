@@ -12,6 +12,8 @@ const SpaceFC = (props: SpaceProps) => {
   );
 };
 
-export const Space = Object.assign(SpaceFC, AntSpace);
+export const Space = Object.assign(SpaceFC, {
+  Compact: AntSpace.Compact,
+});
 
 export type { SpaceProps, SpaceCompactProps };
