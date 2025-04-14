@@ -31,6 +31,7 @@ import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
 import { Mentions } from './enter/mentions';
 import { Radio, RadioGroup } from './enter/radio';
+import { Rate } from './enter/rate';
 import { Switch } from './enter/switch';
 import { TreeSelect } from './enter/tree-select';
 
@@ -113,6 +114,7 @@ export const components: IConfigComponents = {
   Mentions,
   Radio,
   RadioGroup,
+  Rate,
   Switch,
   TreeSelect,
 
