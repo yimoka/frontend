@@ -24,6 +24,7 @@ import { Countdown, Statistic } from './display/statistic';
 import { Table } from './display/table';
 import { Tabs } from './display/tabs';
 import { Tag } from './display/tag';
+import { Timeline } from './display/timeline';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
 
@@ -120,6 +121,7 @@ export const components: IConfigComponents = {
   Tabs,
   Tag,
   CheckableTag: Tag.CheckableTag,
+  Timeline,
   Tree,
   ValueLabel,
 
