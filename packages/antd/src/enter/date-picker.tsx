@@ -18,7 +18,7 @@ function DatePickerFC(props: DatePickerProps) {
 
 function DatePickerOne(props: DatePickerOneProps) {
   const {
-    defaultValue, value, onChange, dataValueType: dataValueType, format, picker,
+    defaultValue, value, onChange, dataValueType = 'ms', format, picker,
     nextIcon, prevIcon, suffixIcon, superNextIcon, superPrevIcon, allowClear,
     ...rest
   } = props;
@@ -62,7 +62,7 @@ function DatePickerOne(props: DatePickerOneProps) {
 
 function DatePickerMultiple(props: DatePickerMultipleProps) {
   const {
-    valueType, splitter, defaultValue, value, onChange, dataValueType: dataValueType, format, picker,
+    valueType, splitter, defaultValue, value, onChange, dataValueType = 'ms', format, picker,
     nextIcon, prevIcon, suffixIcon, superNextIcon, superPrevIcon, allowClear,
     ...rest
   } = props;

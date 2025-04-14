@@ -10,7 +10,7 @@ import { toDayjsArray } from './date-picker-common';
 
 export const DateRangePicker = (props: DateRangePickerProps) => {
   const {
-    defaultValue, valueType, value, splitter, onChange, dataValueType, format, picker,
+    defaultValue, valueType, value, splitter, onChange, dataValueType = 'ms', format, picker,
     nextIcon, prevIcon, suffixIcon, superNextIcon, superPrevIcon, allowClear,
     separator,
     ...rest
