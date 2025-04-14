@@ -35,6 +35,8 @@ import { Rate } from './enter/rate';
 import { Select } from './enter/select';
 import { Slider } from './enter/slider';
 import { Switch } from './enter/switch';
+import { TimePicker } from './enter/time-picker';
+import { TimeRangePicker } from './enter/time-range-picker';
 import { TreeSelect } from './enter/tree-select';
 
 import { Alert } from './feedback/alert';
@@ -120,6 +122,8 @@ export const components: IConfigComponents = {
   Select,
   Slider,
   Switch,
+  TimePicker,
+  TimeRangePicker,
   TreeSelect,
 
   // feedback

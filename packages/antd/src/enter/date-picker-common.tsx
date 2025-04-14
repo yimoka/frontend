@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import { DatePickerProps } from './date-picker';
 
-export const toDayjsArray = (value: IDate[] | string | undefined, splitter: string, dataValueType: IDateType = 'string', format: DatePickerProps['format'], picker: DatePickerProps['picker']): Dayjs[] | undefined => {
+export const toDayjsArray = (value: IDate[] | string | undefined, splitter: string, dataValueType: IDateType = 'string', format: DatePickerProps['format'], picker?: DatePickerProps['picker']): Dayjs[] | undefined => {
   if (typeof value === 'undefined') {
     return undefined;
   }
@@ -16,7 +16,7 @@ export const toDayjsArray = (value: IDate[] | string | undefined, splitter: stri
 };
 
 // eslint-disable-next-line complexity
-export const toFormat = (format: DatePickerProps['format'], picker: DatePickerProps['picker']): string => {
+export const toFormat = (format: DatePickerProps['format'], picker?: DatePickerProps['picker']): string => {
   if (isVacuous(format)) {
     if (picker === 'week') {
       return 'YYYY-WW';

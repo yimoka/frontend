@@ -8,7 +8,7 @@ import { handleAllowClear, strToIcon } from '../tools/icon';
 
 import { toDayjsArray } from './date-picker-common';
 
-export const DateRangePicker = (props: RangePickerProps) => {
+export const DateRangePicker = (props: DateRangePickerProps) => {
   const {
     defaultValue, valueType, value, splitter, onChange, dataValueType, format, picker,
     nextIcon, prevIcon, suffixIcon, superNextIcon, superPrevIcon, allowClear,
@@ -70,7 +70,7 @@ export const DateRangePicker = (props: RangePickerProps) => {
 
 type AntRangePickerProps = ComponentProps<typeof AntDatePicker.RangePicker>
 
-export type RangePickerProps = Omit<AntRangePickerProps, 'defaultValue' | 'value' | 'onChange'> & {
+export type DateRangePickerProps = Omit<AntRangePickerProps, 'defaultValue' | 'value' | 'onChange'> & {
   value?: [IDate, IDate] | string
   defaultValue?: [IDate, IDate] | string
   onChange?: (value: [IDate | null, IDate | null] | null | [] | string | Array<string | number>, day: [Dayjs | null, Dayjs | null] | null) => void
