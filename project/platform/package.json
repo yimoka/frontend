@@ -11,9 +11,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
-    "@formily/core": "^2.3.2",
-    "@formily/react": "^2.3.2",
-    "@formily/reactive": "^2.3.2",
     "@yimoka/antd": "workspace:*",
     "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",

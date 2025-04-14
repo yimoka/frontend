@@ -1,5 +1,5 @@
-import { observer } from '@formily/react';
 import { Flex, Layout, LayoutProps, MenuProps, SiderProps, theme } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { Sider } from './components/sider';

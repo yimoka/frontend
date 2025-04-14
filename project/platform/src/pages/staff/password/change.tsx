@@ -1,6 +1,5 @@
-import { observer } from '@formily/react';
 import { Card } from '@yimoka/antd';
-import { EntityOperation } from '@yimoka/react';
+import { observer, EntityOperation } from '@yimoka/react';
 import { IAnyObject } from '@yimoka/shared';
 import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';

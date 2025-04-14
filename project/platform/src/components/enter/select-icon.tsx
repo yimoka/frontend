@@ -1,6 +1,6 @@
 import * as AntdIcons from '@ant-design/icons';
-import { observer } from '@formily/react';
 import { AutoComplete, Icon, Space, AutoCompleteProps } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import { IAny } from '@yimoka/shared';
 import React from 'react';
 

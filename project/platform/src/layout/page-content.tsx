@@ -1,4 +1,4 @@
-import { observer } from '@formily/react';
+import { observer } from '@yimoka/react';
 import { Content, GetProps, theme } from '@yimoka/antd';
 import React from 'react';
 

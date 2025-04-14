@@ -1,5 +1,4 @@
-import { observer } from '@formily/react';
-import { EntityAdd, IEntityAddProps } from '@yimoka/react';
+import { observer, EntityAdd, IEntityAddProps } from '@yimoka/react';
 import React from 'react';
 
 import { permissionConfig } from './conf';

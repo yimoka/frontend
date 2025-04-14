@@ -1,5 +1,7 @@
 export * from '@formily/react';
 
+export type { Field } from '@formily/core';
+
 export * from './components/array/render-array';
 export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';

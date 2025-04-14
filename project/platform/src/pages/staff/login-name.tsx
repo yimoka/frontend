@@ -1,5 +1,4 @@
-import { observer } from '@formily/react';
-import { EntityOperation, IEntityProps } from '@yimoka/react';
+import { observer, EntityOperation, IEntityProps } from '@yimoka/react';
 import { IAnyObject } from '@yimoka/shared';
 import React from 'react';
 

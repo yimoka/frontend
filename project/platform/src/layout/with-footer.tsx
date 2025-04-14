@@ -1,5 +1,5 @@
-import { observer } from '@formily/react';
 import { Flex, Layout, LayoutProps, theme } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React, { CSSProperties } from 'react';
 
 import { Footer } from './components/footer';

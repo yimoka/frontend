@@ -1,7 +1,5 @@
-import { Field } from '@formily/core';
-import { observer, useField } from '@formily/react';
 import { Input, Modal, Spin, Space, Typography } from '@yimoka/antd';
-import { useInitStore } from '@yimoka/react';
+import { Field, observer, useField, useInitStore } from '@yimoka/react';
 import React, { useEffect, useState } from 'react';
 
 import { ImageCaptcha } from './captcha-image';
