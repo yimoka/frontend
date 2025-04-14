@@ -59,6 +59,7 @@ import { Pagination } from './nav/pagination';
 import { Steps } from './nav/steps';
 import { PageHeader } from './page/page-header';
 import { StoreForm } from './store/form';
+import { ListFilter } from './store/list-filter';
 import { RecordDel } from './store/record-del';
 import { RecordOperation } from './store/record-operation';
 import { Reset } from './store/reset';
@@ -146,6 +147,7 @@ export const components: IConfigComponents = {
 
   // store
   StoreForm,
+  ListFilter,
   RecordOperation,
   RecordDel,
   Reset,

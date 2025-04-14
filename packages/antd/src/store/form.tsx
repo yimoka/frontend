@@ -33,4 +33,4 @@ export const StoreForm = (props: StoreFormProps) => {
   return <Form {...args} onSubmitCapture={autoSubmit} />;
 };
 
-export type StoreFormProps = FormProps & { store: IStore }
+export type StoreFormProps = FormProps & { store?: IStore }

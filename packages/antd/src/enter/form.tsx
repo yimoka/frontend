@@ -1,4 +1,4 @@
-import { IAny, isVacuous } from '@yimoka/shared';
+import { IAny } from '@yimoka/shared';
 import { Form as AntForm, GetProps, Row, theme } from 'antd';
 import React from 'react';
 
@@ -12,7 +12,7 @@ export function Form<T = IAny>(props: FormProps<T>) {
 
   return (
     <FormLayoutContext.Provider value={{ row, col, labelWidth, labelAttached }}>
-      {isVacuous(row)
+      {!row
         ? <AntForm {...rest} />
         : <Row gutter={token.token.padding} {...(row === true ? {} : row)}>{<AntForm {...rest} />}</Row>
       }

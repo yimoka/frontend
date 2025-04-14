@@ -5,14 +5,16 @@ import { ButtonProps } from 'antd';
 import React from 'react';
 
 import { Button } from '../base/button';
+import { useLocaleComponent } from '../hooks/use-locale';
 
 export const Submit = observer((props: Omit<ButtonProps, 'loading' | 'disabled' | 'htmlType'> & { store?: IStore }) => {
   const { store, ...rest } = props;
   const curStore = useStore(store);
+  const locale = useLocaleComponent('Common');
 
   return (
     <Button
-      children='提交'
+      children={locale.submit}
       type='primary'
       {...rest}
       disabled={curStore?.form?.disabled || !!curStore?.form?.errors?.length}
