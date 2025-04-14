@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Form, FormProps } from '../enter/form';
 
 export const StoreForm = (props: StoreFormProps) => {
-  const { fields, store, onSubmitCapture, labelWidth, row, col, ...args } = props;
+  const { store, onSubmitCapture, ...args } = props;
   const curStore = useStore(store);
   const location = useLocation();
   const nav = useNavigate();
