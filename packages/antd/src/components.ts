@@ -29,6 +29,7 @@ import { Form } from './enter/form';
 import { FormItem } from './enter/form-item';
 import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
+import { Mentions } from './enter/mentions';
 import { Switch } from './enter/switch';
 import { TreeSelect } from './enter/tree-select';
 
@@ -108,6 +109,7 @@ export const components: IConfigComponents = {
   FormItem,
   InputNumber,
   Input,
+  Mentions,
   Switch,
   TreeSelect,
 
