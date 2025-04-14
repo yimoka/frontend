@@ -13,6 +13,7 @@ import { Carousel } from './display/carousel';
 import { Collapse } from './display/collapse';
 import { Descriptions } from './display/descriptions';
 import { Empty } from './display/empty';
+import { HTMLContent } from './display/html-content';
 import { Link } from './display/link';
 import { Table } from './display/table';
 
@@ -100,6 +101,7 @@ export const components: IConfigComponents = {
   Collapse,
   Descriptions,
   Empty,
+  HTMLContent,
   Table,
   Link,
   Tag,
