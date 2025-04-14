@@ -1,6 +1,6 @@
 import { GetProps } from 'antd';
 
-export { ConfigProvider, theme, App } from 'antd';
+export { ConfigProvider, theme } from 'antd';
 export type { GetProps };
 
 export * from './base/button';
@@ -80,6 +80,9 @@ export * from './nav/dropdown';
 export * from './nav/menu';
 export * from './nav/pagination';
 export * from './nav/steps';
+
+export * from './other/app';
+export * from './other/affix';
 
 export * from './page/page-header';
 

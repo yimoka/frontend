@@ -77,6 +77,8 @@ import { Dropdown } from './nav/dropdown';
 import { Menu } from './nav/menu';
 import { Pagination } from './nav/pagination';
 import { Steps } from './nav/steps';
+import { Affix } from './other/affix';
+import { App } from './other/app';
 import { PageHeader } from './page/page-header';
 import { StoreForm } from './store/form';
 import { ListFilter } from './store/list-filter';
@@ -184,6 +186,10 @@ export const components: IConfigComponents = {
   Menu,
   Pagination,
   Steps,
+
+  // other
+  App,
+  Affix,
 
   // page
   PageHeader,
