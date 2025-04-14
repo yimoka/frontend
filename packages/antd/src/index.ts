@@ -28,6 +28,7 @@ export * from './enter/time-picker';
 export * from './enter/time-range-picker';
 export * from './enter/transfer';
 export * from './enter/tree-select';
+export * from './enter/upload';
 
 export * from './display/avatar';
 export * from './display/badge';

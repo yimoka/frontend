@@ -40,6 +40,7 @@ import { TimeRangePicker } from './enter/time-range-picker';
 import { Transfer } from './enter/transfer';
 import { TreeSelect } from './enter/tree-select';
 
+import { Upload } from './enter/upload';
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
@@ -127,6 +128,7 @@ export const components: IConfigComponents = {
   TimeRangePicker,
   Transfer,
   TreeSelect,
+  Upload,
 
   // feedback
   Alert,
