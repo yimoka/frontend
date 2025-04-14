@@ -26,6 +26,7 @@ export * from './enter/slider';
 export * from './enter/switch';
 export * from './enter/time-picker';
 export * from './enter/time-range-picker';
+export * from './enter/transfer';
 export * from './enter/tree-select';
 
 export * from './display/avatar';

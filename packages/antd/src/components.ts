@@ -37,6 +37,7 @@ import { Slider } from './enter/slider';
 import { Switch } from './enter/switch';
 import { TimePicker } from './enter/time-picker';
 import { TimeRangePicker } from './enter/time-range-picker';
+import { Transfer } from './enter/transfer';
 import { TreeSelect } from './enter/tree-select';
 
 import { Alert } from './feedback/alert';
@@ -124,6 +125,7 @@ export const components: IConfigComponents = {
   Switch,
   TimePicker,
   TimeRangePicker,
+  Transfer,
   TreeSelect,
 
   // feedback
