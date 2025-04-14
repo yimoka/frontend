@@ -14,9 +14,9 @@ import { Collapse } from './display/collapse';
 import { Descriptions } from './display/descriptions';
 import { Empty } from './display/empty';
 import { HTMLContent } from './display/html-content';
+import { Image } from './display/image';
 import { Link } from './display/link';
 import { Table } from './display/table';
-
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
@@ -102,6 +102,7 @@ export const components: IConfigComponents = {
   Descriptions,
   Empty,
   HTMLContent,
+  Image,
   Table,
   Link,
   Tag,
