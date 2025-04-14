@@ -10,6 +10,7 @@ import { Badge } from './display/badge';
 import { Calendar } from './display/calendar';
 import { Card } from './display/card';
 import { Carousel } from './display/carousel';
+import { Collapse } from './display/collapse';
 import { Descriptions } from './display/descriptions';
 import { Empty } from './display/empty';
 import { Link } from './display/link';
@@ -96,6 +97,7 @@ export const components: IConfigComponents = {
   Calendar,
   Card,
   Carousel,
+  Collapse,
   Descriptions,
   Empty,
   Table,

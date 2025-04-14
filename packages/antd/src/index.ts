@@ -35,6 +35,7 @@ export * from './display/badge';
 export * from './display/calendar';
 export * from './display/card';
 export * from './display/carousel';
+export * from './display/collapse';
 export * from './display/descriptions';
 export * from './display/empty';
 export * from './display/table';
