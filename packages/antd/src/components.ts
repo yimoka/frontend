@@ -16,6 +16,7 @@ import { Empty } from './display/empty';
 import { HTMLContent } from './display/html-content';
 import { Image } from './display/image';
 import { Link } from './display/link';
+import { List } from './display/list';
 import { Table } from './display/table';
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
@@ -103,6 +104,7 @@ export const components: IConfigComponents = {
   Empty,
   HTMLContent,
   Image,
+  List,
   Table,
   Link,
   Tag,
