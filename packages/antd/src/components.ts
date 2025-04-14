@@ -22,6 +22,8 @@ import { AutoComplete } from './enter/auto-complete';
 import { Cascader } from './enter/cascader';
 import { Checkbox, CheckboxGroup } from './enter/checkbox';
 import { ColorPicker } from './enter/color-picker';
+import { DatePicker } from './enter/date-picker';
+import { DateRangePicker } from './enter/date-range-picker';
 import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
 import { Switch } from './enter/switch';
@@ -97,6 +99,8 @@ export const components: IConfigComponents = {
   Checkbox,
   CheckboxGroup,
   ColorPicker,
+  DatePicker,
+  DateRangePicker,
   InputNumber,
   Input,
   Switch,

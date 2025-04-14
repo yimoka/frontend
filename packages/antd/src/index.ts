@@ -12,6 +12,8 @@ export * from './enter/auto-complete';
 export * from './enter/cascader';
 export * from './enter/checkbox';
 export * from './enter/color-picker';
+export * from './enter/date-picker';
+export * from './enter/date-range-picker';
 export * from './enter/input-number';
 export * from './enter/input';
 export * from './enter/switch';
