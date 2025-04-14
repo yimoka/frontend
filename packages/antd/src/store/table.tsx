@@ -4,7 +4,7 @@
  */
 
 import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
-import { dataToOptions, IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
+import { dataToOptions, IAny, IAnyObject, isVacuous, normalizeToArray } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
 import { TablePaginationConfig } from 'antd';
 import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
@@ -25,7 +25,7 @@ const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
   const { store, bindValue, ...rest } = props;
   const curStore = useStore(store) as ListStore;
 
-  if (isBlank(curStore)) {
+  if (isVacuous(curStore)) {
     return null;
   }
 
@@ -36,7 +36,7 @@ const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
   const { listData = [], pagination, loading } = curStore;
   const tProps = { ...rest, dataSource: listData, loading };
 
-  if (!isBlank(pagination) && rest.pagination !== false) {
+  if (!isVacuous(pagination) && rest.pagination !== false) {
     const { page, pageSize, total } = pagination;
     tProps.pagination = { defaultPageSize: pageSize, defaultCurrent: page, total, ...rest.pagination };
   }
@@ -81,7 +81,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
   // store 的 value 更新时 更新 filterValues
   useDeepEffect(() => {
-    if (isBlank(filterValueKeys)) {
+    if (isVacuous(filterValueKeys)) {
       return;
     }
     const disposer = reaction(() => {
@@ -135,7 +135,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         withFilterAndSortAndTitle.filteredValue = fVal;
       } else if (typeof fVal === 'string' && fVal) {
         withFilterAndSortAndTitle.filteredValue = fVal.split(getFieldSplitter(dataIndex, curStore) ?? ',');
-      } else if (isBlank(fVal)) {
+      } else if (isVacuous(fVal)) {
         withFilterAndSortAndTitle.filteredValue = null;
       } else {
         withFilterAndSortAndTitle.filteredValue = [fVal];
@@ -164,7 +164,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
             }
           }
         }
-        if (!isBlank(options)) {
+        if (!isVacuous(options)) {
           withFilterAndSortAndTitle.filters = dataToOptions<keyof ColumnFilterItem>(options, { keys: { label: 'label', value: 'value' } }) as ColumnFilterItem[];
         }
       }
@@ -178,7 +178,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         }
       }
     }
-    if (!isBlank(withFilterAndSortAndTitle)) {
+    if (!isVacuous(withFilterAndSortAndTitle)) {
       return { ...column, ...withFilterAndSortAndTitle };
     }
     return column;
@@ -269,7 +269,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         }
       }
     });
-    if (!isBlank(newValues)) {
+    if (!isVacuous(newValues)) {
       setFieldValue(pageKey, 1);
       setValues(newValues);
       queryData();

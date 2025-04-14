@@ -1,5 +1,5 @@
 import { useExpressionScope, useFieldSchema } from '@formily/react';
-import { IAny, IAnyObject, isBlank, normalizeToArray } from '@yimoka/shared';
+import { IAny, IAnyObject, isVacuous, normalizeToArray } from '@yimoka/shared';
 import { get } from 'lodash-es';
 import React, { useMemo } from 'react';
 
@@ -16,13 +16,13 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     const itemComponentName = 'Item';
     const componentItems: T[] = [];
     const { items: fieldItems } = fieldSchema ?? {};
-    if (isBlank(data) || isBlank(fieldItems)) {
+    if (isVacuous(data) || isVacuous(fieldItems)) {
       return componentItems;
     }
     // eslint-disable-next-line complexity
     normalizeToArray(data).forEach((record: IAny, index: number) => {
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
-      if (isBlank(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
+      if (isVacuous(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
       }
       const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(itemSchema, fieldSchema);
@@ -30,7 +30,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       const getRecordIndex = () => index;
       const { 'x-component': component, 'x-decorator': decorator, properties } = itemSchema;
       if (
-        isBlank(properties) // 没有 properties 时直接使用 itemSchema
+        isVacuous(properties) // 没有 properties 时直接使用 itemSchema
         || (component) // 顶层 UI 属性不为空时使用 itemSchema
         || (!component && decorator === itemComponentName) // 顶层 decorator 为 itemComponentName 时并且 component 为空时使用 itemSchema
       ) {

@@ -1,5 +1,5 @@
 import { observer } from '@formily/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
+import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
 import React, { useEffect } from 'react';
@@ -13,7 +13,7 @@ import { EntityResponse } from './response';
 export const EntityDetail = observer((props: IEntityDetailProps) => {
   const { values, ...args } = props;
 
-  if (isBlank(values)) {
+  if (isVacuous(values)) {
     return <FetchDetail {...args} />;
   }
 

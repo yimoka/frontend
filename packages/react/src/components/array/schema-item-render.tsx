@@ -1,6 +1,6 @@
 import { Schema, SchemaKey } from '@formily/json-schema';
 import { RecordScope, ExpressionScope, useFieldSchema } from '@formily/react';
-import { IAny, isBlank } from '@yimoka/shared';
+import { IAny, isVacuous } from '@yimoka/shared';
 import React, { useMemo } from 'react';
 
 import { IRecordIndexFn } from '../../hooks/record-index-fn';
@@ -17,7 +17,7 @@ export const SchemaItemRender = (props: { value: IAny, record: IAny, schema: Sch
       return name;
     }
     const schemaName = getSchemaNameByFieldSchema(schema, fieldSchema);
-    if (!isBlank(schemaName)) {
+    if (!isVacuous(schemaName)) {
       return `${index}.${schemaName}`;
     }
     // 如果不转为字符串 0 会出现问题

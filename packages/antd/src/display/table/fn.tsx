@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { getTooltipProps, RenderAny } from '@yimoka/react';
-import { getAutoFilterConfig, getSorterFn, IAnyObject, isBlank } from '@yimoka/shared';
+import { getAutoFilterConfig, getSorterFn, IAnyObject, isVacuous } from '@yimoka/shared';
 import { BaseStore } from '@yimoka/store';
 import { TableProps as AntTableProps, Space, Tooltip } from 'antd';
 import { ColumnType } from 'antd/es/table';
@@ -40,7 +40,7 @@ export function getTableColumnWithAutoFilterAndSorter(column: ITableColumn, data
       newColumn.sorter = sorterFn;
     }
   }
-  if (!isBlank(newColumn)) {
+  if (!isVacuous(newColumn)) {
     const result: IAnyObject = { ...column, ...newColumn };
     return result;
   }
@@ -66,7 +66,7 @@ export function getTableColumnTitleWithTooltip(column: ITableColumn, store?: Bas
   }
   const curTooltip = getTooltipProps(tooltip, `${colKey}`, store);
 
-  if (!isBlank(curTooltip)) {
+  if (!isVacuous(curTooltip)) {
     return (
       <Space>
         <RenderAny value={title} />

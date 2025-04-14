@@ -1,7 +1,7 @@
 import { observer } from '@formily/react';
 import { Avatar, Dropdown, Icon, Link, Menu, Space, Typography, ConfigProvider, Layout, theme, MenuProps } from '@yimoka/antd';
 import { useInitStore, useLocation, useNavigate, useRoot } from '@yimoka/react';
-import { isBlank } from '@yimoka/shared';
+import { isVacuous } from '@yimoka/shared';
 import { omit } from 'lodash-es';
 import React, { useMemo } from 'react';
 const { useToken } = theme;
@@ -39,7 +39,7 @@ const HeaderMenu = observer(() => {
   const menus = root.menus?.map(item => omit(item, ['children'])) as MenuProps['items'];
   const activeKey = useMemo(() => `/${pathname.split('/')[1]}`, [pathname]);
 
-  if (isBlank(menus)) {
+  if (isVacuous(menus)) {
     return null;
   }
   return <Menu activeKey={activeKey}
@@ -52,7 +52,7 @@ const HeaderMenu = observer(() => {
 const User = observer(() => {
   const { user = {} } = useRoot();
   const { actualName, avatar, name, phone, mail } = user;
-  const showName = [actualName, name, phone, mail].find(item => !isBlank(item));
+  const showName = [actualName, name, phone, mail].find(item => !isVacuous(item));
   const nav = useNavigate();
 
   const { fetch } = useInitStore({
@@ -63,7 +63,7 @@ const User = observer(() => {
     },
   });
 
-  if (isBlank(user)) {
+  if (isVacuous(user)) {
     return null;
   }
 

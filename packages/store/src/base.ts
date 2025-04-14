@@ -1,6 +1,6 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isVacuous, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
@@ -398,7 +398,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       const searchParams = new URLSearchParams();
       Object.entries(this.values).forEach(([key, value]) => {
         const defaultValue = this.defaultValues[key];
-        if ((value !== defaultValue || this.options.urlWithDefaultFields?.includes(key)) && (!isBlank(value) || !isBlank(defaultValue))) {
+        if ((value !== defaultValue || this.options.urlWithDefaultFields?.includes(key)) && (!isVacuous(value) || !isVacuous(defaultValue))) {
           const str = valueToSearchParam(value);
           searchParams.append(key, str);
         }
@@ -481,7 +481,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     const fetchID = this.lastFetchID;
     const { api } = this;
-    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : this.values) as V;
+    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isVacuous(value))) : this.values) as V;
     const response = await runAPI<V, R>(api, this.apiExecutor, params, this.apiController);
     if (response && fetchID === this.lastFetchID) {
       this.setResponse(response);

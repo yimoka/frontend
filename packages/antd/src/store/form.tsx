@@ -2,7 +2,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Field } from '@formily/core';
 import { observer, useForm, useField } from '@formily/react';
 import { useAdditionalNode, useStore } from '@yimoka/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
+import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { IStore, ListStore } from '@yimoka/store';
 import { Col, ColProps, FormItemProps as AntFormItemProps, FormProps, Row, Form, Tooltip, RowProps } from 'antd';
 
@@ -44,7 +44,7 @@ export const StoreForm = (props: StoreFormProps) => {
   return (
     <FormContext.Provider value={{ row, col, labelWidth }}>
       <Form {...args} onSubmitCapture={autoSubmit}>
-        {isBlank(row) ? children : <Row gutter={16} {...(row === true ? {} : row)}>{children}</Row>}
+        {isVacuous(row) ? children : <Row gutter={16} {...(row === true ? {} : row)}>{children}</Row>}
       </Form>
     </FormContext.Provider>
   );
@@ -96,7 +96,7 @@ export const FormItem = observer((props: FormItemProps) => {
     />);
 
   // 或者上下文中的 row
-  if (isBlank(context.row)) {
+  if (isVacuous(context.row)) {
     return fEl;
   }
   return <Col {...context.col} {...col} >{fEl}</Col>;

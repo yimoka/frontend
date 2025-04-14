@@ -1,7 +1,7 @@
 import { observer } from '@formily/react';
 import { Dropdown, Icon, Modal, RecordDel, Space, ConfigProvider } from '@yimoka/antd';
 import { EntityOperation, useInitStore } from '@yimoka/react';
-import { IHTTPResponse, isBlank, isSuccess } from '@yimoka/shared';
+import { IHTTPResponse, isVacuous, isSuccess } from '@yimoka/shared';
 import { IStore } from '@yimoka/store';
 import React, { CSSProperties } from 'react';
 
@@ -119,7 +119,7 @@ const TitleRender = observer(({ node, onSuccess, treeStore }: { node: IPermissio
             },
             {
               key: 'del',
-              disabled: !isBlank(node.children),
+              disabled: !isVacuous(node.children),
               label: (
                 <RecordDel
                   isRefresh
@@ -128,7 +128,7 @@ const TitleRender = observer(({ node, onSuccess, treeStore }: { node: IPermissio
                   trigger={{
                     component: 'Text',
                     type: 'danger',
-                    disabled: !isBlank(node.children),
+                    disabled: !isVacuous(node.children),
                     children: '删除',
                     style: TextStyle,
                   }} />

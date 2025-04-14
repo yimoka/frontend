@@ -4,7 +4,7 @@ import { omit } from 'lodash-es';
 
 import { strToArr } from './str';
 import { IAnyObject, IObjKey } from './type';
-import { isBlank } from './val';
+import { isVacuous } from './val';
 
 export const DF_KEYS: IKeys = { label: 'label', value: 'value' };
 export const DF_SPLITTER = ',';
@@ -44,7 +44,7 @@ export function arrToOptions<T extends string = 'label' | 'value'>(options: IOpt
     }
   });
 
-  if (isBlank(optionsKeys)) {
+  if (isVacuous(optionsKeys)) {
     return options;
   }
 

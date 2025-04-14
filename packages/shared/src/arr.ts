@@ -1,4 +1,4 @@
-import { isBlank } from './val';
+import { isVacuous } from './val';
 
 /**
  * 将输入值规范化为数组。
@@ -22,7 +22,7 @@ export const normalizeToArray = <T>(value: T): T extends unknown[] ? T : T[] => 
   if (Array.isArray(value)) {
     return value as T extends unknown[] ? T : T[];
   }
-  if (isBlank(value)) {
+  if (isVacuous(value)) {
     return [] as T extends unknown[] ? T : T[];
   }
   return [value] as T extends unknown[] ? T : T[];

@@ -47,8 +47,8 @@ describe('getAutoFilterConfig', () => {
       expect(onFilter('张', {})).toBe(false);
     });
 
-    it('应该处理isBlank的情况', () => {
-      // 测试意图：验证like模式下isBlank的处理
+    it('应该处理isVacuous的情况', () => {
+      // 测试意图：验证like模式下isVacuous的处理
       const config = getAutoFilterConfig('like', undefined, 'name');
       const onFilter = config.onFilter!;
 
@@ -107,8 +107,8 @@ describe('getAutoFilterConfig', () => {
       ]);
     });
 
-    it('应该处理isBlank的情况', () => {
-      // 测试意图：验证enum模式下isBlank的处理
+    it('应该处理isVacuous的情况', () => {
+      // 测试意图：验证enum模式下isVacuous的处理
       const config = getAutoFilterConfig('enum', testData, 'status');
       const onFilter = config.onFilter!;
 

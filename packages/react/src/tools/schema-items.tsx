@@ -6,7 +6,7 @@
  */
 
 import { Schema, SchemaKey } from '@formily/react';
-import { IAny, IAnyObject, isBlank } from '@yimoka/shared';
+import { IAny, IAnyObject, isVacuous } from '@yimoka/shared';
 import { get } from 'lodash-es';
 
 /**
@@ -20,7 +20,7 @@ import { get } from 'lodash-es';
 // eslint-disable-next-line complexity
 export const getPropsByItemSchema = (schema: Schema, componentName?: string, propsMap?: IAnyObject, scope?: IAnyObject) => {
   let itemProps: IAnyObject = {};
-  if (!isBlank(propsMap)) {
+  if (!isVacuous(propsMap)) {
     Object.entries(propsMap).forEach(([itemKey, schemaKey]) => {
       const val = get(schema, schemaKey);
       if (typeof val !== 'undefined') {
@@ -37,9 +37,9 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
     itemProps = { ...itemProps, ...schema['x-component-props'] };
   }
   const sName = schema.name;
-  if (componentName === 'Column' && !isBlank(scope) && sName) {
+  if (componentName === 'Column' && !isVacuous(scope) && sName) {
     const fieldColumnProps = scope?.$config?.[sName]?.['x-column'];
-    if (!isBlank(fieldColumnProps)) {
+    if (!isVacuous(fieldColumnProps)) {
       itemProps = { ...fieldColumnProps, ...itemProps };
     }
   }
@@ -56,7 +56,7 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
 export const isItemSchemaRecursion = (schema: Schema, componentName?: string) => {
   const decorator = schema['x-decorator'];
   const component = schema['x-component'];
-  return !isBlank(schema.properties) || (decorator && decorator !== componentName) || (component && component !== componentName);
+  return !isVacuous(schema.properties) || (decorator && decorator !== componentName) || (component && component !== componentName);
 };
 
 /**
@@ -113,7 +113,7 @@ export const schemaItemsReduce = (schema: Schema, scope: IAnyObject, toProps: (i
     return undefined;
   }
   const { items } = schema;
-  if (isBlank(items)) {
+  if (isVacuous(items)) {
     return undefined;
   }
   // 取第一个 item 来实例化相关组件，具体 index 渲染时可考虑根据数组的 items[index] 中相同的 prop 来渲染

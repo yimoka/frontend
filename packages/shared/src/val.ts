@@ -7,15 +7,15 @@ import { isEmpty } from 'lodash-es';
  *
  * @example
  * ```typescript
- * isBlank(null); // true
- * isBlank(undefined); // true
- * isBlank(''); // true
- * isBlank('hello'); // false
- * isBlank(0); // false
- * isBlank(false); // false
+ * isVacuous(null); // true
+ * isVacuous(undefined); // true
+ * isVacuous(''); // true
+ * isVacuous('hello'); // false
+ * isVacuous(0); // false
+ * isVacuous(false); // false
  * ```
  */
-export const isBlank = (value: unknown): value is (null | undefined | '') => {
+export const isVacuous = (value: unknown): value is (null | undefined | '') => {
   const type = typeof value;
   if (['boolean', 'number', 'bigint', 'function'].includes(type)) {
     return false;

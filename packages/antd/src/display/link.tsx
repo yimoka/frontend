@@ -1,5 +1,5 @@
 import { observer } from '@formily/react';
-import { isBlank } from '@yimoka/shared';
+import { isVacuous } from '@yimoka/shared';
 import { Typography } from 'antd';
 import { LinkProps as ALinkProps } from 'antd/lib/typography/Link';
 import React, { useMemo } from 'react';
@@ -17,7 +17,7 @@ export const Link = observer((props: LinkProps) => {
     if (typeof val === 'string') {
       return val;
     }
-    if (isBlank(val)) {
+    if (isVacuous(val)) {
       return '';
     }
     const { pathname = '', search = '', hash = '' } = val;

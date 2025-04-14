@@ -16,7 +16,7 @@
 import { get } from 'lodash-es';
 
 import { IAny } from './type';
-import { isBlank } from './val';
+import { isVacuous } from './val';
 
 /**
  * 自动过滤模式类型定义
@@ -66,10 +66,10 @@ export const getAutoFilterConfig = (autoFilter?: IAutoFilter, data?: IAny[], pat
   if (autoFilter === 'like' && path) {
     onFilter = (value: IAny, record: IAny) => {
       const rVal = get(record, path);
-      if (rVal === value || isBlank(value)) {
+      if (rVal === value || isVacuous(value)) {
         return true;
       }
-      if (isBlank(rVal)) {
+      if (isVacuous(rVal)) {
         return false;
       }
       return rVal?.toString?.().includes?.(value?.toString?.());
@@ -86,7 +86,7 @@ export const getAutoFilterConfig = (autoFilter?: IAutoFilter, data?: IAny[], pat
     });
     filters = Array.from(map.entries()).map(([value, label]) => ({ label, value, text: label }));
     onFilter = (value: IAny, record: IAny) => {
-      if (isBlank(value)) {
+      if (isVacuous(value)) {
         return true;
       }
       const rVal = get(record, path);

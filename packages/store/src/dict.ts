@@ -5,7 +5,7 @@
  */
 
 import { reaction } from '@formily/reactive';
-import { dataToOptions, IAny, IAnyObject, IKeys, IObjKey, IOptions, isBlank, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
+import { dataToOptions, IAny, IAnyObject, IKeys, IObjKey, IOptions, isVacuous, isSuccess, optionsToObj, strToArr } from '@yimoka/shared';
 import { pick } from 'lodash-es';
 
 import { IStoreAPI, IStoreResponse, runAPI } from './api';
@@ -100,7 +100,7 @@ export const watchStoreDict = (store: BaseStore) => {
       const { field, getData, api, byField, isEmptyGetData = false, toMap, toOptions, keys } = conf;
       const updateDict = (newValues: IAny) => {
         // 处理空值情况
-        if (!isEmptyGetData && (isBlank(newValues) || (Array.isArray(byField) ? byField.every(item => isBlank(newValues[item])) : isBlank(newValues[byField])))) {
+        if (!isEmptyGetData && (isVacuous(newValues) || (Array.isArray(byField) ? byField.every(item => isVacuous(newValues[item])) : isVacuous(newValues[byField])))) {
           store.incrDictFetchID(field);
           store.setFieldDict(field, []);
           updateValueByDict(conf, [], store);

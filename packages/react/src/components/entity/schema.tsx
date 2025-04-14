@@ -1,5 +1,5 @@
 import { createSchemaField, FormProvider, observer, RecordScope } from '@formily/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
+import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { IFetchListener, ISchema, IStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
@@ -13,7 +13,7 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
   const { fieldsConfig, form } = store;
 
   const curSchema = useMemo(() => {
-    if (isBlank(fieldsConfig)) {
+    if (isVacuous(fieldsConfig)) {
       return schema;
     }
     const { definitions = {}, ...args } = schema ?? {};
@@ -21,12 +21,12 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
     const outputSchemas: Record<string, ISchema> = {};
     Object.entries(fieldsConfig).forEach(([key, value]) => {
       const s = value['x-output-schema'];
-      if (!isBlank(s)) {
+      if (!isVacuous(s)) {
         outputSchemas[`__output_${key}`] = s;
       }
     });
 
-    const withOutputSchemas = isBlank(outputSchemas) ? fieldsConfig : { ...fieldsConfig, ...outputSchemas };
+    const withOutputSchemas = isVacuous(outputSchemas) ? fieldsConfig : { ...fieldsConfig, ...outputSchemas };
     return { definitions: typeof definitions === 'object' ? { ...withOutputSchemas, ...definitions } : withOutputSchemas, ...args };
   }, [schema, fieldsConfig]);
 

@@ -1,4 +1,4 @@
-import { IAny, IAnyObject, isBlank, JSONStringify } from '@yimoka/shared';
+import { IAny, IAnyObject, isVacuous, JSONStringify } from '@yimoka/shared';
 import React, { isValidElement } from 'react';
 import { isValidElementType } from 'react-is';
 
@@ -20,7 +20,7 @@ export const RenderAny = (props: RenderAnyProps) => {
     return <C {...cProps} />;
   }
 
-  if (isBlank(value)) {
+  if (isVacuous(value)) {
     return null;
   }
 

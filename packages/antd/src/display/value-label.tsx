@@ -8,7 +8,7 @@
 
 import { observer } from '@formily/react';
 import { RenderAny, useSplitter } from '@yimoka/react';
-import { IAny, IAnyObject, IKeys, IOptions, isBlank, optionsToObj } from '@yimoka/shared';
+import { IAny, IAnyObject, IKeys, IOptions, isVacuous, optionsToObj } from '@yimoka/shared';
 import { Tag, Space } from 'antd';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -63,7 +63,7 @@ export const ValueLabel = observer((props: ValueLabelProps) => {
     return value;
   }, [toArray, value, curSplitter]);
 
-  if (isBlank(newVal)) {
+  if (isVacuous(newVal)) {
     return null;
   }
 

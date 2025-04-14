@@ -1,4 +1,4 @@
-import { IAnyObject, IObjKey, isBlank } from '@yimoka/shared';
+import { IAnyObject, IObjKey, isVacuous } from '@yimoka/shared';
 import { IStore, IStoreAPI, IStoreResponse, runAPI } from '@yimoka/store';
 import { get } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
@@ -30,7 +30,7 @@ export function useFetchData<T = IAny>(api: IStoreAPI, params?: IAnyObject, conf
   const curStore = useStore(store);
 
   const watchParams = useMemo(() => {
-    if (isBlank(watchParamsKeys) || !curStore) {
+    if (isVacuous(watchParamsKeys) || !curStore) {
       return;
     }
     const watchObj = {

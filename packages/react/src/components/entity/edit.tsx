@@ -1,5 +1,5 @@
 import { observer } from '@formily/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
+import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { getEntityStore, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import React from 'react';
 
@@ -12,7 +12,7 @@ export const EntityEdit = observer((props: IEntityEditProps) => {
 
   const editStore = useDeepMemo(() => getEntityStore(store, 'edit', config), [store, config]);
 
-  if (isBlank(values)) {
+  if (isVacuous(values)) {
     return <FetchDetail {...args} config={config} store={editStore} />;
   }
 
