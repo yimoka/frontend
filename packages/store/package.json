@@ -48,9 +48,9 @@
     "test-watch": "vitest --coverage --watch"
   },
   "dependencies": {
-    "@formily/core": "^2.3.2",
-    "@formily/json-schema": "^2.3.2",
-    "@formily/reactive": "^2.3.2",
+    "@formily/core": "^2.3.3",
+    "@formily/json-schema": "^2.3.3",
+    "@formily/reactive": "^2.3.3",
     "@yimoka/shared": "workspace:*",
     "lodash-es": "^4.17.21"
   },
