@@ -1,7 +1,7 @@
-import { GetProps } from 'antd';
+import { GetProps, GetRef, GetProp } from 'antd';
 
 export { ConfigProvider, theme } from 'antd';
-export type { GetProps };
+export type { GetProps, GetRef, GetProp };
 
 export * from './base/button';
 export * from './base/float-button';
