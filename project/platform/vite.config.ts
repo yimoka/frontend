@@ -34,10 +34,10 @@ export default defineConfig({
         manualChunks: {
           vendor: ['dayjs', 'dayjs/locale/zh-cn', 'axios', 'lodash-es'],
           react: ['react', 'react-dom', 'react-is', 'react-router-dom', 'react/jsx-runtime'],
-          antd: ['antd', 'antd/lib/locale/zh_CN'],
           icon: ['@ant-design/icons'],
           formily: ['@formily/core', '@formily/react', '@formily/reactive'],
-          yimoka: ['@yimoka/shared', '@yimoka/store', '@yimoka/react', '@yimoka/antd'],
+          yimoka: ['@yimoka/shared', '@yimoka/store', '@yimoka/react'],
+          yimokaAntd: ['@yimoka/antd'],
         },
       },
     },
