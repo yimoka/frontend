@@ -25,6 +25,7 @@ import { Table } from './display/table';
 import { Tabs } from './display/tabs';
 import { Tag } from './display/tag';
 import { Timeline } from './display/timeline';
+import { Tour } from './display/tour';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
 
@@ -122,6 +123,7 @@ export const components: IConfigComponents = {
   Tag,
   CheckableTag: Tag.CheckableTag,
   Timeline,
+  Tour,
   Tree,
   ValueLabel,
 

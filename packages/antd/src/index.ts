@@ -50,6 +50,7 @@ export * from './display/table';
 export * from './display/tabs';
 export * from './display/tag';
 export * from './display/timeline';
+export * from './display/tour';
 export * from './display/tree';
 export * from './display/value-label';
 
