@@ -19,6 +19,7 @@ export * from './enter/form-item';
 export * from './enter/input-number';
 export * from './enter/input';
 export * from './enter/mentions';
+export * from './enter/radio';
 export * from './enter/switch';
 export * from './enter/tree-select';
 
