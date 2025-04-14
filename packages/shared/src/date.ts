@@ -37,7 +37,10 @@ import dayjs, { Dayjs, ManipulateType } from 'dayjs';
  * console.log(toDayjs(dateString, { format: 'YYYY-MM-DD' })); // 输出: Dayjs 对象，表示 2021-10-01
  * ```
  */
-export const toDayjs = (date: IDate, options?: IDateOptions): Dayjs => {
+export const toDayjs = (date: IDate, options?: IDateOptions): Dayjs | undefined => {
+  if (date === undefined) {
+    return undefined;
+  }
   if (dayjs.isDayjs(date)) {
     return date;
   }
@@ -263,7 +266,7 @@ const units = ['date', 'D', 'day', 'd', 'week', 'w', 'month', 'M', 'quarter', 'Q
 // 日期常用的格式为 毫秒数 秒数 字符串格式 dayjs 对象 和 Date 对象
 export type IDateType = 'ms' | 's' | 'string' | 'dayjs' | 'date';
 
-export type IDate = number | string | Dayjs | Date;
+export type IDate = number | string | Dayjs | Date | undefined;
 
 export interface IDateOptions {
   type?: IDateType;
