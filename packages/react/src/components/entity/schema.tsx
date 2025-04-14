@@ -1,6 +1,6 @@
 import { createSchemaField, FormProvider, observer, RecordScope } from '@formily/react';
-import { IAnyObject, isVacuous } from '@yimoka/shared';
-import { IFetchListener, ISchema, IStore } from '@yimoka/store';
+import { IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
+import { IFetchListener, IFieldConfig, ISchema, IStore, ListStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
 import { useComponents } from '../../hooks/components';
@@ -19,16 +19,24 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
     const { definitions = {}, ...args } = schema ?? {};
 
     const outputSchemas: Record<string, ISchema> = {};
+    const newFieldsConfig: Record<string, IFieldConfig> = {};
+
     Object.entries(fieldsConfig).forEach(([key, value]) => {
-      const s = value['x-output-schema'];
-      if (!isVacuous(s)) {
-        outputSchemas[`__output_${key}`] = s;
+      const { 'x-query-schema': querySchema, 'x-output-schema': outputSchema, ...rest } = value;
+      if (!isVacuous(outputSchema)) {
+        outputSchemas[`__output_${key}`] = outputSchema;
+      }
+      if (store instanceof ListStore && !isVacuous(querySchema)) {
+        newFieldsConfig[key] = mergeWithArrayOverride({}, rest, querySchema);
+      } else {
+        newFieldsConfig[key] = rest;
       }
     });
 
-    const withOutputSchemas = isVacuous(outputSchemas) ? fieldsConfig : { ...fieldsConfig, ...outputSchemas };
+    const withOutputSchemas = isVacuous(outputSchemas) ? newFieldsConfig : { ...newFieldsConfig, ...outputSchemas };
+
     return { definitions: typeof definitions === 'object' ? { ...withOutputSchemas, ...definitions } : withOutputSchemas, ...args };
-  }, [schema, fieldsConfig]);
+  }, [fieldsConfig, schema, store]);
 
   const SchemaField = useMemo(() => createSchemaField({
     components: components ? { ...ctxComponents, ...components } : ctxComponents,

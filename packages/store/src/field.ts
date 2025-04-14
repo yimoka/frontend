@@ -161,6 +161,8 @@ export type IFieldsConfig = Record<string, IFieldConfig>;
 export type IFieldConfig = ISchema & {
   /** 输出显示的 schema */
   'x-output-schema'?: ISchema;
+  /** 查询的 schema 在查询 store 中,生成的 ref 会合并 'x-query-schema' 的配置 例如: 可在其中定义 required 为 false 来实现非必填 */
+  'x-query-schema'?: ISchema;
   /** 表格列配置 */
   'x-column'?: IFieldColumn
 };
