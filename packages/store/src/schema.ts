@@ -86,4 +86,4 @@ export declare type ISchema<Decorator = IAny, Component = IAny, DecoratorProps =
   'x-edit-config'?: IAnyObject;
 }
 
-export type ITooltip = string | IAnyObject | boolean;
+export type ITooltip = string | IAnyObject | boolean | null | number

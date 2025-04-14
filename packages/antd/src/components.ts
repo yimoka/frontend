@@ -18,17 +18,19 @@ import { Table } from './display/table';
 import { Tag } from './display/tag';
 import { Tree } from './display/tree';
 import { ValueLabel } from './display/value-label';
+
 import { AutoComplete } from './enter/auto-complete';
 import { Cascader } from './enter/cascader';
 import { Checkbox, CheckboxGroup } from './enter/checkbox';
 import { ColorPicker } from './enter/color-picker';
 import { DatePicker } from './enter/date-picker';
 import { DateRangePicker } from './enter/date-range-picker';
+import { Form } from './enter/form';
+import { FormItem } from './enter/form-item';
 import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
 import { Switch } from './enter/switch';
 import { TreeSelect } from './enter/tree-select';
-
 
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
@@ -56,7 +58,7 @@ import { Menu } from './nav/menu';
 import { Pagination } from './nav/pagination';
 import { Steps } from './nav/steps';
 import { PageHeader } from './page/page-header';
-import { FormItem, StoreForm } from './store/form';
+import { StoreForm } from './store/form';
 import { RecordDel } from './store/record-del';
 import { RecordOperation } from './store/record-operation';
 import { Reset } from './store/reset';
@@ -101,6 +103,8 @@ export const components: IConfigComponents = {
   ColorPicker,
   DatePicker,
   DateRangePicker,
+  Form,
+  FormItem,
   InputNumber,
   Input,
   Switch,
@@ -142,7 +146,6 @@ export const components: IConfigComponents = {
 
   // store
   StoreForm,
-  FormItem,
   RecordOperation,
   RecordDel,
   Reset,
