@@ -31,10 +31,16 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'react',
+        'monaco-editor',
+        'lodash-es',
+        '@yimoka/shared',
       ],
       output: {
         globals: {
           react: 'React',
+          'monaco-editor': 'MonacoEditor',
+          'lodash-es': '_',
+          '@yimoka/shared': 'YimokaShared',
         },
       },
     },
