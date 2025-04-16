@@ -16,7 +16,7 @@ export const listKeysDefault: Record<string, string> = {
 export const listOptionsDefault: Partial<IBaseStoreOptions> = {
   bindRoute: true,
   filterBlankAtRun: true,
-  runNow: true,
+  runNow: 'whenRequired',
   keys: { ...listKeysDefault },
 };
 

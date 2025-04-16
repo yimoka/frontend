@@ -67,15 +67,15 @@ describe('BaseStore 模块', () => {
       expect(store.extInfo).toEqual(extInfo);
     });
 
-    it('应该在 runNow 为 true 且 bindRoute 为 false 时立即执行 fetch', async () => {
+    it('应该在 runNow 为 always 且 bindRoute 为 false 时立即执行 fetch', async () => {
       const apiMock = vi.fn();
-      new BaseStore({ options: { runNow: true, bindRoute: false }, api: apiMock });
+      new BaseStore({ options: { runNow: 'always', bindRoute: false }, api: apiMock });
       expect(apiMock).toHaveBeenCalledTimes(1);
     });
 
-    it('不应该在 runNow 为 true 但 bindRoute 为 true 时立即执行 fetch', async () => {
+    it('不应该在 runNow 为 always 但 bindRoute 为 true 时立即执行 fetch', async () => {
       const apiMock = vi.fn();
-      new BaseStore({ options: { runNow: true, bindRoute: true }, api: apiMock });
+      new BaseStore({ options: { runNow: 'always', bindRoute: true }, api: apiMock });
       expect(apiMock).not.toHaveBeenCalled();
     });
   });
