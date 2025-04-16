@@ -4,11 +4,11 @@
  */
 
 import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
-import { dataToOptions, IAny, IAnyObject, isVacuous, normalizeToArray } from '@yimoka/shared';
+import { dataToOptions, getSmart, IAny, IAnyObject, isVacuous, normalizeToArray, setSmart } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
 import { TablePaginationConfig } from 'antd';
 import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
-import { cloneDeep, get, isEqual, pick, set } from 'lodash-es';
+import { cloneDeep, isEqual, pick } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
 
 import { Table, TableProps } from '../display/table';
@@ -125,12 +125,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
     }
     //  处理过滤和排序
     if (column.autoFilter === true) {
-      let fVal;
-      if (keyValue in values) {
-        fVal = values[keyValue];
-      } else {
-        fVal = get(values, keyValue);
-      }
+      const fVal = getSmart(values, keyValue);
       if (Array.isArray(fVal)) {
         withFilterAndSortAndTitle.filteredValue = fVal;
       } else if (typeof fVal === 'string' && fVal) {
@@ -144,25 +139,12 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         let options: IAnyObject[] = [];
         const metaDict = curStore.response?.meta?.dict;
         if (metaDict) {
-          if (keyValue in metaDict) {
-            options = metaDict[keyValue];
-          } else {
-            const tmp = get(metaDict, keyValue);
-            if (tmp) {
-              options = tmp;
-            }
-          }
+          // 尝试从 metaDict 中取
+          options = getSmart(metaDict, keyValue, []);
         }
-        if (!options) {
+        if (isVacuous(options)) {
           // 尝试从字典中取
-          if (keyValue in curStore.dict) {
-            options = curStore.dict[keyValue];
-          } else {
-            const tmp = get(curStore.dict, keyValue);
-            if (tmp) {
-              options = tmp;
-            }
-          }
+          options = getSmart(curStore.dict, keyValue, []);
         }
         if (!isVacuous(options)) {
           withFilterAndSortAndTitle.filters = dataToOptions<keyof ColumnFilterItem>(options, { keys: { label: 'label', value: 'value' } }) as ColumnFilterItem[];
@@ -170,7 +152,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       }
     }
     if (column.sorter === true) {
-      const sorterValue = get(values, sortOrderKey);
+      const sorterValue = getSmart(values, sortOrderKey);
       if (Array.isArray(sorterValue)) {
         const sorter = sorterValue.find(item => item.field === keyValue);
         if (sorter) {
@@ -231,7 +213,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
   const handleFilters = (filters: Record<string, FilterValue | null>) => {
     const newValues: IAnyObject = {};
-    // eslint-disable-next-line complexity
+
     Object.entries(filters).forEach(([key, value]) => {
       const val = value === null ? [] : value;
       const col = columnsWithSchema.find((item) => {
@@ -246,13 +228,9 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       });
       if (col) {
         let fVal: unknown;
-        let oldVal: unknown;
+
         const keyValue = col.filterValueKey ?? key;
-        if (keyValue in values) {
-          oldVal = values[keyValue];
-        } else {
-          oldVal = get(values, keyValue);
-        }
+        const oldVal = getSmart(values, keyValue);
         if (col?.filterMultiple === false) {
           fVal = val?.[0];
         } else if (typeof oldVal === 'string') {
@@ -261,11 +239,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
           fVal = val;
         }
         if (!isEqual(fVal, oldVal)) {
-          if (keyValue in values) {
-            newValues[keyValue] = fVal;
-          } else {
-            set(newValues, keyValue, fVal);
-          }
+          setSmart(newValues, keyValue, fVal);
         }
       }
     });

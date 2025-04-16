@@ -7,6 +7,8 @@
  */
 
 import { isEmpty, set, get } from 'lodash-es';
+
+import { IAny, IAnyObject } from './type';
 /**
  * 判断值是否为空 ('' | null | undefined | 空对象 | 空数组)
  *
@@ -91,11 +93,11 @@ export const setSmart = <T extends object, K extends keyof T>(
  * getSmart(obj, 'b.c'); // 2
  * ```
  */
-export const getSmart = <T extends object, K extends keyof T>(
+export const getSmart = <T extends IAnyObject, K extends keyof T = string>(
   object: T,
   path: K | string | string[],
-  defaultValue?: unknown,
-): T[K] | unknown => {
+  defaultValue?: IAny,
+): T[K] | IAny => {
   if (typeof path === 'string' && path in object) {
     return object[path as K];
   }
