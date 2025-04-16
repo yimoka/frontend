@@ -1,0 +1,59 @@
+{
+  "name": "@yimoka/tiptap",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yimoka/frontend/tree/main/packages/tiptap"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "ickeep",
+    "email": "i@ickeep.com",
+    "url": "https://github.com/ickeep"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "main": "src/index.ts",
+  "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "types",
+    "README.md"
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "build-watch": "tsc -b && vite build --watch",
+    "lint": "eslint . --fix",
+    "test": "vitest --coverage --watch=false",
+    "test-watch": "vitest --coverage --watch"
+  },
+  "dependencies": {
+    "@tiptap/react": "^2.11.7",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@types/react": "^18.3.3"
+  }
+}
