@@ -48,18 +48,13 @@ jobs:
           pnpm run build:pkg
           cd project/platform && pnpm run build
 
-      - name: 配置 对象存储 凭证
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.S3_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.S3_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.S3_REGION }}
-          audience: sts.tencentcloudapi.com
-        env:
-          AWS_STS_REGIONAL_ENDPOINTS: regional
-          AWS_ENDPOINT_URL: ${{ vars.S3_ENDPOINT }}
-          AWS_STS_ENDPOINT: https://sts.tencentcloudapi.com
-
       - name: 部署到 对象存储
-        run: |
-          aws --endpoint-url ${{ vars.S3_ENDPOINT }} s3 sync project/platform/dist s3://${{ secrets.S3_BUCKET }}/${{ github.repository }}/${{ github.ref_name }}/ 
+        uses: TencentCloud/cos-action@v1
+        with:
+          secret_id: ${{ secrets.S3_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          cos_bucket: ${{ secrets.S3_BUCKET }}
+          cos_region: ${{ vars.S3_REGION }}
+          local_path: project/platform/dist
+          remote_path: ${{ github.repository }}/${{ github.ref_name }}/
+          clean: false 
