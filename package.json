@@ -8,10 +8,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build-watch:pkg": "pnpm --parallel --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd build-watch",
-    "build:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd build",
-    "lint:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd lint",
-    "test:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd test"
+    "build-watch:pkg": "pnpm --parallel --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build-watch",
+    "build:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build",
+    "lint:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts lint",
+    "test:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts test"
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
