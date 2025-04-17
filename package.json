@@ -45,7 +45,8 @@
       "**/public/**"
     ],
     "words": [
-      "Buildx"
+      "Buildx",
+      "DOCKERHUB"
     ]
   }
 }
