@@ -38,7 +38,7 @@ jobs:
             echo "mode=tag" >> $GITHUB_OUTPUT
           else
             BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/^platform\///')
-            echo "path_prefix=$REPO/branch/$BRANCH_NAME" >> $GITHUB_OUTPUT
+            echo "path_prefix=$REPO/branch/${{ github.ref_name }}" >> $GITHUB_OUTPUT
             echo "mode=$BRANCH_NAME" >> $GITHUB_OUTPUT
           fi
 
