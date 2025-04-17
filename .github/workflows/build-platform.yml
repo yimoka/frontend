@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - 'platform/*'
+    tags:
+      - 'v*'
 
 jobs:
   build-and-deploy:
     name: 构建和部署
     runs-on: ubuntu-latest
+    env:
+      REPO: ${{ github.repository }}
     
     steps:
       - name: 检出代码
@@ -25,28 +29,23 @@ jobs:
           version: 10
           run_install: true
 
-      - name: 缓存 pnpm 依赖
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            **/node_modules
-            .pnpm-debug.log
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: 验证 pnpm 安装
+      - name: 设置路径变量
         run: |
-          which pnpm
-          pnpm --version
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "MODE=tag" >> $GITHUB_ENV
+            TAG_NAME=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+            echo "PATH_PREFIX=$REPO/platform/$TAG_NAME" >> $GITHUB_ENV
+          else
+            echo "MODE=$(echo "${{ github.ref_name }}" | sed 's/^platform\///')" >> $GITHUB_ENV
+            echo "PATH_PREFIX=$REPO/${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
 
       - name: 安装依赖并构建
         run: |
           pnpm install --frozen-lockfile
           pnpm run lint:pkg
           pnpm run build:pkg
-          cd project/platform && pnpm run build
+          cd project/platform && pnpm run build --base https://static.zxnum.com/$PATH_PREFIX/ --mode $MODE
 
       - name: 部署到 对象存储
         uses: TencentCloud/cos-action@v1
@@ -56,5 +55,5 @@ jobs:
           cos_bucket: ${{ secrets.S3_BUCKET }}
           cos_region: ${{ vars.S3_REGION }}
           local_path: project/platform/dist
-          remote_path: ${{ github.repository }}/${{ github.ref_name }}/
+          remote_path: $PATH_PREFIX/
           clean: false 
