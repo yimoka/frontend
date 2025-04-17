@@ -2,7 +2,6 @@
   "name": "@yimoka/store",
   "version": "0.0.1",
   "private": false,
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yimoka/frontend/tree/main/packages/store"
@@ -13,6 +12,7 @@
     "email": "i@ickeep.com",
     "url": "https://github.com/ickeep"
   },
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
@@ -28,6 +28,13 @@
     "types",
     "README.md"
   ],
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "build-watch": "tsc -b && vite build --watch",
+    "lint": "eslint . --fix",
+    "test": "vitest --coverage --watch=false",
+    "test-watch": "vitest --coverage --watch"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,13 +47,6 @@
       "last 1 safari version"
     ]
   },
-  "scripts": {
-    "build": "tsc -b && vite build",
-    "build-watch": "tsc -b && vite build --watch",
-    "lint": "eslint . --fix",
-    "test": "vitest --coverage --watch=false",
-    "test-watch": "vitest --coverage --watch"
-  },
   "dependencies": {
     "@formily/core": "^2.3.3",
     "@formily/json-schema": "^2.3.3",
@@ -54,5 +54,7 @@
     "@yimoka/shared": "workspace:*",
     "lodash-es": "^4.17.21"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^9.24.0"
+  }
 }
