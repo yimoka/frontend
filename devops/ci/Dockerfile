@@ -1,4 +1,4 @@
-FROM node-pnpm:22.14.0
+FROM ickeep/pnpm:10.8.1
 
 # 设置工作目录
 WORKDIR /app
