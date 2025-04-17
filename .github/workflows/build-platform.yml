@@ -23,6 +23,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm run lint:pkg
+          pnpm run build:pkg
           cd project/platform && pnpm run build
 
       - name: 配置 AWS 凭证
