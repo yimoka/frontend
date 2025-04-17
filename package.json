@@ -43,6 +43,9 @@
       "**/build/**",
       "**/coverage/**",
       "**/public/**"
+    ],
+    "words": [
+      "Buildx"
     ]
   }
 }
