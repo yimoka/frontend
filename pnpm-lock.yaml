@@ -225,6 +225,9 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.18
+      eslint:
+        specifier: ^9.24.0
+        version: 9.24.0(jiti@1.21.7)
 
   packages/react:
     dependencies:
