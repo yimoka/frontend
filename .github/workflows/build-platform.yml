@@ -9,15 +9,22 @@ jobs:
   build-and-deploy:
     name: 构建和部署
     runs-on: ubuntu-latest
-    container:
-      image: ickeep/yimoka-frontend-ci:1.0.0
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
     
     steps:
       - name: 检出代码
         uses: actions/checkout@v3
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
 
       - name: 安装依赖并构建
         run: |
@@ -26,13 +33,16 @@ jobs:
           pnpm run build:pkg
           cd project/platform && pnpm run build
 
-      - name: 配置 AWS 凭证
+      - name: 配置 对象存储 凭证
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.S3_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.S3_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.S3_REGION }}
+        env:
+          AWS_STS_REGIONAL_ENDPOINTS: regional
+          AWS_ENDPOINT_URL: ${{ vars.S3_ENDPOINT }}
 
-      - name: 部署到 S3
+      - name: 部署到 对象存储
         run: |
           aws --endpoint-url ${{ vars.S3_ENDPOINT }} s3 sync project/platform/dist s3://${{ secrets.S3_BUCKET }}/${{ github.repository }}/${{ github.ref_name }}/ 
