@@ -12,7 +12,7 @@ import { PermissionEdit } from './edit';
 
 export const PermissionTreePage = observer(() => {
   const treeStore = useInitStore({
-    options: { runNow: true },
+    options: { runNow: 'always' },
     api: { url: '/base/iam/portal/my/permission' },
   });
 

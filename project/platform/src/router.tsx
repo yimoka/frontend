@@ -40,7 +40,7 @@ export const GuardRouter = observer(() => {
 
   //  获取用户信息的 store 判断用户是否登录
   const store = useInitStore({
-    options: { runNow: true },
+    options: { runNow: 'always' },
     api: { url: '/base/iam/portal/staff/info' },
     afterAtFetch: {
       successRun: (res) => {
