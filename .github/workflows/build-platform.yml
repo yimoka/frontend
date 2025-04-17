@@ -3,7 +3,7 @@ name: 平台构建部署
 on:
   push:
     branches:
-      - 'platform-*'
+      - 'platform/*'
 
 jobs:
   build-and-deploy:
@@ -34,4 +34,4 @@ jobs:
 
       - name: 部署到 S3
         run: |
-          aws --endpoint-url ${{ vars.S3_ENDPOINT }} s3 sync dist/ s3://${{ secrets.S3_BUCKET }}/${{ github.repository }}/${{ github.ref_name }}/ 
+          aws --endpoint-url ${{ vars.S3_ENDPOINT }} s3 sync project/platform/dist s3://${{ secrets.S3_BUCKET }}/${{ github.repository }}/${{ github.ref_name }}/ 
