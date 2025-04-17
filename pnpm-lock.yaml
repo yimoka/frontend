@@ -178,6 +178,9 @@ importers:
 
   packages/echarts:
     dependencies:
+      '@yimoka/shared':
+        specifier: workspace:*
+        version: link:../shared
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
