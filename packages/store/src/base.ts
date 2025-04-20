@@ -205,7 +205,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
     const { runNow, bindRoute } = this.options;
     // 绑定路由时，会使用组件在进行页面时进行参数赋值，再进行请求。
-    if (runNow && !bindRoute) {
+    if (runNow === 'always' && !bindRoute) {
       this.fetch();
     }
   }
