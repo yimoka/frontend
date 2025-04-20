@@ -1,4 +1,4 @@
-import { Avatar, Dropdown, Icon, Link, Menu, Space, Typography, ConfigProvider, Layout, theme, MenuProps } from '@yimoka/antd';
+import { Avatar, Dropdown, Icon, Link, Menu, Typography, ConfigProvider, Layout, theme, MenuProps, Flex } from '@yimoka/antd';
 import { observer, useInitStore, useLocation, useNavigate, useRoot } from '@yimoka/react';
 import { isVacuous } from '@yimoka/shared';
 import { omit } from 'lodash-es';
@@ -18,14 +18,17 @@ export const Header = observer(() => {
       }}
     >
       <Layout.Header style={{ zIndex: 9, boxShadow: `0 1px 6px ${token.colorBorder}` }} title='标题' >
-        <Space>
+        <Flex align='center'
+          gap={token.padding}
+          justify='space-between'
+          style={{ height: '100%' }}>
           <Link to='/'>
             {/* <img style={{ width: 50 }} src={`${img}logo.png`} /> */}
             <Typography.Text strong style={{ marginLeft: 5, fontSize: 18, color: '#0056d3' }}  >平台</Typography.Text>
           </Link>
           <HeaderMenu />
-        </Space>
-        <User />
+          <User />
+        </Flex>
       </Layout.Header>
     </ConfigProvider>
   );
@@ -41,10 +44,15 @@ const HeaderMenu = observer(() => {
   if (isVacuous(menus)) {
     return null;
   }
-  return <Menu activeKey={activeKey}
-    items={menus}
-    mode="horizontal"
-    style={{ margin: 0 }} />;
+  return (
+    <div style={{ flex: 1, flexGrow: 1 }}>
+      <Menu
+        activeKey={activeKey}
+        items={menus}
+        mode="horizontal"
+        style={{ margin: 0 }} />
+    </div>
+  );
 });
 
 

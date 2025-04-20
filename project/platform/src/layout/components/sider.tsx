@@ -29,7 +29,10 @@ export const Sider = observer(({ menus, ...args }: SiderProps) => {
   }, [pathname]);
 
   return (
-    <Layout.Sider collapsible theme='light'  {...args}  >
+    <Layout.Sider collapsible
+      collapsedWidth={60}
+      theme='light'
+      {...args}  >
       <Menu
         defaultOpenKeys={selectedKeys}
         items={curMenus}
