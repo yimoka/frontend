@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { useStore } from '@yimoka/react';
-import { Button, ButtonProps, Col, ColProps, Flex, theme } from 'antd';
+import { Button, ButtonProps, Col, ColProps, Flex, Space, theme } from 'antd';
 import React from 'react';
 
 import { useLocaleComponent } from '../hooks/use-locale';
@@ -24,16 +24,18 @@ export const ListFilter = observer((props: ListFilterProps) => {
       row={row}
       {...rest}
     >
+      {children}
       <Col
         {...col}
         {...actionCol}
         style={{ marginLeft: 'auto', ...actionCol?.style }}>
         <Flex justify='end' style={{ marginBottom: token.token.margin }} >
-          <Submit children={locale.query} store={curStore} {...queryProps} />
-          {isReset && <Button children={locale.reset} {...resetProps} onClick={curStore?.resetValues} />}
+          <Space>
+            <Submit children={locale.query} store={curStore} {...queryProps} />
+            {isReset && <Button children={locale.reset} {...resetProps} onClick={curStore?.resetValues} />}
+          </Space>
         </Flex>
       </Col>
-      {children}
     </StoreForm >
   );
 });

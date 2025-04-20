@@ -63,7 +63,7 @@ function FormItemFn<T = IAny>(props: FormItemProps<T>) {
 
     if (curLabelAttached) {
       return {
-        childre: (
+        children: (
           <Space.Compact style={{ width: '100%' }}>
             <Button style={{ cursor: 'default', color: 'inherit' }}>
               {curLabel}

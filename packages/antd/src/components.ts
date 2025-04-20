@@ -86,6 +86,7 @@ import { RecordDel } from './store/record-del';
 import { RecordOperation } from './store/record-operation';
 import { Reset } from './store/reset';
 import { Submit } from './store/submit';
+import { StoreTable } from './store/table';
 
 export const components: IConfigComponents = {
   // 用于系统配置的基础组件
@@ -196,6 +197,7 @@ export const components: IConfigComponents = {
 
   // store
   StoreForm,
+  StoreTable,
   ListFilter,
   RecordOperation,
   RecordDel,
