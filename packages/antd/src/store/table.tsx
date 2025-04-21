@@ -6,7 +6,7 @@
 import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
 import { dataToOptions, getSmart, IAny, IAnyObject, isVacuous, normalizeToArray, setSmart } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
-import { TablePaginationConfig } from 'antd';
+import { TablePaginationConfig, Table as AntTable } from 'antd';
 import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
 import { cloneDeep, isEqual, pick } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
@@ -22,9 +22,8 @@ import { useTableRowKey } from '../display/table/hook';
  * @returns React 元素
  */
 const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
-  const { store, bindValue, ...rest } = props;
+  const { store, bindValue = true, ...rest } = props;
   const curStore = useStore(store) as ListStore;
-
   if (isVacuous(curStore)) {
     return null;
   }
@@ -252,7 +251,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
 
   return (
     <RecordsScope getRecords={() => listData} >
-      <Table
+      <AntTable
         {...rest}
         columns={curColumns}
         dataSource={listData}

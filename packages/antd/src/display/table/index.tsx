@@ -1,7 +1,7 @@
 // 对表格进行增强 支持 json schema 以及 自动生成 rowKey
 import { RecordsScope } from '@formily/react';
 import { observer, useComponentData, useRecordIndexFn, useSchemaItemsToColumns, useStore } from '@yimoka/react';
-import { IAnyObject } from '@yimoka/shared';
+import { IAny, IAnyObject } from '@yimoka/shared';
 import { IFieldColumn, IStore, ITooltip } from '@yimoka/store';
 import { Table as AntTable, TableProps as AntTableProps } from 'antd';
 import { ColumnGroupType, ColumnType } from 'antd/es/table';
@@ -18,19 +18,20 @@ const TableFn = <T extends IAnyObject>(props: TableProps<T>) => {
   const curRowKey = useTableRowKey(rowKey, getRecordIndex);
   const schemaColumns = useSchemaItemsToColumns(getRecordIndex, tableSchemaItemPropsMap);
 
-  const curColumns = useMemo(() => ([...(schemaColumns ?? []), ...(columns ?? [])].map((column) => {
+
+  const curColumns = useMemo(() => {
     const handleColumn = (column: ITableColumn) => {
       const { title, children, ...rest } = column;
       const curTitle = getTableColumnTitleWithTooltip(column, curStore);
       const curChildren = children?.map?.((col: ITableColumn) => handleColumn(col));
       return getTableColumnWithAutoFilterAndSorter({ ...rest, title: curTitle, children: curChildren }, data);
     };
-    return handleColumn(column);
-  }), data), [columns, curStore, data, schemaColumns]);
+    return [...(schemaColumns ?? []), ...(columns ?? [])].map(handleColumn);
+  }, [columns, curStore, data, schemaColumns]);
 
   return (
     <RecordsScope getRecords={() => (data ?? []) as T[]} >
-      <AntTable<T>
+      <AntTable<IAny>
         {...rest}
         columns={curColumns}
         dataSource={data}
