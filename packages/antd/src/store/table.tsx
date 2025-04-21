@@ -3,13 +3,14 @@
  * @summary 该模块实现了基于 Store 的表格组件，支持数据绑定、分页、排序、筛选等功能
  */
 
-import { observer, RecordsScope, useNavigate, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
+import { observer, RecordsScope, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
 import { dataToOptions, getSmart, IAny, IAnyObject, isVacuous, normalizeToArray, setSmart } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
 import { TablePaginationConfig, Table as AntTable } from 'antd';
 import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
 import { cloneDeep, isEqual, pick } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Table, TableProps } from '../display/table';
 import { dataIndexToKey, getTableColumnTitleWithTooltip, tableSchemaItemPropsMap } from '../display/table/fn';
@@ -188,6 +189,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       }
     }
   };
+
 
   const handlePagination = (pagination: TablePaginationConfig) => {
     setFieldValue(pageKey, pagination.current);
