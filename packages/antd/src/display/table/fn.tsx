@@ -56,6 +56,7 @@ export type DataIndex<T = IAnyObject> = Required<ColumnType<T>>['dataIndex']
 
 export function getTableColumnTitleWithTooltip(column: ITableColumn, store?: BaseStore) {
   const { title, tooltip } = column;
+  let curTitle = title;
   if (tooltip === false) {
     return title;
   }
@@ -63,16 +64,19 @@ export function getTableColumnTitleWithTooltip(column: ITableColumn, store?: Bas
 
   if (typeof colKey === 'undefined' && 'dataIndex' in column) {
     colKey = dataIndexToKey(column.dataIndex);
+    if (typeof curTitle === 'undefined') {
+      curTitle = store?.fieldsConfig?.[colKey]?.title;
+    }
   }
   const curTooltip = getTooltipProps(tooltip, `${colKey}`, store);
 
   if (!isVacuous(curTooltip)) {
     return (
       <Space>
-        <RenderAny value={title} />
+        <RenderAny value={curTitle} />
         <Tooltip children={<QuestionCircleOutlined />} {...curTooltip} />
       </Space>
     );
   }
-  return title;
+  return curTitle;
 }
