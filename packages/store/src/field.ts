@@ -119,6 +119,7 @@ export const getFieldSplitter = (field: IField, store: BaseStore) => {
  * // 返回: { type: 'string', required: true }
  * ```
  */
+// TODO: 跳过 type void 的配置
 export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
   if (!fieldsConfig) return undefined;
   const conf = fieldsConfig[field];

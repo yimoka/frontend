@@ -18,8 +18,8 @@ import { get } from 'lodash-es';
  * @remarks 从 Schema 中提取组件所需的属性，支持从 x-decorator-props 和 x-component-props 中合并属性
  */
 
-// eslint-disable-next-line complexity
-export const getPropsByItemSchema = (schema: Schema, componentName?: string, propsMap?: IAnyObject, scope?: IAnyObject) => {
+
+export const getPropsByItemSchema = (schema: Schema, componentName?: string, propsMap?: IAnyObject) => {
   let itemProps: IAnyObject = {};
   if (!isVacuous(propsMap)) {
     Object.entries(propsMap).forEach(([itemKey, schemaKey]) => {
@@ -37,14 +37,14 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
   if (component === componentName) {
     itemProps = { ...itemProps, ...schema['x-component-props'] };
   }
-  const sName = schema.name;
-  if (componentName === 'Column' && sName) {
-    // TODO: 处理层级
-    const fieldColumnProps = scope?.$config?.fieldsConfig?.[sName]?.['x-column'];
-    if (!isVacuous(fieldColumnProps)) {
-      itemProps = { ...fieldColumnProps, ...itemProps };
-    }
-  }
+  // const sName = schema.name;
+  // if (componentName === 'Column' && sName) {
+  //   // TODO: 处理层级
+  //   const fieldColumnProps = scope?.$config?.fieldsConfig?.[sName]?.['x-column'];
+  //   if (!isVacuous(fieldColumnProps)) {
+  //     itemProps = { ...fieldColumnProps, ...itemProps };
+  //   }
+  // }
   return itemProps;
 };
 
