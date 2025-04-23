@@ -24,7 +24,7 @@ export const calcAutoScrollBasicInfo = (
   let begin: number;
   let end: number;
   let pos: number;
-  let speedFactor: number;
+  const speedFactor = 1;
   if (axis === 'x') {
     begin = left;
     end = right;
@@ -65,12 +65,14 @@ export const updateScrollValue = (
     if (!isWindow(element)) {
       if (axis === 'x') {
         if (element.scrollLeft + value > element.scrollWidth) return;
+        // eslint-disable-next-line no-param-reassign
         element.scrollLeft += value;
         if (isFn(callback)) {
           callback(element.scrollLeft);
         }
       } else {
         if (element.scrollTop + value > element.scrollHeight) return;
+        // eslint-disable-next-line no-param-reassign
         element.scrollTop += value;
         if (isFn(callback)) {
           callback(element.scrollTop);

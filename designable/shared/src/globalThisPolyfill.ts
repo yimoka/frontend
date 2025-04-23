@@ -5,14 +5,14 @@ function getGlobalThis(): IAny {
     if (typeof self !== 'undefined') {
       return self;
     }
-  } catch (e) {
+  } catch (_e) {
     // Ignore error
   }
   try {
     if (typeof globalThisPolyfill !== 'undefined') {
       return globalThisPolyfill;
     }
-  } catch (e) {
+  } catch (_e) {
     // Ignore error
   }
   try {
@@ -20,7 +20,7 @@ function getGlobalThis(): IAny {
       // eslint-disable-next-line no-undef
       return global;
     }
-  } catch (e) {
+  } catch (_e) {
     // Ignore error
   }
   // eslint-disable-next-line no-new-func

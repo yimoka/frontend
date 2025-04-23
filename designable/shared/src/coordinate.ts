@@ -81,9 +81,9 @@ export function isCrossRectInRect(target: IRect, source: IRect) {
   );
   return (
     Math.abs(targetCenterPoint.x - sourceCenterPoint.x)
-      <= target.width / 2 + source.width / 2
+    <= target.width / 2 + source.width / 2
     && Math.abs(targetCenterPoint.y - sourceCenterPoint.y)
-      <= target.height / 2 + source.height / 2
+    <= target.height / 2 + source.height / 2
   );
 }
 
@@ -150,7 +150,7 @@ export function isNearAfter(point: IPoint, rect: IRect, inline = false) {
     return (
       Math.abs(point.x - rect.x) + Math.abs(point.y - rect.y)
       > Math.abs(point.x - (rect.x + rect.width))
-        + Math.abs(point.y - (rect.y + rect.height))
+      + Math.abs(point.y - (rect.y + rect.height))
     );
   }
   return Math.abs(point.y - rect.y) > Math.abs(point.y - (rect.y + rect.height));
@@ -173,16 +173,17 @@ export function calcRelativeOfPointToRect(
   };
 }
 
-export function calcBoundingRect(rects: IRect[]) {
-  if (!rects?.length) return;
-  if (rects?.length === 1 && !rects[0]) return;
+export function calcBoundingRect(rects: IRect[]): DOMRect | undefined {
+  if (!rects?.length) return undefined;
+  if (rects?.length === 1 && !rects[0]) return undefined;
   let minTop = Infinity;
   let maxBottom = -Infinity;
   let minLeft = Infinity;
   let maxRight = -Infinity;
   rects.forEach((item) => {
-    const rect =      typeof DOMRect !== 'undefined'
-      && new DOMRect(item.x, item.y, item.width, item.height);
+    const rect = typeof DOMRect !== 'undefined'
+      ? new DOMRect(item.x, item.y, item.width, item.height)
+      : { top: item.y, bottom: item.y + item.height, left: item.x, right: item.x + item.width };
     if (rect.top <= minTop) {
       minTop = rect.top;
     }
@@ -196,18 +197,18 @@ export function calcBoundingRect(rects: IRect[]) {
       maxRight = rect.right;
     }
   });
-  return (
-    typeof DOMRect !== 'undefined'
-    && new DOMRect(minLeft, minTop, maxRight - minLeft, maxBottom - minTop)
-  );
+  return typeof DOMRect !== 'undefined'
+    ? new DOMRect(minLeft, minTop, maxRight - minLeft, maxBottom - minTop)
+    : undefined;
 }
 
+// eslint-disable-next-line complexity
 export function calcRectByStartEndPoint(
   startPoint: IPoint,
   endPoint: IPoint,
   scrollX = 0,
   scrollY = 0,
-) {
+): DOMRect | undefined {
   let drawStartX = 0;
   let drawStartY = 0;
   if (
@@ -217,15 +218,14 @@ export function calcRectByStartEndPoint(
     // 4象限
     drawStartX = startPoint.x;
     drawStartY = startPoint.y;
-    return (
-      typeof DOMRect !== 'undefined'
-      && new DOMRect(
+    return typeof DOMRect !== 'undefined'
+      ? new DOMRect(
         drawStartX - scrollX,
         drawStartY - scrollY,
         Math.abs(endPoint.x - startPoint.x + scrollX),
         Math.abs(endPoint.y - startPoint.y + scrollY),
       )
-    );
+      : undefined;
   } if (
     endPoint.x + scrollX < startPoint.x
     && endPoint.y + scrollY < startPoint.y
@@ -233,15 +233,14 @@ export function calcRectByStartEndPoint(
     // 1象限
     drawStartX = endPoint.x;
     drawStartY = endPoint.y;
-    return (
-      typeof DOMRect !== 'undefined'
-      && new DOMRect(
+    return typeof DOMRect !== 'undefined'
+      ? new DOMRect(
         drawStartX,
         drawStartY,
         Math.abs(endPoint.x - startPoint.x) - scrollX,
         Math.abs(endPoint.y - startPoint.y) - scrollY,
       )
-    );
+      : undefined;
   } if (
     endPoint.x + scrollX < startPoint.x
     && endPoint.y + scrollY >= startPoint.y
@@ -249,26 +248,24 @@ export function calcRectByStartEndPoint(
     // 3象限
     drawStartX = endPoint.x;
     drawStartY = startPoint.y;
-    return (
-      typeof DOMRect !== 'undefined'
-      && new DOMRect(
+    return typeof DOMRect !== 'undefined'
+      ? new DOMRect(
         drawStartX - scrollX,
         drawStartY - scrollY,
         Math.abs(endPoint.x - startPoint.x + scrollX),
         Math.abs(endPoint.y - startPoint.y + scrollY),
       )
-    );
+      : undefined;
   }
   // 2象限
   drawStartX = startPoint.x;
   drawStartY = endPoint.y;
-  return (
-    typeof DOMRect !== 'undefined'
-      && new DOMRect(
-        drawStartX,
-        drawStartY,
-        Math.abs(endPoint.x - startPoint.x) - scrollX,
-        Math.abs(endPoint.y - startPoint.y) - scrollY,
-      )
-  );
+  return typeof DOMRect !== 'undefined'
+    ? new DOMRect(
+      drawStartX,
+      drawStartY,
+      Math.abs(endPoint.x - startPoint.x) - scrollX,
+      Math.abs(endPoint.y - startPoint.y) - scrollY,
+    )
+    : undefined;
 }

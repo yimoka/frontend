@@ -60,17 +60,19 @@ export const calcElementOuterWidth = (
   style: CSSStyleDeclaration,
 ) => (
   innerWidth
-    + parseFloat(style.marginLeft)
-    + parseFloat(style.marginRight)
-    + parseFloat(style.paddingLeft)
-    + parseFloat(style.paddingRight)
-    + parseFloat(style.borderLeftWidth)
-    + parseFloat(style.borderRightWidth)
+  + parseFloat(style.marginLeft)
+  + parseFloat(style.marginRight)
+  + parseFloat(style.paddingLeft)
+  + parseFloat(style.paddingRight)
+  + parseFloat(style.borderLeftWidth)
+  + parseFloat(style.borderRightWidth)
 );
 
 export const calcElementLayout = (element: Element) => {
   if (!element) return 'vertical';
   const parent = element.parentElement;
+  if (!parent) return 'vertical';
+
   const { tagName } = element;
   const parentTagName = parent.tagName;
   const style = getComputedStyle(element);

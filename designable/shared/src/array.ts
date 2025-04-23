@@ -33,7 +33,11 @@ type MemoObjectIterator<TValue, TResult> = (
   key: string
 ) => TResult
 
-export const toArr = (val: IAny): IAny[] => (isArr(val) ? val : val ? [val] : []);
+export const toArr = (val: IAny): IAny[] => {
+  if (isArr(val)) return val;
+  return val ? [val] : [];
+};
+
 export function each(
   val: string,
   iterator: EachStringIterator,
@@ -44,9 +48,9 @@ export function each<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): void
-export function each<T extends IAnyObject, TValue = T[keyof T]>(
+export function each<T extends IAnyObject, _TValue = T[keyof T]>(
   val: T,
-  iterator: EachObjectIterator<TValue>,
+  iterator: EachObjectIterator<_TValue>,
   revert?: boolean
 ): void
 
@@ -124,9 +128,9 @@ export function reduce<T>(
   accumulator?: T,
   revert?: boolean
 ): T
-export function reduce<T extends IAnyObject, TValue = T[keyof T], TResult = IAny>(
+export function reduce<T extends IAnyObject, _TValue = T[keyof T], TResult = IAny>(
   val: T,
-  iterator: MemoObjectIterator<TValue, TResult>,
+  iterator: MemoObjectIterator<_TValue, TResult>,
   accumulator?: TResult,
   revert?: boolean
 ): TResult
@@ -157,7 +161,7 @@ export function every<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function every<T extends IAnyObject, TValue = T[keyof T]>(
+export function every<T extends IAnyObject, _TValue = T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -187,7 +191,7 @@ export function some<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function some<T extends IAnyObject, TValue = T[keyof T]>(
+export function some<T extends IAnyObject, _TValue = T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -217,7 +221,7 @@ export function findIndex<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): number
-export function findIndex<T extends IAnyObject, TValue = T[keyof T]>(
+export function findIndex<T extends IAnyObject, _TValue = T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -251,7 +255,7 @@ export function find<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): T
-export function find<T extends IAnyObject, TValue = T[keyof T]>(
+export function find<T extends IAnyObject, _TValue = T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
