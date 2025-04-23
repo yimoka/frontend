@@ -1,9 +1,9 @@
-import { ICustomEvent } from '@designable/shared'
-import { AbstractHistoryEvent } from './AbstractHistoryEvent'
+import { ICustomEvent } from '@yimoka/designable-shared';
+
+import { AbstractHistoryEvent } from './AbstractHistoryEvent';
 
 export class HistoryGotoEvent
   extends AbstractHistoryEvent
-  implements ICustomEvent
-{
-  type = 'history:goto'
+  implements ICustomEvent {
+  type = 'history:goto';
 }

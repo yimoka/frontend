@@ -1,15 +1,16 @@
-import * as Core from './exports'
-export * from './exports'
-import { globalThisPolyfill } from '@designable/shared'
+import { globalThisPolyfill } from '@yimoka/designable-shared';
 
-if (globalThisPolyfill?.['Designable']?.['Core']) {
+import * as Core from './exports';
+export * from './exports';
+
+if (globalThisPolyfill?.Designable?.Core) {
   if (module.exports) {
     module.exports = {
       __esModule: true,
-      ...globalThisPolyfill['Designable']['Core'],
-    }
+      ...globalThisPolyfill.Designable.Core,
+    };
   }
 } else {
-  globalThisPolyfill['Designable'] = globalThisPolyfill['Designable'] || {}
-  globalThisPolyfill['Designable'].Core = Core
+  globalThisPolyfill.Designable = globalThisPolyfill.Designable || {};
+  globalThisPolyfill.Designable.Core = Core;
 }

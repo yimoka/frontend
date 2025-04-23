@@ -1,9 +1,9 @@
-import { ICustomEvent } from '@designable/shared'
-import { AbstractWorkspaceEvent } from './AbstractWorkspaceEvent'
+import { ICustomEvent } from '@yimoka/designable-shared';
+
+import { AbstractWorkspaceEvent } from './AbstractWorkspaceEvent';
 
 export class SwitchWorkspaceEvent
   extends AbstractWorkspaceEvent
-  implements ICustomEvent
-{
-  type = 'switch:workspace'
+  implements ICustomEvent {
+  type = 'switch:workspace';
 }

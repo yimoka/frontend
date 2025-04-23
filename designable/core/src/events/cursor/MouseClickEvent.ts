@@ -1,16 +1,15 @@
-import { ICustomEvent } from '@designable/shared'
-import { AbstractCursorEvent } from './AbstractCursorEvent'
+import { ICustomEvent } from '@yimoka/designable-shared';
+
+import { AbstractCursorEvent } from './AbstractCursorEvent';
 
 export class MouseClickEvent
   extends AbstractCursorEvent
-  implements ICustomEvent
-{
-  type = 'mouse:click'
+  implements ICustomEvent {
+  type = 'mouse:click';
 }
 
 export class MouseDoubleClickEvent
   extends AbstractCursorEvent
-  implements ICustomEvent
-{
-  type = 'mouse:dblclick'
+  implements ICustomEvent {
+  type = 'mouse:dblclick';
 }

@@ -1,9 +1,9 @@
-import { ICustomEvent } from '@designable/shared'
-import { AbstractMutationNodeEvent } from './AbstractMutationNodeEvent'
+import { ICustomEvent } from '@yimoka/designable-shared';
+
+import { AbstractMutationNodeEvent } from './AbstractMutationNodeEvent';
 
 export class SelectNodeEvent
   extends AbstractMutationNodeEvent
-  implements ICustomEvent
-{
-  type = 'select:node'
+  implements ICustomEvent {
+  type = 'select:node';
 }

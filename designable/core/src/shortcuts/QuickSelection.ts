@@ -1,18 +1,18 @@
-import { KeyCode, Shortcut, TreeNode } from '../models'
+import { KeyCode, Shortcut, TreeNode } from '../models';
 
 const findBottomLastChild = (node: TreeNode) => {
-  if (!node) return node
+  if (!node) return node;
   if (node.lastChild) {
-    return findBottomLastChild(node.lastChild)
+    return findBottomLastChild(node.lastChild);
   }
-  return node
-}
+  return node;
+};
 
 const findTopParentNext = (node: TreeNode) => {
-  if (!node.parent) return node
-  if (node.parent?.next) return node.parent.next
-  return findTopParentNext(node.parent)
-}
+  if (!node.parent) return node;
+  if (node.parent?.next) return node.parent.next;
+  return findTopParentNext(node.parent);
+};
 
 export const SelectPrevNode = new Shortcut({
   codes: [
@@ -24,27 +24,27 @@ export const SelectPrevNode = new Shortcut({
     [KeyCode.ArrowLeft],
   ],
   handler(context) {
-    const operation = context?.workspace.operation
+    const operation = context?.workspace.operation;
     if (operation) {
-      const tree = operation.tree
-      const selection = operation.selection
-      const selectedNode = tree.findById(selection.last)
+      const { tree } = operation;
+      const { selection } = operation;
+      const selectedNode = tree.findById(selection.last);
       if (selectedNode) {
-        const previousNode = selectedNode.previous
+        const previousNode = selectedNode.previous;
         if (previousNode) {
-          const bottom = findBottomLastChild(previousNode)
+          const bottom = findBottomLastChild(previousNode);
           if (bottom) {
-            selection.select(bottom)
+            selection.select(bottom);
           } else {
-            selection.select(previousNode)
+            selection.select(previousNode);
           }
         } else {
-          selection.select(selectedNode.parent)
+          selection.select(selectedNode.parent);
         }
       }
     }
   },
-})
+});
 
 export const SelectNextNode = new Shortcut({
   codes: [
@@ -56,21 +56,21 @@ export const SelectNextNode = new Shortcut({
     [KeyCode.ArrowRight],
   ],
   handler(context) {
-    const operation = context?.workspace.operation
+    const operation = context?.workspace.operation;
     if (operation) {
-      const tree = operation.tree
-      const selection = operation.selection
-      const selectedNode = tree.findById(selection.last)
+      const { tree } = operation;
+      const { selection } = operation;
+      const selectedNode = tree.findById(selection.last);
       if (selectedNode) {
         const nextNode = selectedNode.firstChild
           ? selectedNode.firstChild
-          : selectedNode.next
+          : selectedNode.next;
         if (nextNode) {
-          selection.select(nextNode)
+          selection.select(nextNode);
         } else {
-          selection.select(findTopParentNext(selectedNode))
+          selection.select(findTopParentNext(selectedNode));
         }
       }
     }
   },
-})
+});

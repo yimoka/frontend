@@ -1,6 +1,7 @@
-import { Engine } from './Engine'
-import { action, define, observable } from '@formily/reactive'
-import { globalThisPolyfill } from '@designable/shared'
+import { action, define, observable } from '@formily/reactive';
+import { globalThisPolyfill } from '@yimoka/designable-shared';
+
+import { Engine } from './Engine';
 
 export enum CursorStatus {
   Normal = 'NORMAL',
@@ -58,46 +59,46 @@ const DEFAULT_POSITION = {
   topPageY: 0,
   topClientX: 0,
   topClientY: 0,
-}
+};
 
 const DEFAULT_SCROLL_OFFSET = {
   scrollX: 0,
   scrollY: 0,
-}
+};
 
 const setCursorStyle = (contentWindow: Window, style: string) => {
-  const currentRoot = document?.getElementsByTagName?.('html')?.[0]
-  const root = contentWindow?.document?.getElementsByTagName('html')?.[0]
+  const currentRoot = document?.getElementsByTagName?.('html')?.[0];
+  const root = contentWindow?.document?.getElementsByTagName('html')?.[0];
   if (root && root.style.cursor !== style) {
-    root.style.cursor = style
+    root.style.cursor = style;
   }
   if (currentRoot && currentRoot.style.cursor !== style) {
-    currentRoot.style.cursor = style
+    currentRoot.style.cursor = style;
   }
-}
+};
 
 export class Cursor {
-  engine: Engine
+  engine: Engine;
 
-  type: CursorType | string = CursorType.Move
+  type: CursorType | string = CursorType.Move;
 
-  status: CursorStatus = CursorStatus.Normal
+  status: CursorStatus = CursorStatus.Normal;
 
-  position: ICursorPosition = DEFAULT_POSITION
+  position: ICursorPosition = DEFAULT_POSITION;
 
-  dragStartPosition: ICursorPosition = DEFAULT_POSITION
+  dragStartPosition: ICursorPosition = DEFAULT_POSITION;
 
-  dragStartScrollOffset: IScrollOffset = DEFAULT_SCROLL_OFFSET
+  dragStartScrollOffset: IScrollOffset = DEFAULT_SCROLL_OFFSET;
 
-  dragEndPosition: ICursorPosition = DEFAULT_POSITION
+  dragEndPosition: ICursorPosition = DEFAULT_POSITION;
 
-  dragEndScrollOffset: IScrollOffset = DEFAULT_SCROLL_OFFSET
+  dragEndScrollOffset: IScrollOffset = DEFAULT_SCROLL_OFFSET;
 
-  view: Window = globalThisPolyfill
+  view: Window = globalThisPolyfill;
 
   constructor(engine: Engine) {
-    this.engine = engine
-    this.makeObservable()
+    this.engine = engine;
+    this.makeObservable();
   }
 
   makeObservable() {
@@ -114,51 +115,51 @@ export class Cursor {
       setPosition: action,
       setStatus: action,
       setType: action,
-    })
+    });
   }
 
   setStatus(status: CursorStatus) {
-    this.status = status
+    this.status = status;
   }
 
   setType(type: CursorType | string) {
-    this.type = type
+    this.type = type;
   }
 
   setStyle(style: string) {
     this.engine.workbench.eachWorkspace((workspace) => {
-      setCursorStyle(workspace.viewport.contentWindow, style)
-    })
+      setCursorStyle(workspace.viewport.contentWindow, style);
+    });
   }
 
   setPosition(position?: ICursorPosition) {
     this.position = {
       ...this.position,
       ...position,
-    }
+    };
   }
   setDragStartPosition(position?: ICursorPosition) {
     this.dragStartPosition = {
       ...this.dragStartPosition,
       ...position,
-    }
+    };
   }
   setDragEndPosition(position?: ICursorPosition) {
     this.dragEndPosition = {
       ...this.dragEndPosition,
       ...position,
-    }
+    };
   }
   setDragStartScrollOffset(offset?: IScrollOffset) {
     this.dragStartScrollOffset = {
       ...this.dragStartScrollOffset,
       ...offset,
-    }
+    };
   }
   setDragEndScrollOffset(offset?: IScrollOffset) {
     this.dragEndScrollOffset = {
       ...this.dragEndScrollOffset,
       ...offset,
-    }
+    };
   }
 }

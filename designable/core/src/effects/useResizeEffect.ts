@@ -1,7 +1,8 @@
-import { Engine, CursorType } from '../models'
-import { DragStartEvent, DragMoveEvent, DragStopEvent } from '../events'
-import { TreeNode } from '../models'
-import { Point } from '@designable/shared'
+import { Point } from '@yimoka/designable-shared';
+
+import { DragStartEvent, DragMoveEvent, DragStopEvent } from '../events';
+import { Engine, CursorType, TreeNode } from '../models';
+
 
 type ResizeData = {
   element?: Element
@@ -17,104 +18,95 @@ type ResizeStore = {
 
 export const useResizeEffect = (engine: Engine) => {
   const findStartNodeHandler = (target: HTMLElement): ResizeData => {
-    const handler = target?.closest(
-      `*[${engine.props.nodeResizeHandlerAttrName}]`
-    )
+    const handler = target?.closest(`*[${engine.props.nodeResizeHandlerAttrName}]`);
     if (handler) {
-      const type = handler.getAttribute(engine.props.nodeResizeHandlerAttrName)
+      const type = handler.getAttribute(engine.props.nodeResizeHandlerAttrName);
       if (type) {
-        const element = handler.closest(
-          `*[${engine.props.nodeSelectionIdAttrName}]`
-        )
+        const element = handler.closest(`*[${engine.props.nodeSelectionIdAttrName}]`);
         if (element) {
-          const nodeId = element.getAttribute(
-            engine.props.nodeSelectionIdAttrName
-          )
+          const nodeId = element.getAttribute(engine.props.nodeSelectionIdAttrName);
           if (nodeId) {
-            const node = engine.findNodeById(nodeId)
+            const node = engine.findNodeById(nodeId);
             if (node) {
-              const axis = type.includes('x') ? 'x' : 'y'
-              return { axis, type, node, element }
+              const axis = type.includes('x') ? 'x' : 'y';
+              return { axis, type, node, element };
             }
           }
         }
       }
     }
-    return
-  }
+    return;
+  };
 
-  const store: ResizeStore = {}
+  const store: ResizeStore = {};
 
   engine.subscribeTo(DragStartEvent, (event) => {
-    if (engine.cursor.type !== CursorType.Move) return
-    const target = event.data.target as HTMLElement
-    const data = findStartNodeHandler(target)
+    if (engine.cursor.type !== CursorType.Move) return;
+    const target = event.data.target as HTMLElement;
+    const data = findStartNodeHandler(target);
     if (data) {
-      const point = new Point(event.data.clientX, event.data.clientY)
+      const point = new Point(event.data.clientX, event.data.clientY);
       store.value = {
         ...data,
         point,
-      }
+      };
       if (data.axis === 'x') {
-        engine.cursor.setStyle('ew-resize')
+        engine.cursor.setStyle('ew-resize');
       } else if (data.axis === 'y') {
-        engine.cursor.setStyle('ns-resize')
+        engine.cursor.setStyle('ns-resize');
       }
     }
-  })
+  });
 
   engine.subscribeTo(DragMoveEvent, (event) => {
-    if (engine.cursor.type !== CursorType.Move) return
+    if (engine.cursor.type !== CursorType.Move) return;
     if (store.value) {
-      const { axis, type, node, element, point } = store.value
-      const allowResize = node.allowResize()
-      if (!allowResize) return
-      const resizable = node.designerProps.resizable
-      const rect = element.getBoundingClientRect()
-      const current = new Point(event.data.clientX, event.data.clientY)
-      const plusX = type === 'x-end' ? current.x > point.x : current.x < point.x
-      const plusY = type === 'y-end' ? current.y > point.y : current.y < point.y
-      const allowX = allowResize.includes('x')
-      const allowY = allowResize.includes('y')
-      const width = resizable.width?.(node, element)
-      const height = resizable.height?.(node, element)
+      const { axis, type, node, element, point } = store.value;
+      const allowResize = node.allowResize();
+      if (!allowResize) return;
+      const { resizable } = node.designerProps;
+      const rect = element.getBoundingClientRect();
+      const current = new Point(event.data.clientX, event.data.clientY);
+      const plusX = type === 'x-end' ? current.x > point.x : current.x < point.x;
+      const plusY = type === 'y-end' ? current.y > point.y : current.y < point.y;
+      const allowX = allowResize.includes('x');
+      const allowY = allowResize.includes('y');
+      const width = resizable.width?.(node, element);
+      const height = resizable.height?.(node, element);
       if (axis === 'x') {
-        if (plusX && type === 'x-end' && current.x < rect.x + rect.width) return
-        if (!plusX && type === 'x-end' && current.x > rect.x + rect.width)
-          return
-        if (plusX && type === 'x-start' && current.x > rect.x) return
-        if (!plusX && type === 'x-start' && current.x < rect.x) return
+        if (plusX && type === 'x-end' && current.x < rect.x + rect.width) return;
+        if (!plusX && type === 'x-end' && current.x > rect.x + rect.width) return;
+        if (plusX && type === 'x-start' && current.x > rect.x) return;
+        if (!plusX && type === 'x-start' && current.x < rect.x) return;
         if (allowX) {
           if (plusX) {
-            width.plus()
+            width.plus();
           } else {
-            width.minus()
+            width.minus();
           }
         }
       } else if (axis === 'y') {
-        if (plusY && type === 'y-end' && current.y < rect.y + rect.height)
-          return
-        if (!plusY && type === 'y-end' && current.y > rect.y + rect.height)
-          return
-        if (plusY && type === 'y-start' && current.y > rect.y) return
-        if (!plusY && type === 'y-start' && current.y < rect.y) return
+        if (plusY && type === 'y-end' && current.y < rect.y + rect.height) return;
+        if (!plusY && type === 'y-end' && current.y > rect.y + rect.height) return;
+        if (plusY && type === 'y-start' && current.y > rect.y) return;
+        if (!plusY && type === 'y-start' && current.y < rect.y) return;
         if (allowY) {
           if (plusY) {
-            height.plus()
+            height.plus();
           } else {
-            height.minus()
+            height.minus();
           }
         }
       }
-      store.value.point = current
+      store.value.point = current;
     }
-  })
+  });
 
   engine.subscribeTo(DragStopEvent, () => {
-    if (engine.cursor.type !== CursorType.Move) return
+    if (engine.cursor.type !== CursorType.Move) return;
     if (store.value) {
-      store.value = null
-      engine.cursor.setStyle('')
+      store.value = null;
+      engine.cursor.setStyle('');
     }
-  })
-}
+  });
+};

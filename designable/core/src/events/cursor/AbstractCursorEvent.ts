@@ -1,5 +1,6 @@
-import { IEngineContext } from '../../types'
-import { globalThisPolyfill } from '@designable/shared'
+import { globalThisPolyfill } from '@yimoka/designable-shared';
+
+import { IEngineContext } from '../../types';
 
 export interface ICursorEventOriginData {
   clientX: number
@@ -18,9 +19,9 @@ export interface ICursorEventData extends ICursorEventOriginData {
 }
 
 export class AbstractCursorEvent {
-  data: ICursorEventData
+  data: ICursorEventData;
 
-  context: IEngineContext
+  context: IEngineContext;
 
   constructor(data: ICursorEventOriginData) {
     this.data = data || {
@@ -30,33 +31,31 @@ export class AbstractCursorEvent {
       pageY: 0,
       target: null,
       view: globalThisPolyfill,
-    }
-    this.transformCoordinates()
+    };
+    this.transformCoordinates();
   }
 
   transformCoordinates() {
-    const { frameElement } = this.data?.view || {}
+    const { frameElement } = this.data?.view || {};
     if (frameElement && this.data.view !== globalThisPolyfill) {
-      const frameRect = frameElement.getBoundingClientRect()
-      const scale = frameRect.width / frameElement['offsetWidth']
-      this.data.topClientX = this.data.clientX * scale + frameRect.x
-      this.data.topClientY = this.data.clientY * scale + frameRect.y
-      this.data.topPageX =
-        this.data.pageX + frameRect.x - this.data.view.scrollX
-      this.data.topPageY =
-        this.data.pageY + frameRect.y - this.data.view.scrollY
+      const frameRect = frameElement.getBoundingClientRect();
+      const scale = frameRect.width / frameElement.offsetWidth;
+      this.data.topClientX = this.data.clientX * scale + frameRect.x;
+      this.data.topClientY = this.data.clientY * scale + frameRect.y;
+      this.data.topPageX = this.data.pageX + frameRect.x - this.data.view.scrollX;
+      this.data.topPageY = this.data.pageY + frameRect.y - this.data.view.scrollY;
       const topElement = document.elementFromPoint(
         this.data.topPageX,
-        this.data.topClientY
-      )
+        this.data.topClientY,
+      );
       if (topElement !== frameElement) {
-        this.data.target = topElement
+        this.data.target = topElement;
       }
     } else {
-      this.data.topClientX = this.data.clientX
-      this.data.topClientY = this.data.clientY
-      this.data.topPageX = this.data.pageX
-      this.data.topPageY = this.data.pageY
+      this.data.topClientX = this.data.clientX;
+      this.data.topClientY = this.data.clientY;
+      this.data.topPageX = this.data.pageX;
+      this.data.topPageY = this.data.pageY;
     }
   }
 }

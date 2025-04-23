@@ -1,5 +1,6 @@
-import { IEngineContext } from '../../types'
-import { globalThisPolyfill } from '@designable/shared'
+import { globalThisPolyfill } from '@yimoka/designable-shared';
+
+import { IEngineContext } from '../../types';
 
 export interface IViewportEventData {
   scrollX: number
@@ -13,8 +14,8 @@ export interface IViewportEventData {
 }
 
 export class AbstractViewportEvent {
-  data: IViewportEventData
-  context: IEngineContext
+  data: IViewportEventData;
+  context: IEngineContext;
   constructor(data: IViewportEventData) {
     this.data = data || {
       scrollX: globalThisPolyfill.scrollX,
@@ -25,6 +26,6 @@ export class AbstractViewportEvent {
       innerHeight: globalThisPolyfill.innerHeight,
       view: globalThisPolyfill,
       target: globalThisPolyfill,
-    }
+    };
   }
 }
