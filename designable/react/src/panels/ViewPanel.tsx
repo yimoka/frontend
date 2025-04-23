@@ -1,6 +1,6 @@
 import { TreeNode, ITreeNode, WorkbenchTypes } from '@designable/core';
 import { requestIdle } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React, { useEffect, useState } from 'react';
 
 import { Viewport } from '../containers';
@@ -38,9 +38,9 @@ export const ViewPanel: React.FC<IViewPanelProps> = observer((props) => {
     tree.takeSnapshot();
   });
   if (workbench.type === 'DESIGNABLE') return (
-      <Viewport dragTipsDirection={props.dragTipsDirection}>
-        {render()}
-      </Viewport>
+    <Viewport dragTipsDirection={props.dragTipsDirection}>
+      {render()}
+    </Viewport>
   );
   return (
     <div

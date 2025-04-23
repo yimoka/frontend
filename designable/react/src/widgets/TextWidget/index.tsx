@@ -1,6 +1,6 @@
 import { GlobalRegistry, IDesignerMiniLocales } from '@designable/core';
 import { isStr, isPlainObj } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React, { Fragment } from 'react';
 
 export interface ITextWidgetProps {

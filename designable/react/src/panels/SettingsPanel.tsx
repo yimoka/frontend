@@ -1,5 +1,5 @@
 import { requestIdle } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 
 import cls from 'classnames';
 import React, { useEffect, useState } from 'react';

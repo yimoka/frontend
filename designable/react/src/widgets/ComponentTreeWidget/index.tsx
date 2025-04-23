@@ -1,5 +1,5 @@
 import { TreeNode, GlobalRegistry } from '@designable/core';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React, { Fragment, useEffect } from 'react';
 
@@ -68,7 +68,7 @@ export const TreeNodeWidget: React.FC<ITreeNodeWidgetProps> = observer((props: I
   );
 });
 
-export const ComponentTreeWidget: React.FC<IComponentTreeWidgetProps> =  observer((props: IComponentTreeWidgetProps) => {
+export const ComponentTreeWidget: React.FC<IComponentTreeWidgetProps> = observer((props: IComponentTreeWidgetProps) => {
   const tree = useTree();
   const prefix = usePrefix('component-tree');
   const designer = useDesigner();
@@ -80,15 +80,15 @@ export const ComponentTreeWidget: React.FC<IComponentTreeWidgetProps> =  observe
     GlobalRegistry.registerDesignerBehaviors(props.components);
   }, []);
   return (
-      <div
-        className={cls(prefix, props.className)}
-        style={{ ...props.style, ...tree?.props?.style }}
-        {...dataId}
-      >
-        <DesignerComponentsContext.Provider value={props.components}>
-          <TreeNodeWidget node={tree} />
-        </DesignerComponentsContext.Provider>
-      </div>
+    <div
+      className={cls(prefix, props.className)}
+      style={{ ...props.style, ...tree?.props?.style }}
+      {...dataId}
+    >
+      <DesignerComponentsContext.Provider value={props.components}>
+        <TreeNodeWidget node={tree} />
+      </DesignerComponentsContext.Provider>
+    </div>
   );
 });
 

@@ -55,7 +55,9 @@
     "@yimoka/antd": "workspace:*",
     "@yimoka/store": "workspace:*",
     "@yimoka/react": "workspace:*",
-    "globals": "^15.14.0"
+    "classnames": "^2.5.1",
+    "globals": "^15.14.0",
+    "react": "^18.3.1"
   },
   "devDependencies": {
     "eslint": "^9.24.0"

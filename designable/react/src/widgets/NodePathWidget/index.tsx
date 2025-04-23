@@ -1,5 +1,5 @@
-import { observer } from '@formily/reactive-react';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { useCurrentNode, useSelection, usePrefix, useHover } from '../../hooks';
@@ -27,27 +27,27 @@ export const NodePathWidget: React.FC<INodePathWidgetProps> = observer((props) =
     .reverse()
     .concat(selected);
   return (
-      <Breadcrumb className={prefix}>
-        {nodes.map((node, key) => (
-            <Breadcrumb.Item key={key}>
-              {key === 0 && (
-                <IconWidget infer="Position" style={{ marginRight: 3 }} />
-              )}
-              <a
-                href=""
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  selection.select(node);
-                }}
-                onMouseEnter={() => {
-                  hover.setHover(node);
-                }}
-              >
-                <NodeTitleWidget node={node} />
-              </a>
-            </Breadcrumb.Item>
-        ))}
-      </Breadcrumb>
+    <Breadcrumb className={prefix}>
+      {nodes.map((node, key) => (
+        <Breadcrumb.Item key={key}>
+          {key === 0 && (
+            <IconWidget infer="Position" style={{ marginRight: 3 }} />
+          )}
+          <a
+            href=""
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              selection.select(node);
+            }}
+            onMouseEnter={() => {
+              hover.setHover(node);
+            }}
+          >
+            <NodeTitleWidget node={node} />
+          </a>
+        </Breadcrumb.Item>
+      ))}
+    </Breadcrumb>
   );
 });

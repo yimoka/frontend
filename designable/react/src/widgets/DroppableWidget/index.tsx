@@ -1,5 +1,5 @@
 import { TreeNode } from '@designable/core';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { useTreeNode, useNodeIdProps } from '../../hooks';
@@ -36,24 +36,24 @@ export const DroppableWidget: React.FC<IDroppableWidgetProps> = observer(({
   const target = node ?? currentNode;
   const hasChildren = hasChildrenProp ?? target.children?.length > 0;
   return (
-      <div {...nodeId} className={className} style={style}>
-        {hasChildren ? (
-          props.children
-        ) : placeholder ? (
-          <div className="dn-droppable-placeholder" style={{ height }}>
-            <NodeTitleWidget node={target} />
-          </div>
-        ) : (
-          props.children
-        )}
-        {actions?.length ? (
-          <NodeActionsWidget>
-            {actions.map((action, key) => (
-              <NodeActionsWidget.Action {...action} key={key} />
-            ))}
-          </NodeActionsWidget>
-        ) : null}
-      </div>
+    <div {...nodeId} className={className} style={style}>
+      {hasChildren ? (
+        props.children
+      ) : placeholder ? (
+        <div className="dn-droppable-placeholder" style={{ height }}>
+          <NodeTitleWidget node={target} />
+        </div>
+      ) : (
+        props.children
+      )}
+      {actions?.length ? (
+        <NodeActionsWidget>
+          {actions.map((action, key) => (
+            <NodeActionsWidget.Action {...action} key={key} />
+          ))}
+        </NodeActionsWidget>
+      ) : null}
+    </div>
   );
 });
 

@@ -1,5 +1,5 @@
 import { ClosestPosition } from '@designable/core';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { useOutlineDragon, usePrefix } from '../../hooks';
@@ -23,24 +23,23 @@ export const Insertion: React.FC<IInsertionProps> = observer(({ workspaceId }) =
     if (!closestRect) return baseStyle;
     if (
       closestDirection === ClosestPosition.After
-        || closestDirection === ClosestPosition.InnerAfter
-        || closestDirection === ClosestPosition.Under
-        || closestDirection === ClosestPosition.ForbidAfter
-        || closestDirection === ClosestPosition.ForbidInnerAfter
-        || closestDirection === ClosestPosition.ForbidUnder
+      || closestDirection === ClosestPosition.InnerAfter
+      || closestDirection === ClosestPosition.Under
+      || closestDirection === ClosestPosition.ForbidAfter
+      || closestDirection === ClosestPosition.ForbidInnerAfter
+      || closestDirection === ClosestPosition.ForbidUnder
     ) {
       baseStyle.width = closestRect.width;
       baseStyle.height = 2;
-      baseStyle.transform = `perspective(1px) translate3d(${
-        closestRect.x
+      baseStyle.transform = `perspective(1px) translate3d(${closestRect.x
       }px,${closestRect.y + closestRect.height - 2}px,0)`;
     } else if (
       closestDirection === ClosestPosition.Before
-        || closestDirection === ClosestPosition.InnerBefore
-        || closestDirection === ClosestPosition.Upper
-        || closestDirection === ClosestPosition.ForbidBefore
-        || closestDirection === ClosestPosition.ForbidInnerBefore
-        || closestDirection === ClosestPosition.ForbidUpper
+      || closestDirection === ClosestPosition.InnerBefore
+      || closestDirection === ClosestPosition.Upper
+      || closestDirection === ClosestPosition.ForbidBefore
+      || closestDirection === ClosestPosition.ForbidInnerBefore
+      || closestDirection === ClosestPosition.ForbidUpper
     ) {
       baseStyle.width = closestRect.width;
       baseStyle.height = 2;

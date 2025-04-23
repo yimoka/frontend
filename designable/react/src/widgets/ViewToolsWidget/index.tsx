@@ -1,6 +1,6 @@
 import { WorkbenchTypes } from '@designable/core';
-import { observer } from '@formily/reactive-react';
-import { Button } from 'antd';
+import { Button } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React from 'react';
 
@@ -18,52 +18,52 @@ export const ViewToolsWidget: React.FC<IViewToolsWidget> = observer(({ use, styl
   const workbench = useWorkbench();
   const prefix = usePrefix('view-tools');
   return (
-      <Button.Group className={cls(prefix, className)} style={style}>
-        {use.includes('DESIGNABLE') && (
-          <Button
-            disabled={workbench.type === 'DESIGNABLE'}
-            size="small"
-            onClick={() => {
-              workbench.type = 'DESIGNABLE';
-            }}
-          >
-            <IconWidget infer="Design" />
-          </Button>
-        )}
-        {use.includes('JSONTREE') && (
-          <Button
-            disabled={workbench.type === 'JSONTREE'}
-            size="small"
-            onClick={() => {
-              workbench.type = 'JSONTREE';
-            }}
-          >
-            <IconWidget infer="JSON" />
-          </Button>
-        )}
-        {use.includes('MARKUP') && (
-          <Button
-            disabled={workbench.type === 'MARKUP'}
-            size="small"
-            onClick={() => {
-              workbench.type = 'MARKUP';
-            }}
-          >
-            <IconWidget infer="Code" />
-          </Button>
-        )}
-        {use.includes('PREVIEW') && (
-          <Button
-            disabled={workbench.type === 'PREVIEW'}
-            size="small"
-            onClick={() => {
-              workbench.type = 'PREVIEW';
-            }}
-          >
-            <IconWidget infer="Play" />
-          </Button>
-        )}
-      </Button.Group>
+    <Button.Group className={cls(prefix, className)} style={style}>
+      {use.includes('DESIGNABLE') && (
+        <Button
+          disabled={workbench.type === 'DESIGNABLE'}
+          size="small"
+          onClick={() => {
+            workbench.type = 'DESIGNABLE';
+          }}
+        >
+          <IconWidget infer="Design" />
+        </Button>
+      )}
+      {use.includes('JSONTREE') && (
+        <Button
+          disabled={workbench.type === 'JSONTREE'}
+          size="small"
+          onClick={() => {
+            workbench.type = 'JSONTREE';
+          }}
+        >
+          <IconWidget infer="JSON" />
+        </Button>
+      )}
+      {use.includes('MARKUP') && (
+        <Button
+          disabled={workbench.type === 'MARKUP'}
+          size="small"
+          onClick={() => {
+            workbench.type = 'MARKUP';
+          }}
+        >
+          <IconWidget infer="Code" />
+        </Button>
+      )}
+      {use.includes('PREVIEW') && (
+        <Button
+          disabled={workbench.type === 'PREVIEW'}
+          size="small"
+          onClick={() => {
+            workbench.type = 'PREVIEW';
+          }}
+        >
+          <IconWidget infer="Play" />
+        </Button>
+      )}
+    </Button.Group>
   );
 });
 

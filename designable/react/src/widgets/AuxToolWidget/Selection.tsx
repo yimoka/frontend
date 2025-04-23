@@ -1,5 +1,5 @@
 import { TreeNode } from '@designable/core';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React, { Fragment } from 'react';
 
 import {

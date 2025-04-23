@@ -1,5 +1,5 @@
-import { observer } from '@formily/reactive-react';
-import { Space, Typography, Divider, TypographyProps } from 'antd';
+import { Space, Typography, Divider, TypographyProps } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React from 'react';
 
@@ -18,7 +18,7 @@ export interface INodeActionsWidgetProps {
 
 export interface INodeActionsWidgetActionProps
   extends Omit<React.ComponentProps<'a'>, 'title' | 'type' | 'ref'>,
-    Partial<TypographyProps['Link']> {
+  Partial<TypographyProps['Link']> {
   className?: string
   style?: React.CSSProperties
   title: React.ReactNode

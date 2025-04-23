@@ -1,6 +1,6 @@
 import { isStr, isFn, isObj, isPlainObj } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
-import { Tooltip, TooltipProps } from 'antd';
+import { Tooltip, TooltipProps } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 
 import cls from 'classnames';
 import React, { createContext, useContext, useEffect, useRef } from 'react';
@@ -93,12 +93,12 @@ export const IconWidget: React.FC<IIconWidgetProps> & {
   };
   const renderTooltips = (children: React.ReactElement): React.ReactElement => {
     if (!isStr(props.infer) && context?.tooltip) return children as any;
-    const tooltip =      props.tooltip || registry.getDesignerMessage(`icons.${props.infer}`);
+    const tooltip = props.tooltip || registry.getDesignerMessage(`icons.${props.infer}`);
     if (tooltip) {
-      const title =        React.isValidElement(tooltip) || isStr(tooltip)
+      const title = React.isValidElement(tooltip) || isStr(tooltip)
         ? tooltip
         : tooltip.title;
-      const props =        React.isValidElement(tooltip) || isStr(tooltip)
+      const props = React.isValidElement(tooltip) || isStr(tooltip)
         ? {}
         : isObj(tooltip)
           ? tooltip
@@ -113,15 +113,15 @@ export const IconWidget: React.FC<IIconWidgetProps> & {
   };
   if (!props.infer) return null;
   return renderTooltips(<span
-      {...props}
-      className={cls(prefix, props.className)}
-      style={{
-        ...props.style,
-        cursor: props.onClick ? 'pointer' : props.style?.cursor,
-      }}
-    >
-      {takeIcon(props.infer)}
-    </span>);
+    {...props}
+    className={cls(prefix, props.className)}
+    style={{
+      ...props.style,
+      cursor: props.onClick ? 'pointer' : props.style?.cursor,
+    }}
+  >
+    {takeIcon(props.infer)}
+  </span>);
 });
 
 IconWidget.ShadowSVG = (props) => {
@@ -140,5 +140,5 @@ IconWidget.ShadowSVG = (props) => {
 };
 
 IconWidget.Provider = props => (
-    <IconContext.Provider value={props}>{props.children}</IconContext.Provider>
+  <IconContext.Provider value={props}>{props.children}</IconContext.Provider>
 );

@@ -1,5 +1,5 @@
 import { TreeNode } from '@designable/core';
-import { Button } from 'antd';
+import { Button } from '@yimoka/antd';
 import React from 'react';
 
 import { useOperation, usePrefix } from '../../hooks';

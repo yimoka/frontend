@@ -1,6 +1,6 @@
 import { ScreenType } from '@designable/core';
 import { requestIdle } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { useScreen } from '../hooks';
@@ -18,7 +18,7 @@ export const Simulator: React.FC<ISimulatorProps> = observer(
     if (screen.type === ScreenType.PC) return <PCSimulator {...props}>{props.children}</PCSimulator>;
     if (screen.type === ScreenType.Mobile) return <MobileSimulator {...props}>{props.children}</MobileSimulator>;
     if (screen.type === ScreenType.Responsive) return (
-        <ResponsiveSimulator {...props}>{props.children}</ResponsiveSimulator>
+      <ResponsiveSimulator {...props}>{props.children}</ResponsiveSimulator>
     );
     return <PCSimulator {...props}>{props.children}</PCSimulator>;
   },

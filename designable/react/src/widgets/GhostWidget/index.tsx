@@ -1,6 +1,6 @@
 import { CursorStatus } from '@designable/core';
-import { autorun } from '@formily/reactive';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
+import { autorun } from '@yimoka/store';
 import React, { useRef, useEffect } from 'react';
 
 import { useCursor, usePrefix, useDesigner } from '../../hooks';
@@ -17,8 +17,7 @@ export const GhostWidget = observer(() => {
   const firstNode = draggingNodes[0];
   useEffect(
     () => autorun(() => {
-      const transform = `perspective(1px) translate3d(${
-        cursor.position?.topClientX - 18
+      const transform = `perspective(1px) translate3d(${cursor.position?.topClientX - 18
       }px,${cursor.position?.topClientY - 12}px,0) scale(0.8)`;
       if (!ref.current) return;
       ref.current.style.transform = transform;
@@ -26,14 +25,14 @@ export const GhostWidget = observer(() => {
     [designer, cursor],
   );
   const renderNodes = () => (
-      <span
-        style={{
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <NodeTitleWidget node={firstNode} />
-        {draggingNodes.length > 1 ? '...' : ''}
-      </span>
+    <span
+      style={{
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <NodeTitleWidget node={firstNode} />
+      {draggingNodes.length > 1 ? '...' : ''}
+    </span>
   );
   if (!firstNode) return null;
   return cursor.status === CursorStatus.Dragging ? (

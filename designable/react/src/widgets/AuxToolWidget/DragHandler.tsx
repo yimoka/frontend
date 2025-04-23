@@ -1,7 +1,7 @@
 import { TreeNode } from '@designable/core';
-import { observer } from '@formily/reactive-react';
+import { Button } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 
-import { Button } from 'antd';
 import React from 'react';
 
 import { useDesigner, usePrefix } from '../../hooks';
@@ -20,12 +20,12 @@ export const DragHandler: React.FC<IDragHandlerProps> = observer(({ node, style 
     [designer.props.nodeDragHandlerAttrName]: 'true',
   };
   return (
-      <Button {...handlerProps}
-className={prefix}
-style={style}
-type="primary">
-        <IconWidget infer="Move" />
-      </Button>
+    <Button {...handlerProps}
+      className={prefix}
+      style={style}
+      type="primary">
+      <IconWidget infer="Move" />
+    </Button>
   );
 });
 

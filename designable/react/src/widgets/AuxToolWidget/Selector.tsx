@@ -1,6 +1,6 @@
 import { TreeNode } from '@designable/core';
-import { observer } from '@formily/reactive-react';
-import { Button } from 'antd';
+import { Button } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React, { useEffect, useState, useRef } from 'react';
 
 import { useHover, useSelection, usePrefix } from '../../hooks';
@@ -73,21 +73,21 @@ export const Selector: React.FC<ISelectorProps> = observer(({ node }) => {
         }}
       >
         {parents.slice(0, 4).map(parent => (
-            <Button
-              key={parent.id}
-              type="primary"
-              onClick={() => {
-                selection.select(parent.id);
-              }}
-              onMouseEnter={() => {
-                hover.setHover(parent);
-              }}
-            >
-              {renderIcon(parent)}
-              <span style={{ transform: 'scale(0.85)', marginLeft: 2 }}>
-                <NodeTitleWidget node={parent} />
-              </span>
-            </Button>
+          <Button
+            key={parent.id}
+            type="primary"
+            onClick={() => {
+              selection.select(parent.id);
+            }}
+            onMouseEnter={() => {
+              hover.setHover(parent);
+            }}
+          >
+            {renderIcon(parent)}
+            <span style={{ transform: 'scale(0.85)', marginLeft: 2 }}>
+              <NodeTitleWidget node={parent} />
+            </span>
+          </Button>
         ))}
       </div>
     );

@@ -5,7 +5,7 @@ import {
   IResource,
 } from '@designable/core';
 import { isFn } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React, { useState } from 'react';
 
@@ -32,30 +32,30 @@ export const ResourceWidget: React.FC<IResourceWidgetProps> = observer((props) =
   const renderNode = (source: IResource) => {
     const { node, icon, title, thumb, span } = source;
     return (
-        <div
-          key={node.id}
-          className={`${prefix}-item`}
-          data-designer-source-id={node.id}
-          style={{ gridColumnStart: `span ${span || 1}` }}
-        >
-          {thumb && <img className={`${prefix}-item-thumb`} src={thumb} />}
-          {icon && React.isValidElement(icon) ? (
-            <>{icon}</>
-          ) : (
-            <IconWidget
-              className={`${prefix}-item-icon`}
-              infer={icon}
-              style={{ width: 150, height: 40 }}
-            />
-          )}
-          <span className={`${prefix}-item-text`}>
-            {
-              <TextWidget>
-                {title || node.children[0]?.getMessage('title')}
-              </TextWidget>
-            }
-          </span>
-        </div>
+      <div
+        key={node.id}
+        className={`${prefix}-item`}
+        data-designer-source-id={node.id}
+        style={{ gridColumnStart: `span ${span || 1}` }}
+      >
+        {thumb && <img className={`${prefix}-item-thumb`} src={thumb} />}
+        {icon && React.isValidElement(icon) ? (
+          <>{icon}</>
+        ) : (
+          <IconWidget
+            className={`${prefix}-item-icon`}
+            infer={icon}
+            style={{ width: 150, height: 40 }}
+          />
+        )}
+        <span className={`${prefix}-item-text`}>
+          {
+            <TextWidget>
+              {title || node.children[0]?.getMessage('title')}
+            </TextWidget>
+          }
+        </span>
+      </div>
     );
   };
   const sources = props.sources.reduce<IResource[]>((buf, source) => {
@@ -66,40 +66,40 @@ export const ResourceWidget: React.FC<IResourceWidgetProps> = observer((props) =
     }
     return buf;
   }, []);
-  const remainItems =      sources.reduce((length, source) => length + (source.span ?? 1), 0) % 3;
+  const remainItems = sources.reduce((length, source) => length + (source.span ?? 1), 0) % 3;
   return (
+    <div
+      className={cls(prefix, props.className, {
+        expand,
+      })}
+    >
       <div
-        className={cls(prefix, props.className, {
-          expand,
-        })}
+        className={`${prefix}-header`}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setExpand(!expand);
+        }}
       >
-        <div
-          className={`${prefix}-header`}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setExpand(!expand);
-          }}
-        >
-          <div className={`${prefix}-header-expand`}>
-            <IconWidget infer="Expand" size={10} />
-          </div>
-          <div className={`${prefix}-header-content`}>
-            <TextWidget>{props.title}</TextWidget>
-          </div>
+        <div className={`${prefix}-header-expand`}>
+          <IconWidget infer="Expand" size={10} />
         </div>
-        <div className={`${prefix}-content-wrapper`}>
-          <div className={`${prefix}-content`}>
-            {sources.map(isFn(props.children) ? props.children : renderNode)}
-            {remainItems ? (
-              <div
-                className={`${prefix}-item-remain`}
-                style={{ gridColumnStart: `span ${3 - remainItems}` }}
-              ></div>
-            ) : null}
-          </div>
+        <div className={`${prefix}-header-content`}>
+          <TextWidget>{props.title}</TextWidget>
         </div>
       </div>
+      <div className={`${prefix}-content-wrapper`}>
+        <div className={`${prefix}-content`}>
+          {sources.map(isFn(props.children) ? props.children : renderNode)}
+          {remainItems ? (
+            <div
+              className={`${prefix}-item-remain`}
+              style={{ gridColumnStart: `span ${3 - remainItems}` }}
+            ></div>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 });
 

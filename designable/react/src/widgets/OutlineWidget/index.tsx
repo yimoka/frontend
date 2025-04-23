@@ -1,6 +1,6 @@
 import { TreeNode, Viewport } from '@designable/core';
 import { globalThisPolyfill } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React, { useRef, useLayoutEffect } from 'react';
 
@@ -45,24 +45,24 @@ export const OutlineTreeWidget: React.FC<IOutlineTreeWidgetProps> = observer(({ 
 
   if (!outline || !workspaceId) return null;
   return (
-      <NodeContext.Provider value={{ renderActions, renderTitle }}>
-        <div
-          {...props}
-          className={cls(`${prefix}-container`, className)}
-          style={style}
-        >
-          <div ref={ref} className={`${prefix}-content`}>
-            <OutlineTreeNode node={tree} workspaceId={workspaceId} />
-            <div
-              className={`${prefix}-aux`}
-              style={{
-                pointerEvents: 'none',
-              }}
-            >
-              <Insertion workspaceId={workspaceId} />
-            </div>
+    <NodeContext.Provider value={{ renderActions, renderTitle }}>
+      <div
+        {...props}
+        className={cls(`${prefix}-container`, className)}
+        style={style}
+      >
+        <div ref={ref} className={`${prefix}-content`}>
+          <OutlineTreeNode node={tree} workspaceId={workspaceId} />
+          <div
+            className={`${prefix}-aux`}
+            style={{
+              pointerEvents: 'none',
+            }}
+          >
+            <Insertion workspaceId={workspaceId} />
           </div>
         </div>
-      </NodeContext.Provider>
+      </div>
+    </NodeContext.Provider>
   );
 });

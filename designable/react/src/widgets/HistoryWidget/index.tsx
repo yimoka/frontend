@@ -1,17 +1,17 @@
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
+import { toDayjs } from '@yimoka/shared';
 import cls from 'classnames';
-import format from 'dateformat';
 import React from 'react';
 
 import { usePrefix, useWorkbench } from '../../hooks';
 import { TextWidget } from '../TextWidget';
 
 
-import './styles.less';
+// import './styles.less';
 
 export const HistoryWidget: React.FC = observer(() => {
   const workbench = useWorkbench();
-  const currentWorkspace =    workbench?.activeWorkspace || workbench?.currentWorkspace;
+  const currentWorkspace = workbench?.activeWorkspace || workbench?.currentWorkspace;
   const prefix = usePrefix('history');
   if (!currentWorkspace) return null;
   return (
@@ -34,7 +34,7 @@ export const HistoryWidget: React.FC = observer(() => {
             </span>
             <span className={`${prefix}-item-timestamp`}>
               {' '}
-              {format(item.timestamp, 'yy/mm/dd HH:MM:ss')}
+              {toDayjs(item.timestamp).format('yy/mm/dd HH:MM:ss')}
             </span>
           </div>
         );

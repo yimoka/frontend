@@ -1,6 +1,6 @@
 import { CursorStatus, CursorType } from '@designable/core';
 import { calcRectByStartEndPoint } from '@designable/shared';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
 import cls from 'classnames';
 import React from 'react';
 

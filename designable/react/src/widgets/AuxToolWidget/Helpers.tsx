@@ -1,5 +1,5 @@
 import { TreeNode } from '@designable/core';
-import { reaction } from '@formily/reactive';
+import { reaction } from '@yimoka/store';
 import cls from 'classnames';
 import React, { useRef, useState, useLayoutEffect } from 'react';
 
@@ -72,8 +72,7 @@ export const Helpers: React.FC<IHelpersProps> = ({ node, nodeRect }) => {
       if (!helpersRect || !nodeRect) return;
       if (unmountRef.current) return;
       setPosition(`${getYInViewport(nodeRect, helpersRect)
-      }-${
-        getXInViewport(nodeRect, helpersRect)}`);
+      }-${getXInViewport(nodeRect, helpersRect)}`);
     };
 
     update();

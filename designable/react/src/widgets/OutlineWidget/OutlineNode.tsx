@@ -5,8 +5,8 @@ import {
   DragMoveEvent,
 } from '@designable/core';
 import { isFn } from '@designable/shared';
-import { autorun } from '@formily/reactive';
-import { observer } from '@formily/reactive-react';
+import { observer } from '@yimoka/react';
+import { autorun } from '@yimoka/store';
 import cls from 'classnames';
 import React, { useRef, useContext, useEffect } from 'react';
 
@@ -48,7 +48,7 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
     if (!ref.current) return;
     if (
       closestNodeId === id
-          && closestDirection === ClosestPosition.Inner
+      && closestDirection === ClosestPosition.Inner
     ) {
       if (!ref.current.classList.contains('droppable')) {
         ref.current.classList.add('droppable');
@@ -88,7 +88,7 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
     }
     if (
       cursor.status === CursorStatus.Dragging
-          && outlineDragon?.dragNodes?.length
+      && outlineDragon?.dragNodes?.length
     ) {
       if (ref.current.classList.contains('selected')) {
         ref.current.classList.remove('selected');
@@ -114,9 +114,9 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
   const renderTitle = (node: TreeNode) => {
     if (isFn(ctx.renderTitle)) return ctx.renderTitle(node);
     return (
-        <span>
-          <NodeTitleWidget node={node} />
-        </span>
+      <span>
+        <NodeTitleWidget node={node} />
+      </span>
     );
   };
 
@@ -125,70 +125,70 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
   };
 
   return (
-      <div
-        ref={ref}
-        className={cls(prefix, className, 'expanded')}
-        data-designer-outline-node-id={node.id}
-        style={style}
-      >
-        <div className={`${prefix}-header`}>
+    <div
+      ref={ref}
+      className={cls(prefix, className, 'expanded')}
+      data-designer-outline-node-id={node.id}
+      style={style}
+    >
+      <div className={`${prefix}-header`}>
+        <div
+          className={`${prefix}-header-head`}
+          style={{
+            left: -node.depth * 16,
+            width: node.depth * 16,
+          }}
+        ></div>
+        <div className={`${prefix}-header-content`}>
+          <div className={`${prefix}-header-base`}>
+            {(node?.children?.length > 0 || node === node.root) && (
+              <div
+                className={`${prefix}-expand`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (ref.current?.classList?.contains('expanded')) {
+                    ref.current?.classList.remove('expanded');
+                  } else {
+                    ref.current?.classList.add('expanded');
+                  }
+                }}
+              >
+                <IconWidget infer="Expand" size={10} />
+              </div>
+            )}
+            <div className={`${prefix}-icon`}>{renderIcon(node)}</div>
+            <div className={`${prefix}-title`}>{renderTitle(node)}</div>
+          </div>
           <div
-            className={`${prefix}-header-head`}
-            style={{
-              left: -node.depth * 16,
-              width: node.depth * 16,
-            }}
-          ></div>
-          <div className={`${prefix}-header-content`}>
-            <div className={`${prefix}-header-base`}>
-              {(node?.children?.length > 0 || node === node.root) && (
-                <div
-                  className={`${prefix}-expand`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (ref.current?.classList?.contains('expanded')) {
-                      ref.current?.classList.remove('expanded');
-                    } else {
-                      ref.current?.classList.add('expanded');
-                    }
-                  }}
-                >
-                  <IconWidget infer="Expand" size={10} />
-                </div>
-              )}
-              <div className={`${prefix}-icon`}>{renderIcon(node)}</div>
-              <div className={`${prefix}-title`}>{renderTitle(node)}</div>
-            </div>
-            <div
-              data-click-stop-propagation
-              className={`${prefix}-header-actions`}
-            >
-              {renderActions(node)}
-              {node !== node.root && (
-                <IconWidget
-                  className={cls(`${prefix}-hidden-icon`, {
-                    hidden: node.hidden,
-                  })}
-                  infer={node.hidden ? 'EyeClose' : 'Eye'}
-                  size={14}
-                  onClick={() => {
-                    node.hidden = !node.hidden;
-                  }}
-                />
-              )}
-            </div>
+            data-click-stop-propagation
+            className={`${prefix}-header-actions`}
+          >
+            {renderActions(node)}
+            {node !== node.root && (
+              <IconWidget
+                className={cls(`${prefix}-hidden-icon`, {
+                  hidden: node.hidden,
+                })}
+                infer={node.hidden ? 'EyeClose' : 'Eye'}
+                size={14}
+                onClick={() => {
+                  node.hidden = !node.hidden;
+                }}
+              />
+            )}
           </div>
         </div>
-        <div className={`${prefix}-children`}>
-          {node.children?.map(child => (
-              <OutlineTreeNode
-                key={child.id}
-                node={child}
-                workspaceId={workspaceId}
-              />
-          ))}
-        </div>
       </div>
+      <div className={`${prefix}-children`}>
+        {node.children?.map(child => (
+          <OutlineTreeNode
+            key={child.id}
+            node={child}
+            workspaceId={workspaceId}
+          />
+        ))}
+      </div>
+    </div>
   );
 });
