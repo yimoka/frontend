@@ -1,24 +1,28 @@
+import { IAny } from '@yimoka/shared';
+
 import { instOf } from './instanceof';
 import { isFn } from './types';
-type Filter = (value: any, key: string) => boolean
+type Filter = (value: IAny, key: string) => boolean
 
 const NATIVE_KEYS = [
-  ['Map', (map: any) => new Map(map)],
-  ['WeakMap', (map: any) => new WeakMap(map)],
-  ['WeakSet', (set: any) => new WeakSet(set)],
-  ['Set', (set: any) => new Set(set)],
-  ['Date', (date: any) => new Date(date)],
+  ['Map', (map: IAny) => new Map(map)],
+  ['WeakMap', (map: IAny) => new WeakMap(map)],
+  ['WeakSet', (set: IAny) => new WeakSet(set)],
+  ['Set', (set: IAny) => new Set(set)],
+  ['Date', (date: IAny) => new Date(date)],
   'FileList',
   'File',
   'URL',
   'RegExp',
   [
     'Promise',
-    (promise: Promise<any>) => new Promise((resolve, reject) => promise.then(resolve, reject)),
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    (promise: Promise<IAny>) => new Promise((resolve, reject) => promise.then(resolve, reject)),
   ],
 ];
 
-const isNativeObject = (values: any): any => {
+const isNativeObject = (values: IAny): IAny => {
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < NATIVE_KEYS.length; i++) {
     const item = NATIVE_KEYS[i];
     if (Array.isArray(item) && item[0]) {
@@ -33,8 +37,8 @@ const isNativeObject = (values: any): any => {
   }
 };
 
-export const shallowClone = (values: any) => {
-  let nativeClone: (values: any) => any;
+export const shallowClone = (values: IAny): IAny => {
+  let nativeClone: (values: IAny) => IAny;
   if (Array.isArray(values)) {
     return values.slice(0);
   } if (isNativeObject(values)) {
@@ -45,10 +49,12 @@ export const shallowClone = (values: any) => {
       ...values,
     };
   }
+  return values;
 };
 
-export const clone = (values: any, filter?: Filter) => {
-  let nativeClone: (values: any) => any;
+// eslint-disable-next-line complexity
+export const clone = (values: IAny, filter?: Filter): IAny => {
+  let nativeClone: (values: IAny) => IAny;
   if (Array.isArray(values)) {
     return values.map(item => clone(item, filter));
   } if (isNativeObject(values)) {
@@ -58,9 +64,11 @@ export const clone = (values: any, filter?: Filter) => {
     if ('$$typeof' in values && '_owner' in values) {
       return values;
     }
+    // eslint-disable-next-line no-underscore-dangle
     if (values._isAMomentObject) {
       return values;
     }
+    // eslint-disable-next-line no-underscore-dangle
     if (values._isJSONSchemaObject) {
       return values;
     }
@@ -74,7 +82,8 @@ export const clone = (values: any, filter?: Filter) => {
     if (Object.getOwnPropertySymbols(values || {}).length) {
       return values;
     }
-    const res = {};
+    const res: Record<string, IAny> = {};
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in values) {
       if (Object.hasOwnProperty.call(values, key)) {
         if (isFn(filter)) {

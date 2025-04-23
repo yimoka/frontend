@@ -48,6 +48,7 @@
     ]
   },
   "dependencies": {
+    "@yimoka/shared": "workspace:*",
     "globals": "^15.14.0"
   },
   "devDependencies": {

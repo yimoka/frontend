@@ -1,3 +1,6 @@
+import { IAny } from '@yimoka/shared';
+
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export enum KeyCode {
   Backspace = 'Backspace',
   Tab = 'Tab',
@@ -144,5 +147,6 @@ export enum KeyCode {
   ClosedBracket = ']',
   Quote = '\'',
 }
+/* eslint-enable @typescript-eslint/no-duplicate-enum-values */
 
-export const getKeyCodeFromEvent = (event: KeyboardEvent): KeyCode => event.key as any;
+export const getKeyCodeFromEvent = (event: KeyboardEvent): KeyCode => event.key as IAny;

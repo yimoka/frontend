@@ -1,10 +1,12 @@
+import { IAny } from '@yimoka/shared';
+
 import { isFn } from './types';
 
 const UNSUBSCRIBE_ID_SYMBOL = Symbol('UNSUBSCRIBE_ID_SYMBOL');
 
-export type ISubscriber<Payload = any> = (payload: Payload) => void | boolean
+export type ISubscriber<Payload = IAny> = (payload: Payload) => void | boolean
 
-export class Subscribable<ExtendsType = any> {
+export class Subscribable<ExtendsType = IAny> {
   private subscribers: {
     index?: number
     [key: number]: ISubscriber
@@ -12,7 +14,7 @@ export class Subscribable<ExtendsType = any> {
       index: 0,
     };
 
-  dispatch<T extends ExtendsType = any>(event: T, context?: any) {
+  dispatch<T extends ExtendsType = IAny>(event: T, context?: IAny) {
     let interrupted = false;
     for (const key in this.subscribers) {
       if (isFn(this.subscribers[key])) {
@@ -30,7 +32,7 @@ export class Subscribable<ExtendsType = any> {
     if (isFn(subscriber)) {
       id = this.subscribers.index + 1;
       this.subscribers[id] = subscriber;
-      this.subscribers.index++;
+      this.subscribers.index = this.subscribers.index + 1;
     }
 
     const unsubscribe = () => {

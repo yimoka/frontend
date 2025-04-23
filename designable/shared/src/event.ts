@@ -1,3 +1,5 @@
+import { IAny } from '@yimoka/shared';
+
 import { globalThisPolyfill } from './globalThisPolyfill';
 import { Subscribable, ISubscriber } from './subscribable';
 import { isArr, isWindow } from './types';
@@ -11,9 +13,9 @@ const DRIVER_INSTANCES_SYMBOL = Symbol('DRIVER_INSTANCES_SYMBOL');
 export type EventOptions =
   | boolean
   | (AddEventListenerOptions &
-      EventListenerOptions & {
-        mode?: 'onlyOne' | 'onlyParent' | 'onlyChild'
-      })
+    EventListenerOptions & {
+      mode?: 'onlyOne' | 'onlyParent' | 'onlyChild'
+    })
 
 export type EventContainer = Window | HTMLElement | HTMLDocument
 
@@ -26,11 +28,11 @@ export interface IEventDriver {
   contentWindow: Window
   attach(container: EventDriverContainer): void
   detach(container: EventDriverContainer): void
-  dispatch<T extends ICustomEvent<any> = any>(event: T): void | boolean
-  subscribe<T extends ICustomEvent<any> = any>(subscriber: ISubscriber<T>): void
+  dispatch<T extends ICustomEvent<IAny> = IAny>(event: T): void | boolean
+  subscribe<T extends ICustomEvent<IAny> = IAny>(subscriber: ISubscriber<T>): void
   addEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   addEventListener(
@@ -38,10 +40,10 @@ export interface IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  addEventListener(type: any, listener: any, options: any): void
+  addEventListener(type: IAny, listener: IAny, options: IAny): void
   removeEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   removeEventListener(
@@ -49,10 +51,10 @@ export interface IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  removeEventListener(type: any, listener: any, options?: any): void
+  removeEventListener(type: IAny, listener: IAny, options?: IAny): void
   batchAddEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   batchAddEventListener(
@@ -60,10 +62,10 @@ export interface IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  batchAddEventListener(type: any, listener: any, options?: any): void
+  batchAddEventListener(type: IAny, listener: IAny, options?: IAny): void
   batchRemoveEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   batchRemoveEventListener(
@@ -71,18 +73,18 @@ export interface IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  batchRemoveEventListener(type: any, listener: any, options: any): void
+  batchRemoveEventListener(type: IAny, listener: IAny, options: IAny): void
 }
 
-export type IEventDriverClass<T> = new (engine: T, context?: any) => IEventDriver
+export type IEventDriverClass<T> = new (engine: T, context?: IAny) => IEventDriver
 
-export interface ICustomEvent<EventData = any, EventContext = any> {
+export interface ICustomEvent<EventData = IAny, EventContext = IAny> {
   type: string
   data?: EventData
   context?: EventContext
 }
 
-export type CustomEventClass = new (...args: any[]) => any
+export type CustomEventClass = new (...args: IAny[]) => IAny
 
 export interface IEventProps<T = Event> {
   drivers?: IEventDriverClass<T>[]
@@ -93,7 +95,7 @@ const isOnlyMode = (mode: string) => mode === 'onlyOne' || mode === 'onlyChild' 
 /**
  * 事件驱动器基类
  */
-export class EventDriver<Engine extends Event = Event, Context = any>
+export class EventDriver<Engine extends Event = Event, Context = IAny>
 implements IEventDriver {
   engine: Engine;
 
@@ -108,11 +110,11 @@ implements IEventDriver {
     this.context = context;
   }
 
-  dispatch<T extends ICustomEvent<any> = any>(event: T) {
+  dispatch<T extends ICustomEvent<IAny> = IAny>(event: T) {
     return this.engine.dispatch(event, this.context);
   }
 
-  subscribe<T extends ICustomEvent<any> = any>(subscriber: ISubscriber<T>) {
+  subscribe<T extends ICustomEvent<IAny> = IAny>(subscriber: ISubscriber<T>) {
     return this.engine.subscribe(subscriber);
   }
 
@@ -149,7 +151,7 @@ implements IEventDriver {
 
   addEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   addEventListener(
@@ -157,7 +159,7 @@ implements IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  addEventListener(type: any, listener: any, options: any) {
+  addEventListener(type: IAny, listener: IAny, options: IAny) {
     const target = this.eventTarget(type);
     if (isOnlyMode(options?.mode)) {
       target[EVENTS_ONCE_SYMBOL] = target[EVENTS_ONCE_SYMBOL] || {};
@@ -196,7 +198,7 @@ implements IEventDriver {
 
   removeEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   removeEventListener(
@@ -204,7 +206,7 @@ implements IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  removeEventListener(type: any, listener: any, options?: any) {
+  removeEventListener(type: IAny, listener: IAny, options?: IAny) {
     const target = this.eventTarget(type);
     if (isOnlyMode(options?.mode)) {
       const { constructor } = this;
@@ -223,7 +225,7 @@ implements IEventDriver {
 
   batchAddEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   batchAddEventListener(
@@ -231,8 +233,8 @@ implements IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  batchAddEventListener(type: any, listener: any, options?: any) {
-    this.engine[DRIVER_INSTANCES_SYMBOL] =      this.engine[DRIVER_INSTANCES_SYMBOL] || [];
+  batchAddEventListener(type: IAny, listener: IAny, options?: IAny) {
+    this.engine[DRIVER_INSTANCES_SYMBOL] = this.engine[DRIVER_INSTANCES_SYMBOL] || [];
     if (!this.engine[DRIVER_INSTANCES_SYMBOL].includes(this)) {
       this.engine[DRIVER_INSTANCES_SYMBOL].push(this);
     }
@@ -248,7 +250,7 @@ implements IEventDriver {
 
   batchRemoveEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => IAny,
     options?: boolean | EventOptions
   ): void
   batchRemoveEventListener(
@@ -256,8 +258,8 @@ implements IEventDriver {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
-  batchRemoveEventListener(type: any, listener: any, options: any) {
-    this.engine[DRIVER_INSTANCES_SYMBOL] =      this.engine[DRIVER_INSTANCES_SYMBOL] || [];
+  batchRemoveEventListener(type: IAny, listener: IAny, options: IAny) {
+    this.engine[DRIVER_INSTANCES_SYMBOL] = this.engine[DRIVER_INSTANCES_SYMBOL] || [];
     this.engine[DRIVER_INSTANCES_SYMBOL].forEach((driver) => {
       const target = driver.eventTarget(type);
       target[EVENTS_BATCH_SYMBOL] = target[EVENTS_BATCH_SYMBOL] || {};
@@ -269,18 +271,18 @@ implements IEventDriver {
 /**
  * 事件引擎
  */
-export class Event extends Subscribable<ICustomEvent<any>> {
-  private drivers: IEventDriverClass<any>[] = [];
+export class Event extends Subscribable<ICustomEvent<IAny>> {
+  private drivers: IEventDriverClass<IAny>[] = [];
   private containers: EventContainer[] = [];
   constructor(props?: IEventProps) {
     super();
-    if (isArr(props?.effects)) {
-      props.effects.forEach((plugin) => {
-        plugin(this);
-      });
-    }
-    if (isArr(props?.drivers)) {
+    if (props?.drivers) {
       this.drivers = props.drivers;
+    }
+    if (props?.effects) {
+      props.effects.forEach((effect) => {
+        effect(this);
+      });
     }
   }
 
@@ -315,7 +317,7 @@ export class Event extends Subscribable<ICustomEvent<any>> {
   attachEvents(
     container: EventContainer,
     contentWindow: Window = globalThisPolyfill,
-    context?: any,
+    context?: IAny,
   ) {
     if (!container) return;
     if (isWindow(container)) {
