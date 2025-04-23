@@ -6,14 +6,16 @@ import { ViewportResizeEvent } from '../events';
 import { Engine } from '../models/Engine';
 
 export class ViewportResizeDriver extends EventDriver<Engine> {
-  request = null;
+  request: number | null = null;
 
-  resizeObserver: ResizeObserver = null;
+  resizeObserver: ResizeObserver | null = null;
 
-  onResize = (e: any) => {
-    if (e.preventDefault) e.preventDefault();
-    this.request = requestAnimationFrame(() => {
-      cancelAnimationFrame(this.request);
+  onResize = (e: Event | ResizeObserverEntry[]) => {
+    if ((e as Event).preventDefault) (e as Event).preventDefault();
+    const requestId = requestAnimationFrame(() => {
+      if (this.request !== null) {
+        cancelAnimationFrame(this.request);
+      }
       this.dispatch(new ViewportResizeEvent({
         scrollX: this.contentWindow.scrollX,
         scrollY: this.contentWindow.scrollY,
@@ -22,9 +24,10 @@ export class ViewportResizeDriver extends EventDriver<Engine> {
         innerHeight: this.contentWindow.innerHeight,
         innerWidth: this.contentWindow.innerWidth,
         view: this.contentWindow,
-        target: e.target || this.container,
+        target: (e as Event).target || this.container,
       }));
     });
+    this.request = requestId;
   };
 
   attach() {

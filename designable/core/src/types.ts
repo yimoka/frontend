@@ -11,6 +11,14 @@ import {
   TreeNode,
 } from './models';
 
+// 添加ISchema接口定义
+export interface ISchema {
+  type?: string;
+  properties?: Record<string, ISchema>;
+  items?: ISchema | ISchema[];
+  [key: string]: unknown;
+}
+
 export type IEngineProps<T = Event> = IEventProps<T> & {
   shortcuts?: Shortcut[]
   sourceIdAttrName?: string // 拖拽源Id的dom属性名
@@ -86,14 +94,14 @@ export interface IDesignerProps {
   inlineChildrenLayout?: boolean // 子节点内联，用于指定复杂布局容器，强制内联
   selfRenderChildren?: boolean // 是否自己渲染子节点
   propsSchema?: ISchema // Formily JSON Schema
-  defaultProps?: any // 默认属性
+  defaultProps?: Record<string, unknown> // 默认属性
   getDragNodes?: (node: TreeNode) => TreeNode | TreeNode[] // 拦截转换Drag节点
   getDropNodes?: (node: TreeNode, parent: TreeNode) => TreeNode | TreeNode[] // 拦截转换Drop节点
-  getComponentProps?: (node: TreeNode) => any // 拦截属性
+  getComponentProps?: (node: TreeNode) => Record<string, unknown> // 拦截属性
   allowAppend?: (target: TreeNode, sources?: TreeNode[]) => boolean
   allowSiblings?: (target: TreeNode, sources?: TreeNode[]) => boolean
   allowDrop?: (target: TreeNode) => boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export type IDesignerPropsMap = Record<string, IDesignerProps>
@@ -108,7 +116,7 @@ export type IDesignerControllerPropsMap = Record<
 >
 export interface IDesignerLocales {
   [ISOCode: string]: {
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -124,7 +132,7 @@ export interface IDesignerStore<P> {
   value: P
 }
 
-export type IDesignerIcons = Record<string, any>
+export type IDesignerIcons = Record<string, unknown>
 
 export type IDesignerIconsStore = IDesignerStore<IDesignerIcons>
 export type IDesignerLocaleStore = IDesignerStore<IDesignerLocales>
@@ -163,7 +171,7 @@ export type IBehaviorLike = IBehavior[] | IBehaviorHost
 export interface IResource {
   title?: string | IDesignerMiniLocales
   description?: string | IDesignerMiniLocales
-  icon?: any
+  icon?: unknown
   thumb?: string
   span?: number
   node?: TreeNode
@@ -177,7 +185,7 @@ export type IResourceLike = IResource[] | IResourceHost
 export interface IResourceCreator {
   title?: string | IDesignerMiniLocales
   description?: string | IDesignerMiniLocales
-  icon?: any
+  icon?: unknown
   thumb?: string
   span?: number
   elements?: ITreeNode[]

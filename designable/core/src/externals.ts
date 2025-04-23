@@ -1,5 +1,7 @@
 import { untracked } from '@formily/reactive';
-import { isFn, isArr } from '@yimoka/designable-shared';
+import { isArr } from '@yimoka/designable-shared';
+
+import { IAny } from '@yimoka/shared';
 
 import { mergeLocales } from './internals';
 import { Engine, TreeNode } from './models';
@@ -15,21 +17,21 @@ import {
   IResourceHost,
 } from './types';
 
-export const isBehaviorHost = (val: any): val is IBehaviorHost => val?.Behavior && isBehaviorList(val.Behavior);
+export const isBehaviorHost = (val: IAny): val is IBehaviorHost => val?.Behavior && isBehaviorList(val.Behavior);
 
-export const isBehaviorList = (val: any): val is IBehavior[] => Array.isArray(val) && val.every(isBehavior);
+export const isBehaviorList = (val: IAny): val is IBehavior[] => Array.isArray(val) && val.every(isBehavior);
 
-export const isBehavior = (val: any): val is IBehavior => val?.name
+export const isBehavior = (val: IAny): val is IBehavior => val?.name
   || val?.selector
   || val?.extends
   || val?.designerProps
   || val?.designerLocales;
 
-export const isResourceHost = (val: any): val is IResourceHost => val?.Resource && isResourceList(val.Resource);
+export const isResourceHost = (val: IAny): val is IResourceHost => val?.Resource && isResourceList(val.Resource);
 
-export const isResourceList = (val: any): val is IResource[] => Array.isArray(val) && val.every(isResource);
+export const isResourceList = (val: IAny): val is IResource[] => Array.isArray(val) && val.every(isResource);
 
-export const isResource = (val: any): val is IResource => val?.node && !!val.node.isSourceNode && val.node instanceof TreeNode;
+export const isResource = (val: IAny): val is IResource => val?.node && !!val.node.isSourceNode && val.node instanceof TreeNode;
 
 export const createLocales = (...packages: IDesignerLocales[]) => {
   const results = {};
@@ -39,24 +41,27 @@ export const createLocales = (...packages: IDesignerLocales[]) => {
   return results;
 };
 
-export const createBehavior = (...behaviors: Array<IBehaviorCreator | IBehaviorCreator[]>): IBehavior[] => behaviors.reduce((buf: any[], behavior) => {
+export const createBehavior = (...behaviors: Array<IBehaviorCreator | IBehaviorCreator[]>): IBehavior[] => behaviors.reduce((buf: IBehavior[], behavior) => {
   if (isArr(behavior)) return buf.concat(createBehavior(...behavior));
   const { selector } = behavior || {};
   if (!selector) return buf;
   if (typeof selector === 'string') {
     behavior.selector = node => node.componentName === selector;
   }
-  return buf.concat(behavior);
+  return buf.concat(behavior as IBehavior);
 }, []);
 
-export const createResource = (...sources: IResourceCreator[]): IResource[] => sources.reduce((buf, source) => buf.concat({
-  ...source,
-  node: new TreeNode({
-    componentName: '$$ResourceNode$$',
-    isSourceNode: true,
-    children: source.elements || [],
-  }),
-}), []);
+export const createResource = (...sources: IResourceCreator[]): IResource[] => sources.reduce<IResource[]>((buf, source) => [
+  ...buf,
+  {
+    ...source,
+    node: new TreeNode({
+      componentName: '$$ResourceNode$$',
+      isSourceNode: true,
+      children: source.elements || [],
+    }),
+  },
+], []);
 
 export const createDesigner = (props: IEngineProps<Engine> = {}) => {
   const drivers = props.drivers || [];

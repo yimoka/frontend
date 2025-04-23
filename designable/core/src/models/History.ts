@@ -1,4 +1,5 @@
 import { define, observable, action } from '@formily/reactive';
+import { IAny } from '@yimoka/shared';
 
 export interface IHistoryProps<T> {
   onPush?: (item: T) => void
@@ -14,11 +15,11 @@ export interface HistoryItem<T> {
 }
 
 export interface ISerializable {
-  from(json: any): void // 导入数据
-  serialize(): any // 序列化模型，用于历史记录保存
+  from(json: IAny): void // 导入数据
+  serialize(): IAny // 序列化模型，用于历史记录保存
 }
 
-export class History<T extends ISerializable = any> {
+export class History<T extends ISerializable = IAny> {
   context: ISerializable;
   props: IHistoryProps<HistoryItem<T>>;
   current = 0;

@@ -6,6 +6,7 @@ import {
   isPointInRect,
   IPoint,
 } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { DragNodeEvent, DropNodeEvent } from '../events';
 
@@ -304,7 +305,7 @@ export class Dragon {
     }));
   }
 
-  trigger(event: any) {
+  trigger(event: IAny) {
     if (this.operation) {
       return this.operation.dispatch(event);
     }

@@ -9,6 +9,7 @@ import {
   cancelIdle,
   globalThisPolyfill,
 } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { Engine } from './Engine';
 import { Selector } from './Selector';
@@ -254,7 +255,7 @@ export class Viewport {
   containsElement(element: HTMLElement | Element | EventTarget) {
     const root: Element | HTMLDocument = this.viewportElement;
     if (root === element) return true;
-    return root?.contains(element as any);
+    return root?.contains(element as IAny);
   }
 
   getOffsetPoint(topPoint: IPoint) {

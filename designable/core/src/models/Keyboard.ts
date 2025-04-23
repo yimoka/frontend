@@ -1,5 +1,6 @@
 import { observable, define, action } from '@formily/reactive';
 import { KeyCode } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { AbstractKeyboardEvent } from '../events/keyboard/AbstractKeyboardEvent';
 

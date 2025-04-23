@@ -1,12 +1,13 @@
 import { Path } from '@formily/path';
 import { requestIdle, globalThisPolyfill } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { MouseDoubleClickEvent, MouseClickEvent } from '../events';
 import { Engine, TreeNode } from '../models';
 
 type GlobalState = {
   activeElements: Map<HTMLInputElement, TreeNode>
-  requestTimer: any
+  requestTimer: IAny
   isComposition: boolean
   queue: (() => void)[]
 }
@@ -104,7 +105,7 @@ export const useContentEditableEffect = (engine: Engine) => {
   function onCompositionHandler(event: CompositionEvent) {
     if (event.type === 'compositionend') {
       globalState.isComposition = false;
-      onInputHandler(event as any);
+      onInputHandler(event as IAny);
     } else {
       clearTimeout(globalState.requestTimer);
       globalState.isComposition = true;

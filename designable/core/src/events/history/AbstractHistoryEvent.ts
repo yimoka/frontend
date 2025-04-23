@@ -1,9 +1,11 @@
+import { IAny } from '@yimoka/shared';
+
 import { IEngineContext } from '../../types';
 
 export class AbstractHistoryEvent {
-  data: any;
+  data: IAny;
   context: IEngineContext;
-  constructor(data: any) {
+  constructor(data: IAny) {
     this.data = data;
   }
 }

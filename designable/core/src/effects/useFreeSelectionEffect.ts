@@ -3,16 +3,26 @@ import {
   isCrossRectInRect,
   isRectInRect,
   Point,
+  IRect,
 } from '@yimoka/designable-shared';
 
 import { DragStopEvent } from '../events';
 import { Engine, CursorType, TreeNode } from '../models';
 
 export const useFreeSelectionEffect = (engine: Engine) => {
-  engine.subscribeTo(DragStopEvent, (event) => {
+  engine.subscribeTo(DragStopEvent, (_event) => {
     if (engine.cursor.type !== CursorType.Selection) return;
     engine.workbench.eachWorkspace((workspace) => {
       const { viewport } = workspace;
+
+      // 安全检查，确保所有需要的值都存在
+      if (!engine.cursor.dragStartPosition?.topClientX
+        || !engine.cursor.dragStartPosition?.topClientY
+        || !engine.cursor.position?.topClientX
+        || !engine.cursor.position?.topClientY) {
+        return;
+      }
+
       const dragStartPoint = new Point(
         engine.cursor.dragStartPosition.topClientX,
         engine.cursor.dragStartPosition.topClientY,
@@ -27,30 +37,38 @@ export const useFreeSelectionEffect = (engine: Engine) => {
       ));
       if (!viewport.isPointInViewport(dragStartPoint, false)) return;
       const { tree } = workspace.operation;
+
+      // 安全检查滚动偏移
+      const scrollXOffset = engine.cursor.dragStartScrollOffset?.scrollX || 0;
+      const scrollYOffset = engine.cursor.dragStartScrollOffset?.scrollY || 0;
+
       const selectionRect = calcRectByStartEndPoint(
         dragStartOffsetPoint,
         dragEndOffsetPoint,
-        viewport.scrollX - engine.cursor.dragStartScrollOffset.scrollX,
-        viewport.scrollY - engine.cursor.dragStartScrollOffset.scrollY,
+        viewport.scrollX - scrollXOffset,
+        viewport.scrollY - scrollYOffset,
       );
+
       const selected: [TreeNode, DOMRect][] = [];
       tree.eachChildren((node) => {
         const nodeRect = viewport.getValidNodeOffsetRect(node);
-        if (nodeRect && isCrossRectInRect(selectionRect, nodeRect)) {
+        if (nodeRect && isCrossRectInRect(selectionRect, nodeRect as IRect)) {
           selected.push([node, nodeRect]);
         }
       });
-      const selectedNodes: TreeNode[] = selected.reduce(
+
+      const selectedNodes: TreeNode[] = selected.reduce<TreeNode[]>(
         (buf, [node, nodeRect]) => {
-          if (isRectInRect(nodeRect, selectionRect)) {
+          if (isRectInRect(nodeRect as IRect, selectionRect)) {
             if (selected.some(([selectNode]) => selectNode.isMyParents(node))) {
               return buf;
             }
           }
-          return buf.concat(node);
+          return [...buf, node];
         },
         [],
       );
+
       workspace.operation.selection.batchSafeSelect(selectedNodes);
     });
     engine.cursor.setType(CursorType.Move);

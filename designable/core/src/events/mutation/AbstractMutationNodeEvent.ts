@@ -1,3 +1,5 @@
+import { IAny } from '@yimoka/shared';
+
 import { TreeNode } from '../../models';
 import { IEngineContext } from '../../types';
 
@@ -9,7 +11,7 @@ export interface IMutationNodeEventData {
   // 事件发生的来源对象
   originSourceParents?: TreeNode | TreeNode[]
   // 扩展数据
-  extra?: any
+  extra?: IAny
 }
 
 export class AbstractMutationNodeEvent {

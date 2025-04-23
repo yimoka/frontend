@@ -1,6 +1,6 @@
 import { action, define, observable, toJS } from '@formily/reactive';
 import { uid, isFn } from '@yimoka/designable-shared';
-
+import { IAny } from '@yimoka/shared';
 
 import {
   InsertBeforeEvent,
@@ -32,7 +32,7 @@ export interface ITreeNode {
   hidden?: boolean
   isSourceNode?: boolean
   id?: string
-  props?: Record<string | number | symbol, any>
+  props?: Record<string | number | symbol, IAny>
   children?: ITreeNode[]
 }
 
@@ -292,7 +292,7 @@ export class TreeNode {
     }
   }
 
-  triggerMutation<T>(event: any, callback?: () => T, defaults?: T): T {
+  triggerMutation<T>(event: IAny, callback?: () => T, defaults?: T): T {
     if (this.root?.operation) {
       const result = this.root.operation.dispatch(event, callback) || defaults;
       this.takeSnapshot(event?.type);
@@ -437,7 +437,7 @@ export class TreeNode {
     );
   }
 
-  setProps(props?: any) {
+  setProps(props?: IAny) {
     return this.triggerMutation(
       new UpdateNodePropsEvent({
         target: this,

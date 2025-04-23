@@ -1,9 +1,10 @@
 import { each, isPlainObj, globalThisPolyfill } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 export const lowerSnake = (str: string) => String(str).replace(/\s+/g, '_')
   .toLocaleLowerCase();
 
-export const mergeLocales = (target: any, source: any) => {
+export const mergeLocales = (target: IAny, source: IAny) => {
   if (isPlainObj(target) && isPlainObj(source)) {
     each(source, (value, key) => {
       const token = lowerSnake(key);

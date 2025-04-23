@@ -1,4 +1,5 @@
 import { isFn, KeyCode } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { IEngineContext } from '../types';
 
@@ -73,5 +74,5 @@ export class Shortcut {
 
   static matchCode = (code1: KeyCode, code2: KeyCode) => code1?.toLocaleLowerCase?.() === code2?.toLocaleLowerCase?.();
 
-  static sortCodes = (codes: KeyCode[]): KeyCode[] => codes.map(code => code.toLocaleLowerCase()).sort() as any;
+  static sortCodes = (codes: KeyCode[]): KeyCode[] => codes.map(code => code.toLocaleLowerCase()).sort() as IAny;
 }

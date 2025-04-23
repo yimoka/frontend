@@ -1,4 +1,5 @@
 import { KeyCode, Point } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { MouseClickEvent } from '../events';
 import { Engine, CursorStatus } from '../models';
@@ -6,7 +7,7 @@ import { Engine, CursorStatus } from '../models';
 export const useSelectionEffect = (engine: Engine) => {
   engine.subscribeTo(MouseClickEvent, (event) => {
     if (engine.cursor.status !== CursorStatus.Normal) return;
-    const target: HTMLElement = event.data.target as any;
+    const target: HTMLElement = event.data.target as IAny;
     const el = target?.closest?.(`
       *[${engine.props.nodeIdAttrName}],
       *[${engine.props.outlineNodeIdAttrName}]

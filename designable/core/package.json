@@ -50,6 +50,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "@yimoka/designable-shared": "workspace:*",
+    "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
     "@formily/path": "^2.3.3",
     "globals": "^15.14.0"

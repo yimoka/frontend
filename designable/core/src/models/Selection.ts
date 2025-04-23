@@ -1,5 +1,6 @@
 import { observable, define, action } from '@formily/reactive';
 import { isStr, isArr } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { SelectNodeEvent, UnSelectNodeEvent } from '../events';
 
@@ -62,9 +63,9 @@ export class Selection {
     this.select(id);
   }
 
-  mapIds(ids: any) {
+  mapIds(ids: IAny) {
     return isArr(ids)
-      ? ids.map((node: any) => (isStr(node) ? node : node?.id))
+      ? ids.map((node: IAny) => (isStr(node) ? node : node?.id))
       : [];
   }
 

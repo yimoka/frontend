@@ -1,11 +1,12 @@
 import { ICustomEvent } from '@yimoka/designable-shared';
+import { IAny } from '@yimoka/shared';
 
 import { SelectNodeEvent } from '../events';
 import { Engine } from '../models';
 import { IEngineContext } from '../types';
 
 export const useWorkspaceEffect = (engine: Engine) => {
-  engine.subscribeWith<ICustomEvent<any, IEngineContext>>(
+  engine.subscribeWith<ICustomEvent<IAny, IEngineContext>>(
     [
       'append:node',
       'insert:after',
