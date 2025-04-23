@@ -142,9 +142,7 @@ export enum KeyCode {
   GraveAccent = '`',
   OpenBracket = '[',
   ClosedBracket = ']',
-  Quote = "'",
+  Quote = '\'',
 }
 
-export const getKeyCodeFromEvent = (event: KeyboardEvent): KeyCode => {
-  return event.key as any
-}
+export const getKeyCodeFromEvent = (event: KeyboardEvent): KeyCode => event.key as any;

@@ -1,7 +1,1 @@
-export const compose = (...fns: ((payload: any) => any)[]) => {
-  return (payload: any) => {
-    return fns.reduce((buf, fn) => {
-      return fn(buf)
-    }, payload)
-  }
-}
+export const compose = (...fns: ((payload: any) => any)[]) => (payload: any) => fns.reduce((buf, fn) => fn(buf), payload);
