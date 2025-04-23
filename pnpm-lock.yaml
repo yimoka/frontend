@@ -74,6 +74,40 @@ importers:
       '@yimoka/designable-shared':
         specifier: workspace:*
         version: link:../shared
+      '@yimoka/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@yimoka/store':
+        specifier: workspace:*
+        version: link:../../packages/store
+      globals:
+        specifier: ^15.14.0
+        version: 15.14.0
+    devDependencies:
+      eslint:
+        specifier: ^9.24.0
+        version: 9.24.0(jiti@1.21.7)
+
+  designable/react:
+    dependencies:
+      '@designable/core':
+        specifier: 1.0.0-beta.45
+        version: 1.0.0-beta.45(@formily/json-schema@2.3.3(typescript@5.8.2))(@formily/path@2.3.3)(@formily/reactive@2.3.3)
+      '@designable/shared':
+        specifier: 1.0.0-beta.45
+        version: 1.0.0-beta.45
+      '@juggle/resize-observer':
+        specifier: ^3.4.0
+        version: 3.4.0
+      '@yimoka/antd':
+        specifier: workspace:*
+        version: link:../../packages/antd
+      '@yimoka/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      '@yimoka/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@yimoka/store':
         specifier: workspace:*
         version: link:../../packages/store
@@ -1840,6 +1874,18 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       postcss: ^8.4
+
+  '@designable/core@1.0.0-beta.45':
+    resolution: {integrity: sha512-zCN2O9HlVaqcd90KCl1OtsWTBMX4+xcWfew9sqxQfOE9GWc2VENw2IpbHcIsGaEDhklmZZ83vnDrivjwhZMMsw==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      '@formily/json-schema': ^2.0.2
+      '@formily/path': ^2.0.2
+      '@formily/reactive': ^2.0.2
+
+  '@designable/shared@1.0.0-beta.45':
+    resolution: {integrity: sha512-gHbTp+LlpIOvKg2QX6iq8BotNn98Dnf2/xc2fXJfWz97YlbSDEqYaPiCAQYHGoucAjj1BWYZQFdNar1FdOfR9g==}
+    engines: {npm: '>=3.0.0'}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -10009,6 +10055,9 @@ packages:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
     engines: {node: '>=0.10'}
 
+  requestidlecallback@0.3.0:
+    resolution: {integrity: sha512-TWHFkT7S9p7IxLC5A1hYmAYQx2Eb9w1skrXmQ+dS1URyvR8tenMLl4lHbqEOUnpEYxNKpkVMXUgknVpBZWXXfQ==}
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -13353,6 +13402,18 @@ snapshots:
   '@csstools/utilities@2.0.0(postcss@8.5.1)':
     dependencies:
       postcss: 8.5.1
+
+  '@designable/core@1.0.0-beta.45(@formily/json-schema@2.3.3(typescript@5.8.2))(@formily/path@2.3.3)(@formily/reactive@2.3.3)':
+    dependencies:
+      '@designable/shared': 1.0.0-beta.45
+      '@formily/json-schema': 2.3.3(typescript@5.8.2)
+      '@formily/path': 2.3.3
+      '@formily/reactive': 2.3.3
+      '@juggle/resize-observer': 3.4.0
+
+  '@designable/shared@1.0.0-beta.45':
+    dependencies:
+      requestidlecallback: 0.3.0
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -24637,6 +24698,8 @@ snapshots:
       strip-ansi: 6.0.1
 
   repeat-string@1.6.1: {}
+
+  requestidlecallback@0.3.0: {}
 
   require-directory@2.1.1: {}
 
