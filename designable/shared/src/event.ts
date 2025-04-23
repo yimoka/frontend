@@ -110,7 +110,7 @@ const isOnlyMode = (mode: string) => mode === 'onlyOne' || mode === 'onlyChild' 
  * 事件驱动器基类
  */
 export class EventDriver<Engine extends Event = Event, Context = IAny>
-  implements IEventDriver {
+implements IEventDriver {
   engine: Engine;
 
   container: EventDriverContainer = document;
@@ -175,6 +175,7 @@ export class EventDriver<Engine extends Event = Event, Context = IAny>
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventOptions
   ): void
+  // eslint-disable-next-line complexity
   addEventListener(type: IAny, listener: IAny, options: IAny) {
     const target = this.eventTarget(type) as EventTarget & SymbolKeyed;
     if (isOnlyMode(options?.mode)) {
@@ -191,8 +192,7 @@ export class EventDriver<Engine extends Event = Event, Context = IAny>
         if (container) {
           if (options.mode === 'onlyChild') {
             // 使用类型断言确保container具有contains方法
-            if ((container as unknown as ContainerWithContains).contains
-              && (container as unknown as ContainerWithContains).contains(target as unknown as Node)) {
+            if ((container as unknown as ContainerWithContains).contains?.(target as unknown as Node)) {
               container.removeEventListener(
                 type,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -204,8 +204,7 @@ export class EventDriver<Engine extends Event = Event, Context = IAny>
             }
           } else if (options.mode === 'onlyParent') {
             // 使用类型断言确保container具有contains方法
-            if ((container as unknown as ContainerWithContains).contains
-              && (container as unknown as ContainerWithContains).contains(target as unknown as Node)) return;
+            if ((container as unknown as ContainerWithContains).contains?.(target as unknown as Node)) return;
           }
         }
         target.addEventListener(type, listener, options);

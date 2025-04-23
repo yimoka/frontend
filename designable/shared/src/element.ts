@@ -68,6 +68,7 @@ export const calcElementOuterWidth = (
   + parseFloat(style.borderRightWidth)
 );
 
+// eslint-disable-next-line complexity
 export const calcElementLayout = (element: Element) => {
   if (!element) return 'vertical';
   const parent = element.parentElement;
