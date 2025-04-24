@@ -1,4 +1,4 @@
-import { observer, Trigger, TriggerProps, useAdditionalNode, WatchChildStore } from '@yimoka/react';
+import { observer, Trigger, TriggerProps, useAdditionalNode, useStore, WatchChildStore } from '@yimoka/react';
 import { isSuccess } from '@yimoka/shared';
 import { IStore } from '@yimoka/store';
 import { Modal as AntModal, ModalProps as AntModalProps } from 'antd';
@@ -28,6 +28,9 @@ export type ModalProps = AntModalProps & {
   bindChildStore?: boolean
   /** 子 store 的回调函数 */
   onChildStore?: (store: IStore) => void
+  /** 执行成功时 是否执行 store 的 fetch */
+  fetchOnSuccess?: boolean
+  store?: IStore
 }
 
 /**
@@ -53,12 +56,15 @@ export const Modal = observer((props: ModalProps) => {
     bindChildStore,
     onChildStore,
     children,
+    store,
+    fetchOnSuccess,
     ...rest
   } = props;
 
   // 内部状态管理
   const [open, setOpen] = useState(oldOpen);
   const [childStore, setChildStore] = useState<IStore>();
+  const curStore = useStore(store);
 
   // 使用 useAdditionalNode 处理可自定义的节点
   const cancelTextNode = useAdditionalNode('cancelText', cancelText);
@@ -95,6 +101,9 @@ export const Modal = observer((props: ModalProps) => {
     const { fetch, form } = childStore;
     const run = async () => {
       const res = await fetch();
+      if (isSuccess(res) && fetchOnSuccess) {
+        curStore?.fetch();
+      }
       if (
         closeOnOk === true
         || (closeOnOk === 'success' && isSuccess(res))
@@ -109,7 +118,7 @@ export const Modal = observer((props: ModalProps) => {
     } else {
       run();
     }
-  }, [bindChildStore, childStore, closeOnOk, onOk]);
+  }, [bindChildStore, childStore, closeOnOk, curStore, fetchOnSuccess, onOk]);
 
   return (
     <>

@@ -58,7 +58,7 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
 export const isItemSchemaRecursion = (schema: Schema, componentName?: string) => {
   const decorator = schema['x-decorator'];
   const component = schema['x-component'];
-  return !isVacuous(schema.properties) || (decorator && decorator !== componentName) || (component && component !== componentName);
+  return !!schema.properties || (decorator && decorator !== componentName) || (component && component !== componentName);
 };
 
 /**
@@ -147,6 +147,9 @@ export const getSchemaNameByFieldSchema = (schema: Schema, fieldSchema: Schema, 
     let rName = schemaName;
     if (rName && name) {
       rName = `${rName}.${name}`;
+    }
+    if (!rName) {
+      rName = name;
     }
     return rName;
   }

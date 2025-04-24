@@ -27,17 +27,16 @@ export const DateText = (props: DateTextProps) => {
     }
 
     let type: IDateType = 'string';
-    if (typeof dateVal === 'number') {
+    if (typeof dateVal === 'number' || /^\d+$/.test(dateVal.toString())) {
       type = timestamp;
-    }
-    if (typeof dateVal === 'string') {
+    } else if (typeof dateVal === 'string') {
       type = 'string';
-    }
-    if (dateVal instanceof Date) {
-      type = 'date';
-    }
-    if (dateVal instanceof Dayjs) {
-      type = 'dayjs';
+    } else if (typeof dateVal === 'object') {
+      if (dateVal instanceof Date) {
+        type = 'date';
+      } else if (dateVal instanceof Dayjs) {
+        type = 'dayjs';
+      }
     }
 
     const dayjsVal = toDayjsArray(normalizeToArray(dateVal), curSplitter, type, valFormat);
