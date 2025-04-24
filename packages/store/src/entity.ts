@@ -30,16 +30,23 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     fieldsConfig: config?.fieldsConfig,
   };
 
+  const idKey = config?.idKey ?? 'id';
   if (['add', 'edit'].includes(`${mode}`)) {
     conf.afterAtFetch = { ...opStoreAfterAtFetch };
     conf.defaultValues = { ...config?.defaultFormValues };
+    // 如果是 edit 添加 idKey
+    if (mode === 'edit') {
+      if (!(idKey in conf.defaultValues)) {
+        conf.defaultValues[idKey] = undefined;
+      }
+    }
   } else if (['list', 'query'].includes(`${mode}`)) {
     conf.defaultValues = { ...config?.defaultQueryValues };
     conf.type = 'list';
   } else if (['detail'].includes(`${mode}`)) {
     conf.defaultValues = { ...config?.defaultDetailValues };
-    if (config?.idKey) {
-      conf.defaultValues[config.idKey] = undefined;
+    if (!(idKey in conf.defaultValues)) {
+      conf.defaultValues[idKey] = undefined;
     }
   } else if (isOperation) {
     conf.afterAtFetch = { ...opStoreAfterAtFetch };
