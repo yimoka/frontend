@@ -7,7 +7,7 @@ import { IconWidget } from '../IconWidget';
 import { NodeTitleWidget } from '../NodeTitleWidget';
 
 
-import './styles.less';
+// import './styles.less';
 
 export interface INodePathWidgetProps {
   workspaceId?: string

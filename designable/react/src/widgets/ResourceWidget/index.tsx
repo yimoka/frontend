@@ -14,7 +14,7 @@ import { IconWidget } from '../IconWidget';
 import { TextWidget } from '../TextWidget';
 
 
-import './styles.less';
+// import './styles.less';
 
 export type SourceMapper = (resource: IResource) => React.ReactChild
 
@@ -29,13 +29,14 @@ export interface IResourceWidgetProps {
 export const ResourceWidget: React.FC<IResourceWidgetProps> = observer((props) => {
   const prefix = usePrefix('resource');
   const [expand, setExpand] = useState(props.defaultExpand);
+  // eslint-disable-next-line complexity
   const renderNode = (source: IResource) => {
     const { node, icon, title, thumb, span } = source;
     return (
       <div
-        key={node.id}
+        key={node?.id}
         className={`${prefix}-item`}
-        data-designer-source-id={node.id}
+        data-designer-source-id={node?.id}
         style={{ gridColumnStart: `span ${span || 1}` }}
       >
         {thumb && <img className={`${prefix}-item-thumb`} src={thumb} />}
@@ -51,21 +52,21 @@ export const ResourceWidget: React.FC<IResourceWidgetProps> = observer((props) =
         <span className={`${prefix}-item-text`}>
           {
             <TextWidget>
-              {title || node.children[0]?.getMessage('title')}
+              {title || node?.children?.[0]?.getMessage('title')}
             </TextWidget>
           }
         </span>
       </div>
     );
   };
-  const sources = props.sources.reduce<IResource[]>((buf, source) => {
+  const sources = props.sources?.reduce<IResource[]>((buf, source) => {
     if (isResourceList(source)) {
       return buf.concat(source);
     } if (isResourceHost(source)) {
-      return buf.concat(source.Resource);
+      return buf.concat(source?.Resource ?? []);
     }
     return buf;
-  }, []);
+  }, []) ?? [];
   const remainItems = sources.reduce((length, source) => length + (source.span ?? 1), 0) % 3;
   return (
     <div

@@ -8,7 +8,7 @@ import { IconWidget } from '../IconWidget';
 import { TextWidget } from '../TextWidget';
 
 
-import './styles.less';
+// import './styles.less';
 
 export interface INodeActionsWidgetProps {
   className?: string

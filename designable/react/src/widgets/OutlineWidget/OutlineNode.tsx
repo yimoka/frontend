@@ -23,7 +23,7 @@ import { NodeTitleWidget } from '../NodeTitleWidget';
 import { NodeContext } from './context';
 
 
-import './styles.less';
+// import './styles.less';
 export interface IOutlineTreeNodeProps {
   node: TreeNode
   style?: React.CSSProperties
@@ -34,13 +34,14 @@ export interface IOutlineTreeNodeProps {
 export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node, className, style, workspaceId }) => {
   const prefix = usePrefix('outline-tree-node');
   const engine = useDesigner();
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   const ctx = useContext(NodeContext);
-  const request = useRef(null);
+  const request = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cursor = useCursor();
   const selection = useSelection(workspaceId);
   const outlineDragon = useOutlineDragon(workspaceId);
 
+  // eslint-disable-next-line complexity
   useEffect(() => engine.subscribeTo(DragMoveEvent, () => {
     const closestNodeId = outlineDragon?.closestNode?.id;
     const closestDirection = outlineDragon?.closestDirection;
@@ -59,7 +60,7 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
           request.current = null;
         }
         request.current = setTimeout(() => {
-          ref.current.classList.add('expanded');
+          ref.current?.classList.add('expanded');
         }, 600);
       }
     } else {
@@ -71,8 +72,10 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
         ref.current.classList.remove('droppable');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [node, outlineDragon, cursor]);
 
+  // eslint-disable-next-line complexity
   useEffect(() => autorun(() => {
     const selectedIds = selection?.selected || [];
     const { id } = node;
@@ -94,6 +97,7 @@ export const OutlineTreeNode: React.FC<IOutlineTreeNodeProps> = observer(({ node
         ref.current.classList.remove('selected');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [node, selection, outlineDragon]);
 
   if (!node) return null;

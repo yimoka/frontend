@@ -19,7 +19,7 @@ export const ViewToolsWidget: React.FC<IViewToolsWidget> = observer(({ use, styl
   const prefix = usePrefix('view-tools');
   return (
     <Button.Group className={cls(prefix, className)} style={style}>
-      {use.includes('DESIGNABLE') && (
+      {use?.includes('DESIGNABLE') && (
         <Button
           disabled={workbench.type === 'DESIGNABLE'}
           size="small"
@@ -30,7 +30,7 @@ export const ViewToolsWidget: React.FC<IViewToolsWidget> = observer(({ use, styl
           <IconWidget infer="Design" />
         </Button>
       )}
-      {use.includes('JSONTREE') && (
+      {use?.includes('JSONTREE') && (
         <Button
           disabled={workbench.type === 'JSONTREE'}
           size="small"
@@ -41,7 +41,7 @@ export const ViewToolsWidget: React.FC<IViewToolsWidget> = observer(({ use, styl
           <IconWidget infer="JSON" />
         </Button>
       )}
-      {use.includes('MARKUP') && (
+      {use?.includes('MARKUP') && (
         <Button
           disabled={workbench.type === 'MARKUP'}
           size="small"
@@ -52,7 +52,7 @@ export const ViewToolsWidget: React.FC<IViewToolsWidget> = observer(({ use, styl
           <IconWidget infer="Code" />
         </Button>
       )}
-      {use.includes('PREVIEW') && (
+      {use?.includes('PREVIEW') && (
         <Button
           disabled={workbench.type === 'PREVIEW'}
           size="small"

@@ -7,7 +7,7 @@ import React, { createContext, useContext, useEffect, useRef } from 'react';
 
 import { usePrefix, useRegistry, useTheme } from '../../hooks';
 
-import './styles.less';
+// import './styles.less';
 
 const IconContext = createContext<IconProviderProps>(null);
 
