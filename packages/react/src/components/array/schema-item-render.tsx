@@ -1,3 +1,7 @@
+/**
+ * @description Schema 项渲染组件，用于处理数组项的渲染逻辑
+ */
+
 import { Schema, SchemaKey } from '@formily/json-schema';
 import { RecordScope, ExpressionScope, useFieldSchema } from '@formily/react';
 import { IAny, isVacuous } from '@yimoka/shared';
@@ -8,6 +12,36 @@ import { getSchemaNameByFieldSchema } from '../../tools/schema-items';
 
 import { SchemaItemRecursion } from './schema-item-recursion';
 
+/**
+ * Schema 项渲染组件
+ * @summary 用于渲染数组中的单个项，处理项的名称生成和作用域设置
+ *
+ * @param {Object} props - 组件属性
+ * @param {IAny} props.value - 当前项的值
+ * @param {IAny} props.record - 当前记录对象
+ * @param {Schema} props.schema - Schema 定义
+ * @param {SchemaKey} [props.name] - 可选的项名称
+ * @param {IRecordIndexFn} [props.getRecordIndex] - 获取记录索引的函数
+ * @param {string} [props.componentName] - 组件名称
+ *
+ * @returns {React.ReactElement} 渲染后的 React 元素
+ *
+ * @remarks
+ * 该组件主要负责：
+ * 1. 生成数组项的唯一名称
+ * 2. 设置记录作用域和表达式作用域
+ * 3. 递归渲染 Schema 项
+ *
+ * @example
+ * ```tsx
+ * <SchemaItemRender
+ *   value={itemValue}
+ *   record={record}
+ *   schema={schema}
+ *   getRecordIndex={getIndex}
+ * />
+ * ```
+ */
 export const SchemaItemRender = (props: { value: IAny, record: IAny, schema: Schema, name?: SchemaKey, getRecordIndex?: IRecordIndexFn, componentName?: string }) => {
   const { value, record, schema, getRecordIndex, componentName, name } = props;
   const index = getRecordIndex?.(record);
