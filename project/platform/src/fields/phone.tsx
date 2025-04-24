@@ -12,8 +12,14 @@ export const PhoneField: IFieldConfig = {
   'x-column': {
     width: 150,
   },
+  'x-output-schema': {
+    type: 'string',
+    'x-component': 'Text',
+    'x-component-props': {
+      children: '{{ $record.phone }}',
+    },
+  },
 };
-
 // 深度合并
 export const getPhoneField = (conf: IFieldConfig = {}) => mergeWithArrayOverride({}, PhoneField, conf);
 
@@ -29,6 +35,13 @@ export const PhonePrefixField: IFieldConfig = {
   },
   'x-column': {
     width: 60,
+  },
+  'x-output-schema': {
+    type: 'string',
+    'x-component': 'Text',
+    'x-component-props': {
+      children: '{{ $record.phonePrefix }}',
+    },
   },
 };
 

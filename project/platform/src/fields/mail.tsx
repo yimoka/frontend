@@ -12,6 +12,13 @@ export const MailField: IFieldConfig = {
   'x-column': {
     width: 150,
   },
+  'x-output-schema': {
+    type: 'string',
+    'x-component': 'Text',
+    'x-component-props': {
+      children: '{{ $record.mail }}',
+    },
+  },
 };
 
 // 深度合并
