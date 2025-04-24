@@ -1,8 +1,9 @@
 import { Avatar, Dropdown, Icon, Link, Menu, Typography, ConfigProvider, Layout, theme, MenuProps, Flex } from '@yimoka/antd';
-import { observer, useInitStore, useLocation, useNavigate, useRoot } from '@yimoka/react';
+import { observer, useInitStore, useLocation, useRoot } from '@yimoka/react';
 import { isVacuous } from '@yimoka/shared';
 import { omit } from 'lodash-es';
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 const { useToken } = theme;
 
 export const Header = observer(() => {
@@ -66,7 +67,9 @@ const User = observer(() => {
     api: { url: '/user/logout', method: 'POST' },
     afterAtFetch: {
       notify: true,
-      successRun: () => nav('/user/login'),
+      successRun: () => {
+        nav('/user/login');
+      },
     },
   });
 
