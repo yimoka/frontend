@@ -29,6 +29,7 @@
     "README.md"
   ],
   "scripts": {
+    "dev": "vite --config vite.demo.config.ts",
     "build": "tsc -b && vite build",
     "build-watch": "tsc -b && vite build --watch",
     "lint": "eslint . --fix",

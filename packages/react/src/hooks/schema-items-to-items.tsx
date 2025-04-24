@@ -1,6 +1,5 @@
 import { useExpressionScope, useFieldSchema } from '@formily/react';
-import { IAny, IAnyObject, isVacuous, normalizeToArray } from '@yimoka/shared';
-import { get } from 'lodash-es';
+import { getSmart, IAny, IAnyObject, normalizeToArray } from '@yimoka/shared';
 import React, { useMemo } from 'react';
 
 import { SchemaItemRender } from '../components/array/schema-item-render';
@@ -16,13 +15,14 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     const itemComponentName = 'Item';
     const componentItems: T[] = [];
     const { items: fieldItems } = fieldSchema ?? {};
-    if (isVacuous(data) || isVacuous(fieldItems)) {
+    if (!data || !fieldItems) {
       return componentItems;
     }
+    const arr = Array.isArray(data) ? data : [data];
     // eslint-disable-next-line complexity
-    normalizeToArray(data).forEach((record: IAny, index: number) => {
+    normalizeToArray(arr).forEach((record: IAny, index: number) => {
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
-      if (isVacuous(itemSchema) || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
+      if (!itemSchema || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
       }
       const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(itemSchema, fieldSchema);
@@ -30,7 +30,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       const getRecordIndex = () => index;
       const { 'x-component': component, 'x-decorator': decorator, properties } = itemSchema;
       if (
-        isVacuous(properties) // 没有 properties 时直接使用 itemSchema
+        !properties // 没有 properties 时直接使用 itemSchema
         || (component) // 顶层 UI 属性不为空时使用 itemSchema
         || (!component && decorator === itemComponentName) // 顶层 decorator 为 itemComponentName 时并且 component 为空时使用 itemSchema
       ) {
@@ -53,7 +53,9 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
       } else {
         // 当顶层没有 UI 属性或者 UI 不为 itemComponentName 且 properties 不为空时使用 properties 的每一个 prop 转为 item
         Object.entries(properties).forEach(([propKey, propSchema]) => {
-          const value = get(record, propSchema.name ?? propKey);
+          const key = propSchema.name ?? propKey;
+          const value = getSmart(record, key);
+
           if (!isItemSchemaVisible(propSchema, { ...scope, $index: index, $record: record, $value: value })) {
             return;
           }

@@ -22,6 +22,7 @@
   },
   "include": [
     "vite.config.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "vite.demo.config.ts"
   ]
 }
