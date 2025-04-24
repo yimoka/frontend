@@ -6,7 +6,7 @@
 import { BaseStore, IField, ITooltip } from '@yimoka/store';
 import { describe, it, expect } from 'vitest';
 
-import { getTooltipProps } from '../tools/tooltip';
+import { getTooltipProps } from '../tooltip';
 
 describe('工具提示模块', () => {
   describe('getTooltipProps', () => {

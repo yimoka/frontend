@@ -20,6 +20,11 @@ export const SchemaItemRender = (props: { value: IAny, record: IAny, schema: Sch
     if (!isVacuous(schemaName)) {
       return `${index}.${schemaName}`;
     }
+    // 如果找不到相对的 schemaName 并且 schema 是 void,如果不添加 name 会导致同一个数组项的所有 key 都是同一个 会导致渲染的结果都是每一个, 以支持正确渲染
+    // 这里只是一种兼容方式 正常是建议在 item 里声明 type 为非 void 来获取相对的值
+    if (schema.type === 'void') {
+      return `${index}.${schema.name}`;
+    }
     // 如果不转为字符串 0 会出现问题
     return `${index}`;
   }, [name, index, schema, fieldSchema]);

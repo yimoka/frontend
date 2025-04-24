@@ -61,6 +61,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
           }
           const schemaKey = Array.isArray(data) ? undefined : getSchemaNameByFieldSchema(propSchema, fieldSchema);
           const itemProps = getPropsByItemSchema(propSchema, itemComponentName, propsMap);
+
           if (isItemSchemaRecursion(propSchema, itemComponentName)) {
             itemProps[valueNodeKey] = (
               <SchemaItemRender

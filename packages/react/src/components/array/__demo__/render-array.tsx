@@ -16,12 +16,16 @@ export const RenderArrayDemo = () => (
       properties: {
         arr: {
           'x-component': RenderArray,
-          type: 'array',
+          // 数据的展示 不随着 values 走 只能通过 data 然后在 item 里只能通过 $record $value 来取值
+          type: 'void',
+          'x-component-props': {
+            dataKey: 'values.arr',
+          },
           items: {
-            type: 'object',
+            type: 'void',
             properties: {
-              name: { type: 'string', 'x-component': 'input' },
-              age: { type: 'number', 'x-component': 'input' },
+              name: {},
+              age: {},
             },
           },
         },
@@ -29,7 +33,7 @@ export const RenderArrayDemo = () => (
     }}
     store={{
       defaultValues: {
-        arr: [{ name: '张三', age: 18 }, { name: '李四', age: 20 }],
+        arr: { name: '张三', age: 18 },
       },
     }}
   />
