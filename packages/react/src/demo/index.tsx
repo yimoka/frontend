@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
 import { RenderArrayDemo } from '../components/array/__demo__/render-array';
+import { TableDemo } from '../hooks/__demo__/schema-items-to-columns';
 
 const DemoList = [
-  {
-    title: 'RenderArray',
-    component: RenderArrayDemo,
-  },
+  { title: 'RenderArray', component: RenderArrayDemo },
+  { title: 'Table', component: TableDemo },
 ];
 
 export const DemoIndex = () => {

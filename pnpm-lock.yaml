@@ -111,6 +111,9 @@ importers:
       '@yimoka/store':
         specifier: workspace:*
         version: link:../../packages/store
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       globals:
         specifier: ^15.14.0
         version: 15.14.0
