@@ -24,7 +24,12 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
     Object.entries(fieldsConfig).forEach(([key, value]) => {
       const { 'x-query-schema': querySchema, 'x-output-schema': outputSchema, ...rest } = value;
       if (!isVacuous(outputSchema)) {
-        outputSchemas[`__output_${key}`] = outputSchema;
+        const outputSchemaKey = `__output__${key}`;
+        if (typeof outputSchema?.title === 'undefined') {
+          outputSchemas[outputSchemaKey] = { ...outputSchema, title: rest.title };
+        } else {
+          outputSchemas[outputSchemaKey] = outputSchema;
+        }
       }
       if (store instanceof ListStore && !isVacuous(querySchema)) {
         newFieldsConfig[key] = mergeWithArrayOverride({}, rest, querySchema);

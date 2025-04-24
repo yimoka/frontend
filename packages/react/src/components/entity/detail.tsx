@@ -2,7 +2,7 @@ import { observer } from '@formily/react';
 import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
 import { useInitStore } from '../../hooks/store';
@@ -11,13 +11,22 @@ import { Entity, IEntityProps } from './base';
 import { EntityResponse } from './response';
 
 export const EntityDetail = observer((props: IEntityDetailProps) => {
-  const { values, ...args } = props;
+  const { values, store, config, ...args } = props;
+
+  const curStore = useMemo(() => getEntityStore(store, 'detail', config), [config, store]);
 
   if (isVacuous(values)) {
-    return <FetchDetail {...args} />;
+    return <FetchDetail {...args} config={config} store={curStore} />;
   }
 
-  return <EntityValues {...args} values={values} />;
+  return (
+    <EntityValues
+      {...args}
+      config={config}
+      store={curStore}
+      values={values}
+    />
+  );
 });
 
 export const FetchDetail = observer((props: IFetchDetailProps) => {
