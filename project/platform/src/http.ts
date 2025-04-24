@@ -6,6 +6,8 @@ import { getClientIDSync } from './local';
 import { getLanguage, setAuthErr } from './root';
 import { getStaffToken } from './token';
 
+export const TENANT_ID = '1000';
+
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
@@ -16,7 +18,7 @@ export const http = axios.create({
     'x-md-global-use-type': 'platform',
     'x-md-global-platform': navigator.platform,
     // 平台固定租户 ID
-    'x-md-global-tenantID': '1000',
+    'x-md-global-tenantID': TENANT_ID,
   },
 });
 

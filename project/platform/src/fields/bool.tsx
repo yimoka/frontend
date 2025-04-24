@@ -2,6 +2,7 @@ import { mergeWithArrayOverride } from '@yimoka/shared';
 import { IFieldConfig } from '@yimoka/store';
 
 export const BoolField: IFieldConfig = {
+  title: '是/否',
   type: 'boolean',
   'x-decorator': 'FormItem',
   'x-component': 'Switch',

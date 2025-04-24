@@ -1,7 +1,9 @@
 import { Modal } from '@yimoka/antd';
-import { observer, useNavigate } from '@yimoka/react';
+import { observer } from '@yimoka/react';
 import { IHTTPCode } from '@yimoka/shared';
 import React, { useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import { setAuthErr, useAuthErr } from '@/root';
 
