@@ -5,7 +5,7 @@ import { Icon } from '../base/icon';
 
 export const Tooltip = (props: TooltipProps) => {
   const { icon, children, ...args } = props;
-  const curChilder = useMemo(() => {
+  const curChildren = useMemo(() => {
     if (typeof children === 'undefined' || children === null) {
       if (icon) {
         if (typeof icon === 'string') {
@@ -18,7 +18,7 @@ export const Tooltip = (props: TooltipProps) => {
     return children;
   }, [children, icon]);
 
-  return <AntTooltip {...args} children={curChilder} />;
+  return <AntTooltip {...args} children={curChildren} />;
 };
 
 export type TooltipProps = AntTooltipProps & {

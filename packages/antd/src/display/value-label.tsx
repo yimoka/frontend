@@ -7,7 +7,7 @@
  */
 
 import { observer } from '@formily/react';
-import { RenderAny, useSplitter } from '@yimoka/react';
+import { RenderAny, useSplitter, withScopeValueFallback } from '@yimoka/react';
 import { IAny, IAnyObject, IKeys, IOptions, isVacuous, optionsToObj } from '@yimoka/shared';
 import { Tag, Space } from 'antd';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -51,7 +51,7 @@ export interface ValueLabelProps {
  * <ValueLabel value={["1", "2"]} options={{ 1: "选项一", 2: "选项二" }} />
  * ```
  */
-export const ValueLabel = observer((props: ValueLabelProps) => {
+export const ValueLabel = withScopeValueFallback((props: ValueLabelProps) => {
   const { value, toArray, splitter, options, keys } = props;
   const curSplitter = useSplitter(splitter);
   const optMap = useMemo(() => (options ? optionsToObj(options, keys) : {}), [options, keys]);

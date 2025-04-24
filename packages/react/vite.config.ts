@@ -7,6 +7,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
+const isWatch = process.argv.includes('--watch');
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -18,15 +20,15 @@ export default defineConfig({
   ],
   publicDir: false,
   build: {
-    sourcemap: !process.env.VITE_WATCH,
-    target: process.env.VITE_WATCH ? 'modules' : 'es2015',
+    sourcemap: !isWatch,
+    target: isWatch ? 'modules' : 'es2015',
     lib: {
-      formats: ['cjs', 'es', 'umd'],
+      formats: isWatch ? ['es'] : ['cjs', 'es', 'umd'],
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'YimokaReact',
       fileName: format => `index.${format}.js`,
     },
-    watch: process.env.VITE_WATCH ? { buildDelay: 100 } : null,
+    watch: isWatch ? { buildDelay: 100 } : null,
     outDir: path.resolve(__dirname, 'dist'),
     rollupOptions: {
       external: [

@@ -1,4 +1,4 @@
-import { useSplitter } from '@yimoka/react';
+import { useSplitter, withScopeValueFallback } from '@yimoka/react';
 import { IDate, IDateType, isVacuous, normalizeToArray } from '@yimoka/shared';
 import { Dayjs } from 'dayjs';
 import React, { useMemo } from 'react';
@@ -17,7 +17,7 @@ export type DateTextProps = TextProps & {
 
 const dfFormat = 'YYYY-MM-DD HH:mm:ss';
 
-export const DateText = (props: DateTextProps) => {
+export const DateText = withScopeValueFallback((props: DateTextProps) => {
   const { date, value, timestamp = 's', format = dfFormat, valFormat = dfFormat, splitter, ...rest } = props;
   const curSplitter = useSplitter(splitter);
   const curValue = useMemo(() => {
@@ -47,4 +47,4 @@ export const DateText = (props: DateTextProps) => {
   }, [date, value, valFormat, timestamp, format, curSplitter]);
 
   return <Text {...rest}>{curValue}</Text>;
-};
+});

@@ -24,6 +24,8 @@ export * from './components/trigger';
 
 export * from './context/config';
 
+export * from './hoc/with-scope-value-fallback.tsx';
+
 export * from './hooks/additional-node';
 export * from './hooks/array-string-transform';
 export * from './hooks/children-without-fragment';
