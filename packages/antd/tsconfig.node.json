@@ -23,6 +23,7 @@
   "include": [
     "vite.config.ts",
     "vitest.config.ts",
+    "vite.demo.config.ts",
     "public/locale/*.d.ts"
   ]
 }
