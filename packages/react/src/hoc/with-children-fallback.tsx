@@ -6,8 +6,10 @@ import React, { useMemo } from 'react';
  * @param WrappedComponent 被包装的组件
  * @returns 包装后的组件
  */
-export function withChildrenFallback<P extends { value?: unknown; children?: React.ReactNode }>(WrappedComponent: React.ComponentType<P>) {
-  const Component = (props: P & { withScopeValue?: boolean; }) => {
+export function withChildrenFallback<P extends { children?: React.ReactNode }>(WrappedComponent: React.ComponentType<P>) {
+  type Props = P & { value?: P['children']; withScopeValue?: boolean };
+
+  const Component = (props: Props) => {
     const { value, children, withScopeValue, ...rest } = props;
     const scope = useExpressionScope();
     const sValue = scope?.$value;

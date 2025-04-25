@@ -1,9 +1,11 @@
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
 
+import { Typography } from '../base/typography';
+
 const DemoList = [
-  { key: '1', children: <>1</> },
-  { key: '2', children: <>2</> },
+  { key: '1', children: <Typography value="123" /> },
+  { key: '2', children: <Typography value="123" >456</Typography> },
 ];
 
 export const DemoIndex = () => {
