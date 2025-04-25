@@ -1,5 +1,5 @@
-import { observer } from '@yimoka/react';
 import { Content, GetProps, theme } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 const { useToken } = theme;
