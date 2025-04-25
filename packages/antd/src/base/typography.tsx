@@ -1,10 +1,16 @@
-import { Typography as AntTypography, TypographyProps } from 'antd';
-import { TextProps } from 'antd/es/typography/Text';
-import { TitleProps } from 'antd/es/typography/Title';
+import { withChildrenFallback } from '@yimoka/react';
+import { Typography as AntTypography } from 'antd';
 
-export const Typography = AntTypography;
+const TypographyFn = withChildrenFallback(AntTypography);
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const { Text, Title, Paragraph } = Typography;
+const { Text: AntText, Title: AntTitle, Paragraph: AntParagraph } = AntTypography;
 
-export type { TypographyProps, TextProps, TitleProps };
+export const Text = withChildrenFallback(AntText);
+export const Title = withChildrenFallback(AntTitle);
+export const Paragraph = withChildrenFallback(AntParagraph);
+
+export const Typography = Object.assign(TypographyFn, {
+  Text: withChildrenFallback(AntText),
+  Title: withChildrenFallback(AntTitle),
+  Paragraph: withChildrenFallback(AntParagraph),
+});

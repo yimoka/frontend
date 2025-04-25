@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
  */
 export function withChildrenFallback<P extends { value?: unknown; children?: React.ReactNode }>(WrappedComponent: React.ComponentType<P>) {
   const Component = (props: P & { withScopeValue?: boolean; }) => {
-    const { value, children, withScopeValue = true, ...rest } = props;
+    const { value, children, withScopeValue, ...rest } = props;
     const scope = useExpressionScope();
     const sValue = scope?.$value;
 

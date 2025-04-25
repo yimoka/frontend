@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
  */
 export function withValueFallback<P extends { value?: unknown }>(WrappedComponent: React.ComponentType<P>) {
   const Component = (props: P & { withScopeValue?: boolean }) => {
-    const { value, withScopeValue = true, ...rest } = props;
+    const { value, withScopeValue, ...rest } = props;
     const scope = useExpressionScope();
     const sValue = scope?.$value;
     const curValue = useMemo(() => {
