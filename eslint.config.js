@@ -8,7 +8,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'build', '**/dist/**/*.js', '**/coverage/**.js', '**/*.d.ts', '**/*.cjs.js', '**/*.es.js', '**/*.umd.js'] },
+  { ignores: ['dist', 'build', '**/dist/**/*.js', '**/coverage/**.js', '**/locale/*.js', '**/*.d.ts', '**/*.cjs.js', '**/*.es.js', '**/*.umd.js'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}', '**/*.{js,jsx}', '**/*.test.{ts,tsx}', '**/*.test.{js,jsx}'],

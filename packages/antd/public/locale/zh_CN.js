@@ -1,5 +1,5 @@
+import { mergeWithArrayOverride } from '@yimoka/shared';
 import zhCN from 'antd/es/locale/zh_CN';
-import { mergeWithArrayOverride } from "@yimoka/shared"
 
 export default mergeWithArrayOverride({}, zhCN, {
   Common: { confirm: '确定', cancel: '取消', submit: '提交', reset: '重置' },
