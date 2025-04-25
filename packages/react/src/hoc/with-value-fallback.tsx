@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
  * @param WrappedComponent 被包装的组件
  * @returns 包装后的组件
  */
-export function withScopeValueFallback<P extends { value?: unknown }>(WrappedComponent: React.ComponentType<P>) {
+export function withValueFallback<P extends { value?: unknown }>(WrappedComponent: React.ComponentType<P>) {
   const Component = (props: P & { withScopeValue?: boolean }) => {
     const { value, withScopeValue = true, ...rest } = props;
     const scope = useExpressionScope();
