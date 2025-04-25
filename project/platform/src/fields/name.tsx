@@ -12,7 +12,7 @@ export const NameField: IFieldConfig = {
     type: 'string',
     'x-component': 'Text',
     'x-component-props': {
-      children: '{{ $record.name }}',
+      withScopeValue: true,
     },
   },
 };

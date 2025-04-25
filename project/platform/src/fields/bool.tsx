@@ -10,6 +10,7 @@ export const BoolField: IFieldConfig = {
     type: 'boolean',
     'x-component': 'ValueLabel',
     'x-component-props': {
+      withScopeValue: true,
       isTag: true,
       options: { true: '是', false: '否' },
       colors: { true: 'green', false: 'red' },

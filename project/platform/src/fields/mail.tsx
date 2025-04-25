@@ -16,7 +16,7 @@ export const MailField: IFieldConfig = {
     type: 'string',
     'x-component': 'Text',
     'x-component-props': {
-      children: '{{ $record.mail }}',
+      withScopeValue: true,
     },
   },
 };

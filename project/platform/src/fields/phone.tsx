@@ -16,7 +16,7 @@ export const PhoneField: IFieldConfig = {
     type: 'string',
     'x-component': 'Text',
     'x-component-props': {
-      children: '{{ $record.phone }}',
+      withScopeValue: true,
     },
   },
 };

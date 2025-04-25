@@ -16,7 +16,7 @@ export const IDField: IFieldConfig = {
     type: 'string',
     'x-component': 'Text',
     'x-component-props': {
-      children: '{{ $record.id }}',
+      withScopeValue: true,
     },
   },
 };

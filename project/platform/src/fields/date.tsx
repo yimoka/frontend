@@ -16,6 +16,9 @@ export const DateField: IFieldConfig = {
   'x-output-schema': {
     type: 'number',
     'x-component': 'DateText',
+    'x-component-props': {
+      withScopeValue: true,
+    },
   },
 };
 
