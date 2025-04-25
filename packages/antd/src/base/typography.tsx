@@ -1,5 +1,5 @@
 import { withChildrenFallback } from '@yimoka/react';
-import { Typography as AntTypography } from 'antd';
+import { Typography as AntTypography, GetProps } from 'antd';
 
 const TypographyFn = withChildrenFallback(AntTypography);
 
@@ -14,3 +14,8 @@ export const Typography = Object.assign(TypographyFn, {
   Title: withChildrenFallback(AntTitle),
   Paragraph: withChildrenFallback(AntParagraph),
 });
+
+export type TextProps = GetProps<typeof Text>;
+export type TitleProps = GetProps<typeof Title>;
+export type ParagraphProps = GetProps<typeof Paragraph>;
+export type TypographyProps = GetProps<typeof Typography>;
