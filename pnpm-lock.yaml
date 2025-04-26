@@ -190,7 +190,7 @@ importers:
         specifier: ^18.3.3
         version: 18.3.18
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.5
         version: 18.3.5(@types/react@18.3.18)
       '@types/react-is':
         specifier: ^18.3.0
@@ -272,9 +272,15 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.18
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.5(@types/react@18.3.18)
       eslint:
         specifier: ^9.24.0
         version: 9.24.0(jiti@1.21.7)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
 
   packages/monaco-editor:
     dependencies:
@@ -350,7 +356,7 @@ importers:
         specifier: ^18.3.3
         version: 18.3.18
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.5
         version: 18.3.5(@types/react@18.3.18)
       '@types/react-is':
         specifier: ^18.3.0
