@@ -16,11 +16,19 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
   const curStore = useMemo(() => getEntityStore(store, 'detail', config), [config, store]);
 
   if (isVacuous(values)) {
-    return <FetchDetail {...args} config={config} store={curStore} />;
+    return (
+      <FetchDetail
+        notPickValues
+        {...args}
+        config={config}
+        store={curStore}
+      />
+    );
   }
 
   return (
     <EntityValues
+      notPickValues
       {...args}
       config={config}
       store={curStore}
@@ -49,7 +57,7 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
 });
 
 export const EntityValues = observer((props: IEntityValuesProps) => {
-  const { config, values, notPickValues = true, scope, store = {}, ...args } = props;
+  const { config, values, notPickValues, scope, store = {}, ...args } = props;
   const curStore = useInitStore(store);
   const useScope = useDeepMemo(() => ({ $config: config, ...scope }), [config, scope]);
 
