@@ -1,6 +1,7 @@
 import { Entity } from '@yimoka/react';
 import React from 'react';
 
+import { Text } from '../../base/typography';
 import { Descriptions } from '../descriptions';
 
 export const DescriptionsDemo = () => (
@@ -23,8 +24,21 @@ export const DescriptionsDemo = () => (
               age: {},
               gender: {},
               address: {},
-              phone: {},
-              email: {},
+              phone: {
+                'x-component': Text,
+                'x-component-props': {
+                  withScopeValue: true,
+                  copyable: true,
+                },
+              },
+              email: {
+                'x-component': 'a',
+                'x-component-props': {
+                  href: '{{"mailto:"+$record.email}}',
+                  target: '_blank',
+                  children: '{{$record.email}}',
+                },
+              },
             },
           },
         },
@@ -32,7 +46,7 @@ export const DescriptionsDemo = () => (
     }}
     store={{
       fieldsConfig: {
-        name: { title: '姓名111' },
+        name: { title: '姓名' },
         age: { title: '年龄' },
         gender: { title: '性别' },
         address: { title: '地址' },
