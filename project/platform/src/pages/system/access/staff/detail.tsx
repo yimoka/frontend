@@ -2,7 +2,6 @@
 
 import { Modal, ModalProps } from '@yimoka/antd';
 import { EntityDetail, IEntityDetailProps, observer, useExpressionScope } from '@yimoka/react';
-
 import { IAnyObject } from '@yimoka/shared';
 import React from 'react';
 
@@ -20,19 +19,19 @@ export const StaffDetailPage = observer((props: Omit<IEntityDetailProps, 'config
           'x-component': 'Descriptions',
           'x-component-props': {
             column: 1,
-            dataKey: 'values',
+            data: '{{$store.values}}',
             styles: { label: { width: 60 } },
           },
           items: {
             type: 'void',
             properties: {
-              id: { $ref: '#/definitions/__output__id' },
-              name: { $ref: '#/definitions/__output__name' },
+              id: {},
+              name: {},
               switch: { $ref: '#/definitions/__output__switch' },
               realName: { $ref: '#/definitions/__output__realName' },
-              phonePrefix: { $ref: '#/definitions/__output__phonePrefix' },
-              phone: { $ref: '#/definitions/__output__phone' },
-              mail: { $ref: '#/definitions/__output__mail' },
+              phonePrefix: {},
+              phone: {},
+              mail: {},
               avatar: { $ref: '#/definitions/__output__avatar' },
               isChangePassword: { $ref: '#/definitions/__output__isChangePassword' },
               createTime: { $ref: '#/definitions/__output__createTime' },
