@@ -2,9 +2,10 @@ import { Tabs } from 'antd';
 import React, { useState } from 'react';
 
 import { Typography } from '../base/typography';
+import { DescriptionsDemo } from '../display/__demo__/descriptions';
 
 const DemoList = [
-  { key: '1', children: <Typography value="123" /> },
+  { key: 'descriptions', children: <DescriptionsDemo /> },
   { key: '2', children: <Typography value="123" >456</Typography> },
 ];
 

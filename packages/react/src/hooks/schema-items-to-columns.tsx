@@ -53,7 +53,7 @@ const schemaToItemProps = (schema: Schema, fieldSchema: Schema, scope: IAnyObjec
     schemaName = schema.name;
   }
   if (schemaName) {
-    const fieldConfig = getFieldConfig(schemaName, scope.$config?.fieldsConfig);
+    const fieldConfig = getFieldConfig(schemaName, scope.$store?.fieldsConfig ?? scope.$config?.fieldsConfig);
     const xColumn = fieldConfig?.['x-column'];
     // 合并字段配置中的列配置
     if (!isVacuous(xColumn)) {

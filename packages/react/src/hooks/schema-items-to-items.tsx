@@ -1,10 +1,27 @@
-import { useExpressionScope, useFieldSchema } from '@formily/react';
-import { getSmart, IAny, IAnyObject, normalizeToArray } from '@yimoka/shared';
+import { SchemaKey, useExpressionScope, useFieldSchema } from '@formily/react';
+import { getSmart, IAny, IAnyObject, isVacuous, normalizeToArray } from '@yimoka/shared';
+import { getFieldConfig } from '@yimoka/store';
 import React, { useMemo } from 'react';
 
 import { SchemaItemRender } from '../components/array/schema-item-render';
 import { RenderAny } from '../components/render-any';
 import { getPropsByItemSchema, getSchemaNameByFieldSchema, isItemSchemaRecursion, isItemSchemaVisible } from '../tools/schema-items';
+
+
+const withTitle = (itemProps: IAnyObject, schemaName?: SchemaKey, scope?: IAnyObject, propsMap?: IAnyObject) => {
+  if (schemaName && propsMap) {
+    const field = Object.keys(propsMap).find(item => propsMap[item] === 'title');
+    if (field && typeof itemProps[field] === 'undefined' && scope) {
+      const fieldConfig = getFieldConfig(schemaName, scope.$store?.fieldsConfig ?? scope.$config?.fieldsConfig);
+      if (!isVacuous(fieldConfig)) {
+        const newProps = itemProps;
+        newProps[field] = fieldConfig.title;
+        return newProps;
+      }
+    }
+  }
+  return itemProps;
+};
 
 /**
  * 将 Schema items 转换为组件 items 的 Hook
@@ -36,7 +53,6 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
     normalizeToArray(arr).forEach((record: IAny, index: number) => {
       // 获取当前索引对应的 Schema 项
       const itemSchema = Array.isArray(fieldItems) ? (fieldItems[index]) : fieldItems;
-
       // 检查 Schema 项是否可见
       if (!itemSchema || !isItemSchemaVisible(itemSchema, { ...scope, $index: index, $record: record })) {
         return;
@@ -73,7 +89,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
           // 如果没有设置值节点，使用 RenderAny 渲染值
           itemProps[valueNodeKey] = <RenderAny value={record} />;
         }
-        componentItems.push(itemProps);
+        componentItems.push(withTitle(itemProps, schemaKey, scope, propsMap));
       } else {
         // 处理 properties 中的每个属性，将它们转换为组件项
         Object.entries(properties).forEach(([propKey, propSchema]) => {
@@ -104,7 +120,7 @@ export const useSchemaItemsToItems = <T = IAny>(data?: IAny[] | IAny, propsMap?:
             // 如果没有设置值节点，使用 RenderAny 渲染值
             itemProps[valueNodeKey] = <RenderAny value={value} />;
           }
-          componentItems.push(itemProps);
+          componentItems.push(withTitle(itemProps, key, scope, propsMap));
         });
       }
     });

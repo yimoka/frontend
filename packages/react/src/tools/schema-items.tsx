@@ -37,14 +37,6 @@ export const getPropsByItemSchema = (schema: Schema, componentName?: string, pro
   if (component === componentName) {
     itemProps = { ...itemProps, ...schema['x-component-props'] };
   }
-  // const sName = schema.name;
-  // if (componentName === 'Column' && sName) {
-  //   // TODO: 处理层级
-  //   const fieldColumnProps = scope?.$config?.fieldsConfig?.[sName]?.['x-column'];
-  //   if (!isVacuous(fieldColumnProps)) {
-  //     itemProps = { ...fieldColumnProps, ...itemProps };
-  //   }
-  // }
   return itemProps;
 };
 
