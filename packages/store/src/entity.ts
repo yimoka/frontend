@@ -44,7 +44,7 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     conf.defaultValues = { ...config?.defaultQueryValues };
     conf.type = 'list';
   } else if (['detail'].includes(`${mode}`)) {
-    conf.defaultValues = { ...config?.defaultDetailValues };
+    conf.defaultValues = { ...config?.defaultDetailValues ?? config?.defaultFormValues };
     if (!(idKey in conf.defaultValues)) {
       conf.defaultValues[idKey] = undefined;
     }

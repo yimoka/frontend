@@ -49,7 +49,7 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
 });
 
 export const EntityValues = observer((props: IEntityValuesProps) => {
-  const { config, values, notPickValues, scope, store = {}, ...args } = props;
+  const { config, values, notPickValues = true, scope, store = {}, ...args } = props;
   const curStore = useInitStore(store);
   const useScope = useDeepMemo(() => ({ $config: config, ...scope }), [config, scope]);
 
