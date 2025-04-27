@@ -1,4 +1,4 @@
-import { createSchemaField, FormProvider, observer, RecordScope } from '@formily/react';
+import { createSchemaField, ExpressionScope, FormProvider, observer, RecordScope } from '@formily/react';
 import { IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
 import { IFetchListener, IFieldConfig, ISchema, IStore, ListStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
@@ -43,10 +43,12 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
     return { definitions: typeof definitions === 'object' ? { ...withOutputSchemas, ...definitions } : withOutputSchemas, ...args };
   }, [fieldsConfig, schema, store]);
 
+  const curScope = useMemo(() => ({ $store: store, $root: root, ...scope }), [store, root, scope]);
+
   const SchemaField = useMemo(() => createSchemaField({
     components: components ? { ...ctxComponents, ...components } : ctxComponents,
-    scope: { $store: store, $root: root, ...scope },
-  }), [ctxComponents, components, store, root, scope]);
+    scope: curScope,
+  }), [components, ctxComponents, curScope]);
 
   useEffect(() => {
     if (onError) {
@@ -67,11 +69,12 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
 
   return (
     <FormProvider form={form}>
-      <RecordScope getRecord={() => store.values}>
-        <SchemaField schema={curSchema} >
+      <ExpressionScope value={curScope}>
+        <RecordScope getRecord={() => store.values}>
+          <SchemaField schema={curSchema} />
           {children}
-        </SchemaField>
-      </RecordScope>
+        </RecordScope>
+      </ExpressionScope>
     </FormProvider>
   );
 });

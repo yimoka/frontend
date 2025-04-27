@@ -48,7 +48,7 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
         <EntityValues
           {...args}
           config={config}
-          scope={{ ...scope, $detailStore: detailStore }}
+          scope={{ ...scope, $detailStore: curDetailStore }}
           values={curDetailStore?.response?.data ?? {}}
         />
       </EntityResponse>

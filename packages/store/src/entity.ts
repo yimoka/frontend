@@ -44,7 +44,18 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     conf.defaultValues = { ...config?.defaultQueryValues };
     conf.type = 'list';
   } else if (['detail'].includes(`${mode}`)) {
+    // 默认马上执行 和过滤空值
+    if (typeof conf.options === 'undefined') {
+      conf.options = {};
+    }
+    if (typeof conf.options.runNow === 'undefined') {
+      conf.options.runNow = 'always';
+    }
+    if (typeof conf.options.filterBlankAtRun === 'undefined') {
+      conf.options.filterBlankAtRun = true;
+    }
     conf.defaultValues = { ...config?.defaultDetailValues ?? config?.defaultFormValues };
+
     if (!(idKey in conf.defaultValues)) {
       conf.defaultValues[idKey] = undefined;
     }
@@ -57,6 +68,7 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
   curStore.fieldsConfig = { ...conf.fieldsConfig, ...curStore.fieldsConfig };
   curStore.defaultValues = { ...conf.defaultValues, ...curStore.defaultValues };
   curStore.afterAtFetch = { ...conf.afterAtFetch, ...curStore.afterAtFetch };
+  curStore.options = { ...conf.options, ...curStore.options };
   curStore.type = curStore.type ?? conf.type;
 
   if (!curStore.api && mode) {

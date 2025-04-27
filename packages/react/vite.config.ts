@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   publicDir: false,
   build: {
-    sourcemap: !isWatch,
+    sourcemap: true,
     target: isWatch ? 'modules' : 'es2015',
     lib: {
       formats: isWatch ? ['es'] : ['cjs', 'es', 'umd'],

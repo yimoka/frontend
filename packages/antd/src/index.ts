@@ -94,5 +94,6 @@ export * from './store/record-operation';
 export * from './store/record-del';
 export * from './store/reset';
 export * from './store/submit';
+export * from './store/table';
 
 export * from './components';
