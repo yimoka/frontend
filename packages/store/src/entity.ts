@@ -54,7 +54,7 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     if (typeof conf.options.filterBlankAtRun === 'undefined') {
       conf.options.filterBlankAtRun = true;
     }
-    conf.defaultValues = { ...config?.defaultDetailValues ?? config?.defaultFormValues };
+    conf.defaultValues = { ...config?.defaultDetailValues };
 
     if (!(idKey in conf.defaultValues)) {
       conf.defaultValues[idKey] = undefined;
