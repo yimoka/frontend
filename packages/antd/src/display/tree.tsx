@@ -1,6 +1,6 @@
 import { PropsWithComponentData, useArrayStringTransform, useComponentData, useSplitter } from '@yimoka/react';
 import { IAny, IAnyObject, isVacuous } from '@yimoka/shared';
-import { Tree as AntTree, TreeProps as AntTreeProps, Empty, EmptyProps, Spin, SpinProps } from 'antd';
+import { Tree as AntTree, TreeProps as AntTreeProps, Spin, SpinProps } from 'antd';
 import { BasicDataNode } from 'antd/es/tree';
 import React, { Key, useMemo } from 'react';
 
@@ -15,12 +15,11 @@ export type TreeProps<T extends BasicDataNode = IAnyObject> = PropsWithComponent
   noParentKey?: boolean
   isValueHasParent?: boolean
   onChange?: (value: Key | Key[]) => void
-  empty?: EmptyProps
   loading?: boolean | SpinProps
 }>
 
 export const Tree = (props: TreeProps) => {
-  const { loading, empty, switcherLoadingIcon, icon, treeData, data, store, dataKey, checkedKeys, value, valueType, splitter, noParentKey, onChange, onCheck, ...args } = props;
+  const { loading, switcherLoadingIcon, icon, treeData, data, store, dataKey, checkedKeys, value, valueType, splitter, noParentKey, onChange, onCheck, ...args } = props;
   const curData = useComponentData([treeData, data], dataKey, store);
   const curSplitter = useSplitter(splitter);
   const curCheckedKeys = useArrayStringTransform(checkedKeys ?? value, curSplitter) as Key[] | undefined;
@@ -51,10 +50,6 @@ export const Tree = (props: TreeProps) => {
     return <Spin {...loading} />;
   }
 
-  if (isVacuous(curData)) {
-    return <Empty {...empty} />;
-  }
-
   return (
     <AntTree
       {...args}
@@ -69,7 +64,6 @@ export const Tree = (props: TreeProps) => {
           if (noParentKey) {
             keys = keys.filter(key => !hasChildrenMap.has(key));
           }
-          console.log('keys', keys);
           if (valueType === 'string') {
             onChange(keys.join(splitter));
           } else {
