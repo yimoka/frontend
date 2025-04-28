@@ -28,6 +28,8 @@ export * from './hoc/with-children-fallback';
 export * from './hoc/with-value-fallback';
 
 export * from './hooks/additional-node';
+export * from './hooks/api-options';
+export * from './hooks/api-search';
 export * from './hooks/array-string-transform';
 export * from './hooks/children-without-fragment';
 export * from './hooks/component-data';

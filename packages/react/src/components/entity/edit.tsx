@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isVacuous } from '@yimoka/shared';
-import { getEntityStore, ISchema, IStore, IStoreConfig } from '@yimoka/store';
+import { getEntityStore, IStore, IStoreConfig } from '@yimoka/store';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
@@ -27,6 +27,5 @@ export const EntityEdit = observer((props: IEntityEditProps) => {
 });
 
 export type IEntityEditProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityValuesProps<V, R>> & {
-  schema: ISchema;
   detailStore?: IStore<V, R> | IStoreConfig<V, R>;
 }

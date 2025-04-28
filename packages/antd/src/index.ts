@@ -21,6 +21,7 @@ export * from './enter/input';
 export * from './enter/mentions';
 export * from './enter/radio';
 export * from './enter/rate';
+export * from './enter/search-select';
 export * from './enter/select';
 export * from './enter/slider';
 export * from './enter/switch';

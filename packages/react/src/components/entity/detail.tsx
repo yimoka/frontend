@@ -89,7 +89,6 @@ type IFetchDetailProps<V extends object = IAnyObject, R extends object = IAnyObj
 
 export type IEntityValuesProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityProps<V, R>> & {
   config?: IEntityConfig<V>;
-  schema: ISchema;
   values: V,
   // 不对传入的 values 根据 store 的默认值进行 pick
   notPickValues?: boolean

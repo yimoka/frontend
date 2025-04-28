@@ -44,6 +44,7 @@ import { InputNumber } from './enter/input-number';
 import { Mentions } from './enter/mentions';
 import { Radio, RadioGroup } from './enter/radio';
 import { Rate } from './enter/rate';
+import { SearchSelect } from './enter/search-select';
 import { Select } from './enter/select';
 import { Slider } from './enter/slider';
 import { Switch } from './enter/switch';
@@ -150,6 +151,7 @@ export const components: IConfigComponents = {
   Radio,
   RadioGroup,
   Rate,
+  SearchSelect,
   Select,
   Slider,
   Switch,

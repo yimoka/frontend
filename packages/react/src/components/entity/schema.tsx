@@ -1,5 +1,5 @@
 import { createSchemaField, ExpressionScope, FormProvider, observer, RecordScope } from '@formily/react';
-import { IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
+import { IAny, IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
 import { IFetchListener, IFieldConfig, ISchema, IStore, ListStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
@@ -81,7 +81,7 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
 
 export type EntitySchemaProps<V extends object = IAnyObject, R extends object = IAnyObject> = PropsWithChildren<{
   store: IStore<V, R>;
-  components?: Record<string, ComponentType<IAnyObject>>;
+  components?: Record<string, ComponentType<IAny>>;
   scope?: IAnyObject;
   schema?: ISchema;
   onError?: IFetchListener;
