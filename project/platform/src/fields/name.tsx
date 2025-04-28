@@ -8,13 +8,13 @@ export const NameField: IFieldConfig = {
   'x-component-props': {
     allowClear: true,
   },
-  'x-output-schema': {
-    type: 'string',
-    'x-component': 'Text',
-    'x-component-props': {
-      withScopeValue: true,
-    },
-  },
+  // 'x-output-schema': {
+  //   type: 'string',
+  //   'x-component': 'Text',
+  //   'x-component-props': {
+  //     withScopeValue: true,
+  //   },
+  // },
 };
 
 // 深度合并
@@ -28,12 +28,12 @@ export const RealNameField: IFieldConfig = {
     allowClear: true,
   },
   'x-column': { width: 130 },
-  'x-output-schema': {
-    type: 'string',
-    'x-component': 'Text',
-    'x-component-props': {
-      children: '{{ $record.realName }}',
-    },
-  },
+  // 'x-output-schema': {
+  //   type: 'string',
+  //   'x-component': 'Text',
+  //   'x-component-props': {
+  //     withScopeValue: true,
+  //   },
+  // },
 };
 export const getRealNameField = (conf: IFieldConfig = {}) => mergeWithArrayOverride({}, RealNameField, conf);

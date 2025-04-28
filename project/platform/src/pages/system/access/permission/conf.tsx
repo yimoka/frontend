@@ -14,7 +14,7 @@ export const permissionConfig: IEntityConfig = {
     { label: '权限管理', path: '/system/access' },
   ],
   options: {},
-  defaultValues: { parentID: '', name: '', path: '', remark: '', sort: 0, icon: '', isMenu: true, isPage: true, isAPI: false },
+  defaultFormValues: { parentID: '', name: '', path: '', remark: '', sort: 0, icon: '', isMenu: true, isPage: true, isAPI: false },
   fieldsConfig: {
     // id: IDField,
     // updateTime: getDateField({ title: '更新时间' }),

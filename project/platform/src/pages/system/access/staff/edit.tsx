@@ -64,8 +64,8 @@ export const StaffEditModal = (props: Omit<ModalProps, 'children'> & { values?: 
       destroyOnClose
       fetchOnSuccess
       maskClosable={false}
-      title='添加人员'
-      trigger={{ type: 'primary', size: 'small' }}
+      title='编辑人员'
+      trigger={{ type: 'primary', size: 'small', ghost: true }}
       {...props}
     >
       <StaffEditPage values={values ?? record} />

@@ -3,12 +3,12 @@ import { EntityDetail, IEntityDetailProps, observer, useExpressionScope } from '
 import { IAnyObject } from '@yimoka/shared';
 import React from 'react';
 
-import { staffConfig } from './conf';
+import { privateRoleConfig } from './conf';
 
-export const StaffDetailPage = observer((props: Omit<IEntityDetailProps, 'config' | 'schema'>) => (
+export const PrivateRoleDetailPage = observer((props: Omit<IEntityDetailProps, 'config' | 'schema'>) => (
   <EntityDetail
     {...props}
-    config={staffConfig}
+    config={privateRoleConfig}
     schema={{
       type: 'object',
       properties: {
@@ -25,13 +25,8 @@ export const StaffDetailPage = observer((props: Omit<IEntityDetailProps, 'config
             properties: {
               id: {},
               name: {},
-              switch: { $ref: '#/definitions/__output__switch' },
-              realName: { $ref: '#/definitions/__output__realName' },
-              phonePrefix: {},
-              phone: {},
-              mail: {},
-              avatar: { $ref: '#/definitions/__output__avatar' },
-              isChangePassword: { $ref: '#/definitions/__output__isChangePassword' },
+              showName: {},
+              remark: {},
               createTime: { $ref: '#/definitions/__output__createTime' },
               updateTime: { $ref: '#/definitions/__output__updateTime' },
             },
@@ -42,7 +37,7 @@ export const StaffDetailPage = observer((props: Omit<IEntityDetailProps, 'config
   />
 ));
 
-export const StaffDetailModal = (props: Omit<ModalProps, 'children'> & { values?: IAnyObject }) => {
+export const PrivateRoleDetailModal = (props: Omit<ModalProps, 'children'> & { values?: IAnyObject }) => {
   const { values } = props;
   const record = useExpressionScope()?.$record;
 
@@ -51,11 +46,10 @@ export const StaffDetailModal = (props: Omit<ModalProps, 'children'> & { values?
       destroyOnClose
       footer={false}
       maskClosable={false}
-      title='人员详情'
+      title='角色详情'
       trigger={{ size: 'small', type: 'primary', ghost: true }}
-      {...props}
-    >
-      <StaffDetailPage values={values ?? record} />
+      {...props}  >
+      <PrivateRoleDetailPage values={values ?? record} />
     </Modal>
   );
 };
