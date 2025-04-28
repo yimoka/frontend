@@ -173,7 +173,7 @@ const getPresetDate = (preset: string, d: Dayjs): Dayjs => {
   if (!curRule) {
     return day;
   }
-  const match = curRule.match(/^(-?[0-9]+)(\w+)$/);
+  const match = curRule.match(/^(-?\d+)(date|D|day|d|week|w|month|M|quarter|Q|year|y|hour|h|minute|m|second|s|millisecond|ms)$/);
   if (match) {
     // 匹配到 数字+单位 例如 -1d 1d
     const [, num, unit] = match;
