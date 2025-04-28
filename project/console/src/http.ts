@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getCodeByStatus, IAnyObject, IHTTPCode, IHTTPResponse, isBlank } from '@yimoka/shared';
+import { getCodeByStatus, IAnyObject, IHTTPCode, IHTTPResponse, isVacuous } from '@yimoka/shared';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getClientIDSync, getTenantID } from './local';
@@ -21,14 +21,14 @@ export const http = axios.create({
 // 请求拦截器 处理凭证以及请求头
 http.interceptors.request.use((config) => {
   const newConfig = config;
-  if (isBlank(newConfig.headers.Authorization)) {
+  if (isVacuous(newConfig.headers.Authorization)) {
     // 除了用户相关接口，其他接口都默认带上员工 token
     newConfig.headers.Authorization = getStaffToken();
   }
-  if (isBlank(newConfig.headers['x-md-global-client-id'])) {
+  if (isVacuous(newConfig.headers['x-md-global-client-id'])) {
     newConfig.headers['x-md-global-client-id'] = getClientIDSync();
   }
-  if (isBlank(newConfig.headers['x-md-global-tenantID'])) {
+  if (isVacuous(newConfig.headers['x-md-global-tenantID'])) {
     newConfig.headers['x-md-global-tenantID'] = getTenantID();
   }
   return newConfig;

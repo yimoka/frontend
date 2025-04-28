@@ -1,5 +1,5 @@
 import { action, define, observable } from '@formily/reactive';
-import { IAnyObject, IAny, IObjKey, mergeWithArrayOverride, isBlank, addWithLimit, isSuccess } from '@yimoka/shared';
+import { IAnyObject, IAny, mergeWithArrayOverride, isVacuous, addWithLimit, isSuccess, IKey } from '@yimoka/shared';
 
 import { cloneDeep, get, pickBy, set } from 'lodash-es';
 
@@ -16,7 +16,7 @@ export const listKeysDefault: Record<string, string> = {
 export const listOptionsDefault: Partial<IBaseStoreOptions> = {
   bindRoute: true,
   filterBlankAtRun: true,
-  runNow: true,
+  runNow: 'whenRequired',
   keys: { ...listKeysDefault },
 };
 
@@ -70,9 +70,9 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
   /**
    * 选中的行键数组。
    *
-   * @type {IObjKey[]}
+   * @type {IKey[]}
    */
-  selectedRowKeys: IObjKey[] = [];
+  selectedRowKeys: IKey[] = [];
 
   /**
    * 表示是否正在加载下一页数据的标志。
@@ -224,7 +224,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    *
    * @param {IObjKey[]} [keys=[]] - 要设置的行键数组，默认为空数组。
    */
-  setSelectedRowKeys = (keys: IObjKey[] = []) => {
+  setSelectedRowKeys = (keys: IKey[] = []) => {
     this.selectedRowKeys = keys;
   };
 
@@ -252,7 +252,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    * @param data - 要加载的数据数组。
    */
   loadNextData = (data: IAny[]) => {
-    if (!isBlank(data) && Array.isArray(data)) {
+    if (!isVacuous(data) && Array.isArray(data)) {
       const newResponse: IAny = { ...this.response };
       if (Array.isArray(newResponse.data)) {
         newResponse.data = [...newResponse.data, ...data];
@@ -283,7 +283,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
       return null;
     }
     const { page } = mergeWithArrayOverride({}, listKeysDefault, this.options.keys);
-    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : { ...this.values }) as V;
+    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isVacuous(value))) : { ...this.values }) as V;
     const nextPage = this.values[page] + 1;
     set(params, page, nextPage);
     this.setNextLoading(true);

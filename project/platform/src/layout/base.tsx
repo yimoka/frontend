@@ -1,5 +1,5 @@
-import { observer } from '@formily/react';
-import { Layout, LayoutProps } from 'antd';
+import { Layout, LayoutProps } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import React from 'react';
 
 import { Header } from './components/header';

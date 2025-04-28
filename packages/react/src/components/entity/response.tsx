@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { observer } from '@formily/react';
-import { IAnyObject, isBlank, isSuccess } from '@yimoka/shared';
+import { IAnyObject, isVacuous, isSuccess } from '@yimoka/shared';
 import { IStore, IStoreResponse } from '@yimoka/store';
 import React, { PropsWithChildren, useMemo } from 'react';
 
@@ -37,7 +37,7 @@ export const EntityResponse = observer((props: IEntityResponseProps) => {
 
   const curOnAgain = useMemo(() => (again ? curStore?.fetch : undefined), [again, curStore?.fetch]);
 
-  const isSkeleton = useMemo(() => curLoading && isBlank(curResponse) && skeleton !== false, [curLoading, curResponse, skeleton]);
+  const isSkeleton = useMemo(() => curLoading && isVacuous(curResponse) && skeleton !== false, [curLoading, curResponse, skeleton]);
 
   const curChildren = useMemo(
     () => (load
@@ -46,7 +46,7 @@ export const EntityResponse = observer((props: IEntityResponseProps) => {
     , [load, Loading, size, curLoading, children],
   );
 
-  if (isBlank(curStore) || isSuccess(curResponse)) {
+  if (isVacuous(curStore) || isSuccess(curResponse)) {
     return curChildren;
   }
 

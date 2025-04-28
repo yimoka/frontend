@@ -2,17 +2,19 @@
 import { IAnyObject } from '@yimoka/shared';
 import { IEntityConfig } from '@yimoka/store';
 
+import { getBoolField } from '@/fields/bool';
+import { getRemarkField } from '@/fields/remark';
 
 export const permissionConfig: IEntityConfig = {
   name: '权限',
   basePath: '/system/access/permission',
   breadcrumb: [
-    { label: '首页', href: '/' },
-    { label: '系统管理', href: '/system' },
-    { label: '权限管理', href: '/system/access' },
+    { label: '首页', path: '/' },
+    { label: '系统管理', path: '/system' },
+    { label: '权限管理', path: '/system/access' },
   ],
   options: {},
-  defaultValues: { parentID: '', name: '', path: '', remark: '', sort: 0, icon: '', isMenu: true, isPage: true, isAPI: false },
+  defaultFormValues: { parentID: '', name: '', path: '', remark: '', sort: 0, icon: '', isMenu: true, isPage: true, isAPI: false },
   fieldsConfig: {
     // id: IDField,
     // updateTime: getDateField({ title: '更新时间' }),
@@ -55,10 +57,10 @@ export const permissionConfig: IEntityConfig = {
       'x-decorator': 'FormItem',
       'x-component': 'InputNumber',
     },
-    // remark: getRemarkField(),
-    // isMenu: getBoolField({ title: '是否菜单' }),
-    // isPage: getBoolField({ title: '是否页面' }),
-    // isAPI: getBoolField({ title: '是否接口' }),
+    remark: getRemarkField(),
+    isMenu: getBoolField({ title: '是否菜单' }),
+    isPage: getBoolField({ title: '是否页面' }),
+    isAPI: getBoolField({ title: '是否接口' }),
   },
   api: {
     add: { url: '/base/iam/manage/permission/add', method: 'POST' },

@@ -36,3 +36,4 @@ const Step = (props: StepProps) => {
 
 export const Steps = Object.assign(StepsFC, { Step });
 
+export type { StepsProps, StepProps };

@@ -31,11 +31,6 @@ export const useLocation = () => {
   return config?.useLocation?.() as ReturnType<IUseLocation>;
 };
 
-export const useNavigate = () => {
-  const config = useConfig();
-  return config?.useNavigate as IUseNavigate;
-};
-
 export const useRouteParams = () => {
   const config = useConfig();
   return config?.useRouteParams?.() as ReturnType<IUseRouteParams>;
@@ -59,7 +54,6 @@ export interface IConfig {
   notifier: INotifier;
   apiExecutor: IAPIExecutor;
   useLocation?: IUseLocation;
-  useNavigate?: IUseNavigate;
   useRouteParams?: IUseRouteParams;
   components?: IConfigComponents;
   getIcon?: IGetIcon;
@@ -81,11 +75,6 @@ export type IUseLocation<T = IAny> = () => {
   hash: string;
   state: T;
   key: string;
-}
-
-export interface IUseNavigate {
-  (to: string | Partial<IRoutePath>, options?: NavigateOptions): void;
-  (delta: number): void;
 }
 
 export interface NavigateOptions {

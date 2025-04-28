@@ -1,6 +1,6 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, IObjKey, isBlank, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isVacuous, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
 import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
 import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
@@ -16,7 +16,7 @@ const DF_OPTIONS: IBaseStoreOptions = {
   bindRoute: false,
   updateRouteType: 'push',
   routeTrigger: 'unequal',
-  runNow: false,
+  runNow: 'never',
   urlWithDefaultFields: [] as string[],
   keys: {},
 };
@@ -205,7 +205,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
 
     const { runNow, bindRoute } = this.options;
     // 绑定路由时，会使用组件在进行页面时进行参数赋值，再进行请求。
-    if (runNow && !bindRoute) {
+    if (runNow === 'always' && !bindRoute) {
       this.fetch();
     }
   }
@@ -398,7 +398,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       const searchParams = new URLSearchParams();
       Object.entries(this.values).forEach(([key, value]) => {
         const defaultValue = this.defaultValues[key];
-        if ((value !== defaultValue || this.options.urlWithDefaultFields?.includes(key)) && (!isBlank(value) || !isBlank(defaultValue))) {
+        if ((value !== defaultValue || this.options.urlWithDefaultFields?.includes(key)) && (!isVacuous(value) || !isVacuous(defaultValue))) {
           const str = valueToSearchParam(value);
           searchParams.append(key, str);
         }
@@ -481,7 +481,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     const fetchID = this.lastFetchID;
     const { api } = this;
-    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isBlank(value))) : this.values) as V;
+    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isVacuous(value))) : this.values) as V;
     const response = await runAPI<V, R>(api, this.apiExecutor, params, this.apiController);
     if (response && fetchID === this.lastFetchID) {
       this.setResponse(response);
@@ -556,6 +556,8 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
   }
 }
 
+
+export type IStoreRunNow = 'never' | 'always' | 'whenRequired'
 /**
  * Store 的默认选项。
  *
@@ -563,7 +565,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
  * @property {boolean} bindRoute - 是否绑定路由。
  * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
  * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
- * @property {boolean} runNow -  立即拉取数据
+ * @property {IStoreRunNow} runNow -  进入页面时是否立即拉取数据
  * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
  * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
  */
@@ -572,7 +574,7 @@ export type IBaseStoreOptions = {
   bindRoute: boolean;
   updateRouteType: 'push' | 'replace';
   routeTrigger: 'unequal' | 'any';
-  runNow: boolean
+  runNow: IStoreRunNow
   urlWithDefaultFields: string[];
   keys: Record<string, string>;
 }

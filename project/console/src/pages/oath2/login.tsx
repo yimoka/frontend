@@ -10,7 +10,7 @@ export const Oauth2LoginPage = observer(() => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const store = useInitStore({
-    options: { runNow: true },
+    options: { runNow: 'always' },
     api: { url: '/admin/tenant/bff/oauth/acceptLogin', method: 'POST' },
     defaultValues: { challenge: params.get('login_challenge') },
     afterAtFetch: {

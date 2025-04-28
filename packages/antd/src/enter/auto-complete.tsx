@@ -10,3 +10,5 @@ export const AutoComplete = (props: AutoCompleteProps) => {
 
   return <AntAutoComplete {...rest} allowClear={handleAllowClear(allowClear)} notFoundContent={curNotFoundContent} />;
 };
+
+export type { AutoCompleteProps };

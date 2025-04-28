@@ -1,3 +1,5 @@
-import { Watermark as AntWatermark } from 'antd';
+import { Watermark as AntWatermark, WatermarkProps } from 'antd';
 
 export const Watermark = AntWatermark;
+
+export type { WatermarkProps };

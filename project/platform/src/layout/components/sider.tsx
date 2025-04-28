@@ -1,6 +1,5 @@
-import { observer } from '@formily/react';
-import { useRoot } from '@yimoka/react';
-import { SiderProps as TSiderProps, MenuProps, Menu, Layout } from 'antd';
+import { SiderProps as TSiderProps, MenuProps, Menu, Layout } from '@yimoka/antd';
+import { observer, useRoot } from '@yimoka/react';
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -30,7 +29,10 @@ export const Sider = observer(({ menus, ...args }: SiderProps) => {
   }, [pathname]);
 
   return (
-    <Layout.Sider collapsible theme='light'  {...args}  >
+    <Layout.Sider collapsible
+      collapsedWidth={60}
+      theme='light'
+      {...args}  >
       <Menu
         defaultOpenKeys={selectedKeys}
         items={curMenus}

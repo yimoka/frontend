@@ -1,6 +1,6 @@
-import { createSchemaField, FormProvider, observer, RecordScope } from '@formily/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
-import { IFetchListener, ISchema, IStore } from '@yimoka/store';
+import { createSchemaField, ExpressionScope, FormProvider, observer, RecordScope } from '@formily/react';
+import { IAny, IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
+import { IFetchListener, IFieldConfig, ISchema, IStore, ListStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
 import { useComponents } from '../../hooks/components';
@@ -13,17 +13,42 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
   const { fieldsConfig, form } = store;
 
   const curSchema = useMemo(() => {
-    if (isBlank(fieldsConfig)) {
+    if (isVacuous(fieldsConfig)) {
       return schema;
     }
     const { definitions = {}, ...args } = schema ?? {};
-    return { definitions: typeof definitions === 'object' ? { ...fieldsConfig, ...definitions } : fieldsConfig, ...args };
-  }, [schema, fieldsConfig]);
+
+    const outputSchemas: Record<string, ISchema> = {};
+    const newFieldsConfig: Record<string, IFieldConfig> = {};
+
+    Object.entries(fieldsConfig).forEach(([key, value]) => {
+      const { 'x-query-schema': querySchema, 'x-output-schema': outputSchema, ...rest } = value;
+      if (!isVacuous(outputSchema)) {
+        const outputSchemaKey = `__output__${key}`;
+        if (typeof outputSchema?.title === 'undefined') {
+          outputSchemas[outputSchemaKey] = { ...outputSchema, title: rest.title };
+        } else {
+          outputSchemas[outputSchemaKey] = outputSchema;
+        }
+      }
+      if (store instanceof ListStore && !isVacuous(querySchema)) {
+        newFieldsConfig[key] = mergeWithArrayOverride({}, rest, querySchema);
+      } else {
+        newFieldsConfig[key] = rest;
+      }
+    });
+
+    const withOutputSchemas = isVacuous(outputSchemas) ? newFieldsConfig : { ...newFieldsConfig, ...outputSchemas };
+
+    return { definitions: typeof definitions === 'object' ? { ...withOutputSchemas, ...definitions } : withOutputSchemas, ...args };
+  }, [fieldsConfig, schema, store]);
+
+  const curScope = useMemo(() => ({ $store: store, $root: root, ...scope }), [store, root, scope]);
 
   const SchemaField = useMemo(() => createSchemaField({
     components: components ? { ...ctxComponents, ...components } : ctxComponents,
-    scope: { $store: store, $root: root, ...scope },
-  }), [ctxComponents, components, store, root, scope]);
+    scope: curScope,
+  }), [components, ctxComponents, curScope]);
 
   useEffect(() => {
     if (onError) {
@@ -44,18 +69,19 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
 
   return (
     <FormProvider form={form}>
-      <RecordScope getRecord={() => store.values}>
-        <SchemaField schema={curSchema} >
+      <ExpressionScope value={curScope}>
+        <RecordScope getRecord={() => store.values}>
+          <SchemaField schema={curSchema} />
           {children}
-        </SchemaField>
-      </RecordScope>
+        </RecordScope>
+      </ExpressionScope>
     </FormProvider>
   );
 });
 
 export type EntitySchemaProps<V extends object = IAnyObject, R extends object = IAnyObject> = PropsWithChildren<{
   store: IStore<V, R>;
-  components?: Record<string, ComponentType<IAnyObject>>;
+  components?: Record<string, ComponentType<IAny>>;
   scope?: IAnyObject;
   schema?: ISchema;
   onError?: IFetchListener;

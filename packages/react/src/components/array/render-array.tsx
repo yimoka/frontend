@@ -1,5 +1,5 @@
 import { RecordsScope } from '@formily/react';
-import { IAny, isBlank } from '@yimoka/shared';
+import { IAny, isVacuous } from '@yimoka/shared';
 
 import React from 'react';
 
@@ -16,7 +16,7 @@ export const RenderArray = (props: RenderArrayProps) => {
 
   return (
     <RecordsScope getRecords={() => curData}>
-      {isBlank(items) ? null : items?.map((item, index) => <RenderAny key={index} value={item.children} />)}
+      {isVacuous(items) ? null : items?.map((item, index) => <RenderAny key={index} value={item.children} />)}
     </RecordsScope>
   );
 };

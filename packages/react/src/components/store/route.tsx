@@ -1,3 +1,4 @@
+import { isVacuous } from '@yimoka/shared';
 import { IStore } from '@yimoka/store';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { useEffect, useRef } from 'react';
@@ -19,7 +20,30 @@ export const StoreRoute = (props: { store: IStore, resetMissingValues?: boolean 
       const hasChanged = !isEqual(oldValues, store.values) || routeTrigger === 'any';
       const first = isFirst.current;
       isFirst.current = false;
-      if ((hasChanged && (!first || runNow)) || (!hasChanged && (first && runNow))) {
+
+      const getRunNow = () => {
+        if (runNow === 'always') {
+          return true;
+        }
+        if (runNow === 'whenRequired') {
+          let isBool = true;
+          if (form) {
+            const { fields } = form;
+            if (fields) {
+              for (const field of Object.values(fields)) {
+                if ('required' in field && field.required && isVacuous(field.value)) {
+                  isBool = false;
+                  break;
+                }
+              }
+            }
+          }
+          return isBool;
+        }
+        return false;
+      };
+
+      if ((hasChanged && (!first || getRunNow())) || (!hasChanged && (first && getRunNow()))) {
         form.submit().then(() => fetch());
       }
     }

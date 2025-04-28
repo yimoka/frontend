@@ -2,7 +2,6 @@
   "name": "@yimoka/antd",
   "version": "0.0.1",
   "private": false,
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yimoka/frontend/tree/main/packages/antd"
@@ -13,11 +12,18 @@
     "email": "i@ickeep.com",
     "url": "https://github.com/ickeep"
   },
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js",
       "default": "./src/index.ts"
+    },
+    "./locale/*": {
+      "types": "./types/locale/*.d.ts",
+      "import": "./dist/locale/*.js",
+      "require": "./dist/locale/*.js",
+      "default": "./dist/locale/*.js"
     }
   },
   "main": "src/index.ts",
@@ -28,6 +34,14 @@
     "types",
     "README.md"
   ],
+  "scripts": {
+    "dev": "vite --config vite.demo.config.ts",
+    "build": "tsc -b && vite build",
+    "build-watch": "tsc -b && vite build --watch",
+    "lint": "eslint . --fix",
+    "test": "vitest --coverage --watch=false",
+    "test-watch": "vitest --coverage --watch"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,19 +54,12 @@
       "last 1 safari version"
     ]
   },
-  "scripts": {
-    "build": "tsc -b && vite build",
-    "build-watch": "tsc -b && vite build --watch",
-    "lint": "eslint . --fix",
-    "test": "vitest --coverage --watch=false",
-    "test-watch": "vitest --coverage --watch"
-  },
   "dependencies": {
     "@ant-design/icons": "5.5.1",
-    "@formily/core": "^2.3.2",
-    "@formily/json-schema": "^2.3.2",
-    "@formily/react": "^2.3.2",
-    "@formily/reactive": "^2.3.2",
+    "@formily/core": "^2.3.3",
+    "@formily/json-schema": "^2.3.3",
+    "@formily/react": "^2.3.3",
+    "@formily/reactive": "^2.3.3",
     "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
@@ -66,7 +73,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@types/react-is": "^18.3.0"
+    "@types/react-dom": "^18.3.5",
+    "@types/react-is": "^18.3.0",
+    "eslint": "^9.24.0"
   }
 }

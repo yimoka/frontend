@@ -1,5 +1,7 @@
 export * from '@formily/react';
 
+export type { Field } from '@formily/core';
+
 export * from './components/array/render-array';
 export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';
@@ -22,15 +24,24 @@ export * from './components/trigger';
 
 export * from './context/config';
 
+export * from './hoc/with-children-fallback';
+export * from './hoc/with-value-fallback';
+
 export * from './hooks/additional-node';
+export * from './hooks/api-options';
+export * from './hooks/api-search';
+export * from './hooks/array-string-transform';
 export * from './hooks/children-without-fragment';
 export * from './hooks/component-data';
 export * from './hooks/components';
+export * from './hooks/deep-effect';
 export * from './hooks/deep-memo';
 export * from './hooks/record-index-fn';
 export * from './hooks/root';
 export * from './hooks/schema-items-to-items';
 export * from './hooks/schema-items-to-columns';
+export * from './hooks/splitter';
 export * from './hooks/store';
 
 export * from './tools/schema-items';
+export * from './tools/tooltip';

@@ -1,5 +1,6 @@
 import { useAdditionalNode } from '@yimoka/react';
 import { Space as AntSpace, SpaceProps } from 'antd';
+import { SpaceCompactProps } from 'antd/es/space/Compact';
 import React from 'react';
 
 const SpaceFC = (props: SpaceProps) => {
@@ -11,5 +12,8 @@ const SpaceFC = (props: SpaceProps) => {
   );
 };
 
-export const Space = Object.assign(SpaceFC, AntSpace);
+export const Space = Object.assign(SpaceFC, {
+  Compact: AntSpace.Compact,
+});
 
+export type { SpaceProps, SpaceCompactProps };

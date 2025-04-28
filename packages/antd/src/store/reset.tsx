@@ -1,19 +1,19 @@
 import { useStore } from '@yimoka/react';
 import { IStore } from '@yimoka/store';
-import { ButtonProps, ConfigProvider } from 'antd';
-import React, { useContext } from 'react';
+import { ButtonProps } from 'antd';
+import React from 'react';
 
 import { Button } from '../base/button';
+import { useLocaleComponent } from '../hooks/use-locale';
 
 export const Reset = (props: ButtonProps & { store?: IStore }) => {
   const { onClick, onKeyDown, store, ...rest } = props;
   const curStore = useStore(store);
-  const context = useContext(ConfigProvider.ConfigContext);
-  const filterReset = context.locale?.Table?.filterReset;
+  const locale = useLocaleComponent('Common');
 
   return (
     <Button
-      children={filterReset}
+      children={locale.reset}
       {...rest}
       onClick={(e) => {
         onClick?.(e);

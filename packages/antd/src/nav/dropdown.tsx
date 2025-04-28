@@ -17,4 +17,8 @@ const DropdownFC = observer((props: PropsWithComponentData<DropdownProps> & { va
   return <AntDropdown  {...rest} menu={{ ...menu, items: curItems }} />;
 });
 
-export const Dropdown = Object.assign(DropdownFC, AntDropdown);
+export const Dropdown = Object.assign(DropdownFC, {
+  Button: AntDropdown.Button,
+});
+
+export type { DropdownProps };

@@ -30,16 +30,34 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     fieldsConfig: config?.fieldsConfig,
   };
 
+  const idKey = config?.idKey ?? 'id';
   if (['add', 'edit'].includes(`${mode}`)) {
     conf.afterAtFetch = { ...opStoreAfterAtFetch };
     conf.defaultValues = { ...config?.defaultFormValues };
+    // 如果是 edit 添加 idKey
+    if (mode === 'edit') {
+      if (!(idKey in conf.defaultValues)) {
+        conf.defaultValues[idKey] = undefined;
+      }
+    }
   } else if (['list', 'query'].includes(`${mode}`)) {
     conf.defaultValues = { ...config?.defaultQueryValues };
     conf.type = 'list';
   } else if (['detail'].includes(`${mode}`)) {
+    // 默认马上执行 和过滤空值
+    if (typeof conf.options === 'undefined') {
+      conf.options = {};
+    }
+    if (typeof conf.options.runNow === 'undefined') {
+      conf.options.runNow = 'always';
+    }
+    if (typeof conf.options.filterBlankAtRun === 'undefined') {
+      conf.options.filterBlankAtRun = true;
+    }
     conf.defaultValues = { ...config?.defaultDetailValues };
-    if (config?.idKey) {
-      conf.defaultValues[config.idKey] = undefined;
+
+    if (!(idKey in conf.defaultValues)) {
+      conf.defaultValues[idKey] = undefined;
     }
   } else if (isOperation) {
     conf.afterAtFetch = { ...opStoreAfterAtFetch };
@@ -50,6 +68,7 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
   curStore.fieldsConfig = { ...conf.fieldsConfig, ...curStore.fieldsConfig };
   curStore.defaultValues = { ...conf.defaultValues, ...curStore.defaultValues };
   curStore.afterAtFetch = { ...conf.afterAtFetch, ...curStore.afterAtFetch };
+  curStore.options = { ...conf.options, ...curStore.options };
   curStore.type = curStore.type ?? conf.type;
 
   if (!curStore.api && mode) {
@@ -109,7 +128,9 @@ export interface IBreadcrumbItem {
   /** 图标 */
   icon?: string;
   /** 链接地址 */
-  url?: string;
+  href?: string;
+  /** 路径 */
+  path?: string;
   [key: IObjKey]: IAny;
 }
 

@@ -1,8 +1,5 @@
-import { Field } from '@formily/core';
-import { observer, useField } from '@formily/react';
-import { Spin } from '@yimoka/antd';
-import { useInitStore } from '@yimoka/react';
-import { Input, Modal, Space, Typography } from 'antd';
+import { Input, Modal, Spin, Space, Typography } from '@yimoka/antd';
+import { Field, observer, useField, useInitStore } from '@yimoka/react';
 import React, { useEffect, useState } from 'react';
 
 import { ImageCaptcha } from './captcha-image';
@@ -71,13 +68,14 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
           </Typography.Link>
         }
         value={value}
-        onChange={e => onChange?.(e.target.value)}
+        onChange={onChange}
       />
       <Modal
         maskClosable={false}
         okButtonProps={{ disabled: captchaCode.length < 4 }}
         open={needCaptcha}
         title="请输入图形验证码"
+        trigger={false}
         width={300}
         onCancel={() => setValues({ needCaptcha: false })}
         onOk={getCode}
@@ -85,7 +83,7 @@ export const MailCaptcha = observer((props: MailCaptchaProps) => {
         <Space>
           <Input
             value={captchaCode}
-            onChange={e => setValues({ captchaCode: e.target.value })}
+            onChange={v => setValues({ captchaCode: v })}
             onPressEnter={() => captchaCode.length === 4 && getCode()}
           />
           <ImageCaptcha api={{ url: '/base/iam/portal/captcha/image' }} onChange={v => setValues({ captchaID: v })} />

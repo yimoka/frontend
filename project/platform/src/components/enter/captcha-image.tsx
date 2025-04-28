@@ -1,13 +1,12 @@
-import { observer } from '@formily/react';
-import { useInitStore } from '@yimoka/react';
-import { IStoreAPI } from '@yimoka/store';
-import { ButtonProps, SpinProps, Spin, Button, theme } from 'antd';
+import { ButtonProps, SpinProps, Button, theme, Loading } from '@yimoka/antd';
+import { observer, useInitStore } from '@yimoka/react';
+import { IStoreAPI, IStoreRunNow } from '@yimoka/store';
 import React, { HTMLAttributes, useEffect } from 'react';
 
 const { useToken } = theme;
 
 export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
-  runNow?: boolean;
+  runNow?: IStoreRunNow;
   height?: number;
   onChange?: (id: string) => void;
   imgProps?: Omit<HTMLAttributes<HTMLImageElement>, 'src' | 'onClick'>;
@@ -17,7 +16,7 @@ export interface ImageCaptchaProps extends Omit<SpinProps, 'spinning'> {
 
 export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
   const token = useToken();
-  const { onChange, runNow = true, height = token.token.controlHeight, imgProps, api, btnProps, ...args } = props;
+  const { onChange, runNow = 'always', height = token.token.controlHeight, imgProps, api, btnProps, ...args } = props;
   const { loading, response, fetch } = useInitStore({
     options: { runNow },
     defaultValues: {},
@@ -37,22 +36,22 @@ export const ImageCaptcha = observer((props: ImageCaptchaProps) => {
   };
 
   return (
-    <Spin {...args} spinning={loading} >
+    <Loading {...args} spinning={loading} >
       {image
         ? <img alt='验证码'
-height={height}
-style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }}
-width="100%"
-{...imgProps}
-src={image}
-onClick={getImg} />
+          height={height}
+          style={{ position: 'relative', top: 1, display: 'block', cursor: 'pointer' }}
+          width="100%"
+          {...imgProps}
+          src={image}
+          onClick={getImg} />
         : <Button ghost
-type="primary"
-{...btnProps}
-disabled={loading}
-onClick={getImg}>
+          type="primary"
+          {...btnProps}
+          disabled={loading}
+          onClick={getImg}>
           获取验证码
         </Button>}
-    </Spin>
+    </Loading>
   );
 });

@@ -1,7 +1,9 @@
-import { observer, useNavigate } from '@yimoka/react';
+import { Modal } from '@yimoka/antd';
+import { observer } from '@yimoka/react';
 import { IHTTPCode } from '@yimoka/shared';
-import { Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import { setAuthErr, useAuthErr } from '@/root';
 
@@ -10,8 +12,10 @@ const LoginModal = (props: { onSuccess: () => void }) => {
   console.log('onSuccess', onSuccess);
 
   return (
-    <Modal open footer={null} title="登录">
-
+    <Modal open
+      footer={null}
+      title="登录"
+      trigger={false}>
     </Modal>
   );
 };

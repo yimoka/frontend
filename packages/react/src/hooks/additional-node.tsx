@@ -1,5 +1,5 @@
 import { RecursionField, useFieldSchema } from '@formily/react';
-import { isBlank } from '@yimoka/shared';
+import { isVacuous } from '@yimoka/shared';
 import React, { ReactNode, useMemo } from 'react';
 
 export const useAdditionalNode: <T = ReactNode> (propName: string, node?: T) => T | ReactNode = (propName, node) => {
@@ -8,7 +8,7 @@ export const useAdditionalNode: <T = ReactNode> (propName: string, node?: T) => 
 
   return useMemo(() => {
     // null 有意义
-    if (node !== undefined || isBlank(schema)) {
+    if (node !== undefined || isVacuous(schema)) {
       return node;
     }
     return <RecursionField onlyRenderProperties name={name} schema={{ type: 'void', properties: { [propName]: schema } }} />;

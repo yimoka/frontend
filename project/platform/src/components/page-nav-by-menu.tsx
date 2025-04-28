@@ -1,7 +1,6 @@
-import { observer } from '@formily/react';
 import { Card, Col, Icon, Link, Row } from '@yimoka/antd';
-import { useRoot } from '@yimoka/react';
-import { IAny, isBlank } from '@yimoka/shared';
+import { observer, useRoot } from '@yimoka/react';
+import { IAny, isVacuous } from '@yimoka/shared';
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 const { Meta } = Card;
@@ -27,7 +26,7 @@ export const PageNavByMenu = observer(() => {
     return useChildren;
   }, [menus, pathname]);
 
-  if (isBlank(curMenus)) {
+  if (isVacuous(curMenus)) {
     return null;
   }
   return <Row gutter={[16, 16]} style={{ padding: 30 }}>{
@@ -35,13 +34,13 @@ export const PageNavByMenu = observer(() => {
       const { key, icon, title, desc } = item;
       return (
         <Col key={key}
-lg={8}
-md={8}
-sm={12}
-span={6}
-xl={6}
-xs={24}
-xxl={4}>
+          lg={8}
+          md={8}
+          sm={12}
+          span={6}
+          xl={6}
+          xs={24}
+          xxl={4}>
           <Link to={key}>
             <Card hoverable style={{ width: 200 }}  >
               <Meta description={desc} title={<>{typeof icon === 'string' ? <Icon value={icon} /> : icon} {title}</>} />

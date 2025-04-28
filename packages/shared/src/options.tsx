@@ -4,7 +4,7 @@ import { omit } from 'lodash-es';
 
 import { strToArr } from './str';
 import { IAnyObject, IObjKey } from './type';
-import { isBlank } from './val';
+import { isVacuous } from './val';
 
 export const DF_KEYS: IKeys = { label: 'label', value: 'value' };
 export const DF_SPLITTER = ',';
@@ -44,7 +44,7 @@ export function arrToOptions<T extends string = 'label' | 'value'>(options: IOpt
     }
   });
 
-  if (isBlank(optionsKeys)) {
+  if (isVacuous(optionsKeys)) {
     return options;
   }
 
@@ -171,7 +171,7 @@ export const objToOptions = <T extends string = 'label' | 'value'>(obj: IAnyObje
  * console.log(options3);
  * // 输出: [{ label: 'key1', value: '选项1' }, { label: 'key2', value: '选项2' }]
  */
-export const dataToOptions = <T extends string = 'label' | 'value'>(data?: any, conf?: { keys?: IKeys<T>, splitter?: string, childrenKey?: string }): IOptions<T> => {
+export const dataToOptions = <T extends string = 'label' | 'value'>(data?: any, conf?: IToOptionsConf<T>): IOptions<T> => {
   // 不给 childrenKey 默认值，需要递归处理时 再调用时显性传入
   const { splitter = DF_SPLITTER, keys, childrenKey } = conf ?? {};
   if (Array.isArray(data)) {
@@ -291,7 +291,7 @@ export const isValueInOptions = (value: any, options: IOptions<'value'>, conf?: 
  * console.log(map); // {}
  */
 
-export const optionsToObj = (options: IOptions, keys?: IKeys) => {
+export const optionsToObj = (options: IOptions | IAnyObject, keys?: IKeys) => {
   const map: Record<IObjKey, any> = Object({});
   const valueKey = keys?.value ?? DF_KEYS.value;
   const labelKey = keys?.label ?? DF_KEYS.label;
@@ -316,3 +316,5 @@ export type IOption<T extends IObjKey = 'label' | 'value'> = { [key in T]?: any 
 
 
 export type IKeys<T extends IObjKey = 'label' | 'value'> = { [key in T | string]: string };
+
+export type IToOptionsConf<T extends string = 'label' | 'value'> = { keys?: IKeys<T>, splitter?: string, childrenKey?: string };

@@ -4,10 +4,10 @@
  * @module @yimoka/store
  */
 
-import { IAny, IStrKeyObject, JSONParse, JSONStringify } from '@yimoka/shared';
+import { IAny, IObjKey, IStrKeyObject, IAutoSorter, JSONParse, JSONStringify, IAutoFilter } from '@yimoka/shared';
 
 import { BaseStore } from './base';
-import { ISchema } from './schema';
+import { ISchema, ITooltip } from './schema';
 
 /**
  * 将值转换为搜索参数字符串
@@ -91,7 +91,7 @@ export const parseSearchParam = (searchParam?: string, schema: ISchema = {}, dfV
  * ```ts
  * const store = new BaseStore({
  *   fieldsConfig: {
- *     tags: { splitter: ',' }
+ *     tags: { 'x-splitter': ',' }
  *   }
  * });
  * getFieldSplitter('tags', store);
@@ -119,6 +119,7 @@ export const getFieldSplitter = (field: IField, store: BaseStore) => {
  * // 返回: { type: 'string', required: true }
  * ```
  */
+// TODO: 跳过 type void 的配置
 export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
   if (!fieldsConfig) return undefined;
   const conf = fieldsConfig[field];
@@ -146,7 +147,7 @@ export const getFieldConfig = (field: IField, fieldsConfig?: IFieldsConfig) => {
  * @template P - 对象类型
  * @remarks 字段可以是对象的键名或字符串
  */
-export type IField<P extends object = IStrKeyObject> = keyof P | string;
+export type IField<P extends object = IStrKeyObject> = keyof P | string | number
 
 /**
  * 字段配置类型
@@ -158,4 +159,36 @@ export type IFieldsConfig = Record<string, IFieldConfig>;
  * 字段配置项类型
  * @remarks 字段配置项继承自模式定义
  */
-export type IFieldConfig = ISchema
+export type IFieldConfig = ISchema & {
+  /** 输出显示的 schema */
+  'x-output-schema'?: ISchema;
+  /** 查询的 schema 在查询 store 中,生成的 ref 会合并 'x-query-schema' 的配置 例如: 可在其中定义 required 为 false 来实现非必填 */
+  'x-query-schema'?: ISchema;
+  /** 表格列配置 */
+  'x-column'?: IFieldColumn
+};
+
+
+/**
+ * 表格列配置
+ * @remarks 表格列配置项
+ */
+export type IFieldColumn = {
+  /** 列唯一标识 */
+  key?: IObjKey;
+  /** 列标题 */
+  title?: string | IAny
+  /** 列宽 */
+  width?: number | string;
+  /** 列对齐方式 */
+  align?: 'left' | 'center' | 'right';
+  /** 自动过滤 根据数据自动生成过滤选项 当为 true 时,为受控跟 store 关联*/
+  autoFilter?: IAutoFilter
+  /** 筛选值的 key */
+  filterValueKey?: string
+  /** 提示信息 */
+  tooltip?: ITooltip
+
+  [key: IObjKey]: IAny;
+} & IAutoSorter
+

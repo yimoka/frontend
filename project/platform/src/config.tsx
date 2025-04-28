@@ -1,7 +1,7 @@
 import * as AllIcon from '@ant-design/icons';
+import { App } from '@yimoka/antd';
 import { ConfigProvider, IConfig, IGetIcon } from '@yimoka/react';
 import { INotifier } from '@yimoka/store';
-import { App } from 'antd';
 import { get } from 'lodash-es';
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';

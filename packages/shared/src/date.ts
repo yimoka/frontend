@@ -37,29 +37,30 @@ import dayjs, { Dayjs, ManipulateType } from 'dayjs';
  * console.log(toDayjs(dateString, { format: 'YYYY-MM-DD' })); // 输出: Dayjs 对象，表示 2021-10-01
  * ```
  */
-export const toDayjs = (date: IDate, options?: IDateOptions): Dayjs => {
+export const toDayjs = <T extends IDate = IDate>(date: T, options?: IDateOptions): T extends undefined ? undefined : Dayjs => {
+  if (date === undefined) {
+    return undefined as T extends undefined ? undefined : Dayjs;
+  }
   if (dayjs.isDayjs(date)) {
-    return date;
+    return (date as unknown) as T extends undefined ? undefined : Dayjs;
   }
   if (date instanceof Date) {
-    return dayjs(date);
+    return (dayjs(date) as unknown) as T extends undefined ? undefined : Dayjs;
   }
   const { type, format } = options || {};
   if (typeof date === 'number') {
     if (type === 's') {
-      return dayjs.unix(date);
+      return (dayjs.unix(date) as unknown) as T extends undefined ? undefined : Dayjs;
     }
-    // 默认为毫秒
-    return dayjs(date);
+    return (dayjs(date) as unknown) as T extends undefined ? undefined : Dayjs;
   }
   if (typeof date === 'string') {
     const str = date.trim();
-    // 为纯数字的字符串
     if (/^\d+$/.test(str)) {
-      return toDayjs(Number(str), options);
+      return (toDayjs(Number(str), options) as unknown) as T extends undefined ? undefined : Dayjs;
     }
   }
-  return dayjs(date, format);
+  return (dayjs(date, format) as unknown) as T extends undefined ? undefined : Dayjs;
 };
 
 /**
@@ -154,7 +155,7 @@ export const getPresetsDate = (presets: IPresetsDate, d?: Dayjs) => {
 };
 
 
-const getPresetDate = (preset: string, d?: Dayjs): Dayjs => {
+const getPresetDate = (preset: string, d: Dayjs): Dayjs => {
   const ruleMap: Record<string, string> = {
     cur: '',
     today: 'start-D',
@@ -168,11 +169,11 @@ const getPresetDate = (preset: string, d?: Dayjs): Dayjs => {
     second: 'start-s',
   };
   const curRule = (ruleMap[preset] ?? preset)?.trim();
-  const day = d ?? dayjs();
+  const day = d;
   if (!curRule) {
     return day;
   }
-  const match = curRule.match(/^(-?\d+)(\w+)$/);
+  const match = curRule.match(/^(-?\d+)(date|D|day|d|week|w|month|M|quarter|Q|year|y|hour|h|minute|m|second|s|millisecond|ms)$/);
   if (match) {
     // 匹配到 数字+单位 例如 -1d 1d
     const [, num, unit] = match;
@@ -263,7 +264,7 @@ const units = ['date', 'D', 'day', 'd', 'week', 'w', 'month', 'M', 'quarter', 'Q
 // 日期常用的格式为 毫秒数 秒数 字符串格式 dayjs 对象 和 Date 对象
 export type IDateType = 'ms' | 's' | 'string' | 'dayjs' | 'date';
 
-export type IDate = number | string | Dayjs | Date;
+export type IDate = number | string | Dayjs | Date | undefined;
 
 export interface IDateOptions {
   type?: IDateType;

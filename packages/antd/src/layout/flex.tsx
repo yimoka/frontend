@@ -1,3 +1,5 @@
-import { Flex as AntFlex } from 'antd';
+import { Flex as AntFlex, FlexProps } from 'antd';
 
 export const Flex = AntFlex;
+
+export type { FlexProps };

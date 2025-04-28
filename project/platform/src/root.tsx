@@ -2,7 +2,7 @@
 
 import { Link } from '@yimoka/antd';
 import { useRoot } from '@yimoka/react';
-import { IAny, IHTTPCode, isBlank } from '@yimoka/shared';
+import { IAny, IHTTPCode, isVacuous } from '@yimoka/shared';
 import { rootStore } from '@yimoka/store';
 
 import React from 'react';
@@ -115,9 +115,9 @@ export const handlePermission = (data: IPermissionTreeItem[]) => {
     return {
       title: name,
       key: path,
-      label: level === 0 || isBlank(child) ? <Link style={{ color: 'inherit' }} to={path}>{name}</Link> : name,
+      label: level === 0 || isVacuous(child) ? <Link style={{ color: 'inherit' }} to={path}>{name}</Link> : name,
       icon: icon ? icon : undefined,
-      children: isBlank(child) ? undefined : child,
+      children: isVacuous(child) ? undefined : child,
     };
   });
   rootStore.setMenus(handleTree(data));

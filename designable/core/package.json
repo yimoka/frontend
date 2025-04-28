@@ -1,0 +1,61 @@
+{
+  "name": "@yimoka/designable-core",
+  "version": "0.0.1",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yimoka/frontend/tree/main/packages/designable/core"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "ickeep",
+    "email": "i@ickeep.com",
+    "url": "https://github.com/ickeep"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "main": "src/index.ts",
+  "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "types",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "build-watch": "tsc -b && vite build --watch",
+    "lint": "eslint . --fix",
+    "test": "vitest --coverage --watch=false",
+    "test-watch": "vitest --coverage --watch"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@juggle/resize-observer": "^3.4.0",
+    "@yimoka/designable-shared": "workspace:*",
+    "@yimoka/shared": "workspace:*",
+    "@yimoka/store": "workspace:*",
+    "@formily/path": "^2.3.3",
+    "globals": "^15.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.24.0"
+  }
+}

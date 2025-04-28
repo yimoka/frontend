@@ -1,8 +1,8 @@
 import { observer } from '@formily/react';
-import { IAnyObject, isBlank } from '@yimoka/shared';
+import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
 import { useInitStore } from '../../hooks/store';
@@ -11,13 +11,30 @@ import { Entity, IEntityProps } from './base';
 import { EntityResponse } from './response';
 
 export const EntityDetail = observer((props: IEntityDetailProps) => {
-  const { values, ...args } = props;
+  const { values, store, config, ...args } = props;
 
-  if (isBlank(values)) {
-    return <FetchDetail {...args} />;
+  const curStore = useMemo(() => getEntityStore(store, 'detail', config), [config, store]);
+
+  if (isVacuous(values)) {
+    return (
+      <FetchDetail
+        notPickValues
+        {...args}
+        config={config}
+        store={curStore}
+      />
+    );
   }
 
-  return <EntityValues {...args} values={values} />;
+  return (
+    <EntityValues
+      notPickValues
+      {...args}
+      config={config}
+      store={curStore}
+      values={values}
+    />
+  );
 });
 
 export const FetchDetail = observer((props: IFetchDetailProps) => {
@@ -31,7 +48,7 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
         <EntityValues
           {...args}
           config={config}
-          scope={{ ...scope, $detailStore: detailStore }}
+          scope={{ ...scope, $detailStore: curDetailStore }}
           values={curDetailStore?.response?.data ?? {}}
         />
       </EntityResponse>
@@ -72,7 +89,6 @@ type IFetchDetailProps<V extends object = IAnyObject, R extends object = IAnyObj
 
 export type IEntityValuesProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityProps<V, R>> & {
   config?: IEntityConfig<V>;
-  schema: ISchema;
   values: V,
   // 不对传入的 values 根据 store 的默认值进行 pick
   notPickValues?: boolean

@@ -1,5 +1,5 @@
-import { ConfigProvider, App, theme } from 'antd';
-import zhCN from 'antd/lib/locale/zh_CN';
+import { ConfigProvider, App, theme } from '@yimoka/antd';
+import zhCN from '@yimoka/antd/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import React from 'react';
@@ -19,7 +19,7 @@ export default function app() {
     <BrowserRouter>
       <ConfigProvider
         locale={zhCN}
-        theme={{ algorithm: [theme.compactAlgorithm] }}
+        theme={{ algorithm: [theme.compactAlgorithm], components: { Divider: { margin: 12, marginLG: 12 } } }}
       >
         <App component={false}>
           <Pwa />

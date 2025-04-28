@@ -1,10 +1,9 @@
-import { observer } from '@formily/react';
-import { EntityAdd, IEntityProps } from '@yimoka/react';
+import { observer, EntityAdd, IEntityAddProps } from '@yimoka/react';
 import React from 'react';
 
 import { permissionConfig } from './conf';
 
-export const PermissionAdd = observer((props: IEntityProps) => {
+export const PermissionAdd = observer((props: Omit<IEntityAddProps, 'config' | 'schema' | 'store'>) => {
   const { ...args } = props;
   return (
     <EntityAdd
@@ -17,7 +16,7 @@ export const PermissionAdd = observer((props: IEntityProps) => {
             type: 'void',
             'x-component': 'StoreForm',
             'x-component-props': {
-              labelWidth: 80,
+              labelWidth: 50,
             },
             properties: {
               parentID: {

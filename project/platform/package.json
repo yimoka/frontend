@@ -1,25 +1,21 @@
 {
   "name": "platform",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --mode dev",
     "build": "tsc -b && vite build",
+    "dev": "vite --mode dev",
     "lint": "eslint . --fix",
     "preview": "vite preview"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
-    "@formily/core": "^2.3.2",
-    "@formily/react": "^2.3.2",
-    "@formily/reactive": "^2.3.2",
     "@yimoka/antd": "workspace:*",
     "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
     "@yimoko/safe": "^1.0.0",
-    "antd": "^5.23.1",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "lodash-es": "^4.17.21",
@@ -33,6 +29,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5"
+    "@types/react-dom": "^18.3.5",
+    "eslint": "^9.24.0"
   }
 }
