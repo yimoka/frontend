@@ -55,10 +55,9 @@ export const initStoreDict = (store: BaseStore) => {
               const apiData = getDictAPIData(res.data, conf);
               store.setFieldDict(field, apiData);
             }
-            store.setFieldDictLoading(field, false);
           }
         })
-          .catch(() => {
+          .finally(() => {
             if (lastFetchID === store.getDictFetchID(field)) {
               store.setFieldDictLoading(field, false);
             }
@@ -117,9 +116,8 @@ export const watchStoreDict = (store: BaseStore) => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDict(field, data);
                 updateValueByDict(conf, data, store);
-                store.setFieldDictLoading(field, false);
               }
-            }).catch(() => {
+            }).finally(() => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
               }
@@ -144,10 +142,9 @@ export const watchStoreDict = (store: BaseStore) => {
                 }
                 updateValueByDict(conf, apiData, store);
               }
-              store.setFieldDictLoading(field, false);
             }
           })
-            .catch(() => {
+            .finally(() => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
               }
