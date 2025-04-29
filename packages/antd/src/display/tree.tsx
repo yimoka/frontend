@@ -1,4 +1,4 @@
-import { PropsWithComponentData, useArrayStringTransform, useComponentData, useSplitter } from '@yimoka/react';
+import { observer, PropsWithComponentData, useArrayStringTransform, useComponentData, useSplitter } from '@yimoka/react';
 import { IAny, IAnyObject, isVacuous } from '@yimoka/shared';
 import { Tree as AntTree, TreeProps as AntTreeProps, Spin, SpinProps } from 'antd';
 import { BasicDataNode } from 'antd/es/tree';
@@ -18,7 +18,7 @@ export type TreeProps<T extends BasicDataNode = IAnyObject> = PropsWithComponent
   loading?: boolean | SpinProps
 }>
 
-export const Tree = (props: TreeProps) => {
+export const Tree = observer((props: TreeProps) => {
   const { loading, switcherLoadingIcon, icon, treeData, data, store, dataKey, checkedKeys, value, valueType, splitter, noParentKey, onChange, onCheck, ...args } = props;
   const curData = useComponentData([treeData, data], dataKey, store);
   const curSplitter = useSplitter(splitter);
@@ -73,5 +73,5 @@ export const Tree = (props: TreeProps) => {
       }}
     />
   );
-};
+});
 

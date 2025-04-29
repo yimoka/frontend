@@ -19,6 +19,6 @@ export const EntityOperation = observer((props: IEntityOpProps) => {
 
 export type IEntityOpProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityProps<V, R>> & {
   config?: IEntityConfig<V>;
-  schema: ISchema;
+  schema?: ISchema;
   operation?: IAPIKey;
 }
