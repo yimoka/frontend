@@ -1,5 +1,5 @@
 import { useField } from '@formily/react';
-import { addWithLimit, dataToOptions, IAny, IKeys, IOptions, isSuccess, isVacuous, isValueInOptions, IToOptionsConf } from '@yimoka/shared';
+import { addWithLimit, dataToOptions, IAny, IKeys, IOptions, isSuccess, isVacuous, isValueInOptions, IOptionsConfig } from '@yimoka/shared';
 import { IStoreResponse, runAPI } from '@yimoka/store';
 import { debounce } from 'lodash-es';
 import { useState, useRef, SetStateAction, Dispatch, useEffect, useMemo } from 'react';
@@ -23,7 +23,7 @@ export const useAPISearch = <T extends string = 'label' | 'value'>(
   api?: IOptionsAPI,
   labelAPI?: IOptionsAPI | boolean,
   searchConfig?: IOptionsAPISearchConfig,
-  config?: IToOptionsConf<T>,
+  config?: IOptionsConfig<T>,
 ): [IOptions<T>, boolean, Dispatch<SetStateAction<IOptions<T>>>] => {
   const [options, setOptions] = useState<IOptions<T>>([]);
   const [loading, setLoading] = useState<boolean>(false);

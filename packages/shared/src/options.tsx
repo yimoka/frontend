@@ -171,7 +171,7 @@ export const objToOptions = <T extends string = 'label' | 'value'>(obj: IAnyObje
  * console.log(options3);
  * // 输出: [{ label: 'key1', value: '选项1' }, { label: 'key2', value: '选项2' }]
  */
-export const dataToOptions = <T extends string = 'label' | 'value'>(data?: any, conf?: IToOptionsConf<T>): IOptions<T> => {
+export const dataToOptions = <T extends string = 'label' | 'value'>(data?: any, conf?: IOptionsConfig<T>): IOptions<T> => {
   // 不给 childrenKey 默认值，需要递归处理时 再调用时显性传入
   const { splitter = DF_SPLITTER, keys, childrenKey } = conf ?? {};
   if (Array.isArray(data)) {
@@ -317,4 +317,4 @@ export type IOption<T extends IObjKey = 'label' | 'value'> = { [key in T]?: any 
 
 export type IKeys<T extends IObjKey = 'label' | 'value'> = { [key in T | string]: string };
 
-export type IToOptionsConf<T extends string = 'label' | 'value'> = { keys?: IKeys<T>, splitter?: string, childrenKey?: string };
+export type IOptionsConfig<T extends string = 'label' | 'value'> = { keys?: IKeys<T>, splitter?: string, childrenKey?: string };

@@ -64,9 +64,9 @@ const Password = (props: PasswordProps) => {
     />);
 };
 
-export type SearchProps = Omit<AntSearchProps, 'onChange'> & { onChange?: IOnChange }
+export type InSearchProps = Omit<AntSearchProps, 'onChange'> & { onChange?: IOnChange }
 
-const Search = (props: SearchProps) => {
+const Search = (props: InSearchProps) => {
   const { onChange, prefix, suffix, addonBefore, addonAfter, enterButton, allowClear, ...rest } = props;
 
   const curPrefix = useAdditionalNode('prefix', prefix);

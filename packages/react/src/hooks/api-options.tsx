@@ -1,5 +1,5 @@
 import { useField } from '@formily/react';
-import { dataToOptions, IAny, IAPIRequestConfig, IHTTPResponse, IOptions, isSuccess, IToOptionsConf } from '@yimoka/shared';
+import { dataToOptions, IAny, IAPIRequestConfig, IHTTPResponse, IOptions, isSuccess, IOptionsConfig } from '@yimoka/shared';
 import { runAPI } from '@yimoka/store';
 import { useState, Dispatch, SetStateAction } from 'react';
 
@@ -12,7 +12,7 @@ export const defaultOutOptionsKeys = { title: 'title', desc: 'desc', img: 'img',
 
 export type IOptionsAPI = IAPIRequestConfig | ((config?: IAPIRequestConfig) => Promise<IHTTPResponse>);
 
-export const useAPIOptions = <T extends string = 'label' | 'value'>(data?: IAny, api?: IOptionsAPI, config?: IToOptionsConf<T>): [IOptions<T>, boolean, Dispatch<SetStateAction<IOptions<T>>>] => {
+export const useAPIOptions = <T extends string = 'label' | 'value'>(data?: IAny, api?: IOptionsAPI, config?: IOptionsConfig<T>): [IOptions<T>, boolean, Dispatch<SetStateAction<IOptions<T>>>] => {
   const [options, setOptions] = useState<IOptions<T>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { dataSource } = useField() as IAny ?? {};

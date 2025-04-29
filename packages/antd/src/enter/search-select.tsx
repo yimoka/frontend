@@ -1,5 +1,5 @@
 import { IOptionsAPI, IOptionsAPISearchConfig, observer, useAPISearch } from '@yimoka/react';
-import { IToOptionsConf } from '@yimoka/shared';
+import { IOptionsConfig } from '@yimoka/shared';
 
 import { Spin } from 'antd';
 import React, { useState } from 'react';
@@ -28,5 +28,5 @@ export type SearchSelectProps = Omit<SelectProps, 'showSearch' | 'loading' | 'fi
   api?: IOptionsAPI
   labelAPI?: IOptionsAPI | boolean
   searchConfig?: IOptionsAPISearchConfig
-  toOptionsConf?: IToOptionsConf
+  toOptionsConf?: IOptionsConfig
 }
