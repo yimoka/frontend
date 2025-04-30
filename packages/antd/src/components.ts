@@ -55,6 +55,7 @@ import { Transfer } from './enter/transfer';
 import { TreeSelect } from './enter/tree-select';
 
 import { Upload } from './enter/upload';
+import { UploadS3 } from './enter/upload-s3';
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
@@ -162,6 +163,7 @@ export const components: IConfigComponents = {
   Transfer,
   TreeSelect,
   Upload,
+  UploadS3,
 
   // feedback
   Alert,

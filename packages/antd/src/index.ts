@@ -31,6 +31,7 @@ export * from './enter/time-range-picker';
 export * from './enter/transfer';
 export * from './enter/tree-select';
 export * from './enter/upload';
+export * from './enter/upload-s3';
 
 export * from './display/avatar';
 export * from './display/badge';

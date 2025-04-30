@@ -42,6 +42,7 @@ export * from './hooks/schema-items-to-items';
 export * from './hooks/schema-items-to-columns';
 export * from './hooks/splitter';
 export * from './hooks/store';
+export * from './hooks/upload-s3';
 
 export * from './tools/schema-items';
 export * from './tools/tooltip';
