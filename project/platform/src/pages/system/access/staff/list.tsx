@@ -1,6 +1,4 @@
-
 import { EntityList, IEntityListProps, observer } from '@yimoka/react';
-
 import React from 'react';
 
 import { StaffAddModal } from './add';
@@ -9,6 +7,7 @@ import { StaffRole } from './components/role';
 import { staffConfig } from './conf';
 import { StaffDetailModal } from './detail';
 import { StaffEditModal } from './edit';
+
 
 export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 'schema' | 'store'>) => (
   <EntityList
@@ -50,80 +49,90 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
         //   type: 'void',
         //   'x-component': 'BatchBarAction',
         // },
-        listData: {
+        res: {
           type: 'void',
-          'x-decorator': 'EntityResponse',
-          'x-component': 'StoreTable',
-          'x-component-props': {
-            rowKey: 'id',
-            rowSelection: { fixed: true },
-            scroll: { x: 'max-content' },
-          },
-          items: {
-            type: 'void',
-            properties: {
-              id: {},
-              name: {},
-              switch: { $ref: '#/definitions/__output__switch' },
-              realName: {},
-              phonePrefix: {},
-              phone: {},
-              mail: {},
-              isChangePassword: { $ref: '#/definitions/__output__isChangePassword' },
-              createTime: { $ref: '#/definitions/__output__createTime' },
-              updateTime: { $ref: '#/definitions/__output__updateTime' },
-              operation: {
-                type: 'void',
-                'x-decorator': 'Column',
-                'x-decorator-props': { title: '操作', fixed: 'right', width: 380 },
-                'x-component': 'Space',
+          'x-component': 'EntityResponse',
+          properties: {
+            listData: {
+              'x-decorator': 'ReFormByListData',
+              'x-component': 'StoreTable',
+              'x-component-props': {
+                rowKey: 'id',
+                rowSelection: { fixed: true },
+                scroll: { x: 'max-content' },
+              },
+              items: {
+                type: 'object',
                 properties: {
-                  role: {
+                  id: {},
+                  name: {},
+                  switch: { $ref: '#/definitions/__output__switch' },
+                  realName: {},
+                  phonePrefix: {},
+                  phone: {},
+                  mail: {},
+                  isChangePassword: { $ref: '#/definitions/__output__isChangePassword' },
+                  createTime: { $ref: '#/definitions/__output__createTime' },
+                  updateTime: { $ref: '#/definitions/__output__updateTime' },
+                  operation: {
                     type: 'void',
-                    'x-decorator': 'Modal',
-                    'x-decorator-props': {
-                      title: '角色',
-                      bindChildStore: true,
-                      destroyOnClose: true,
-                      trigger: { type: 'primary', size: 'small' },
-                    },
-                    'x-component': 'StaffRole',
-                  },
-                  permission: {
-                    type: 'void',
-                    'x-decorator': 'Modal',
-                    'x-decorator-props': {
-                      title: '查看权限',
-                      footer: false,
-                      destroyOnClose: true,
-                      trigger: { size: 'small' },
-                    },
+                    'x-decorator': 'Column',
+                    'x-decorator-props': { title: '操作', fixed: 'right', width: 380 },
+                    'x-component': 'Space',
                     properties: {
-                      name: {
+                      role: {
                         type: 'void',
-                        'x-component': 'StaffPermission',
+                        'x-decorator': 'Modal',
+                        'x-decorator-props': {
+                          title: '角色',
+                          bindChildStore: true,
+                          destroyOnClose: true,
+                          trigger: { type: 'primary', size: 'small' },
+                        },
+                        'x-component': 'StaffRole',
+                      },
+                      permission: {
+                        type: 'void',
+                        'x-decorator': 'Modal',
+                        'x-decorator-props': {
+                          title: '查看权限',
+                          footer: false,
+                          destroyOnClose: true,
+                          trigger: { size: 'small' },
+                        },
+                        properties: {
+                          name: {
+                            type: 'void',
+                            'x-component': 'StaffPermission',
+                          },
+                        },
+                      },
+                      detail: {
+                        type: 'void',
+                        'x-component': 'StaffDetailModal',
+                        'x-component-props': { title: '详情' },
+                      },
+                      edit: {
+                        type: 'void',
+                        'x-component': 'StaffEditModal',
+                        'x-component-props': { title: '编辑' },
+                      },
+                      disable: {
+                        type: 'void',
+                        'x-hidden': '{{!$record.switch}}',
+                        'x-component': 'RecordDisable',
+                      },
+                      enable: {
+                        type: 'void',
+                        'x-hidden': '{{$record.switch}}',
+                        'x-component': 'RecordEnable',
+                      },
+                      delete: {
+                        type: 'void',
+                        'x-component': 'RecordDel',
                       },
                     },
                   },
-                  detail: {
-                    type: 'void',
-                    'x-component': 'StaffDetailModal',
-                    'x-component-props': { title: '详情' },
-                  },
-                  edit: {
-                    type: 'void',
-                    'x-component': 'StaffEditModal',
-                    'x-component-props': { title: '编辑' },
-                  },
-
-                  // switch: {
-                  //   type: 'void',
-                  //   'x-component': 'RowActionSwitch',
-                  // },
-                  // delete: {
-                  //   type: 'void',
-                  //   'x-component': 'RowActionDel',
-                  // },
                 },
               },
             },

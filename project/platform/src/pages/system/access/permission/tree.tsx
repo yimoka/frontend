@@ -126,9 +126,9 @@ const TitleRender = observer(({ node, onSuccess, treeStore }: { node: IPermissio
                   record={node}
                   trigger={{
                     component: 'Text',
+                    danger: undefined,
                     type: 'danger',
                     disabled: !isVacuous(node.children),
-                    children: '删除',
                     style: TextStyle,
                   }} />
               ),

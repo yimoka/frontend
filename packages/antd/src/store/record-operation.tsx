@@ -113,7 +113,7 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
         }}>
         {/* fix Warning: findDOMNode is deprecated and will be removed in the next major release. Instead, */}
         <>
-          <Trigger component={Button} {...trigger} />
+          <Trigger component={Button} loading={loading} {...trigger} />
         </>
       </Popconfirm>
     );
@@ -121,7 +121,8 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
 
   return (
     <Trigger
-      component="Button"
+      component={Button}
+      loading={loading}
       {...trigger}
       onTrig={(...args) => {
         run();
