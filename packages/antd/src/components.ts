@@ -39,6 +39,7 @@ import { DatePicker } from './enter/date-picker';
 import { DateRangePicker } from './enter/date-range-picker';
 import { Form } from './enter/form';
 import { FormItem } from './enter/form-item';
+import { InImage } from './enter/in-image';
 import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
 import { Mentions } from './enter/mentions';
@@ -147,6 +148,7 @@ export const components: IConfigComponents = {
   DateRangePicker,
   Form,
   FormItem,
+  InImage,
   InputNumber,
   Input,
   Mentions,

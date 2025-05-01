@@ -1,12 +1,12 @@
-import { isSuccess } from '@yimoka/shared';
+import { IAnyObject, isSuccess } from '@yimoka/shared';
 import { IAPIExecutor, IStoreAPI, runAPI } from '@yimoka/store';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useAPIExecutor } from '../context/config';
 
 interface UploadOptions {
   file: File;
-  onSuccess?: (url: string, fileOrXhr?: File | XMLHttpRequest) => void;
+  onSuccess?: (data: IAnyObject, fileOrXhr?: File | XMLHttpRequest) => void;
   onError?: (error: Error, file?: File) => void;
   onProgress?: (event: { percent: number }, file?: File) => void;
 }
@@ -22,7 +22,7 @@ interface UploadOptions {
  */
 export const useUploadS3 = (api: IStoreAPI, apiExecutor?: IAPIExecutor) => {
   const scopeAPIExecutor = useAPIExecutor();
-  const curAPIExecutor = apiExecutor ?? scopeAPIExecutor;
+  const curAPIExecutor = useMemo(() => apiExecutor ?? scopeAPIExecutor, [apiExecutor, scopeAPIExecutor]);
 
   return useCallback((opts: UploadOptions) => {
     const { file, onSuccess, onError, onProgress } = opts;
@@ -65,7 +65,7 @@ export const useUploadS3 = (api: IStoreAPI, apiExecutor?: IAPIExecutor) => {
               const urlObj = new URL(url);
               const { pathname, host, protocol } = urlObj;
               const fieldUrl = cdnHost ? cdnHost + pathname : `${protocol}://${host}${pathname}`;
-              onSuccess?.(fieldUrl, xhr);
+              onSuccess?.({ url: fieldUrl });
             } else {
               onError?.(new Error(`上传失败: HTTP ${xhr.status}`), file);
             }

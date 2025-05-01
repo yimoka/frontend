@@ -16,6 +16,7 @@ export * from './enter/date-picker';
 export * from './enter/date-range-picker';
 export * from './enter/form';
 export * from './enter/form-item';
+export * from './enter/in-image';
 export * from './enter/input-number';
 export * from './enter/input';
 export * from './enter/mentions';

@@ -21,9 +21,9 @@
  * ```
  */
 
-import { Button, Upload, UploadProps } from '@yimoka/antd';
 import { Trigger, TriggerProps, useUploadS3 } from '@yimoka/react';
 import { IAPIExecutor, IStoreAPI } from '@yimoka/store';
+import { Button, Upload, UploadProps } from 'antd';
 import React from 'react';
 
 /**
