@@ -19,11 +19,12 @@ export * from './components/store/dict';
 export * from './components/store/route';
 export * from './components/store/watchChildStore';
 export * from './components/index.ts';
+export * from './components/re-form-provider';
 export * from './components/render-any';
 export * from './components/trigger';
 
 export * from './context/config';
-
+export * from './context/schema-field';
 export * from './hoc/with-children-fallback';
 export * from './hoc/with-value-fallback';
 

@@ -22,6 +22,8 @@ export * from './root';
 export * from './schema';
 
 export * from '@formily/reactive';
+export { createForm } from '@formily/core';
+export type { Form } from '@formily/core';
 
 /**
  * 存储类型

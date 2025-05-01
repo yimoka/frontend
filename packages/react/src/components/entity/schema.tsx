@@ -3,8 +3,10 @@ import { IAny, IAnyObject, isVacuous, mergeWithArrayOverride } from '@yimoka/sha
 import { IFetchListener, IFieldConfig, ISchema, IStore, ListStore } from '@yimoka/store';
 import React, { ComponentType, PropsWithChildren, useEffect, useMemo } from 'react';
 
+import { SchemaFieldProvider } from '../../context/schema-field';
 import { useComponents } from '../../hooks/components';
 import { useRoot } from '../../hooks/root';
+
 
 export const EntitySchema = observer((props: EntitySchemaProps) => {
   const { store, components, scope, schema, children, onError, onSuccess } = props;
@@ -68,14 +70,16 @@ export const EntitySchema = observer((props: EntitySchemaProps) => {
   }, [onError, onSuccess, store]);
 
   return (
-    <FormProvider form={form}>
-      <ExpressionScope value={curScope}>
-        <RecordScope getRecord={() => store.values}>
-          <SchemaField schema={curSchema} />
-          {children}
-        </RecordScope>
-      </ExpressionScope>
-    </FormProvider>
+    <SchemaFieldProvider value={SchemaField}>
+      <FormProvider form={form}>
+        <ExpressionScope value={curScope}>
+          <RecordScope getRecord={() => store.values}>
+            <SchemaField schema={curSchema} />
+            {children}
+          </RecordScope>
+        </ExpressionScope>
+      </FormProvider>
+    </SchemaFieldProvider>
   );
 });
 
