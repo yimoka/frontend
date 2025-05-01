@@ -62,7 +62,7 @@ export const StaffEditModal = (props: Omit<ModalProps, 'children'> & { values?: 
     <Modal
       bindChildStore
       destroyOnClose
-      fetchOnSuccess
+      isRefresh
       maskClosable={false}
       title='编辑人员'
       trigger={{ type: 'primary', size: 'small', ghost: true }}

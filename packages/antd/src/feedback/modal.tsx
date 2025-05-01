@@ -29,8 +29,8 @@ export type ModalProps = AntModalProps & {
   /** 子 store 的回调函数 */
   onChildStore?: (store: IStore) => void
   /** 执行成功时 是否执行 store 的 fetch */
-  fetchOnSuccess?: boolean
-  store?: IStore
+  isRefresh?: boolean
+  parentStore?: IStore
 }
 
 /**
@@ -56,15 +56,15 @@ export const Modal = observer((props: ModalProps) => {
     bindChildStore,
     onChildStore,
     children,
-    store,
-    fetchOnSuccess,
+    parentStore,
+    isRefresh,
     ...rest
   } = props;
 
   // 内部状态管理
   const [open, setOpen] = useState(oldOpen);
   const [childStore, setChildStore] = useState<IStore>();
-  const curStore = useStore(store);
+  const pStore = useStore(parentStore);
 
   // 使用 useAdditionalNode 处理可自定义的节点
   const cancelTextNode = useAdditionalNode('cancelText', cancelText);
@@ -101,8 +101,8 @@ export const Modal = observer((props: ModalProps) => {
     const { fetch, form } = childStore;
     const run = async () => {
       const res = await fetch();
-      if (isSuccess(res) && fetchOnSuccess) {
-        curStore?.fetch();
+      if (isSuccess(res) && isRefresh) {
+        pStore?.fetch();
       }
       if (
         closeOnOk === true
@@ -118,7 +118,7 @@ export const Modal = observer((props: ModalProps) => {
     } else {
       run();
     }
-  }, [bindChildStore, childStore, closeOnOk, curStore, fetchOnSuccess, onOk]);
+  }, [bindChildStore, childStore, closeOnOk, pStore, isRefresh, onOk]);
 
   return (
     <>

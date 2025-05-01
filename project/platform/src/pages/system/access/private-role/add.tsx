@@ -40,7 +40,7 @@ export const PrivateRoleAddModal = (props: Omit<ModalProps, 'children'>) => (
   <Modal
     bindChildStore
     destroyOnClose
-    fetchOnSuccess
+    isRefresh
     maskClosable={false}
     title='添加角色'
     trigger={{ type: 'primary', ghost: true }}
