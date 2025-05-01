@@ -8,18 +8,22 @@ import { useDeepMemo } from '../../hooks/deep-memo';
 import { EntityValues, FetchDetail, IEntityValuesProps } from './detail';
 
 export const EntityEdit = observer((props: IEntityEditProps) => {
-  const { values, store, config, ...args } = props;
+  const { values, store, config, scope, ...args } = props;
 
   const editStore = useDeepMemo(() => getEntityStore(store, 'edit', config), [store, config]);
 
   if (isVacuous(values)) {
-    return <FetchDetail {...args} config={config} store={editStore} />;
+    return <FetchDetail {...args}
+      config={config}
+      scope={scope}
+      store={editStore} />;
   }
 
   return (
     <EntityValues
       {...args}
       config={config}
+      scope={{ ...scope, $editStore: null }}
       store={editStore}
       values={values}
     />

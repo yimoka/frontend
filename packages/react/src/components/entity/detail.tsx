@@ -11,8 +11,7 @@ import { Entity, IEntityProps } from './base';
 import { EntityResponse } from './response';
 
 export const EntityDetail = observer((props: IEntityDetailProps) => {
-  const { values, store, config, ...args } = props;
-
+  const { values, store, config, scope, ...args } = props;
   const curStore = useMemo(() => getEntityStore(store, 'detail', config), [config, store]);
 
   if (isVacuous(values)) {
@@ -21,6 +20,7 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
         notPickValues
         {...args}
         config={config}
+        scope={scope}
         store={curStore}
       />
     );
@@ -31,6 +31,7 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
       notPickValues
       {...args}
       config={config}
+      scope={{ ...scope, $detailStore: null }}
       store={curStore}
       values={values}
     />
@@ -39,7 +40,21 @@ export const EntityDetail = observer((props: IEntityDetailProps) => {
 
 export const FetchDetail = observer((props: IFetchDetailProps) => {
   const { config, detailStore, scope, ...args } = props;
-  const curDetailConfig = useDeepMemo(() => getEntityStore(detailStore, 'detail', config), [detailStore, config]);
+
+  const curDetailConfig = useDeepMemo(() => {
+    const curDetail = detailStore ?? {};
+    if (typeof curDetail.options === 'undefined') {
+      curDetail.options = {};
+    }
+    if (typeof curDetail.options.runNow === 'undefined') {
+      curDetail.options.runNow = 'always';
+    }
+    if (typeof curDetail.options.bindRoute === 'undefined') {
+      curDetail.options.bindRoute = true;
+    }
+    return getEntityStore(curDetail, 'detail', config);
+  }, [detailStore, config]);
+
   const curDetailStore = useInitStore(curDetailConfig);
 
   return (
