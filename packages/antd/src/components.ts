@@ -88,6 +88,8 @@ import { PageHeader } from './page/page-header';
 import { StoreForm } from './store/form';
 import { ListFilter } from './store/list-filter';
 import { RecordDel } from './store/record-del';
+import { RecordDisable } from './store/record-disable';
+import { RecordEnable } from './store/record-enable';
 import { RecordOperation } from './store/record-operation';
 import { Reset } from './store/reset';
 import { Submit } from './store/submit';
@@ -209,8 +211,10 @@ export const components: IConfigComponents = {
   StoreForm,
   StoreTable,
   ListFilter,
-  RecordOperation,
   RecordDel,
+  RecordDisable,
+  RecordEnable,
+  RecordOperation,
   Reset,
   Submit,
 };

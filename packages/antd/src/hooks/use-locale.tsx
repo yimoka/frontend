@@ -8,7 +8,9 @@ const defaultLocale: Locale = {
   locale: 'en_US',
   Common: { confirm: 'Confirm', cancel: 'Cancel', submit: 'Submit', reset: 'Reset' },
   ListFilter: { query: 'Query', reset: 'Reset' },
-  RecordDel: { popconfirmTitle: 'Are you sure to delete?', popconfirmDescription: 'This action cannot be undone' },
+  RecordDel: { popconfirmTitle: 'Are you sure to delete?', popconfirmDescription: 'This action cannot be undone', text: 'Delete' },
+  RecordEnable: { popconfirmTitle: 'Are you sure to enable?', text: 'Enable' },
+  RecordDisable: { popconfirmTitle: 'Are you sure to disable?', text: 'Disable' },
 };
 
 export const useLocaleComponent = <T extends keyof Locale>(component: T) => {

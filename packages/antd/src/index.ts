@@ -94,8 +94,10 @@ export * from './page/page-header';
 // store
 export * from './store/form';
 export * from './store/list-filter';
-export * from './store/record-operation';
 export * from './store/record-del';
+export * from './store/record-disable';
+export * from './store/record-enable';
+export * from './store/record-operation';
 export * from './store/reset';
 export * from './store/submit';
 export * from './store/table';
