@@ -5,13 +5,19 @@ import React from 'react';
 
 import { staffConfig } from './conf';
 
-export const StaffDetailPage = observer((props: Omit<IEntityDetailProps, 'config' | 'schema'>) => (
+export const StaffDetail = observer((props: Omit<IEntityDetailProps, 'config' | 'schema'>) => (
   <EntityDetail
     {...props}
     config={staffConfig}
     schema={{
       type: 'object',
       properties: {
+        header: {
+          type: 'void',
+          'x-decorator': 'PageHeader',
+          // 列表页的弹出窗,直接使用行值,不需要通过 detailStore 获取 所以 detailStore 不存在,可用于隐藏 页面的 header
+          'x-hidden': '{{!$detailStore}}',
+        },
         desc: {
           type: 'void',
           'x-component': 'Descriptions',
@@ -55,7 +61,7 @@ export const StaffDetailModal = (props: Omit<ModalProps, 'children'> & { values?
       trigger={{ size: 'small', type: 'primary', ghost: true }}
       {...props}
     >
-      <StaffDetailPage values={values ?? record} />
+      <StaffDetail values={values ?? record} />
     </Modal>
   );
 };

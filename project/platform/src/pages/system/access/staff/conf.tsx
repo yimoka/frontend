@@ -2,10 +2,10 @@
 import { mergeWithArrayOverride } from '@yimoka/shared';
 import { IEntityConfig, IFieldConfig } from '@yimoka/store';
 
+import { getAvatarField } from '@/fields/avatar';
 import { getBoolField } from '@/fields/bool';
 import { getCreateTimeField, getUpdateTimeField } from '@/fields/date';
 import { getIDField } from '@/fields/id';
-import { getImageField } from '@/fields/image';
 import { getMailField } from '@/fields/mail';
 import { getNameField, getRealNameField } from '@/fields/name';
 import { getPasswordField } from '@/fields/password';
@@ -28,7 +28,7 @@ export const staffConfig: IEntityConfig = {
     name: getNameField({ required: true, 'x-column': { width: 130 } }),
     nameLike: getNameField(),
     realName: getRealNameField(),
-    avatar: getImageField({ title: '头像', 'x-component-props': { upload: { dir: '/admin/tenant-admin/staff/avatar' } } }),
+    avatar: getAvatarField(),
     isChangePassword: getBoolField({ title: '修改密码', 'x-column': { width: 100 } }),
     createTime: getCreateTimeField(),
     updateTime: getUpdateTimeField(),
