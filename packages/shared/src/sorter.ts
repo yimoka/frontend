@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 
 import { normalizeToArray } from './arr';
 import { IToNumberOption, toNumber } from './num';
-import { IAny } from './type';
+import { IAny, IKey, IObjKey } from './type';
+import { getSmart } from './val';
 
 /**
  * 获取排序函数
@@ -19,47 +20,49 @@ import { IAny } from './type';
  * - 时间排序：使用dayjs比较时间
  * - 长度排序：比较字符串或数组长度
  */
-export const getSorterFn = (config: IAutoSorter) => {
+export const getSorterFn = (config: IAutoSorter, path?: IKey | IKey[] | IObjKey | IObjKey[]) => {
   const { autoSorter } = config;
   if (typeof autoSorter === 'function') {
     return autoSorter;
   }
 
   if (autoSorter === 'number') {
-    return (a: IAny, b: IAny) => toNumber(a, config.sorterParams) - toNumber(b, config.sorterParams);
+    return (a: IAny, b: IAny) => toNumber(getSmart(a, path), config.sorterParams) - toNumber(getSmart(b, path), config.sorterParams);
   }
 
   if (autoSorter === 'string') {
     return (a: IAny, b: IAny) => {
       const params = config.sorterParams;
-      return a?.localeCompare(b, ...(normalizeToArray(params)));
+      return getSmart(a, path)?.localeCompare(getSmart(b, path), ...(normalizeToArray(params)));
     };
   }
   if (autoSorter === 'percentage') {
     return (a: IAny, b: IAny) => {
-      const aNum = typeof a === 'string' ? Number(a.replace('%', '')) : a;
-      const bNum = typeof b === 'string' ? Number(b.replace('%', '')) : b;
+      const aValue = getSmart(a, path);
+      const bValue = getSmart(b, path);
+      const aNum = typeof aValue === 'string' ? Number(aValue.replace('%', '')) : aValue;
+      const bNum = typeof bValue === 'string' ? Number(bValue.replace('%', '')) : bValue;
       return aNum - bNum;
     };
   }
   if (autoSorter === 'date') {
     return (a: IAny, b: IAny) => {
-      const aDate = dayjs(a);
-      const bDate = dayjs(b);
+      const aDate = dayjs(getSmart(a, path));
+      const bDate = dayjs(getSmart(b, path));
       return aDate.isBefore(bDate) ? -1 : 1;
     };
   }
   if (autoSorter === 'time') {
     return (a: IAny, b: IAny) => {
-      const aTime = dayjs(`2022-01-01 ${a}`);
-      const bTime = dayjs(`2022-01-01 ${b}`);
+      const aTime = dayjs(`2022-01-01 ${getSmart(a, path)}`);
+      const bTime = dayjs(`2022-01-01 ${getSmart(b, path)}`);
       return aTime.isBefore(bTime) ? -1 : 1;
     };
   }
   if (autoSorter === 'length') {
     return (a: IAny, b: IAny) => {
-      const aLength = typeof a === 'string' ? a.length : a?.length;
-      const bLength = typeof b === 'string' ? b.length : b?.length;
+      const aLength = typeof a === 'string' ? a.length : getSmart(a, path)?.length;
+      const bLength = typeof b === 'string' ? b.length : getSmart(b, path)?.length;
       return aLength - bLength;
     };
   }
@@ -78,7 +81,10 @@ export const getSorterFn = (config: IAutoSorter) => {
  * 6. 数字排序
  * 7. 自定义排序函数
  */
-export type IAutoSorter = ({
+export type IAutoSorter = {
+  key?: string;
+  dataIndex?: string | string[];
+} & (({
   /** 自动排序类型或自定义排序函数 */
   autoSorter?: 'percentage' | 'date' | 'time' | 'length' | ((...args: IAny[]) => IAny)
 }) | ({
@@ -91,4 +97,4 @@ export type IAutoSorter = ({
   autoSorter?: 'number',
   /** 数字转换选项 */
   sorterParams?: IToNumberOption;
-});
+}));
