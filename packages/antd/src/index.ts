@@ -98,6 +98,7 @@ export * from './store/record-del';
 export * from './store/record-disable';
 export * from './store/record-enable';
 export * from './store/record-operation';
+export * from './store/record-switch';
 export * from './store/reset';
 export * from './store/submit';
 export * from './store/table';

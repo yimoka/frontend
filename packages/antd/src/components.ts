@@ -91,6 +91,7 @@ import { RecordDel } from './store/record-del';
 import { RecordDisable } from './store/record-disable';
 import { RecordEnable } from './store/record-enable';
 import { RecordOperation } from './store/record-operation';
+import { RecordSwitch } from './store/record-switch';
 import { Reset } from './store/reset';
 import { Submit } from './store/submit';
 import { StoreTable } from './store/table';
@@ -215,6 +216,7 @@ export const components: IConfigComponents = {
   RecordDisable,
   RecordEnable,
   RecordOperation,
+  RecordSwitch,
   Reset,
   Submit,
 };

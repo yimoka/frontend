@@ -8,7 +8,6 @@ import { staffConfig } from './conf';
 import { StaffDetailModal } from './detail';
 import { StaffEditModal } from './edit';
 
-
 export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 'schema' | 'store'>) => (
   <EntityList
     {...props}
@@ -54,7 +53,8 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
           'x-component': 'EntityResponse',
           properties: {
             listData: {
-              'x-decorator': 'ReFormByListData',
+              // 当使用表达式时 可使用 ReFormByListData 强制表格重新渲染
+              // 'x-decorator': 'ReFormByListData',
               'x-component': 'StoreTable',
               'x-component-props': {
                 rowKey: 'id',
@@ -117,15 +117,9 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
                         'x-component': 'StaffEditModal',
                         'x-component-props': { title: '编辑' },
                       },
-                      disable: {
+                      switch: {
                         type: 'void',
-                        'x-hidden': '{{!$record.switch}}',
-                        'x-component': 'RecordDisable',
-                      },
-                      enable: {
-                        type: 'void',
-                        'x-hidden': '{{$record.switch}}',
-                        'x-component': 'RecordEnable',
+                        'x-component': 'RecordSwitch',
                       },
                       delete: {
                         type: 'void',
