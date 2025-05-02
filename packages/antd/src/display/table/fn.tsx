@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { getTooltipProps, RenderAny } from '@yimoka/react';
-import { getAutoFilterConfig, getSorterFn, IAnyObject, isVacuous } from '@yimoka/shared';
+import { getAutoFilterConfig, getSorterFn, IAnyObject, IAutoFilter, IAutoSorter, isVacuous } from '@yimoka/shared';
 import { BaseStore } from '@yimoka/store';
 import { TableProps as AntTableProps, Space, Tooltip } from 'antd';
 import { ColumnType } from 'antd/es/table';
@@ -22,26 +22,36 @@ export function getTableRowKey(rowKey: TableProps['rowKey']): AntTableProps['row
   return rowKey;
 };
 
+// eslint-disable-next-line complexity
 export function getTableColumnWithAutoFilterAndSorter(column: ITableColumn, data: IAnyObject[]): ITableColumn {
   const newColumn: ColumnType = {};
+  const { key } = column;
+  const dataIndex = 'dataIndex' in column ? column.dataIndex : undefined;
+  const path = dataIndex ? dataIndexToKey(dataIndex) : key;
+
   if ('autoFilter' in column) {
-    const { autoFilter, dataIndex, key, filteredValue, filters, onFilter } = column;
-    if (autoFilter && autoFilter !== true && [filters, filteredValue, onFilter].every(v => typeof v === 'undefined')) {
-      const path = dataIndex ? dataIndexToKey(dataIndex) : key;
+    const { autoFilter, filteredValue, onFilter } = column;
+    if (autoFilter && autoFilter !== true && [filteredValue, onFilter].every(v => typeof v === 'undefined')) {
       const { filters, onFilter } = getAutoFilterConfig(autoFilter, data, path);
-      newColumn.filters = filters;
+      if (typeof column.filters === 'undefined') {
+        newColumn.filters = filters;
+      }
       newColumn.onFilter = onFilter;
     }
   }
   if ('autoSorter' in column) {
     const { autoSorter, sorter, sortOrder } = column;
     if (autoSorter && [sorter, sortOrder].every(v => typeof v === 'undefined')) {
-      const sorterFn = getSorterFn(column);
-      newColumn.sorter = sorterFn;
+      const sorterFn = getSorterFn(column, path);
+      if (typeof sorterFn === 'function') {
+        newColumn.sorter = (a, b) => sorterFn(a, b);
+      }
     }
   }
   if (!isVacuous(newColumn)) {
-    const result: IAnyObject = { ...column, ...newColumn };
+    const { autoSorter, autoFilter, ...rest } = column as ITableColumn & { autoSorter?: IAutoSorter, autoFilter?: IAutoFilter };
+    const result: IAnyObject = { ...rest, ...newColumn };
+    console.log('result', result);
     return result;
   }
   return column;
