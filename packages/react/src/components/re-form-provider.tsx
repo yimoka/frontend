@@ -21,7 +21,8 @@ export const ReFormProvider = observer((props: ReFormProviderProps) => {
   const type = Array.isArray(model.values.values) ? 'array' : typeof model.values;
 
   const curSchema = useMemo(() => {
-    const { 'x-decorator': decorator, 'x-decorator-props': decoratorProps, properties, ...args } = fieldSchema ?? {};
+    // 必须使用 toJSON 否则 scope 会丢失
+    const { 'x-decorator': decorator, 'x-decorator-props': decoratorProps, properties, ...args } = fieldSchema?.toJSON() ?? {};
     if (decorator === 'ReFormProvider' || decorator === 'ReFormByListData') {
       return { type: 'object', properties: { values: { ...args, properties, type } } };
     }
