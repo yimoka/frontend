@@ -8,6 +8,7 @@ export * from './components/array/schema-item-render';
 
 export * from './components/entity/add';
 export * from './components/entity/base';
+export * from './components/entity/batch-add';
 export * from './components/entity/detail';
 export * from './components/entity/edit';
 export * from './components/entity/list';
@@ -37,6 +38,7 @@ export * from './hooks/component-data';
 export * from './hooks/components';
 export * from './hooks/deep-effect';
 export * from './hooks/deep-memo';
+export * from './hooks/entity-config';
 export * from './hooks/record-index-fn';
 export * from './hooks/root';
 export * from './hooks/schema-items-to-items';

@@ -4,15 +4,17 @@ import { getEntityStore, IEntityConfig } from '@yimoka/store';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
+import { useEntityConfig } from '../../hooks/entity-config';
 
 import { Entity, IEntityProps } from './base';
 
 export const EntityList = observer((props: IEntityListProps) => {
   const { config, store, scope, ...args } = props;
+  const curConfig = useEntityConfig(config);
 
-  const curStore = useDeepMemo(() => getEntityStore(store, 'list', config), [store, config]);
+  const curStore = useDeepMemo(() => getEntityStore(store, 'list', curConfig), [store, curConfig]);
 
-  const useScope = useDeepMemo(() => ({ $config: config, ...scope }), [config, scope]);
+  const useScope = useDeepMemo(() => ({ $config: curConfig, ...scope }), [curConfig, scope]);
 
   return <Entity {...args} scope={useScope} store={curStore} />;
 });

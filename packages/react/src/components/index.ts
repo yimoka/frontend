@@ -6,6 +6,7 @@ import { SchemaItemRecursion } from './array/schema-item-recursion';
 import { SchemaItemRender } from './array/schema-item-render';
 import { EntityAdd } from './entity/add';
 import { Entity } from './entity/base';
+import { EntityBatchAdd } from './entity/batch-add';
 import { EntityDetail } from './entity/detail';
 import { EntityEdit } from './entity/edit';
 import { EntityList } from './entity/list';
@@ -26,6 +27,7 @@ export const components: Record<string, ComponentType<IAny>> = {
   SchemaItemRender,
 
   EntityAdd,
+  EntityBatchAdd,
   Entity,
   EntityDetail,
   EntityEdit,
