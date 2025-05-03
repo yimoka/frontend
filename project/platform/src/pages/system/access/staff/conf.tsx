@@ -41,6 +41,7 @@ export const staffConfig: IEntityConfig = {
   api: {
     list: { url: '/base/iam/portal/staff/list', method: 'POST' },
     add: { url: '/base/iam/portal/staff/add', method: 'POST' },
+    batchAdd: { url: '/base/iam/portal/staff/batchAdd', method: 'POST' },
     edit: { url: '/base/iam/portal/staff/edit', method: 'POST' },
     delOne: { url: '/base/iam/portal/staff/delOne', method: 'POST' },
     enableOne: { url: '/base/iam/portal/staff/enableOne', method: 'POST' },

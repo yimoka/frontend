@@ -503,6 +503,9 @@ importers:
       '@yimoka/antd':
         specifier: workspace:*
         version: link:../../packages/antd
+      '@yimoka/monaco-editor':
+        specifier: workspace:*
+        version: link:../../packages/monaco-editor
       '@yimoka/react':
         specifier: workspace:*
         version: link:../../packages/react

@@ -17,7 +17,6 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
       StaffEditModal,
       StaffRole,
       StaffPermission,
-      // StaffBatchAddModal, StaffEditModal,
     }}
     config={staffConfig}
     schema={{
@@ -28,8 +27,8 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
           'x-decorator': 'PageHeader',
           'x-component': 'Space',
           properties: {
-            add: { 'x-component': 'StaffAddModal' },
-            // batchAdd: { 'x-component': 'StaffBatchAddModal' },
+            add: { type: 'void', 'x-component': 'StaffAddModal' },
+            batchAdd: { type: 'void', 'x-component': 'EntityBatchAddModal' },
           },
         },
         listFilter: {

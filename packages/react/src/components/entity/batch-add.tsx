@@ -5,7 +5,6 @@ import { cloneDeep } from 'lodash-es';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
-
 import { useEntityConfig } from '../../hooks/entity-config';
 
 import { IEntityAddProps } from './add';
@@ -38,6 +37,10 @@ export const EntityBatchAdd = observer((props: IEntityAddProps) => {
           data: {
             type: 'array',
             'x-component': 'JSONEditor',
+            'x-component-props': {
+              valueType: 'object',
+              height: 300,
+            },
           },
         },
       },
