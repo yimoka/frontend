@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { IObjKey } from './type';
+import { IAny, IObjKey } from './type';
 
 /**
  * 判断响应是否成功。
@@ -42,12 +41,37 @@ export const isForbidden = (Response?: Partial<IHTTPResponse>) => Response?.code
 export const isNetworkError = (Response?: Partial<IHTTPResponse>) => Response?.code === IHTTPCode.networkError;
 
 /**
+ * 判断响应是否为捕获 try catch 的错误
+ *
+ * @param {Partial<IHTTPResponse>} [Response] - HTTP响应的部分对象
+ * @returns {boolean} 如果响应代码为捕获 try catch 的错误，则返回true
+ */
+export const isTryCatchError = (Response?: Partial<IHTTPResponse>) => Response?.code === IHTTPCode.tryCatchError;
+
+/**
  * 根据状态码返回对应的 HTTP 代码。
  *
  * @param {number} status - HTTP 状态码。
  * @returns {number} 如果状态码在 200 到 299 之间，返回 IHTTPCode.success，否则返回原始状态码。
  */
 export const getCodeByStatus = (status: number) => ((status >= 200 && status < 300) ? IHTTPCode.success : status);
+
+/**
+ * 获取 try catch 错误的 Response
+ *
+ * @param {Error} error - 错误对象
+ * @returns {Partial<IHTTPResponse>} 返回 try catch 错误的 Response
+ */
+export const getTryCatchErrorResponse = (error?: unknown) => {
+  const msg = error instanceof Error ? error.message : 'try catch error';
+  const res: Partial<IHTTPResponse> = { code: IHTTPCode.tryCatchError, msg, error };
+  if (error) {
+    if (typeof error === 'object' && error !== null && 'data' in error) {
+      res.data = error.data;
+    }
+  }
+  return res;
+};
 
 /**
  * HTTP响应接口
@@ -64,15 +88,15 @@ export const getCodeByStatus = (status: number) => ((status >= 200 && status < 3
  * @property {Record<ObjKey, any>} [headers] 响应头信息，可选
  * @property {any} [key: string] 其他任意附加属性
  */
-export interface IHTTPResponse<R = any, P = any> {
+export interface IHTTPResponse<R = IAny, P = IAny> {
   code: IHTTPCode | number
   msg: string,
   data: R
   config?: IAPIRequestConfig<P>
   status?: number;
   statusText?: string;
-  headers?: Record<IObjKey, any>;
-  [key: string]: any
+  headers?: Record<IObjKey, IAny>;
+  [key: string]: IAny
 }
 
 /**
@@ -86,12 +110,12 @@ export interface IHTTPResponse<R = any, P = any> {
  * @property {V} [data] - 要随请求发送的数据。
  * @property {any} [key: string] - 任何其他附加属性。
  */
-export type IAPIRequestConfig<V = any> = {
+export type IAPIRequestConfig<V = IAny> = {
   url?: string,
   method?: IMethod | string,
-  params?: V | any,
+  params?: V | IAny,
   data?: V,
-  [key: string]: any
+  [key: string]: IAny
 };
 
 
@@ -107,13 +131,13 @@ export type IAPIRequestConfig<V = any> = {
  * @property {T[]} data - 当前页的数据项数组。
  * @property {any} [key: string] - 可以动态添加的其他属性。
  */
-export interface IPageData<T extends object = Record<IObjKey, any>> {
+export interface IPageData<T extends object = Record<IObjKey, IAny>> {
   page: number,
   pageSize: number,
   total: number,
   totalPages: number,
   data: T[],
-  [key: string]: any
+  [key: string]: IAny
 }
 
 /**
@@ -133,6 +157,8 @@ export enum IHTTPCode {
   unauthorized = 401,
   forbidden = 403,
   networkError = 600,
+  // 捕获 try catch 的错误
+  tryCatchError = 999,
 }
 
 /**

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shared';
+import { getTryCatchErrorResponse, IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shared';
 
 /**
  * 执行 Store API
@@ -29,7 +28,11 @@ import { IAny, IAnyObject, IAPIRequestConfig, IHTTPResponse } from '@yimoka/shar
  */
 export async function runAPI<V extends object = IAnyObject, R = IAny>(api?: IStoreAPI<V | undefined, R>, apiExecutor?: IAPIExecutor, params?: V, abortController?: AbortController): Promise<IStoreResponse<R, V>> {
   if (typeof api === 'function') {
-    return await api(params) as Promise<IStoreResponse<R, V>>;
+    try {
+      return await api(params) as Promise<IStoreResponse<R, V>>;
+    } catch (error) {
+      return getTryCatchErrorResponse(error);
+    }
   };
   if (!api || !apiExecutor) {
     const res400: IStoreResponse = { code: 400, data: '', msg: 'api / apiExecutor is required' };
@@ -40,15 +43,19 @@ export async function runAPI<V extends object = IAnyObject, R = IAny>(api?: ISto
   if (abortController) {
     config.signal = abortController.signal;
   }
-  return apiExecutor(config);
+  try {
+    return await apiExecutor(config);
+  } catch (error) {
+    return getTryCatchErrorResponse(error);
+  }
 }
 
 const isMethodPost = (method = '') => ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase());
 
-export type IStoreResponse<R = any, V = any> = Partial<IHTTPResponse<R, V | IAnyObject>>;
+export type IStoreResponse<R = IAny, V = IAny> = Partial<IHTTPResponse<R, V | IAnyObject>>;
 
-export type IStoreAPI<V = any, R = any> = IAPIRequestConfig<V> | ((params: V) => Promise<IStoreResponse<R, V>>);
+export type IStoreAPI<V = IAny, R = IAny> = IAPIRequestConfig<V> | ((params: V) => Promise<IStoreResponse<R, V>>);
 
-export type IStoreHTTPRequest<R = any, P = any> = (config: IAPIRequestConfig<P>) => Promise<IHTTPResponse<R, P>>;
+export type IStoreHTTPRequest<R = IAny, P = IAny> = (config: IAPIRequestConfig<P>) => Promise<IHTTPResponse<R, P>>;
 
 export type IAPIExecutor = <T extends object = IAPIRequestConfig> (config: T) => Promise<IHTTPResponse>;
