@@ -8,7 +8,7 @@ import { ISchema as FISchema } from '@formily/json-schema';
 import { IAny, IAnyObject, IObjKey, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
 import { get, omit, set } from 'lodash-es';
 
-export const mergeSchema = (schema: ISchema, editContentMap?: { [id: string]: ISchemaEditConfigContent }, userEditContentMap?: { [id: string]: ISchemaEditConfigContent }) => {
+export const mergeSchema = (schema: ISchema, editContentMap?:ISchemaEditContentMap, userEditContentMap?: ISchemaEditContentMap) => {
   if (isVacuous(schema)) return schema;
   // 获取 ids 和其所在的路径
   const idPathMap: Record<string, string> = {};
@@ -59,17 +59,18 @@ export const mergeSchema = (schema: ISchema, editContentMap?: { [id: string]: IS
     const editContent = editContentMap?.[id];
     const userEditContent = userEditContentMap?.[id];
     if (path === '' && id) {
-      curSchema = mergeEditConfig(curSchema, editContent, userEditContent);
+      curSchema = mergeEditContent(curSchema, editContent, userEditContent);
+    } else {
+      const pathSchema = get(curSchema, path);
+      if (!pathSchema) return;
+      curSchema = set(curSchema, path, mergeEditContent(pathSchema, editContent, userEditContent));
     }
-    const pathSchema = get(curSchema, path);
-    if (!pathSchema) return;
-    curSchema = set(curSchema, path, mergeEditConfig(pathSchema, editContent, userEditContent));
   });
   return curSchema;
 };
 
 // eslint-disable-next-line complexity
-const mergeEditConfig = (schema: ISchema, editContent?: ISchemaEditConfigContent, userEditContent?: ISchemaEditConfigContent) => {
+const mergeEditContent = (schema: ISchema, editContent?: ISchemaEditContent, userEditContent?: ISchemaEditContent) => {
   if (isVacuous(editContent) && isVacuous(userEditContent)) return schema;
   if (isVacuous(schema)) return schema;
   const { 'x-edit-config': editConfig } = schema;
@@ -78,38 +79,34 @@ const mergeEditConfig = (schema: ISchema, editContent?: ISchemaEditConfigContent
   }
   let curSchema = schema;
   // 合并配置
-  curSchema = mergeSchemaItem(curSchema, editConfig, editContent);
+  curSchema = mergeSchemaContent(curSchema, editConfig, editContent);
   // 合并用户配置
-  curSchema = mergeSchemaItem(curSchema, editConfig?.user, userEditContent);
+  curSchema = mergeSchemaContent(curSchema, editConfig?.user, userEditContent);
   // 合并 properties 配置
-  curSchema.properties = mergeSchemaItem(curSchema.properties, editConfig?.properties, editContent?.properties);
-  curSchema.properties = mergeSchemaItem(curSchema.properties, editConfig?.user?.properties, userEditContent?.properties);
+  curSchema.properties = mergeSchemaContent(curSchema.properties, editConfig?.properties, editContent?.properties);
+  curSchema.properties = mergeSchemaContent(curSchema.properties, editConfig?.user?.properties, userEditContent?.properties);
   // 合并 items 配置
+  const itemsConfig = editConfig?.items;
+  const itemsUserConfig = editConfig?.user?.items;
+  const itemsContent = editContent?.items;
+  const userItemsContent = userEditContent?.items;
   if (Array.isArray(curSchema.items)) {
-    if (Array.isArray(editConfig?.items)) {
-      const itemsConfig = editConfig.items;
-      if (editContent?.items && Array.isArray(editContent?.items)) {
-        const itemsContent = editContent.items;
-        curSchema.items = curSchema.items.map((item, index) => mergeSchemaItem(item, itemsConfig[index], itemsContent[index])) as IAnyObject[];
+    if (Array.isArray(itemsConfig)) {
+      if (itemsContent && Array.isArray(itemsContent)) {
+        curSchema.items = curSchema.items.map((item, index) => mergeSchemaContent(item, itemsConfig[index], itemsContent[index])) as IAnyObject[];
       }
-    }
-    if (Array.isArray(editConfig?.user?.items)) {
-      const itemsConfig = editConfig.user.items;
-      if (userEditContent?.items && Array.isArray(userEditContent?.items)) {
-        const itemsContent = userEditContent.items;
-        curSchema.items = curSchema.items?.map((item, index) => mergeSchemaItem(item, itemsConfig[index], itemsContent[index])) as IAnyObject[];
+      if (Array.isArray(itemsUserConfig)) {
+        if (userItemsContent && Array.isArray(userItemsContent)) {
+          curSchema.items = curSchema.items?.map((item, index) => mergeSchemaContent(item, itemsConfig[index], userItemsContent[index])) as IAnyObject[];
+        }
       }
     }
   } else if (!isVacuous(curSchema.items)) {
-    if (!Array.isArray(editConfig?.items)) {
-      if (!Array.isArray(editContent?.items)) {
-        curSchema.items = mergeSchemaItem(curSchema.items, editConfig?.items, editContent?.items);
-      }
+    if (!Array.isArray(itemsConfig) && !Array.isArray(itemsContent)) {
+      curSchema.items = mergeSchemaContent(curSchema.items, itemsConfig, itemsContent);
     }
-    if (!Array.isArray(editConfig?.user?.items)) {
-      if (!Array.isArray(userEditContent?.items)) {
-        curSchema.items = mergeSchemaItem(curSchema.items, editConfig?.user?.items, userEditContent?.items);
-      }
+    if (!Array.isArray(itemsUserConfig) && !Array.isArray(userItemsContent)) {
+      curSchema.items = mergeSchemaContent(curSchema.items, itemsUserConfig, userItemsContent);
     }
   }
   return curSchema;
@@ -168,7 +165,7 @@ const handleSortOperation = <T extends IAnyObject | undefined>(obj: T, sort: str
   return obj;
 };
 
-export const mergeSchemaItem = <T extends IAnyObject | undefined>(obj: T, editConfig?: ISchemaEditConfigItem, editContent?: ISchemaEditConfigContentItem): T => {
+export const mergeSchemaContent = <T extends IAnyObject | undefined>(obj: T, editConfig?: ISchemaEditConfigItem, editContent?: ISchemaEditContentItem): T => {
   if (isVacuous(editConfig) || isVacuous(editContent)) return obj;
 
   const { allowAdd, allowDel, allowSort, allowKeys, denyKeys } = editConfig;
@@ -313,18 +310,20 @@ export type ISchemaEditConfigItem = {
   allowSort?: string[] | boolean;
 }
 
+export type ISchemaEditContentMap = { [id: string]: ISchemaEditContent };
+
 // 编辑配置的内容
-export type ISchemaEditConfigContent = ISchemaEditConfigContentItem & {
-  properties?: ISchemaEditConfigContentItem;
-  items?: ISchemaEditConfigContentItem | ISchemaEditConfigContentItem[];
+export type ISchemaEditContent = ISchemaEditContentItem & {
+  properties?: ISchemaEditContentItem;
+  items?: ISchemaEditContentItem | ISchemaEditContentItem[];
 }
 
-export type ISchemaEditConfigContentItem = {
+export type ISchemaEditContentItem = {
   keys?: {
     [key: string]: {
       type: 'del' | 'edit'
       /** 值 */
-      value?: IAnyObject;
+      value?: IAny;
     }
   }
   /** 排序 */

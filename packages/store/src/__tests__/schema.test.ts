@@ -3,21 +3,22 @@
  * @author ickeep <i@ickeep.com>
  */
 
+import { cloneDeep } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
-import type { ISchema, ISchemaEditConfigContent, ISchemaEditConfigContentItem } from '../schema';
-import { mergeSchema, mergeSchemaItem } from '../schema';
+import type { ISchema, ISchemaEditContent, ISchemaEditContentItem } from '../schema';
+import { mergeSchema, mergeSchemaContent } from '../schema';
 
 describe('schema 模块', () => {
   describe('mergeSchemaItem', () => {
     it('应该正确处理空对象', () => {
-      const result = mergeSchemaItem(undefined, undefined, undefined);
+      const result = mergeSchemaContent(undefined, undefined, undefined);
       expect(result).toBeUndefined();
     });
 
     it('应该正确处理编辑配置为空的情况', () => {
       const obj = { name: 'test' };
-      const result = mergeSchemaItem(obj, undefined, undefined);
+      const result = mergeSchemaContent(obj, undefined, undefined);
       expect(result).toEqual(obj);
     });
 
@@ -27,7 +28,7 @@ describe('schema 模块', () => {
         allowKeys: ['name'],
         denyKeys: ['age'],
       };
-      const editContent: ISchemaEditConfigContentItem = {
+      const editContent: ISchemaEditContentItem = {
         keys: {
           name: {
             type: 'edit',
@@ -35,7 +36,7 @@ describe('schema 模块', () => {
           },
         },
       };
-      const result = mergeSchemaItem(obj, editConfig, editContent);
+      const result = mergeSchemaContent(obj, editConfig, editContent);
       expect(result).toEqual({ name: { type: 'string', value: 'new name' }, age: 18 });
     });
 
@@ -47,14 +48,14 @@ describe('schema 模块', () => {
       const editConfig = {
         allowDel: ['age'],
       };
-      const editContent: ISchemaEditConfigContentItem = {
+      const editContent: ISchemaEditContentItem = {
         keys: {
           age: {
             type: 'del',
           },
         },
       };
-      const result = mergeSchemaItem(obj, editConfig, editContent);
+      const result = mergeSchemaContent(obj, editConfig, editContent);
       expect(result).toEqual({ name: 'test' });
     });
 
@@ -63,14 +64,14 @@ describe('schema 模块', () => {
       const editConfig = {
         allowAdd: true,
       };
-      const editContent: ISchemaEditConfigContentItem = {
+      const editContent: ISchemaEditContentItem = {
         keys: {},
         addKeys: [{
           key: 'age',
           value: { type: 'number', value: 18 },
         }],
       };
-      const result = mergeSchemaItem(obj, editConfig, editContent);
+      const result = mergeSchemaContent(obj, editConfig, editContent);
       expect(result).toEqual({ name: 'test', age: { type: 'number', value: 18 } });
     });
 
@@ -79,11 +80,11 @@ describe('schema 模块', () => {
       const editConfig = {
         allowSort: true,
       };
-      const editContent: ISchemaEditConfigContentItem = {
+      const editContent: ISchemaEditContentItem = {
         keys: {},
         sort: ['c', 'a', 'b'],
       };
-      const result = mergeSchemaItem(obj, editConfig, editContent);
+      const result = mergeSchemaContent(obj, editConfig, editContent);
       expect(result).toEqual({
         a: { value: 1, 'x-index': 1 },
         b: { value: 2, 'x-index': 2 },
@@ -97,7 +98,7 @@ describe('schema 模块', () => {
       const schema: ISchema = {
         type: 'object',
       };
-      const result = mergeSchema(schema);
+      const result = mergeSchema(cloneDeep(schema));
       expect(result).toEqual(schema);
     });
 
@@ -115,7 +116,87 @@ describe('schema 模块', () => {
           },
         },
       };
-      const result = mergeSchema(schema);
+      const result = mergeSchema(cloneDeep(schema));
+      expect(result).toEqual(schema);
+    });
+
+    it('应该在存在重复 x-id 时返回原始 schema 而不进行合并', () => {
+      const schema: ISchema = {
+        type: 'object',
+        'x-id': 'duplicate-test',
+        properties: {
+          field1: {
+            type: 'string',
+            'x-id': 'duplicate-id',
+            title: '字段1',
+            'x-edit-config': {
+              allowKeys: ['title'],
+            },
+          },
+          field2: {
+            type: 'string',
+            'x-id': 'duplicate-id',
+            title: '字段1',
+            'x-edit-config': {
+              allowKeys: ['title'],
+            },
+          },
+        },
+      };
+
+      const editContent: Record<string, ISchemaEditContent> = {
+        'duplicate-id': {
+          keys: {
+            title: {
+              type: 'edit',
+              value: '修改后的标题',
+            },
+          },
+        },
+      };
+
+      const result = mergeSchema(cloneDeep(schema), editContent);
+      // 由于存在重复的 x-id，函数应该返回原始 schema 而不做任何修改
+      expect(result).toEqual(schema);
+    });
+
+    it('应该在数组类型items中存在重复 x-id 时返回原始 schema', () => {
+      const schema: ISchema = {
+        type: 'array',
+        'x-id': 'array-test',
+        items: [
+          {
+            type: 'object',
+            'x-id': 'duplicate-array-id',
+            title: '数组项1',
+            'x-edit-config': {
+              allowKeys: ['title'],
+            },
+          },
+          {
+            type: 'object',
+            'x-id': 'duplicate-array-id',
+            title: '数组项2',
+            'x-edit-config': {
+              allowKeys: ['title'],
+            },
+          },
+        ],
+      };
+
+      const editContent: Record<string, ISchemaEditContent> = {
+        'duplicate-array-id': {
+          keys: {
+            title: {
+              type: 'edit',
+              value: '修改后的数组项',
+            },
+          },
+        },
+      };
+
+      const result = mergeSchema(cloneDeep(schema), editContent);
+      // 由于在数组items中存在重复的 x-id，函数应该返回原始 schema
       expect(result).toEqual(schema);
     });
 
@@ -138,7 +219,7 @@ describe('schema 模块', () => {
           },
         },
       };
-      const editContent: Record<string, ISchemaEditConfigContent> = {
+      const editContent: Record<string, ISchemaEditContent> = {
         name: {
           properties: {
             keys: {
@@ -150,7 +231,7 @@ describe('schema 模块', () => {
           },
         },
       };
-      const result = mergeSchema(schema, editContent);
+      const result = mergeSchema(cloneDeep(schema), editContent);
       expect(result?.properties?.name?.properties?.title).toEqual({ type: 'string', title: '姓名' });
     });
 
@@ -171,7 +252,7 @@ describe('schema 模块', () => {
           },
         },
       };
-      const editContent: Record<string, ISchemaEditConfigContent> = {
+      const editContent: Record<string, ISchemaEditContent> = {
         item: {
           properties: {
             keys: {
@@ -183,7 +264,7 @@ describe('schema 模块', () => {
           },
         },
       };
-      const result = mergeSchema(schema, editContent);
+      const result = mergeSchema(cloneDeep(schema), editContent);
       const items = result?.items as ISchema;
       expect(items?.properties?.title).toEqual({ type: 'string', title: '标题' });
     });
