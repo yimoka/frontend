@@ -1,7 +1,9 @@
 {
   "recommendations": [
-    "streetsidesoftware.code-spell-checker",
-    "dbaeumer.vscode-eslint",
-    "christian-kohler.npm-intellisense"
+    "dbaeumer.vscode-eslint", // ESLint 支持
+    "streetsidesoftware.code-spell-checker", // 拼写检查
+    "eamodio.gitlens", // Git 增强
+    "christian-kohler.npm-intellisense", // npm 智能提示
+    "Gruntfuggly.todo-tree" // 任务树
   ]
 }
