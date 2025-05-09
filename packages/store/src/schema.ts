@@ -97,7 +97,7 @@ const mergeEditContent = (schema: ISchema, editContent?: ISchemaEditContent, use
       }
       if (Array.isArray(itemsUserConfig)) {
         if (userItemsContent && Array.isArray(userItemsContent)) {
-          curSchema.items = curSchema.items?.map((item, index) => mergeSchemaContent(item, itemsConfig[index], userItemsContent[index])) as IAnyObject[];
+          curSchema.items = curSchema.items?.map((item, index) => mergeSchemaContent(item, itemsUserConfig[index], userItemsContent[index])) as IAnyObject[];
         }
       }
     }
@@ -167,7 +167,6 @@ const handleSortOperation = <T extends IAnyObject | undefined>(obj: T, sort: str
 
 export const mergeSchemaContent = <T extends IAnyObject | undefined>(obj: T, editConfig?: ISchemaEditConfigItem, editContent?: ISchemaEditContentItem): T => {
   if (isVacuous(editConfig) || isVacuous(editContent)) return obj;
-
   const { allowAdd, allowDel, allowSort, allowKeys, denyKeys } = editConfig;
   const { keys, sort, addKeys } = editContent;
 
@@ -179,7 +178,7 @@ export const mergeSchemaContent = <T extends IAnyObject | undefined>(obj: T, edi
   if (keys) {
     Object.entries(keys).forEach(([key, value]) => {
       const editValue = handleEditOperation(key, value as IEditValue, allowKeys, denyKeys);
-      if (editValue) {
+      if (useObject[key] !== editValue) {
         useObject[key] = editValue;
       }
       if (handleDeleteOperation(key, value as IEditValue, allowDel)) {
