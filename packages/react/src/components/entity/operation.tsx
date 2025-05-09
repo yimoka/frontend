@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { IAnyObject } from '@yimoka/shared';
-import { getEntityStore, IAPIKey, IEntityConfig, ISchema } from '@yimoka/store';
+import { getEntityStore, IAPIKey, IEntityConfig } from '@yimoka/store';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
@@ -21,6 +21,5 @@ export const EntityOperation = observer((props: IEntityOpProps) => {
 
 export type IEntityOpProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityProps<V, R>> & {
   config?: IEntityConfig<V>;
-  schema?: ISchema;
   operation?: IAPIKey;
 }

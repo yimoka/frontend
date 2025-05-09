@@ -1,6 +1,6 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isVacuous } from '@yimoka/shared';
-import { getEntityStore, IEntityConfig, ISchema, IStore, IStoreConfig } from '@yimoka/store';
+import { getEntityStore, IEntityConfig, IStore, IStoreConfig } from '@yimoka/store';
 import { cloneDeep, pick } from 'lodash-es';
 import React, { useEffect, useMemo } from 'react';
 
@@ -100,7 +100,6 @@ export const EntityValues = observer((props: IEntityValuesProps) => {
 });
 
 export type IEntityDetailProps<V extends object = IAnyObject, R extends object = IAnyObject> = Partial<IEntityValuesProps<V, R>> & {
-  schema: ISchema;
   detailStore?: IStore<V, R> | IStoreConfig<V, R>;
 }
 
