@@ -5,6 +5,7 @@ import { RenderArray } from './array/render-array';
 import { SchemaItemRecursion } from './array/schema-item-recursion';
 import { SchemaItemRender } from './array/schema-item-render';
 import { EntityAdd } from './entity/add';
+import { EntityAuto } from './entity/auto';
 import { Entity } from './entity/base';
 import { EntityBatchAdd } from './entity/batch-add';
 import { EntityDetail } from './entity/detail';
@@ -27,6 +28,7 @@ export const components: Record<string, ComponentType<IAny>> = {
   SchemaItemRender,
 
   EntityAdd,
+  EntityAuto,
   EntityBatchAdd,
   Entity,
   EntityDetail,

@@ -7,6 +7,7 @@ export * from './components/array/schema-item-recursion';
 export * from './components/array/schema-item-render';
 
 export * from './components/entity/add';
+export * from './components/entity/auto';
 export * from './components/entity/base';
 export * from './components/entity/batch-add';
 export * from './components/entity/detail';
@@ -16,12 +17,12 @@ export * from './components/entity/operation';
 export * from './components/entity/response';
 export * from './components/entity/schema';
 
-export * from './components/store/dict';
-export * from './components/store/route';
-export * from './components/store/watchChildStore';
 export * from './components/index.ts';
 export * from './components/re-form-provider';
 export * from './components/render-any';
+export * from './components/store/dict';
+export * from './components/store/route';
+export * from './components/store/watchChildStore';
 export * from './components/trigger';
 
 export * from './context/config';
@@ -41,11 +42,12 @@ export * from './hooks/deep-memo';
 export * from './hooks/entity-config';
 export * from './hooks/record-index-fn';
 export * from './hooks/root';
-export * from './hooks/schema-items-to-items';
 export * from './hooks/schema-items-to-columns';
+export * from './hooks/schema-items-to-items';
 export * from './hooks/splitter';
 export * from './hooks/store';
 export * from './hooks/upload-s3';
 
 export * from './tools/schema-items';
 export * from './tools/tooltip';
+
