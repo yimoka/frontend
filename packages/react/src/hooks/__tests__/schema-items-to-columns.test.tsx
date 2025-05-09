@@ -329,18 +329,14 @@ describe('schema-items-to-columns 组件测试', () => {
             },
           },
         }}
-        scope={{
-          $config: {
-            fieldsConfig: {
-              name: {
-                'x-column': {
-                  toolip: '标题的提示',
-                },
+        store={{
+          fieldsConfig: {
+            name: {
+              'x-column': {
+                toolip: '标题的提示',
               },
             },
           },
-        }}
-        store={{
           defaultValues: {
             arr: [
               { name: '张三', age: 18, address: '北京', sex: '男' },
