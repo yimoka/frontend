@@ -6,12 +6,15 @@ import { SchemaItemRecursion } from './array/schema-item-recursion';
 import { SchemaItemRender } from './array/schema-item-render';
 import { EntityAdd } from './entity/add';
 import { Entity } from './entity/base';
+import { EntityBatchAdd } from './entity/batch-add';
 import { EntityDetail } from './entity/detail';
 import { EntityEdit } from './entity/edit';
 import { EntityList } from './entity/list';
 import { EntityOperation } from './entity/operation';
 import { EntityResponse } from './entity/response';
 import { EntitySchema } from './entity/schema';
+import { FetchData } from './fetch-data';
+import { ReFormByListData, ReFormProvider } from './re-form-provider';
 import { RenderAny } from './render-any';
 import { StoreDict } from './store/dict';
 import { StoreRoute } from './store/route';
@@ -24,6 +27,7 @@ export const components: Record<string, ComponentType<IAny>> = {
   SchemaItemRender,
 
   EntityAdd,
+  EntityBatchAdd,
   Entity,
   EntityDetail,
   EntityEdit,
@@ -36,6 +40,9 @@ export const components: Record<string, ComponentType<IAny>> = {
   StoreRoute,
   WatchChildStore,
 
+  FetchData,
+  ReFormProvider,
+  ReFormByListData,
   RenderAny,
   Trigger,
 };

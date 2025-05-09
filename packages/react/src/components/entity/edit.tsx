@@ -4,22 +4,28 @@ import { getEntityStore, IStore, IStoreConfig } from '@yimoka/store';
 import React from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
+import { useEntityConfig } from '../../hooks/entity-config';
 
 import { EntityValues, FetchDetail, IEntityValuesProps } from './detail';
 
 export const EntityEdit = observer((props: IEntityEditProps) => {
-  const { values, store, config, ...args } = props;
+  const { values, store, config, scope, ...args } = props;
+  const curConfig = useEntityConfig(config);
 
-  const editStore = useDeepMemo(() => getEntityStore(store, 'edit', config), [store, config]);
+  const editStore = useDeepMemo(() => getEntityStore(store, 'edit', curConfig), [store, curConfig]);
 
   if (isVacuous(values)) {
-    return <FetchDetail {...args} config={config} store={editStore} />;
+    return <FetchDetail {...args}
+      config={curConfig}
+      scope={scope}
+      store={editStore} />;
   }
 
   return (
     <EntityValues
       {...args}
-      config={config}
+      config={curConfig}
+      scope={{ ...scope, $editStore: null }}
       store={editStore}
       values={values}
     />

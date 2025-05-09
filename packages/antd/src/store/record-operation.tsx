@@ -57,7 +57,7 @@ const DEFAULT_ID_KEY = 'id';
  * ```
  */
 export const RecordOperation = observer((props: RecordOperationProps) => {
-  const { parentStore, store, popconfirm, trigger, operation, config, defaultValues, record, isRefresh } = props;
+  const { parentStore, store, popconfirm, trigger, operation, config, defaultValues, record, isRefresh = true } = props;
   const { $config, $record, $index } = useExpressionScope() ?? {};
   const pStore = useStore(parentStore);
   const [loading, setLoading] = useState(false);
@@ -113,7 +113,7 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
         }}>
         {/* fix Warning: findDOMNode is deprecated and will be removed in the next major release. Instead, */}
         <>
-          <Trigger component={Button} {...trigger} />
+          <Trigger component={Button} loading={loading} {...trigger} />
         </>
       </Popconfirm>
     );
@@ -121,7 +121,8 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
 
   return (
     <Trigger
-      component="Button"
+      component={Button}
+      loading={loading}
       {...trigger}
       onTrig={(...args) => {
         run();
@@ -148,7 +149,7 @@ export interface RecordOperationProps extends Pick<Partial<IEntityOpProps>, 'sto
   /** 记录数据，可选 */
   record?: IAnyObject;
   /** 确认弹窗配置，可选 */
-  popconfirm?: PopconfirmProps | true;
+  popconfirm?: PopconfirmProps | boolean;
   /** 触发按钮配置，可选 */
   trigger?: TriggerProps;
 }

@@ -5,19 +5,16 @@ export const ImageField: IFieldConfig = {
   type: 'string',
   title: '图片',
   'x-decorator': 'FormItem',
-  'x-component': 'Image',
-  'x-component-props': { isEdit: true },
-  'x-column': {
-    schema: {
-      'x-component': 'Image',
-      'x-component-props': {
-        // isEdit: false,
-        // isModal: true,
-      },
-    },
+  'x-component': 'InImage',
+  'x-component-props': {
+    api: { url: '/base/iam/portal/getUploadCredential' },
   },
+
   'x-output-schema': {
     'x-component': 'Image',
+    'x-component-props': {
+      withScopeValue: true,
+    },
   },
 };
 
@@ -35,3 +32,5 @@ export const ImageModalField: IFieldConfig = {
 };
 
 export const getImageModalField = (conf: IFieldConfig = {}) => mergeWithArrayOverride({}, ImageModalField, conf);
+
+

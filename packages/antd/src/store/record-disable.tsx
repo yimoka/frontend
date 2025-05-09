@@ -5,14 +5,13 @@ import { useLocaleComponent } from '../hooks/use-locale';
 
 import { RecordOperation, RecordOperationProps } from './record-operation';
 
-export const RecordDel = observer((props: Partial<RecordOperationProps>) => {
-  const { operation = 'delOne', popconfirm = true, trigger, ...args } = props;
-  const locale = useLocaleComponent('RecordDel');
+export const RecordDisable = observer((props: Partial<RecordOperationProps>) => {
+  const { operation = 'disableOne', popconfirm = true, trigger, ...args } = props;
+  const locale = useLocaleComponent('RecordDisable');
 
   const curPopconfirm = useMemo(() => {
     const defaultPopconfirm = {
       title: locale.popconfirmTitle,
-      description: locale.popconfirmDescription,
     };
     if (popconfirm === true) {
       return defaultPopconfirm;

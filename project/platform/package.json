@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@yimoka/antd": "workspace:*",
+    "@yimoka/monaco-editor": "workspace:*",
     "@yimoka/react": "workspace:*",
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",

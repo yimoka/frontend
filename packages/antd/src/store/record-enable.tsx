@@ -1,3 +1,4 @@
+
 import { observer } from '@yimoka/react';
 import React, { useMemo } from 'react';
 
@@ -5,14 +6,13 @@ import { useLocaleComponent } from '../hooks/use-locale';
 
 import { RecordOperation, RecordOperationProps } from './record-operation';
 
-export const RecordDel = observer((props: Partial<RecordOperationProps>) => {
-  const { operation = 'delOne', popconfirm = true, trigger, ...args } = props;
-  const locale = useLocaleComponent('RecordDel');
+export const RecordEnable = observer((props: Partial<RecordOperationProps>) => {
+  const { operation = 'enableOne', popconfirm = false, trigger, ...args } = props;
+  const locale = useLocaleComponent('RecordEnable');
 
   const curPopconfirm = useMemo(() => {
     const defaultPopconfirm = {
       title: locale.popconfirmTitle,
-      description: locale.popconfirmDescription,
     };
     if (popconfirm === true) {
       return defaultPopconfirm;
@@ -28,7 +28,7 @@ export const RecordDel = observer((props: Partial<RecordOperationProps>) => {
       operation={operation}
       {...args}
       popconfirm={curPopconfirm}
-      trigger={{ danger: true, size: 'small', children: locale.text, ...trigger }}
+      trigger={{ size: 'small', children: locale.text, ...trigger }}
     />
   );
 });

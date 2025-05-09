@@ -39,6 +39,7 @@ import { DatePicker } from './enter/date-picker';
 import { DateRangePicker } from './enter/date-range-picker';
 import { Form } from './enter/form';
 import { FormItem } from './enter/form-item';
+import { InImage } from './enter/in-image';
 import { Input } from './enter/input';
 import { InputNumber } from './enter/input-number';
 import { Mentions } from './enter/mentions';
@@ -55,6 +56,7 @@ import { Transfer } from './enter/transfer';
 import { TreeSelect } from './enter/tree-select';
 
 import { Upload } from './enter/upload';
+import { UploadS3 } from './enter/upload-s3';
 import { Alert } from './feedback/alert';
 import { Drawer } from './feedback/drawer';
 import { ErrorContent } from './feedback/error-content';
@@ -86,7 +88,10 @@ import { PageHeader } from './page/page-header';
 import { StoreForm } from './store/form';
 import { ListFilter } from './store/list-filter';
 import { RecordDel } from './store/record-del';
+import { RecordDisable } from './store/record-disable';
+import { RecordEnable } from './store/record-enable';
 import { RecordOperation } from './store/record-operation';
+import { RecordSwitch } from './store/record-switch';
 import { Reset } from './store/reset';
 import { Submit } from './store/submit';
 import { StoreTable } from './store/table';
@@ -146,6 +151,7 @@ export const components: IConfigComponents = {
   DateRangePicker,
   Form,
   FormItem,
+  InImage,
   InputNumber,
   Input,
   Mentions,
@@ -162,6 +168,7 @@ export const components: IConfigComponents = {
   Transfer,
   TreeSelect,
   Upload,
+  UploadS3,
 
   // feedback
   Alert,
@@ -205,8 +212,11 @@ export const components: IConfigComponents = {
   StoreForm,
   StoreTable,
   ListFilter,
-  RecordOperation,
   RecordDel,
+  RecordDisable,
+  RecordEnable,
+  RecordOperation,
+  RecordSwitch,
   Reset,
   Submit,
 };

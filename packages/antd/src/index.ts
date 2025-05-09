@@ -16,6 +16,7 @@ export * from './enter/date-picker';
 export * from './enter/date-range-picker';
 export * from './enter/form';
 export * from './enter/form-item';
+export * from './enter/in-image';
 export * from './enter/input-number';
 export * from './enter/input';
 export * from './enter/mentions';
@@ -31,6 +32,7 @@ export * from './enter/time-range-picker';
 export * from './enter/transfer';
 export * from './enter/tree-select';
 export * from './enter/upload';
+export * from './enter/upload-s3';
 
 export * from './display/avatar';
 export * from './display/badge';
@@ -92,8 +94,11 @@ export * from './page/page-header';
 // store
 export * from './store/form';
 export * from './store/list-filter';
-export * from './store/record-operation';
 export * from './store/record-del';
+export * from './store/record-disable';
+export * from './store/record-enable';
+export * from './store/record-operation';
+export * from './store/record-switch';
 export * from './store/reset';
 export * from './store/submit';
 export * from './store/table';

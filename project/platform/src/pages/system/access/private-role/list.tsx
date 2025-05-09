@@ -98,11 +98,7 @@ export const PrivateRoleListPage = observer((props: Omit<IEntityListProps, 'conf
                     'x-component': 'PrivateRoleEditModal',
                     'x-component-props': { title: '编辑' },
                   },
-
-                  // delete: {
-                  //   type: 'void',
-                  //   'x-component': 'RowActionDel',
-                  // },
+                  delete: { 'x-component': 'RecordDel' },
                 },
               },
             },

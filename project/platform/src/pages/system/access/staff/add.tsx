@@ -58,7 +58,7 @@ export const StaffAddModal = (props: Omit<ModalProps, 'children'>) => (
   <Modal
     bindChildStore
     destroyOnClose
-    fetchOnSuccess
+    isRefresh
     maskClosable={false}
     title='添加人员'
     trigger={{ type: 'primary', ghost: true }}

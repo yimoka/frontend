@@ -44,13 +44,11 @@ export function getEntityStore<V extends object = IAnyObject, R extends object =
     conf.defaultValues = { ...config?.defaultQueryValues };
     conf.type = 'list';
   } else if (['detail'].includes(`${mode}`)) {
-    // 默认马上执行 和过滤空值
+    // 默认过滤空值
     if (typeof conf.options === 'undefined') {
       conf.options = {};
     }
-    if (typeof conf.options.runNow === 'undefined') {
-      conf.options.runNow = 'always';
-    }
+
     if (typeof conf.options.filterBlankAtRun === 'undefined') {
       conf.options.filterBlankAtRun = true;
     }
