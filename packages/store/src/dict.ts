@@ -55,9 +55,11 @@ export const initStoreDict = (store: BaseStore) => {
               const apiData = getDictAPIData(res.data, conf);
               store.setFieldDict(field, apiData);
             }
+            store.setFieldDictLoading(field, false);
           }
         })
-          .finally(() => {
+          // 使用 finally 时 如果抛出 new Error 会报错
+          .catch(() => {
             if (lastFetchID === store.getDictFetchID(field)) {
               store.setFieldDictLoading(field, false);
             }
@@ -116,12 +118,14 @@ export const watchStoreDict = (store: BaseStore) => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDict(field, data);
                 updateValueByDict(conf, data, store);
-              }
-            }).finally(() => {
-              if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
               }
-            });
+            }) // 使用 finally 时 如果抛出 new Error 会报错
+              .catch(() => {
+                if (lastFetchID === store.getDictFetchID(field)) {
+                  store.setFieldDictLoading(field, false);
+                }
+              });
           } else {
             store.setFieldDict(field, dictData);
             updateValueByDict(conf, dictData, store);
@@ -142,9 +146,11 @@ export const watchStoreDict = (store: BaseStore) => {
                 }
                 updateValueByDict(conf, apiData, store);
               }
+              store.setFieldDictLoading(field, false);
             }
           })
-            .finally(() => {
+            // 使用 finally 时 如果抛出 new Error 会报错
+            .catch(() => {
               if (lastFetchID === store.getDictFetchID(field)) {
                 store.setFieldDictLoading(field, false);
               }
