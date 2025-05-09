@@ -5,7 +5,210 @@
  */
 
 import { ISchema as FISchema } from '@formily/json-schema';
-import { IAny, IAnyObject, IObjKey } from '@yimoka/shared';
+import { IAny, IAnyObject, IObjKey, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
+import { get, omit, set } from 'lodash-es';
+
+export const mergeSchema = (schema: ISchema, editContentMap?: { [id: string]: ISchemaEditConfigContent }, userEditContentMap?: { [id: string]: ISchemaEditConfigContent }) => {
+  if (isVacuous(schema)) return schema;
+  // 获取 ids 和其所在的路径
+  const idPathMap: Record<string, string> = {};
+  // 判断是否存在重复项 如果存在则抛出异常 并不进行处理
+  // eslint-disable-next-line complexity
+  const findIdPath = (schema: ISchema, path = '') => {
+    const id = schema['x-id'];
+    if (id) {
+      if (idPathMap[id]) {
+        return true;
+      }
+      idPathMap[id] = path;
+    }
+    if (schema.properties) {
+      for (const [key, value] of Object.entries(schema.properties)) {
+        const curPath = `properties.${key}`;
+        if (findIdPath(value, path ? `${path}.${curPath}` : curPath)) {
+          return true;
+        }
+      }
+    }
+    if (schema.items) {
+      if (Array.isArray(schema.items)) {
+        for (let i = 0; i < schema.items.length; i++) {
+          const item = schema.items[i];
+          const curPath = `items[${i}]`;
+          if (typeof item === 'object' && findIdPath(item as ISchema, path ? `${path}.${curPath}` : curPath)) {
+            return true;
+          }
+        }
+      } else if (typeof schema.items === 'object') {
+        const curPath = 'items';
+        if (findIdPath(schema.items as ISchema, path ? `${path}.${curPath}` : curPath)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+  // 如果存在重复项则返回原 schema
+  if (findIdPath(schema)) return schema;
+  // 如果 idPathMap 为空则返回原 schema
+  if (isVacuous(idPathMap)) return schema;
+
+  // 通过 idPathMap 来进行修复 按优先级,有可能父级的修改已经删除了子级 如通过 path取不到 则跳过
+  let curSchema = { ...schema };
+  Object.entries(idPathMap).forEach(([id, path]) => {
+    const editContent = editContentMap?.[id];
+    const userEditContent = userEditContentMap?.[id];
+    if (path === '' && id) {
+      curSchema = mergeEditConfig(curSchema, editContent, userEditContent);
+    }
+    const pathSchema = get(curSchema, path);
+    if (!pathSchema) return;
+    curSchema = set(curSchema, path, mergeEditConfig(pathSchema, editContent, userEditContent));
+  });
+  return curSchema;
+};
+
+// eslint-disable-next-line complexity
+const mergeEditConfig = (schema: ISchema, editContent?: ISchemaEditConfigContent, userEditContent?: ISchemaEditConfigContent) => {
+  if (isVacuous(editContent) && isVacuous(userEditContent)) return schema;
+  if (isVacuous(schema)) return schema;
+  const { 'x-edit-config': editConfig } = schema;
+  if (isVacuous(editConfig)) {
+    return schema;
+  }
+  let curSchema = schema;
+  // 合并配置
+  curSchema = mergeSchemaItem(curSchema, editConfig, editContent);
+  // 合并用户配置
+  curSchema = mergeSchemaItem(curSchema, editConfig?.user, userEditContent);
+  // 合并 properties 配置
+  curSchema.properties = mergeSchemaItem(curSchema.properties, editConfig?.properties, editContent?.properties);
+  curSchema.properties = mergeSchemaItem(curSchema.properties, editConfig?.user?.properties, userEditContent?.properties);
+  // 合并 items 配置
+  if (Array.isArray(curSchema.items)) {
+    if (Array.isArray(editConfig?.items)) {
+      const itemsConfig = editConfig.items;
+      if (editContent?.items && Array.isArray(editContent?.items)) {
+        const itemsContent = editContent.items;
+        curSchema.items = curSchema.items.map((item, index) => mergeSchemaItem(item, itemsConfig[index], itemsContent[index])) as IAnyObject[];
+      }
+    }
+    if (Array.isArray(editConfig?.user?.items)) {
+      const itemsConfig = editConfig.user.items;
+      if (userEditContent?.items && Array.isArray(userEditContent?.items)) {
+        const itemsContent = userEditContent.items;
+        curSchema.items = curSchema.items?.map((item, index) => mergeSchemaItem(item, itemsConfig[index], itemsContent[index])) as IAnyObject[];
+      }
+    }
+  } else if (!isVacuous(curSchema.items)) {
+    if (!Array.isArray(editConfig?.items)) {
+      if (!Array.isArray(editContent?.items)) {
+        curSchema.items = mergeSchemaItem(curSchema.items, editConfig?.items, editContent?.items);
+      }
+    }
+    if (!Array.isArray(editConfig?.user?.items)) {
+      if (!Array.isArray(userEditContent?.items)) {
+        curSchema.items = mergeSchemaItem(curSchema.items, editConfig?.user?.items, userEditContent?.items);
+      }
+    }
+  }
+  return curSchema;
+};
+
+// 类型守卫函数
+const isAllowedKey = (key: string, allowKeys: string[] | boolean | undefined): boolean => {
+  if (allowKeys === true) return true;
+  if (Array.isArray(allowKeys)) return allowKeys.includes(key);
+  return false;
+};
+
+const isDeniedKey = (key: string, denyKeys: string[] | boolean | undefined): boolean => {
+  if (denyKeys === true) return true;
+  if (Array.isArray(denyKeys)) return denyKeys.includes(key);
+  return false;
+};
+
+interface IEditValue {
+  type: 'edit' | 'del';
+  value?: IAnyObject;
+}
+
+const handleEditOperation = (key: string, value: IEditValue, allowKeys: string[] | boolean | undefined, denyKeys: string[] | boolean | undefined): IAnyObject | undefined => {
+  if (value?.type === 'edit' && isAllowedKey(key, allowKeys) && !isDeniedKey(key, denyKeys)) {
+    return value.value;
+  }
+  return undefined;
+};
+
+const handleDeleteOperation = (key: string, value: IEditValue, allowDel: string[] | boolean | undefined): boolean => value?.type === 'del' && isAllowedKey(key, allowDel);
+
+const handleAddOperation = <T extends IAnyObject | undefined>(obj: T, addKeys: Array<{ key: string; value: IAnyObject }> | undefined, allowAdd: boolean | undefined): T => {
+  if (!isVacuous(addKeys) && allowAdd === true && obj) {
+    const result = { ...obj };
+    addKeys.forEach(({ key, value }) => {
+      if (!(key in result)) {
+        result[key] = value;
+      }
+    });
+    return result as T;
+  }
+  return obj;
+};
+
+const handleSortOperation = <T extends IAnyObject | undefined>(obj: T, sort: string[] | undefined, allowSort: string[] | boolean | undefined): T => {
+  if (allowSort === true && !isVacuous(sort) && obj) {
+    const result = { ...obj };
+    sort.forEach((key, index) => {
+      if (key in result) {
+        result[key] = { ...result[key], 'x-index': index };
+      }
+    });
+    return result as T;
+  }
+  return obj;
+};
+
+export const mergeSchemaItem = <T extends IAnyObject | undefined>(obj: T, editConfig?: ISchemaEditConfigItem, editContent?: ISchemaEditConfigContentItem): T => {
+  if (isVacuous(editConfig) || isVacuous(editContent)) return obj;
+
+  const { allowAdd, allowDel, allowSort, allowKeys, denyKeys } = editConfig;
+  const { keys, sort, addKeys } = editContent;
+
+  let curObj = obj;
+  const useObject: IAnyObject = {};
+  const delKeys: string[] = [];
+
+  // 处理编辑和删除操作
+  if (keys) {
+    Object.entries(keys).forEach(([key, value]) => {
+      const editValue = handleEditOperation(key, value as IEditValue, allowKeys, denyKeys);
+      if (editValue) {
+        useObject[key] = editValue;
+      }
+      if (handleDeleteOperation(key, value as IEditValue, allowDel)) {
+        delKeys.push(key);
+      }
+    });
+  }
+
+  // 处理添加操作
+  curObj = handleAddOperation(curObj, addKeys, allowAdd);
+
+  // 处理编辑操作的结果
+  if (!isVacuous(useObject)) {
+    curObj = mergeWithArrayOverride({}, curObj, useObject) as T;
+  }
+
+  // 处理删除操作
+  if (!isVacuous(delKeys)) {
+    curObj = omit(curObj, delKeys) as T;
+  }
+
+  // 处理排序操作
+  curObj = handleSortOperation(curObj, sort, allowSort);
+
+  return curObj;
+};
 
 /**
  * 模式属性类型
@@ -83,7 +286,54 @@ export declare type ISchema<Decorator = IAny, Component = IAny, DecoratorProps =
   /** 唯一标识字段，用于多级系统编辑时的数据匹配 */
   'x-id'?: string;
   /** 编辑配置，用于实现租户/用户自定义配置 */
-  'x-edit-config'?: IAnyObject;
+  'x-edit-config'?: ISchemaEditConfig;
 }
 
 export type ITooltip = string | IAnyObject | boolean | null | number
+
+
+export type ISchemaEditConfig = ISchemaEditConfigItem & {
+  /** 允许修改的属性,数组展示或 true 为所有属性，其中 properties 和 items 单独配置  */
+  properties?: ISchemaEditConfigItem;
+  items?: ISchemaEditConfigItem | ISchemaEditConfigItem[];
+  // 用户私有配置
+  user?: ISchemaEditConfig;
+}
+
+export type ISchemaEditConfigItem = {
+  /** 允许修改的属性,数组展示或 true 为所有属性 */
+  allowKeys?: string[] | boolean;
+  /** 不允许修改的属性,数组展示或 true 为所有属性 */
+  denyKeys?: string[] | boolean;
+  /** 是否允许删除 */
+  allowDel?: string[] | boolean;
+  /** 是否允许添加 */
+  allowAdd?: boolean;
+  /** 是否允许排序 */
+  allowSort?: string[] | boolean;
+}
+
+// 编辑配置的内容
+export type ISchemaEditConfigContent = ISchemaEditConfigContentItem & {
+  properties?: ISchemaEditConfigContentItem;
+  items?: ISchemaEditConfigContentItem | ISchemaEditConfigContentItem[];
+}
+
+export type ISchemaEditConfigContentItem = {
+  keys?: {
+    [key: string]: {
+      type: 'del' | 'edit'
+      /** 值 */
+      value?: IAnyObject;
+    }
+  }
+  /** 排序 */
+  sort?: string[];
+  /** 添加 */
+  addKeys?: Array<{
+    key: string;
+    value: IAnyObject;
+  }>
+}
+
+
