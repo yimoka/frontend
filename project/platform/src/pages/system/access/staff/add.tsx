@@ -40,11 +40,11 @@ export const StaffAddPage = observer((props: Omit<IEntityAddProps, 'config' | 's
             avatar: {
               $ref: '#/definitions/avatar',
             },
-            isChangePassword: {
-              $ref: '#/definitions/isChangePassword',
-            },
             password: {
               $ref: '#/definitions/password',
+            },
+            isChangePassword: {
+              $ref: '#/definitions/isChangePassword',
             },
           },
         },

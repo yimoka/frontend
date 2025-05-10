@@ -29,7 +29,7 @@ export const staffConfig: IEntityConfig = {
     nameLike: getNameField(),
     realName: getRealNameField(),
     avatar: getAvatarField(),
-    isChangePassword: getBoolField({ title: '修改密码', 'x-column': { width: 100 } }),
+    isChangePassword: getBoolField({ title: '首登改密', 'x-column': { width: 100 } }),
     createTime: getCreateTimeField(),
     updateTime: getUpdateTimeField(),
     phonePrefix: getPhonePrefixField(),

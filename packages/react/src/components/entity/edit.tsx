@@ -15,10 +15,14 @@ export const EntityEdit = observer((props: IEntityEditProps) => {
   const editStore = useDeepMemo(() => getEntityStore(store, 'edit', curConfig), [store, curConfig]);
 
   if (isVacuous(values)) {
-    return <FetchDetail {...args}
-      config={curConfig}
-      scope={scope}
-      store={editStore} />;
+    return (
+      <FetchDetail
+        {...args}
+        config={curConfig}
+        scope={scope}
+        store={editStore}
+      />
+    );
   }
 
   return (

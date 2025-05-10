@@ -10,6 +10,7 @@ export const StaffEditPage = observer((props: Omit<IEntityEditProps, 'config' | 
   <EntityEdit
     {...props}
     config={staffConfig}
+    omitKeys={['phone', 'mail', 'password']}
     schema={{
       type: 'object',
       properties: {
@@ -34,21 +35,35 @@ export const StaffEditPage = observer((props: Omit<IEntityEditProps, 'config' | 
             },
             phone: {
               $ref: '#/definitions/phone',
+              'x-component-props': {
+                placeholder: '手机已加密，不显示原值，留空则不修改',
+              },
             },
             mail: {
               $ref: '#/definitions/mail',
+              'x-component-props': {
+                placeholder: '邮箱已加密，不显示原值，留空则不修改',
+              },
             },
             avatar: {
               $ref: '#/definitions/avatar',
             },
+            password: {
+              $ref: '#/definitions/password',
+              'x-component-props': {
+                placeholder: '密码已加密，不显示原值，留空则不修改',
+              },
+            },
             isChangePassword: {
               $ref: '#/definitions/isChangePassword',
             },
-            password: {
-              $ref: '#/definitions/password',
-            },
           },
         },
+      },
+    }}
+    store={{
+      options: {
+        filterBlankAtRun: ['phone', 'mail', 'password'],
       },
     }}
   />

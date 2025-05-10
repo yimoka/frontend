@@ -1,7 +1,7 @@
 import { observer } from '@formily/react';
 import { IAnyObject, isVacuous } from '@yimoka/shared';
 import { getEntityStore, IEntityConfig, IStore, IStoreConfig } from '@yimoka/store';
-import { cloneDeep, pick } from 'lodash-es';
+import { cloneDeep, omit, pick } from 'lodash-es';
 import React, { useEffect, useMemo } from 'react';
 
 import { useDeepMemo } from '../../hooks/deep-memo';
@@ -76,23 +76,23 @@ export const FetchDetail = observer((props: IFetchDetailProps) => {
 });
 
 export const EntityValues = observer((props: IEntityValuesProps) => {
-  const { config, values, notPickValues, scope, store = {}, ...args } = props;
+  const { config, values, notPickValues, scope, store = {}, omitKeys, ...args } = props;
   const curStore = useInitStore(store);
   const curConfig = useEntityConfig(config);
-
   const useScope = useDeepMemo(() => ({ $config: curConfig, ...scope }), [curConfig, scope]);
 
   useEffect(() => {
     const keys = Object.keys(curStore.defaultValues);
+    let curValues = omitKeys?.length ? omit(values, omitKeys) : values;
     if (notPickValues || keys.length === 0) {
-      curStore.setValues(values);
-      curStore.defaultValues = cloneDeep(values);
+      curStore.setValues(curValues);
+      curStore.defaultValues = cloneDeep(curValues);
     } else {
-      const curValues = pick(values, Object.keys(curStore.defaultValues));
+      curValues = pick(curValues, Object.keys(curStore.defaultValues));
       curStore.setValues(curValues);
       curStore.defaultValues = cloneDeep(curValues);
     }
-  }, [curStore, notPickValues, values]);
+  }, [curStore, notPickValues, omitKeys, values]);
 
   return (
     <Entity {...args} scope={useScope} store={curStore} />
@@ -112,5 +112,7 @@ export type IEntityValuesProps<V extends object = IAnyObject, R extends object =
   values: V,
   // 不对传入的 values 根据 store 的默认值进行 pick
   notPickValues?: boolean
+  // 不取传入 values 中这些 key 的值
+  omitKeys?: string[]
 }
 
