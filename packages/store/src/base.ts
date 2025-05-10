@@ -1,12 +1,12 @@
 import { createForm, Form, IFormMergeStrategy, IFormProps } from '@formily/core';
 import { action, define, observable } from '@formily/reactive';
-import { addWithLimit, IAny, IAnyObject, IObjKey, isVacuous, isSuccess, mergeWithArrayOverride } from '@yimoka/shared';
-import { cloneDeep, get, pick, pickBy, PropertyPath, set } from 'lodash-es';
+import { addWithLimit, IAny, IAnyObject, IObjKey, isSuccess, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
+import { cloneDeep, get, omitBy, pick, pickBy, PropertyPath, set } from 'lodash-es';
 
-import { handleAfterAtFetch, IAfterAtFetch as IAfterAtFetch } from './aop';
+import { handleAfterAtFetch, IAfterAtFetch } from './aop';
 import { IStoreAPI, IStoreHTTPRequest, IStoreResponse, runAPI } from './api';
 import { IStoreDict, IStoreDictConfig, IStoreDictLoading } from './dict';
-import { valueToSearchParam, parseSearchParam, IField, IFieldsConfig } from './field';
+import { IField, IFieldsConfig, parseSearchParam, valueToSearchParam } from './field';
 import { INotifier } from './notifier';
 
 import { IStore } from '.';
@@ -481,7 +481,15 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     const fetchID = this.lastFetchID;
     const { api } = this;
-    const params = (this.options.filterBlankAtRun ? pickBy(this.values, value => (!isVacuous(value))) : this.values) as V;
+    let params:IAnyObject = {};
+    const { filterBlankAtRun  } = this.options;
+    if (filterBlankAtRun === true) {
+      params = pickBy(this.values, value => (!isVacuous(value)));
+    } else if (Array.isArray(filterBlankAtRun) && filterBlankAtRun.length) {
+      params = omitBy(this.values, (value, key) => filterBlankAtRun.includes(key) && isVacuous(value));
+    } else {
+      params = this.values;
+    }
     const response = await runAPI<V, R>(api, this.apiExecutor, params, this.apiController);
     if (response && fetchID === this.lastFetchID) {
       this.setResponse(response);
@@ -561,7 +569,7 @@ export type IStoreRunNow = 'never' | 'always' | 'whenRequired'
 /**
  * Store 的默认选项。
  *
- * @property {boolean} filterBlankAtRun - 执行 API 时是否过滤参数空值。
+ * @property {boolean} filterBlankAtRun - 执行 API 时是否过滤参数空值。支持布尔值和字符串数组。当为字符串数组时，只过滤数组中的字段。
  * @property {boolean} bindRoute - 是否绑定路由。
  * @property {'push' | 'replace'} updateRouteType - 更新路由的方法，是 'push' 还是 'replace'。
  * @property {'unequal' | 'any'} routeTrigger - 路由变化的触发条件，是值变化 ('unequal') 还是任意变化 ('any')。
@@ -570,7 +578,7 @@ export type IStoreRunNow = 'never' | 'always' | 'whenRequired'
  * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
  */
 export type IBaseStoreOptions = {
-  filterBlankAtRun: boolean;
+  filterBlankAtRun: boolean|string[];
   bindRoute: boolean;
   updateRouteType: 'push' | 'replace';
   routeTrigger: 'unequal' | 'any';

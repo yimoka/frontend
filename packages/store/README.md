@@ -56,7 +56,7 @@ graph TD
     Store --> API
     Store --> Storage
     Store --> Dict
-    
+
     %% 添加反向依赖
     Notifier -.-> Store
     Executor -.-> Store
@@ -132,7 +132,7 @@ interface IBaseStoreConfig {
   apiExecutor?: Function;       // API执行器
   api?: object;                 // API配置
   options?: {
-    filterBlankAtRun?: boolean; // 是否过滤空值
+    filterBlankAtRun?: boolean; // 支持布尔值和字符串数组。当为字符串数组时，只过滤数组中的字段。
     bindRoute?: boolean;        // 是否绑定路由
     updateRouteType?: 'push' | 'replace'; // 路由更新方式
     routeTrigger?: 'unequal' | 'any';     // 路由触发条件
@@ -168,7 +168,7 @@ await store.fetch();
 // 列表组件示例
 const ListComponent = observer(() => {
   const store = useStore(ListStore);
-  
+
   return (
     <Table
       dataSource={store.listData}

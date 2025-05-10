@@ -8,7 +8,7 @@
  */
 
 import { IAnyObject, IHTTPResponse } from '@yimoka/shared';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IStoreResponse } from '../api';
 import { BaseStore } from '../base';
@@ -572,6 +572,31 @@ describe('BaseStore 模块', () => {
     store.setValues({ name: '', age: 20 });
     await store.fetch();
     expect(store.api).toHaveBeenCalledWith({ age: 20 });
+  });
+
+  it('当 filterBlankAtRun 为字符串数组时应该只过滤数组中指定的字段', async () => {
+    store.options.filterBlankAtRun = ['name'];
+    store.api = vi.fn().mockResolvedValue({ data: { name: '李四', age: 20 }, status: 200 });
+    store.setValues({ name: '', age: undefined, gender: '' });
+    await store.fetch();
+    expect(store.api).toHaveBeenCalledWith({ age: undefined, gender: '' });
+
+    // 只过滤 name 字段的空值
+    store.setValues({ name: '', age: 20, gender: '' });
+    await store.fetch();
+    expect(store.api).toHaveBeenCalledWith({ age: 20, gender: '' });
+
+    // 只过滤 name 和 gender 字段的空值
+    store.options.filterBlankAtRun = ['name', 'gender'];
+    store.setValues({ name: '', age: undefined, gender: '' });
+    await store.fetch();
+    expect(store.api).toHaveBeenCalledWith({ age: undefined });
+
+    // 空数组不应该过滤任何值
+    store.options.filterBlankAtRun = [];
+    store.setValues({ name: '', age: undefined, gender: '' });
+    await store.fetch();
+    expect(store.api).toHaveBeenCalledWith({ name: '', age: undefined, gender: '' });
   });
 
   it('当 filterBlankAtRun 为 false 时不应该过滤空值', async () => {
