@@ -55,7 +55,6 @@ export const staffConfig: IEntityConfig = {
   },
 };
 
-
 export const staffField: IFieldConfig = {
   title: '员工',
   'x-decorator': 'FormItem',

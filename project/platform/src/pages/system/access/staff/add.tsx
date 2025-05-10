@@ -67,36 +67,3 @@ export const StaffAddModal = (props: Omit<ModalProps, 'children'>) => (
     <StaffAddPage />
   </Modal>
 );
-
-// export const StaffBatchAddModal = (props: Omit<ModalProps, 'children'>) => (
-//   <Modal isBindContent
-//     isBindStore
-//     title='批量添加人员'
-//     trigger={{ children: '批量添加' }}
-//     width={1000}
-//     {...props}  >
-//     <StorePage
-//       schema={{
-//         type: 'object',
-//         properties: {
-//           form: {
-//             type: 'void',
-//             'x-component': 'StoreForm',
-//             properties: {
-//               data: {
-//                 type: 'array',
-//                 'x-component': 'JSONEditor',
-//               },
-//             },
-//           },
-//         },
-//       }}
-//       store={{
-//         type: 'operate',
-//         defaultValues: { data: [] },
-//         api: staffConfig.api.batchAdd,
-//       }}
-//     />
-//   </Modal>
-// );
-
