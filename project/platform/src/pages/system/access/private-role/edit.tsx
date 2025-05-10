@@ -44,7 +44,7 @@ export const PrivateRoleEditModal = (props: Omit<ModalProps, 'children'> & { val
   return (
     <Modal
       bindChildStore
-      destroyOnClose
+      destroyOnHidden
       isRefresh
       maskClosable={false}
       title='编辑角色'

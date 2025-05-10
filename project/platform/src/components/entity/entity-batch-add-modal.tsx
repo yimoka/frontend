@@ -11,7 +11,7 @@ export const EntityBatchAddModal = (props: EntityBatchAddModalProps) => {
   return (
     <Modal
       bindChildStore
-      destroyOnClose
+      destroyOnHidden
       isRefresh
       maskClosable={false}
       title='批量添加'

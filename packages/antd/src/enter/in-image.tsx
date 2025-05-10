@@ -207,7 +207,7 @@ export const InImage = (props: InImageProps) => {
       </Upload>
       {/* URL输入模态框：用于手动输入图片URL */}
       <Modal
-        destroyOnClose
+        destroyOnHidden
         okButtonProps={{ disabled: !inputUrl || !isValidUrl(inputUrl) }}
         open={inOpen}
         title="输入图片地址"
@@ -223,7 +223,7 @@ export const InImage = (props: InImageProps) => {
 
       {/* URL查看模态框：用于查看和复制图片URL */}
       <Modal
-        destroyOnClose
+        destroyOnHidden
         footer={null}
         open={viewOpen}
         title="查看图片地址"

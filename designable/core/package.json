@@ -53,9 +53,9 @@
     "@yimoka/shared": "workspace:*",
     "@yimoka/store": "workspace:*",
     "@formily/path": "^2.3.3",
-    "globals": "^15.14.0"
+    "globals": "^16.1.0"
   },
   "devDependencies": {
-    "eslint": "^9.24.0"
+    "eslint": "^9.26.0"
   }
 }

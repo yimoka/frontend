@@ -1,6 +1,7 @@
 import { withValueFallback } from '@yimoka/react';
-import { ImageProps as AntImageProps, Image as AntImage, EmptyProps, Empty } from 'antd';
+import { Image as AntImage, ImageProps as AntImageProps, Empty, EmptyProps } from 'antd';
 import React, { useMemo } from 'react';
+
 
 const ImageFn = (props: ImageProps) => {
   const { src, value, empty, ...rest } = props;
@@ -12,9 +13,10 @@ const ImageFn = (props: ImageProps) => {
   return <AntImage {...rest} src={curValue} />;
 };
 
-export const Image = withValueFallback(ImageFn);
+export const Image: React.FC<ImageProps> = withValueFallback(ImageFn);
 
 export type ImageProps = AntImageProps & {
+  withScopeValue?: boolean,
   value?: ImageProps['src'],
   empty?: EmptyProps
 };

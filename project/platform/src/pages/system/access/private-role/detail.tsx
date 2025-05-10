@@ -43,7 +43,7 @@ export const PrivateRoleDetailModal = (props: Omit<ModalProps, 'children'> & { v
 
   return (
     <Modal
-      destroyOnClose
+      destroyOnHidden
       footer={false}
       maskClosable={false}
       title='角色详情'

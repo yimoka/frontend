@@ -57,7 +57,7 @@ export const StaffAddPage = observer((props: Omit<IEntityAddProps, 'config' | 's
 export const StaffAddModal = (props: Omit<ModalProps, 'children'>) => (
   <Modal
     bindChildStore
-    destroyOnClose
+    destroyOnHidden
     isRefresh
     maskClosable={false}
     title='添加人员'

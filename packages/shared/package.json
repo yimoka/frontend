@@ -49,10 +49,10 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "globals": "^15.14.0",
+    "globals": "^16.1.0",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "eslint": "^9.24.0"
+    "eslint": "^9.26.0"
   }
 }

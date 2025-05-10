@@ -24,7 +24,7 @@ export const PrivateRolePermission = observer((props: IEntityEditProps) => {
   return (
     <Modal
       bindChildStore
-      destroyOnClose
+      destroyOnHidden
       title={'权限'}
       trigger={{ type: 'primary', size: 'small' }}
     >

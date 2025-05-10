@@ -10,7 +10,7 @@ import { privateRoleConfig } from '../conf';
 export const PrivateRoleStaffsModal = observer(() => (
   <Modal
     bindChildStore
-    destroyOnClose
+    destroyOnHidden
     footer={null}
     title='员工'
     trigger={{ type: 'primary', ghost: true, size: 'small' }}
@@ -50,7 +50,7 @@ export const PrivateRoleStaffs = observer(() => {
       <EntityResponse store={staffsStore}>
         <Modal
           bindChildStore
-          destroyOnClose
+          destroyOnHidden
           maskClosable={false}
           title="添加员工"
           trigger={{ size: 'small', type: 'primary', style: { position: 'absolute', right: 50, top: 15 } }}>

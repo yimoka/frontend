@@ -61,7 +61,7 @@ export const StaffEditModal = (props: Omit<ModalProps, 'children'> & { values?: 
   return (
     <Modal
       bindChildStore
-      destroyOnClose
+      destroyOnHidden
       isRefresh
       maskClosable={false}
       title='编辑人员'

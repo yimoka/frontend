@@ -39,7 +39,7 @@ export const PrivateRoleAddPage = observer((props: Omit<IEntityAddProps, 'config
 export const PrivateRoleAddModal = (props: Omit<ModalProps, 'children'>) => (
   <Modal
     bindChildStore
-    destroyOnClose
+    destroyOnHidden
     isRefresh
     maskClosable={false}
     title='添加角色'

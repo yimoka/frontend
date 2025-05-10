@@ -85,7 +85,7 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
                         'x-decorator-props': {
                           title: '角色',
                           bindChildStore: true,
-                          destroyOnClose: true,
+                          destroyOnHidden: true,
                           trigger: { type: 'primary', size: 'small' },
                         },
                         'x-component': 'StaffRole',
@@ -96,7 +96,7 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
                         'x-decorator-props': {
                           title: '查看权限',
                           footer: false,
-                          destroyOnClose: true,
+                          destroyOnHidden: true,
                           trigger: { size: 'small' },
                         },
                         properties: {

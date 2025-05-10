@@ -87,7 +87,7 @@ export const Pwa = () => {
   if (open) {
     return (
       <Modal
-        destroyOnClose
+        destroyOnHidden
         cancelText="下一次"
         maskClosable={false}
         okText="马上更新"

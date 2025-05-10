@@ -54,7 +54,7 @@ export const StaffDetailModal = (props: Omit<ModalProps, 'children'> & { values?
 
   return (
     <Modal
-      destroyOnClose
+      destroyOnHidden
       footer={false}
       maskClosable={false}
       title='人员详情'
