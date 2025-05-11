@@ -3,10 +3,10 @@
  * @summary 该模块实现了基于 Store 的表格组件，支持数据绑定、分页、排序、筛选等功能
  */
 
-import { observer, RecordsScope, useRecordIndexFn, useSchemaItemsToColumns, useStore, useDeepEffect } from '@yimoka/react';
+import { observer, RecordsScope, useDeepEffect, useRecordIndexFn, useSchemaItemsToColumns, useStore } from '@yimoka/react';
 import { dataToOptions, getSmart, IAny, IAnyObject, isVacuous, normalizeToArray, setSmart } from '@yimoka/shared';
 import { getFieldSplitter, ListStore, reaction } from '@yimoka/store';
-import { TablePaginationConfig, Table as AntTable } from 'antd';
+import { Table as AntTable, TablePaginationConfig } from 'antd';
 import { ColumnFilterItem, ColumnType, FilterValue, SorterResult } from 'antd/es/table/interface';
 import { cloneDeep, isEqual, pick } from 'lodash-es';
 import React, { Key, useMemo, useState } from 'react';
@@ -166,8 +166,8 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
     return column;
   }), [columnsWithSchema, curStore, sortOrderKey, values]);
 
-  const curRowSelection = useMemo(() => (rowSelection
-    ? {
+  const curRowSelection = useMemo(() => (
+    {
       selectedRowKeys,
       ...rowSelection,
       onChange: (keys: Key[], selectedRows: T[], info: IAny) => {
@@ -175,7 +175,6 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         setSelectedRowKeys?.(keys);
       },
     }
-    : rowSelection
   ), [rowSelection, selectedRowKeys, setSelectedRowKeys]);
 
   const queryData = () => {
@@ -189,7 +188,6 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       }
     }
   };
-
 
   const handlePagination = (pagination: TablePaginationConfig) => {
     setFieldValue(pageKey, pagination.current);
