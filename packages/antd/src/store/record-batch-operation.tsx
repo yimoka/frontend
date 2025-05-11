@@ -85,12 +85,12 @@ export const RecordBatchOperation = observer((props: RecordBatchOperationProps) 
     const runStore = initStore();
     !runStore.apiExecutor && (runStore.apiExecutor = apiExecutor);
     !runStore.notifier && (runStore.notifier = notifier);
-    const idKeys = idsKey ?? (config ?? $config)?.idKeys ?? DEFAULT_ID_KEYS;
+    const curIDKeys = idsKey ?? (config ?? $config)?.idKeys ?? DEFAULT_ID_KEYS;
     // 合并默认值
     runStore.defaultValues = { ...runStore.defaultValues, ...defaultValues };
     // 设置操作值
     const newValues = pick({ $index, ...$record, ...record }, Object.keys(runStore.defaultValues));
-    newValues[idKeys] = selectedRowKeys;
+    newValues[curIDKeys] = selectedRowKeys;
     runStore.setValues(newValues);
     setLoading(true);
     const res = await runStore.fetch();
@@ -119,7 +119,12 @@ export const RecordBatchOperation = observer((props: RecordBatchOperationProps) 
         }}>
         {/* fix Warning: findDOMNode is deprecated and will be removed in the next major release. Instead, */}
         <>
-          <Trigger component={Button} loading={loading} {...trigger} />
+          <Trigger
+            component={Button}
+            disabled={!selectedRowKeys?.length}
+            loading={loading}
+            {...trigger}
+          />
         </>
       </Popconfirm>
     );
@@ -128,6 +133,7 @@ export const RecordBatchOperation = observer((props: RecordBatchOperationProps) 
   return (
     <Trigger
       component={Button}
+      disabled={!selectedRowKeys?.length}
       loading={loading}
       {...trigger}
       onTrig={(...args) => {
