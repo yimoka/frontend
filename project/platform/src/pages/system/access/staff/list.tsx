@@ -43,15 +43,23 @@ export const StaffListPage = observer((props: Omit<IEntityListProps, 'config' | 
           type: 'void',
           'x-component': 'Divider',
         },
-        // batchBar: {
-        //   type: 'void',
-        //   'x-component': 'BatchBarAction',
-        // },
+        batch: {
+          type: 'void',
+          'x-decorator': 'Flex',
+          'x-decorator-props': { justify: 'end', style: { marginBottom: 12 } },
+          'x-component': 'Space',
+          properties: {
+            enable: { type: 'void', 'x-component': 'RecordBatchEnable' },
+            disable: { type: 'void', 'x-component': 'RecordBatchDisable' },
+            del: { type: 'void', 'x-component': 'RecordBatchDel' },
+          },
+        },
         res: {
           type: 'void',
           'x-component': 'EntityResponse',
           properties: {
             listData: {
+              type: 'void',
               // 当使用表达式时 可使用 ReFormByListData 强制表格重新渲染
               // 'x-decorator': 'ReFormByListData',
               'x-component': 'StoreTable',
