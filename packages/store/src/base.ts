@@ -481,8 +481,8 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
     }
     const fetchID = this.lastFetchID;
     const { api } = this;
-    let params:IAnyObject = {};
-    const { filterBlankAtRun  } = this.options;
+    let params: IAnyObject = {};
+    const { filterBlankAtRun } = this.options;
     if (filterBlankAtRun === true) {
       params = pickBy(this.values, value => (!isVacuous(value)));
     } else if (Array.isArray(filterBlankAtRun) && filterBlankAtRun.length) {
@@ -578,7 +578,7 @@ export type IStoreRunNow = 'never' | 'always' | 'whenRequired'
  * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
  */
 export type IBaseStoreOptions = {
-  filterBlankAtRun: boolean|string[];
+  filterBlankAtRun: boolean | string[];
   bindRoute: boolean;
   updateRouteType: 'push' | 'replace';
   routeTrigger: 'unequal' | 'any';

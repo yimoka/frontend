@@ -1,5 +1,5 @@
-import { action, define, observable } from '@formily/reactive';
-import { IAnyObject, IAny, mergeWithArrayOverride, isVacuous, addWithLimit, isSuccess, IKey } from '@yimoka/shared';
+import { model, observable } from '@formily/reactive';
+import { addWithLimit, IAny, IAnyObject, IKey, isSuccess, isVacuous, mergeWithArrayOverride } from '@yimoka/shared';
 
 import { cloneDeep, get, pickBy, set } from 'lodash-es';
 
@@ -66,31 +66,30 @@ export const listOptionsDefault: Partial<IBaseStoreOptions> = {
  * @param {IBaseStoreConfig<V, R>} config 配置对象
  */
 export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStore<V, R> {
+  /** 是否分页 */
   isPaginate = true;
-  /**
-   * 选中的行键数组。
-   *
-   * @type {IKey[]}
-   */
-  selectedRowKeys: IKey[] = [];
-
-  /**
-   * 表示是否正在加载下一页数据的标志。
-   * 当前暂时只支持 page + 1 的流式加载，游标等方式暂不支持
-   *
-   * @type {boolean}
-   */
-  nextLoading = false;
-
-  /**
-   * 表示下一页数据响应的对象。
-   *
-   * @type {IStoreResponse<R, V>}
-   */
-  nextResponse: IStoreResponse<R, V> = {};
 
   private nextLastFetchID = 0;
   private nextAPIController: AbortController | undefined;
+
+  // 无法在继承的情况下使用 define 重新建一份额外的数据
+  private listModel = model({
+    selectedRowKeys: [] as IKey[],
+    nextLoading: false as boolean,
+    nextResponse: ({} satisfies IStoreResponse<R, V>),
+
+    setSelectedRowKeys(keys: IKey[]) {
+      this.selectedRowKeys = keys;
+    },
+
+    setNextLoading(loading: boolean) {
+      this.nextLoading = loading;
+    },
+
+    setNextResponse(response: IStoreResponse<R, V>) {
+      this.nextResponse = response;
+    },
+  });
 
   constructor(config: IBaseStoreConfig<V, R> & { isPaginate?: boolean } = {}) {
     const { options, defineConfig, defaultValues, isPaginate = true, ...args } = config;
@@ -117,20 +116,29 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
       defaultValues: curDefaultValues,
     });
     this.isPaginate = isPaginate;
-    define(this, {
-      selectedRowKeys: observable,
-      nextLoading: observable,
-      nextResponse: observable.shallow,
-      listData: observable.computed,
-      pagination: observable.computed,
-      isHasNext: observable.computed,
+  }
+  // 选中的行键数组。
+  get selectedRowKeys() {
+    return this.listModel.selectedRowKeys;
+  }
 
-      setSelectedRowKeys: action,
-      setNextLoading: action,
-      setNextResponse: action,
-      loadNextData: action,
-      fetchNext: action,
-    });
+  /**
+   * 表示是否正在加载下一页数据的标志。
+   * 当前暂时只支持 page + 1 的流式加载，游标等方式暂不支持
+   *
+   * @type {boolean}
+   */
+  get nextLoading() {
+    return this.listModel.nextLoading;
+  }
+
+  /**
+   * 表示下一页数据响应的对象。
+   *
+   * @type {IStoreResponse<R, V>}
+   */
+  get nextResponse() {
+    return this.listModel.nextResponse as IStoreResponse<R, V>;
   }
 
   /**
@@ -145,11 +153,13 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
    * @returns 返回一个包含列表数据的数组。
    */
   get listData() {
-    const data = this.response.data as Array<IAny> | { data?: Array<IAny> };
-    if (Array.isArray(data)) {
-      return data;
-    }
-    return Array.isArray(data?.data) ? data.data : [];
+    return observable.computed(() => {
+      const data = this.response.data as Array<IAny> | { data?: Array<IAny> };
+      if (Array.isArray(data)) {
+        return data;
+      }
+      return Array.isArray(data?.data) ? data.data : [];
+    }).value;
   }
 
   /**
@@ -210,7 +220,7 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
     if (Array.isArray(data)) {
       return false;
     }
-    const totalNum = get(data, total, listData.length) as number;
+    const totalNum = get(data, total, listData?.length) as number;
     const pageNum = get(data, page, this.values[page]) as number;
     const pageSizeNum = get(data, pageSize, this.values[pageSize]) as number;
     if (!totalNum || !pageNum || !pageSizeNum) {
@@ -220,37 +230,38 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
   }
 
   /**
-   * 设置选中的行键。
-   *
-   * @param {IObjKey[]} [keys=[]] - 要设置的行键数组，默认为空数组。
-   */
+ * 设置选中的行键。
+ *
+ * @param {IObjKey[]} [keys=[]] - 要设置的行键数组，默认为空数组。
+ */
+
   setSelectedRowKeys = (keys: IKey[] = []) => {
-    this.selectedRowKeys = keys;
+    this.listModel.setSelectedRowKeys(keys);
   };
 
   /**
-   * 设置下一页加载状态。
-   *
-   * @param loading - 表示是否正在加载下一页的布尔值。
-   */
+ * 设置下一页加载状态。
+ *
+ * @param loading - 表示是否正在加载下一页的布尔值。
+ */
   setNextLoading = (loading: boolean) => {
-    this.nextLoading = loading;
+    this.listModel.setNextLoading(loading);
   };
 
   /**
-   * 设置下一个数据的响应对象。
-   *
-   * @param response - 要设置的响应对象，类型为 `IStoreResponse<R, V>`。
-   */
+ * 设置下一个数据的响应对象。
+ *
+ * @param response - 要设置的响应对象，类型为 `IStoreResponse<R, V>`。
+ */
   setNextResponse = (response: IStoreResponse<R, V>) => {
-    this.nextResponse = response;
+    this.listModel.setNextResponse(response);
   };
 
   /**
-   * 加载下一页数据。
-   *
-   * @param data - 要加载的数据数组。
-   */
+ * 加载下一页数据。
+ *
+ * @param data - 要加载的数据数组。
+ */
   loadNextData = (data: IAny[]) => {
     if (!isVacuous(data) && Array.isArray(data)) {
       const newResponse: IAny = { ...this.response };
@@ -264,19 +275,19 @@ export class ListStore<V extends object = IAnyObject, R = IAny> extends BaseStor
   };
 
   /**
-   * 摘取下一页数据的
-   *
-   * @returns {Promise<R | null>} 返回一个 Promise，解析为下一页的响应数据或 null。
-   *
-   * @remarks
-   * - 如果当前正在加载下一页数据或没有更多数据，则直接返回 null。
-   * - 根据配置选项，过滤空值或直接使用当前的参数值。
-   * - 增加页码并设置加载状态。
-   * - 如果 API 不是函数，则处理 AbortController 以取消先前的请求。
-   * - 调用 `runStoreAPI` 方法执行 API 请求，并在请求成功时加载下一页数据。
-   *
-   * @throws {Error} 如果 AbortController 初始化失败。
-   */
+ * 摘取下一页数据的
+ *
+ * @returns {Promise<R | null>} 返回一个 Promise，解析为下一页的响应数据或 null。
+ *
+ * @remarks
+ * - 如果当前正在加载下一页数据或没有更多数据，则直接返回 null。
+ * - 根据配置选项，过滤空值或直接使用当前的参数值。
+ * - 增加页码并设置加载状态。
+ * - 如果 API 不是函数，则处理 AbortController 以取消先前的请求。
+ * - 调用 `runStoreAPI` 方法执行 API 请求，并在请求成功时加载下一页数据。
+ *
+ * @throws {Error} 如果 AbortController 初始化失败。
+ */
   // eslint-disable-next-line complexity
   fetchNext = async () => {
     if (!this.isHasNext) {
