@@ -6,6 +6,9 @@ export type YimokaAntdLocale = {
   RecordDel: { popconfirmTitle: string; popconfirmDescription: string, text: string }
   RecordEnable: { popconfirmTitle: string; text: string }
   RecordDisable: { popconfirmTitle: string; text: string }
+  RecordBatchDel: { popconfirmTitle: string; popconfirmDescription: string, text: string }
+  RecordBatchEnable: { popconfirmTitle: string; text: string }
+  RecordBatchDisable: { popconfirmTitle: string; text: string }
 }
 
 declare const localeValues: AntLocale & YimokaAntdLocale;

@@ -1,6 +1,6 @@
 /**
- * @file record-operation.tsx
- * 记录操作组件，用于处理数据记录的相关操作，支持确认弹窗和触发操作
+ * @file record-batch-operation.tsx
+ * 记录批量操作组件，用于处理数据记录的批量操作，支持确认弹窗和触发操作
  * @module @yimoka/antd
  * @author Yimoka Team
  * @since 1.0.0
@@ -8,15 +8,17 @@
  * @example
  * ```tsx
  * // 基础用法
- * <RecordOperation
- *   operation="delete"
+ * <RecordBatchOperation
+ *   idsKey="ids"
+ *   operation="del"
  *   store={store}
  *   trigger={{ text: '删除' }}
  *   popconfirm={{ title: '确认删除该记录？' }}
  * />
  *
- * // 带默认值的操作
- * <RecordOperation
+ * // 带默认值的批量操作
+ * <RecordBatchOperation
+ *   idsKey="ids"
  *   operation="update"
  *   store={store}
  *   defaultValues={{ status: 'active' }}
@@ -26,29 +28,31 @@
  */
 
 import { observer, useExpressionScope } from '@formily/react';
-import { IEntityOpProps, Trigger, TriggerProps, useAPIExecutor, useNotifier, useStore } from '@yimoka/react';
-import { IAnyObject, isSuccess } from '@yimoka/shared';
-import { BaseStore, getEntityStore, IAPIKey, IStore } from '@yimoka/store';
-import { Button, Popconfirm, PopconfirmProps } from 'antd';
+import { Trigger, useAPIExecutor, useNotifier, useStore } from '@yimoka/react';
+import { isSuccess } from '@yimoka/shared';
+import { BaseStore, getEntityStore, ListStore } from '@yimoka/store';
+import { Button, Popconfirm } from 'antd';
 import { pick } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
 
-import { useLocaleComponent } from '../hooks/use-locale';
+import { RecordOperationProps } from './record-operation';
 
+/** 默认的确认弹窗标题 */
+const DEFAULT_POPCONFIRM_TITLE = '确认';
 /** 默认的ID字段名 */
-const DEFAULT_ID_KEY = 'id';
+const DEFAULT_ID_KEYS = 'ids';
 
 /**
- * RecordOperation 组件
- * 用于处理记录相关的操作，支持确认弹窗和触发操作
+ * RecordBatchOperation 组件
+ * 用于处理记录相关的批量操作，支持确认弹窗和触发操作
  * @component
- * @param {RecordOperationProps} props - 组件属性
+ * @param {RecordBatchOperationProps} props - 组件属性
  * @returns {JSX.Element} 返回操作按钮组件
  *
  * @example
  * ```tsx
  * // 带自定义配置的操作
- * <RecordOperation
+ * <RecordBatchOperation
  *   operation="custom"
  *   store={store}
  *   config={{ idKey: 'customId' }}
@@ -56,18 +60,18 @@ const DEFAULT_ID_KEY = 'id';
  * />
  * ```
  */
-export const RecordOperation = observer((props: RecordOperationProps) => {
-  const { parentStore, store, popconfirm, trigger, operation, config, defaultValues, record, isRefresh = true } = props;
-  const locale = useLocaleComponent('Common');
+export const RecordBatchOperation = observer((props: RecordBatchOperationProps) => {
+  const { idsKey, parentStore, store, popconfirm, trigger, operation, config, defaultValues, record, isRefresh = true } = props;
   const { $config, $record, $index } = useExpressionScope() ?? {};
-  const pStore = useStore(parentStore);
+  const pStore = useStore(parentStore) as ListStore;
   const [loading, setLoading] = useState(false);
   const apiExecutor = useAPIExecutor();
   const notifier = useNotifier();
+  const { selectedRowKeys } = pStore ?? {};
 
   /**
-   * 执行操作的核心函数
-   * 初始化store并执行操作，支持操作成功后刷新父级数据
+   * 执行批量操作的核心函数
+   * 初始化 store 并执行批量操作，支持批量操作成功后刷新父级数据
    * @async
    * @returns {Promise<void>}
    */
@@ -81,11 +85,12 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
     const runStore = initStore();
     !runStore.apiExecutor && (runStore.apiExecutor = apiExecutor);
     !runStore.notifier && (runStore.notifier = notifier);
+    const idKeys = idsKey ?? (config ?? $config)?.idKeys ?? DEFAULT_ID_KEYS;
     // 合并默认值
     runStore.defaultValues = { ...runStore.defaultValues, ...defaultValues };
-    const idKey = (config ?? $config)?.idKey ?? DEFAULT_ID_KEY;
     // 设置操作值
-    const newValues = pick({ $index, ...$record, ...record }, idKey, Object.keys(runStore.defaultValues));
+    const newValues = pick({ $index, ...$record, ...record }, Object.keys(runStore.defaultValues));
+    newValues[idKeys] = selectedRowKeys;
     runStore.setValues(newValues);
     setLoading(true);
     const res = await runStore.fetch();
@@ -100,8 +105,8 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
    */
   const popconfirmProps = useMemo(() => {
     if (!popconfirm) return null;
-    return popconfirm === true ? { title: locale.confirm } : popconfirm;
-  }, [popconfirm, locale]);
+    return popconfirm === true ? { title: DEFAULT_POPCONFIRM_TITLE } : popconfirm;
+  }, [popconfirm]);
 
   if (popconfirmProps) {
     return (
@@ -134,23 +139,10 @@ export const RecordOperation = observer((props: RecordOperationProps) => {
 });
 
 /**
- * RecordOperation 组件属性接口
- * @interface RecordOperationProps
+ * RecordBatchOperation 组件属性接口
+ * @interface RecordBatchOperationProps
  * @extends {Pick<Partial<IEntityOpProps>, 'store' | 'operation' | 'config' | 'operation'>}
  */
-export interface RecordOperationProps extends Pick<Partial<IEntityOpProps>, 'store' | 'operation' | 'config' | 'operation'> {
-  /** 操作类型，必填 */
-  operation: IAPIKey
-  /** 父级 store，用于刷新数据，可选 */
-  parentStore?: IStore;
-  /** 是否在操作成功后刷新父级数据，可选 */
-  isRefresh?: boolean;
-  /** 默认值，可选 */
-  defaultValues?: IAnyObject;
-  /** 记录数据，可选 */
-  record?: IAnyObject;
-  /** 确认弹窗配置，可选 */
-  popconfirm?: PopconfirmProps | boolean;
-  /** 触发按钮配置，可选 */
-  trigger?: TriggerProps;
+export interface RecordBatchOperationProps extends RecordOperationProps {
+  idsKey?: string
 }

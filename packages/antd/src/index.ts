@@ -1,7 +1,7 @@
-import { GetProps, GetRef, GetProp } from 'antd';
+import { GetProp, GetProps, GetRef } from 'antd';
 
 export { ConfigProvider, theme } from 'antd';
-export type { GetProps, GetRef, GetProp };
+export type { GetProp, GetProps, GetRef };
 
 export * from './base/button';
 export * from './base/float-button';
@@ -17,8 +17,8 @@ export * from './enter/date-range-picker';
 export * from './enter/form';
 export * from './enter/form-item';
 export * from './enter/in-image';
-export * from './enter/input-number';
 export * from './enter/input';
+export * from './enter/input-number';
 export * from './enter/mentions';
 export * from './enter/radio';
 export * from './enter/rate';
@@ -86,14 +86,18 @@ export * from './nav/menu';
 export * from './nav/pagination';
 export * from './nav/steps';
 
-export * from './other/app';
 export * from './other/affix';
+export * from './other/app';
 
 export * from './page/page-header';
 
 // store
 export * from './store/form';
 export * from './store/list-filter';
+export * from './store/record-batch-del';
+export * from './store/record-batch-disable';
+export * from './store/record-batch-enable';
+export * from './store/record-batch-operation';
 export * from './store/record-del';
 export * from './store/record-disable';
 export * from './store/record-enable';

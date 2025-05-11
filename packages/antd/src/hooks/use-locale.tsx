@@ -11,6 +11,9 @@ const defaultLocale: Locale = {
   RecordDel: { popconfirmTitle: 'Are you sure to delete?', popconfirmDescription: 'This action cannot be undone', text: 'Delete' },
   RecordEnable: { popconfirmTitle: 'Are you sure to enable?', text: 'Enable' },
   RecordDisable: { popconfirmTitle: 'Are you sure to disable?', text: 'Disable' },
+  RecordBatchDel: { popconfirmTitle: 'Are you sure to delete?', popconfirmDescription: 'This action cannot be undone', text: 'Batch Delete' },
+  RecordBatchEnable: { popconfirmTitle: 'Are you sure to enable?', text: 'Batch Enable' },
+  RecordBatchDisable: { popconfirmTitle: 'Are you sure to disable?', text: 'Batch Disable' },
 };
 
 export const useLocaleComponent = <T extends keyof Locale>(component: T) => {

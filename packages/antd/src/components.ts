@@ -3,7 +3,7 @@ import { IConfigComponents } from '@yimoka/react';
 import { Button } from './base/button';
 import { FloatButton } from './base/float-button';
 import { Icon } from './base/icon';
-import { Typography, Text, Title, Paragraph } from './base/typography';
+import { Paragraph, Text, Title, Typography } from './base/typography';
 
 import { Avatar } from './display/avatar';
 import { Badge } from './display/badge';
@@ -87,6 +87,10 @@ import { App } from './other/app';
 import { PageHeader } from './page/page-header';
 import { StoreForm } from './store/form';
 import { ListFilter } from './store/list-filter';
+import { RecordBatchDel } from './store/record-batch-del';
+import { RecordBatchDisable } from './store/record-batch-disable';
+import { RecordBatchEnable } from './store/record-batch-enable';
+import { RecordBatchOperation } from './store/record-batch-operation';
 import { RecordDel } from './store/record-del';
 import { RecordDisable } from './store/record-disable';
 import { RecordEnable } from './store/record-enable';
@@ -212,6 +216,10 @@ export const components: IConfigComponents = {
   StoreForm,
   StoreTable,
   ListFilter,
+  RecordBatchDel,
+  RecordBatchDisable,
+  RecordBatchEnable,
+  RecordBatchOperation,
   RecordDel,
   RecordDisable,
   RecordEnable,
