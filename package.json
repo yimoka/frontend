@@ -9,10 +9,10 @@
   "main": "index.js",
   "scripts": {
     "lint:workspace": "eslint . --fix --ignore-pattern 'packages/*' --ignore-pattern 'designable/*' --ignore-pattern 'project/*'",
-    "build-watch:pkg": "pnpm --parallel --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build-watch",
-    "build:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build",
-    "lint:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts lint",
-    "test:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts test"
+    "build-watch:pkg": "pnpm --parallel --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/mini-router --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build-watch",
+    "build:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/mini-router --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts build",
+    "lint:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/mini-router --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts lint",
+    "test:pkg": "pnpm --filter @yimoka/shared --filter @yimoka/store --filter @yimoka/react --filter @yimoka/mini-router --filter @yimoka/antd --filter @yimoka/monaco-editor --filter @yimoka/tiptap --filter @yimoka/echarts test"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
