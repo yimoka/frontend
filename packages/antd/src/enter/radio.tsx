@@ -1,9 +1,11 @@
 import { observer } from '@formily/react';
 import { PropsWithComponentData, useComponentData } from '@yimoka/react';
-import { Radio as AntRadio, RadioChangeEvent, RadioProps } from 'antd';
+import { Radio as AntRadio, RadioChangeEvent } from 'antd';
 import React, { ComponentProps } from 'react';
 
-const GroupFn = (props: RadioGroupProps) => {
+export const Radio = AntRadio;
+
+export const RadioGroup = observer((props: RadioGroupProps) => {
   const { options, data, store, dataKey, onChange, ...rest } = props;
   const curData = useComponentData([options, data], dataKey, store);
 
@@ -14,20 +16,18 @@ const GroupFn = (props: RadioGroupProps) => {
       onChange={e => onChange?.(e.target.value, e)}
     />
   );
-};
+});
 
+// type IRadioFC = React.ForwardRefExoticComponent<RadioProps> & {
+//   Group: React.FC<RadioGroupProps>;
+//   Button: typeof AntRadio.Button;
+// };
 
-export const RadioGroup = observer(GroupFn);
+// export const Radio = AntRadio as IRadioFC;
 
-type IRadioFC = React.ForwardRefExoticComponent<RadioProps> & {
-  Group: React.FC<RadioGroupProps>;
-  Button: typeof AntRadio.Button;
-};
-
-export const Radio = AntRadio as IRadioFC;
-
-Radio.Group = RadioGroup;
-Radio.Button = AntRadio.Button;
+// Radio.Button = AntRadio.Button;
+// 会导致内存泄露 页面崩溃
+// Radio.Group = RadioGroup;
 
 export type AntRadioGroupProps = ComponentProps<typeof AntRadio.Group>
 
