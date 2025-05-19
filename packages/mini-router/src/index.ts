@@ -10,7 +10,7 @@ export * from './components/MiniLink';
 export * from './components/MiniRoute';
 export * from './components/MiniRouter';
 export * from './components/MiniRouteSync';
-export * from './components/PrefixedBrowserRouter';
+export * from './components/PatternBrowserRouter';
 
 // 导出上下文
 export * from './context/MiniRouterContext';

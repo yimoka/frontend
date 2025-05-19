@@ -46,13 +46,13 @@ function App() {
 ### 与 React Router 集成
 
 ```tsx
-import { PrefixedBrowserRouter } from '@yimoka/mini-router';
+import { PatternBrowserRouter } from '@yimoka/mini-router';
 
 function App() {
   return (
-    <PrefixedBrowserRouter prefix="/app">
+    <PatternBrowserRouter base="/app">
       {/* 你的应用内容 */}
-    </PrefixedBrowserRouter>
+    </PatternBrowserRouter>
   );
 }
 ```
@@ -89,14 +89,14 @@ function App() {
 </MiniLink>
 ```
 
-#### PrefixedBrowserRouter
+#### PatternBrowserRouter
 
-与 React Router 集成的路由组件。
+基于模式匹配的 React Router 集成组件。
 
 ```tsx
-<PrefixedBrowserRouter prefix?: string>
+<PatternBrowserRouter base?: string>
   {children}
-</PrefixedBrowserRouter>
+</PatternBrowserRouter>
 ```
 
 ### Hooks

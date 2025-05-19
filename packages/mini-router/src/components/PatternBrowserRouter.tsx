@@ -1,7 +1,7 @@
 /**
- * @file PrefixedBrowserRouter.tsx
+ * @file PatternBrowserRouter.tsx
  * @author ickeep
- * @description 带前缀的浏览器路由组件，用于与 React Router 集成
+ * @description 基于模式匹配的浏览器路由组件，用于与 React Router 集成
  * @since 0.0.1
  */
 
@@ -13,26 +13,29 @@ import { useMiniRouterPath } from '../hooks/useMiniRouter';
 import { MiniRouteSync } from './MiniRouteSync';
 
 /**
- * PrefixedBrowserRouter 组件的属性接口
- * @interface PrefixedBrowserRouterProps
+ * PatternBrowserRouter 组件的属性接口
+ * @interface PatternBrowserRouterProps
  * @extends {Omit<BrowserRouterProps, 'basename'>}
- * @property {string} [prefix] - 路由前缀
+ * @property {string} [base] - 路由基础模式，用于正则匹配
  */
-export function PrefixedBrowserRouter({ prefix, children }: Omit<BrowserRouterProps, 'basename'> & { prefix?: string }) {
+export function PatternBrowserRouter({ base, children }: Omit<BrowserRouterProps, 'basename'> & { base?: string }) {
   // 获取当前路径
   const path = useMiniRouterPath();
 
   /**
    * 计算基础路径
-   * @summary 根据前缀和当前路径计算基础路径
+   * @summary 根据基础模式匹配当前路径
    */
   const baseName = useMemo(() => {
-    if (prefix && path.startsWith(prefix)) {
-      const segments = path.split('/');
-      return `${prefix}/${segments[2]}`;
+    if (base) {
+      const pattern = new RegExp(`^${base}/[^/]+`);
+      const match = path.match(pattern);
+      if (match) {
+        return match[0];
+      }
     }
     return '';
-  }, [path, prefix]);
+  }, [path, base]);
 
   /**
    * 路由内容
