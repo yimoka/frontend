@@ -189,7 +189,7 @@ export class BaseStore<V extends object = IAnyObject, R = IAny> {
       dict: observable,
       dictConfig: observable, // 以支持设置和重置时及时更新
       dictLoading: observable,
-      response: observable.shallow,
+      response: this.options.responseShallow ? observable.shallow : observable,
       loading: observable,
       extInfo: observable,
 
@@ -576,6 +576,7 @@ export type IStoreRunNow = 'never' | 'always' | 'whenRequired'
  * @property {IStoreRunNow} runNow -  进入页面时是否立即拉取数据
  * @property {string[]} urlWithDefaultFields - 字值默认值与参数值相同时默认不添加到 URL search 中。如需添加，可以在此配置。默认为空数组。
  * @property {Record<string, string>} keys - 字段键的配置，例如 'page' 和 'pageSize'，用于标准化输入和输出字段。
+ * @property {boolean} responseShallow - response 是深劫持还是浅劫持 默认是深劫持
  */
 export type IBaseStoreOptions = {
   filterBlankAtRun: boolean | string[];
@@ -585,6 +586,7 @@ export type IBaseStoreOptions = {
   runNow: IStoreRunNow
   urlWithDefaultFields: string[];
   keys: Record<string, string>;
+  responseShallow?: boolean;
 }
 
 export interface IBaseStoreConfig<V extends object = IAnyObject, R = IAny> {
