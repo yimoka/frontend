@@ -70,7 +70,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
   const filterValueKeys = useMemo(() => {
     const keys: string[] = [];
     columnsWithSchema.forEach((column) => {
-      if (column.enableFilter) {
+      if (column.autoFilter) {
         const { filterValueKey, dataIndex } = column;
         const key = filterValueKey ?? dataIndexToKey(dataIndex);
         keys.push(key);
@@ -125,7 +125,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
     }
     //  处理过滤和排序
     if (column.autoFilter === true) {
-      const fVal = getSmart(values, keyValue);
+      const fVal = getSmart(filterValues ?? values, keyValue);
       if (Array.isArray(fVal)) {
         withFilterAndSortAndTitle.filteredValue = fVal;
       } else if (typeof fVal === 'string' && fVal) {
@@ -164,17 +164,17 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       return { ...column, ...withFilterAndSortAndTitle };
     }
     return column;
-  }), [columnsWithSchema, curStore, sortOrderKey, values]);
+  }), [columnsWithSchema, curStore, sortOrderKey, values, filterValues]);
 
   const curRowSelection = useMemo(() => (
-    {
+    rowSelection ? {
       selectedRowKeys,
-      ...rowSelection,
+      ...(typeof rowSelection === 'object' ? rowSelection : {}),
       onChange: (keys: Key[], selectedRows: T[], info: IAny) => {
         rowSelection?.onChange?.(keys, selectedRows, info);
         setSelectedRowKeys?.(keys);
       },
-    }
+    } : undefined
   ), [rowSelection, selectedRowKeys, setSelectedRowKeys]);
 
   const queryData = () => {
@@ -188,6 +188,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       }
     }
   };
+
 
   const handlePagination = (pagination: TablePaginationConfig) => {
     setFieldValue(pageKey, pagination.current);
@@ -284,6 +285,7 @@ const StoreBindTable = observer(StoreBindTableFn) as <T = IAnyObject>(props: Omi
  * @template T - 表格数据项的类型
  */
 export type StoreTableProps<T = IAnyObject> = Omit<TableProps<T>, 'dataSource' | 'data' | 'value' | 'dataKey' | 'store'> & {
+  rowSelection?: TableProps<T>['rowSelection'] | true,
   /** Store 实例 */
   store?: ListStore
   /** 是否绑定值 */
