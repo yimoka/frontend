@@ -23,18 +23,30 @@ import { useTableRowKey } from '../display/table/hook';
  * @returns React 元素
  */
 const StoreTableFn = <T extends IAnyObject>(props: StoreTableProps<T>) => {
-  const { store, bindValue = true, ...rest } = props;
+  const { store, bindValue = true, rowSelection, ...rest } = props;
   const curStore = useStore(store) as ListStore;
+  const { selectedRowKeys, setSelectedRowKeys } = curStore ?? {};
+  const curRowSelection = useMemo(() => (
+    rowSelection && setSelectedRowKeys ? {
+      selectedRowKeys,
+      ...(typeof rowSelection === 'object' ? rowSelection : {}),
+      onChange: (keys: Key[], selectedRows: T[], info: IAny) => {
+        rowSelection?.onChange?.(keys, selectedRows, info);
+        setSelectedRowKeys?.(keys);
+      },
+    } : undefined
+  ), [rowSelection, selectedRowKeys, setSelectedRowKeys]);
+
   if (isVacuous(curStore)) {
     return null;
   }
 
   if (bindValue) {
-    return <StoreBindTable {...rest} store={curStore} />;
+    return <StoreBindTable {...rest} rowSelection={curRowSelection} store={curStore} />;
   }
 
   const { listData = [], pagination, loading } = curStore;
-  const tProps = { ...rest, dataSource: listData, loading };
+  const tProps = { ...rest, dataSource: listData, loading, rowSelection: curRowSelection };
 
   if (!isVacuous(pagination) && rest.pagination !== false) {
     const { page, pageSize, total } = pagination;
@@ -53,11 +65,11 @@ export const StoreTable = observer(StoreTableFn) as <T = IAnyObject>(props: Stor
  * @returns React 元素
  */
 const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 'bindValue'>) => {
-  const { store, pagination, onChange, rowSelection, columns, rowKey, ...rest } = props;
+  const { store, pagination, onChange, columns, rowKey, ...rest } = props;
   const [filterValues, setFilterValues] = useState<IAnyObject | null>(null);
   const nav = useNavigate();
   const curStore = useStore(store) as ListStore;
-  const { listData = [], pagination: storePagination, loading, fetch, selectedRowKeys, setSelectedRowKeys, options, genURLSearch, setFieldValue, setValues, values } = curStore;
+  const { listData = [], pagination: storePagination, loading, fetch, setSelectedRowKeys, options, genURLSearch, setFieldValue, setValues, values } = curStore;
   const { bindRoute, updateRouteType, keys } = options;
   const getRecordIndex = useRecordIndexFn(listData);
   const curRowKey = useTableRowKey(rowKey, getRecordIndex);
@@ -66,6 +78,7 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
   const pageKey = keys.page;
   const pageSizeKey = keys.pageSize;
   const sortOrderKey = keys.sortOrder;
+  const sorterValue = getSmart(values, sortOrderKey);
 
   const filterValueKeys = useMemo(() => {
     const keys: string[] = [];
@@ -152,7 +165,6 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       }
     }
     if (column.sorter === true) {
-      const sorterValue = getSmart(values, sortOrderKey);
       if (Array.isArray(sorterValue)) {
         const sorter = sorterValue.find(item => item.field === keyValue);
         if (sorter) {
@@ -164,18 +176,8 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
       return { ...column, ...withFilterAndSortAndTitle };
     }
     return column;
-  }), [columnsWithSchema, curStore, sortOrderKey, values, filterValues]);
+  }), [columnsWithSchema, curStore, filterValues, values, sorterValue]);
 
-  const curRowSelection = useMemo(() => (
-    rowSelection ? {
-      selectedRowKeys,
-      ...(typeof rowSelection === 'object' ? rowSelection : {}),
-      onChange: (keys: Key[], selectedRows: T[], info: IAny) => {
-        rowSelection?.onChange?.(keys, selectedRows, info);
-        setSelectedRowKeys?.(keys);
-      },
-    } : undefined
-  ), [rowSelection, selectedRowKeys, setSelectedRowKeys]);
 
   const queryData = () => {
     fetch();
@@ -259,7 +261,6 @@ const StoreBindTableFn = <T extends IAnyObject>(props: Omit<StoreTableProps<T>, 
         loading={loading}
         pagination={curPagination}
         rowKey={curRowKey}
-        rowSelection={curRowSelection}
         onChange={(pagination, filters, sorter, extra) => {
           onChange?.(pagination, filters, sorter, extra);
           const { action } = extra;
